@@ -1,0 +1,28 @@
+*.iml
+# Gradle Files
+.gradle
+/build
+
+# IntelliJ 
+.idea/
+*.iml
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
+
+# Macos
+.DS_Store
+
+# Android studio generated files
+/captures
+.externalNativeBuild
+.cxx
+*.apk
+output.json
+
+# Local configuration file (sdk path, etc)
+local.properties
+/local.properties
+
+# Google services
+google-services.json
