@@ -16,7 +16,6 @@ fun MusifyTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colors = colors,
         typography = Typography,
-        shapes = Shapes,
         content = content
     )
 }
