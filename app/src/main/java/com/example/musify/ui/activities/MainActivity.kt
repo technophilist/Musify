@@ -1,4 +1,4 @@
-package com.example.musify
+package com.example.musify.ui.activities
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
