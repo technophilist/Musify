@@ -60,6 +60,11 @@ dependencies {
 
     //accompanist
     implementation "com.google.accompanist:accompanist-insets:0.13.0"
+    implementation "com.google.accompanist:accompanist-placeholder-material:0.13.0"
+
+    // image handling
+    implementation "io.coil-kt:coil-compose:2.1.0"
+
 
     // testing
     testImplementation 'junit:junit:4.13.2'
