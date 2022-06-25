@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -75,7 +76,8 @@ fun GenreCard(
                     .align(Alignment.TopStart)
                     .padding(16.dp),
                 text = genre.name,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.h6
             )
         }
     }
