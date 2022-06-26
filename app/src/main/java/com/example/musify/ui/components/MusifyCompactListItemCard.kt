@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,10 @@ enum class ListItemCardType { ALBUM, ARTIST, SONG, PLAYLIST }
  * as the trailing icon.
  * @param onTrailingButtonIconClick the callback to execute when the
  * [trailingButtonIcon] is clicked.
+ * @param titleTextStyle The style configuration for the [title] such as
+ * color, font, line height etc.
+ * @param subtitleTextStyle The style configuration for the [subtitle] such
+ * as color, font, line height etc.
  * @param onThumbnailLoading the callback to execute when the thumbnail
  * image is loading.
  * @param onThumbnailLoadSuccess the callback to execute when the thumbnail
@@ -58,6 +63,8 @@ fun MusifyCompactListItemCard(
     onClick: () -> Unit,
     trailingButtonIcon: ImageVector,
     onTrailingButtonIconClick: () -> Unit,
+    titleTextStyle: TextStyle = LocalTextStyle.current,
+    subtitleTextStyle: TextStyle = LocalTextStyle.current,
     isLoadingPlaceHolderVisible: Boolean = false,
     onThumbnailLoading: (() -> Unit)? = null,
     onThumbnailLoadFailure: (() -> Unit)? = null,
@@ -103,13 +110,15 @@ fun MusifyCompactListItemCard(
                     text = title,
                     fontWeight = FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
+                    maxLines = 1,
+                    style = titleTextStyle
                 )
                 Text(
                     text = subtitle,
                     fontWeight = FontWeight.SemiBold,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
+                    maxLines = 1,
+                    style = subtitleTextStyle
                 )
             }
             IconButton(onClick = onTrailingButtonIconClick) {
@@ -134,6 +143,10 @@ fun MusifyCompactListItemCard(
  * @param onClick the callback to execute when the card is clicked
  * @param onTrailingButtonIconClick the callback to execute when the trailingButtonIcon
  * is clicked.
+ * @param titleTextStyle The style configuration for the [title] such as
+ * color, font, line height etc.
+ * @param subtitleTextStyle The style configuration for the [subtitle] such
+ * as color, font, line height etc.
  * @param onThumbnailLoading the callback to execute when the thumbnail
  * image is loading.
  * @param onThumbnailLoadSuccess the callback to execute when the thumbnail
@@ -152,6 +165,8 @@ fun MusifyCompactListItemCard(
     subtitle: String,
     onClick: () -> Unit,
     onTrailingButtonIconClick: () -> Unit,
+    titleTextStyle: TextStyle = LocalTextStyle.current,
+    subtitleTextStyle: TextStyle = LocalTextStyle.current,
     isLoadingPlaceHolderVisible: Boolean = false,
     onThumbnailLoading: (() -> Unit)? = null,
     onThumbnailLoadFailure: (() -> Unit)? = null,
@@ -168,6 +183,8 @@ fun MusifyCompactListItemCard(
             else -> ImageVector.vectorResource(id = R.drawable.ic_baseline_chevron_right_24)
         },
         onTrailingButtonIconClick = onTrailingButtonIconClick,
+        titleTextStyle = titleTextStyle,
+        subtitleTextStyle = subtitleTextStyle,
         isLoadingPlaceHolderVisible = isLoadingPlaceHolderVisible,
         onThumbnailLoading = onThumbnailLoading,
         onThumbnailLoadSuccess = onThumbnailLoadSuccess,
