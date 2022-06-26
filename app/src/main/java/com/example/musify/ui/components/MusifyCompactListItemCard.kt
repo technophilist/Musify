@@ -14,7 +14,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
 import com.example.musify.R
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 
 /**
  * An enum containing the all the types of list item cards.
@@ -34,8 +38,16 @@ enum class ListItemCardType { ALBUM, ARTIST, SONG, PLAYLIST }
  * @param onClick the callback to execute when the card is clicked.
  * @param trailingButtonIcon an instance of [ImageVector] that will be used
  * as the trailing icon.
- * @param onTrailingButtonIconClick the callback to execute when the [trailingButtonIcon]
- * is clicked.
+ * @param onTrailingButtonIconClick the callback to execute when the
+ * [trailingButtonIcon] is clicked.
+ * @param onThumbnailLoading the callback to execute when the thumbnail
+ * image is loading.
+ * @param onThumbnailLoadSuccess the callback to execute when the thumbnail
+ * image was loaded successfully.
+ * @param onThumbnailLoadFailure the callback to execute if an error occurs
+ * while loading the thumbnail image.
+ * @param isLoadingPlaceHolderVisible indicates whether the loading
+ * placeholder is visible for the thumbnail image.
  */
 @ExperimentalMaterialApi
 @Composable
@@ -46,6 +58,11 @@ fun MusifyCompactListItemCard(
     onClick: () -> Unit,
     trailingButtonIcon: ImageVector,
     onTrailingButtonIconClick: () -> Unit,
+    isLoadingPlaceHolderVisible: Boolean = false,
+    onThumbnailLoading: (() -> Unit)? = null,
+    onThumbnailLoadFailure: (() -> Unit)? = null,
+    onThumbnailLoadSuccess: (() -> Unit)? = null,
+    placeholderHighlight: PlaceholderHighlight = PlaceholderHighlight.shimmer()
 ) {
     Card(
         modifier = Modifier
@@ -60,9 +77,22 @@ fun MusifyCompactListItemCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                modifier = Modifier.size(75.dp),
+                modifier = Modifier
+                    .size(75.dp)
+                    .placeholder(
+                        visible = isLoadingPlaceHolderVisible,
+                        highlight = placeholderHighlight
+                    ),
                 model = thumbnailImageUrlString,
                 contentScale = ContentScale.Crop,
+                onState = {
+                    when (it) {
+                        is AsyncImagePainter.State.Empty -> {}
+                        is AsyncImagePainter.State.Loading -> onThumbnailLoading?.invoke()
+                        is AsyncImagePainter.State.Success -> onThumbnailLoadSuccess?.invoke()
+                        is AsyncImagePainter.State.Error -> onThumbnailLoadFailure?.invoke()
+                    }
+                },
                 contentDescription = null
             )
             Column(
@@ -104,6 +134,14 @@ fun MusifyCompactListItemCard(
  * @param onClick the callback to execute when the card is clicked
  * @param onTrailingButtonIconClick the callback to execute when the trailingButtonIcon
  * is clicked.
+ * @param onThumbnailLoading the callback to execute when the thumbnail
+ * image is loading.
+ * @param onThumbnailLoadSuccess the callback to execute when the thumbnail
+ * image was loaded successfully.
+ * @param onThumbnailLoadFailure the callback to execute if an error occurs
+ * while loading the thumbnail image.
+ * @param isLoadingPlaceHolderVisible indicates whether the loading
+ * placeholder is visible for the thumbnail image.
  */
 @ExperimentalMaterialApi
 @Composable
@@ -114,6 +152,11 @@ fun MusifyCompactListItemCard(
     subtitle: String,
     onClick: () -> Unit,
     onTrailingButtonIconClick: () -> Unit,
+    isLoadingPlaceHolderVisible: Boolean = false,
+    onThumbnailLoading: (() -> Unit)? = null,
+    onThumbnailLoadFailure: (() -> Unit)? = null,
+    onThumbnailLoadSuccess: (() -> Unit)? = null,
+    placeholderHighlight: PlaceholderHighlight = PlaceholderHighlight.shimmer()
 ) {
     MusifyCompactListItemCard(
         thumbnailImageUrlString = thumbnailImageUrlString,
@@ -124,6 +167,11 @@ fun MusifyCompactListItemCard(
             ListItemCardType.SONG -> Icons.Filled.MoreVert
             else -> ImageVector.vectorResource(id = R.drawable.ic_baseline_chevron_right_24)
         },
-        onTrailingButtonIconClick = onTrailingButtonIconClick
+        onTrailingButtonIconClick = onTrailingButtonIconClick,
+        isLoadingPlaceHolderVisible = isLoadingPlaceHolderVisible,
+        onThumbnailLoading = onThumbnailLoading,
+        onThumbnailLoadSuccess = onThumbnailLoadSuccess,
+        onThumbnailLoadFailure = onThumbnailLoadFailure,
+        placeholderHighlight = placeholderHighlight
     )
 }
