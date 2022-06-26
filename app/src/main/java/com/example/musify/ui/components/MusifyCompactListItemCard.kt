@@ -1,12 +1,15 @@
 package com.example.musify.ui.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
@@ -17,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import com.example.musify.R
+import com.example.musify.utils.conditional
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
@@ -29,8 +33,8 @@ enum class ListItemCardType { ALBUM, ARTIST, SONG, PLAYLIST }
 /**
  * A composable that represents a compact list item. This composable
  * contain an argument for setting the [trailingButtonIcon]. To
- * automatically set the trailing icon based on the [ListItemCardType]
- * use the other overload.
+ * automatically set the trailing icon and the shape of the thumbnail
+ * based on the [ListItemCardType], use the other overload.
  *
  * @param thumbnailImageUrlString the url of the image to use as the
  * thumbnail.
@@ -41,9 +45,11 @@ enum class ListItemCardType { ALBUM, ARTIST, SONG, PLAYLIST }
  * as the trailing icon.
  * @param onTrailingButtonIconClick the callback to execute when the
  * [trailingButtonIcon] is clicked.
- * @param titleTextStyle The style configuration for the [title] such as
+ * @param thumbnailShape the shape of the thumbnail image. If it is
+ * not set, a square shape will be used.
+ * @param titleTextStyle the style configuration for the [title] such as
  * color, font, line height etc.
- * @param subtitleTextStyle The style configuration for the [subtitle] such
+ * @param subtitleTextStyle the style configuration for the [subtitle] such
  * as color, font, line height etc.
  * @param onThumbnailLoading the callback to execute when the thumbnail
  * image is loading.
@@ -63,13 +69,14 @@ fun MusifyCompactListItemCard(
     onClick: () -> Unit,
     trailingButtonIcon: ImageVector,
     onTrailingButtonIconClick: () -> Unit,
+    thumbnailShape: Shape? = null,
     titleTextStyle: TextStyle = LocalTextStyle.current,
     subtitleTextStyle: TextStyle = LocalTextStyle.current,
     isLoadingPlaceHolderVisible: Boolean = false,
     onThumbnailLoading: (() -> Unit)? = null,
     onThumbnailLoadFailure: (() -> Unit)? = null,
     onThumbnailLoadSuccess: (() -> Unit)? = null,
-    placeholderHighlight: PlaceholderHighlight = PlaceholderHighlight.shimmer()
+    placeholderHighlight: PlaceholderHighlight = PlaceholderHighlight.shimmer(),
 ) {
     Card(
         modifier = Modifier
@@ -86,6 +93,7 @@ fun MusifyCompactListItemCard(
             AsyncImage(
                 modifier = Modifier
                     .size(75.dp)
+                    .conditional(thumbnailShape != null) { clip(thumbnailShape!!) }
                     .placeholder(
                         visible = isLoadingPlaceHolderVisible,
                         highlight = placeholderHighlight
@@ -133,7 +141,8 @@ fun MusifyCompactListItemCard(
 
 /**
  * A composable that represents a compact list item. This overload will
- * ensure the use of correct trailing icon based on the [cardType].
+ * ensure the use of correct trailing icon and thumbnail shape based
+ * on the [cardType].
  * If a specific trailing icon is needed, use the other overload.
  *
  * @param thumbnailImageUrlString the url of the image to use as the
@@ -183,6 +192,7 @@ fun MusifyCompactListItemCard(
             else -> ImageVector.vectorResource(id = R.drawable.ic_baseline_chevron_right_24)
         },
         onTrailingButtonIconClick = onTrailingButtonIconClick,
+        thumbnailShape = if (cardType == ListItemCardType.ARTIST) CircleShape else null,
         titleTextStyle = titleTextStyle,
         subtitleTextStyle = subtitleTextStyle,
         isLoadingPlaceHolderVisible = isLoadingPlaceHolderVisible,
