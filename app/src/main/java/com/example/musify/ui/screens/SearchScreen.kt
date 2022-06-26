@@ -22,7 +22,8 @@ import com.google.accompanist.insets.statusBarsPadding
 @Composable
 fun SearchScreen(
     genreList: List<Genre>,
-    onGenreItemClick: (Genre) -> Unit
+    onGenreItemClick: (Genre) -> Unit,
+    onSearchTextChanged: (String) -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
     val isLoadingMap = remember { mutableStateMapOf<String, Boolean>() }
@@ -55,7 +56,10 @@ fun SearchScreen(
             },
             singleLine = true,
             value = searchText,
-            onValueChange = { searchText = it },
+            onValueChange = {
+                searchText = it
+                onSearchTextChanged(it)
+            },
             textStyle = LocalTextStyle.current.copy(fontWeight = FontWeight.SemiBold),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.White,
