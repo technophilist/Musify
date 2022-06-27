@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.musify.domain.Genre
+import com.example.musify.domain.MusicSummary
 import com.example.musify.ui.components.GenreCard
 import com.google.accompanist.insets.statusBarsPadding
 
@@ -23,7 +24,8 @@ import com.google.accompanist.insets.statusBarsPadding
 fun SearchScreen(
     genreList: List<Genre>,
     onGenreItemClick: (Genre) -> Unit,
-    onSearchTextChanged: (String) -> Unit
+    onSearchTextChanged: (String) -> Unit,
+    searchQueryResult: List<MusicSummary>
 ) {
     var searchText by remember { mutableStateOf("") }
     val isLoadingMap = remember { mutableStateMapOf<String, Boolean>() }
