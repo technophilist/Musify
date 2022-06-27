@@ -28,7 +28,8 @@ sealed class MusicSummary(
         override val id: String,
         override val name: String,
         val nameOfArtist: String,
-        val trackArtUrl: URL
+        val trackArtUrl: URL,
+        val trackUrl: URL
     ) : MusicSummary(id, name, trackArtUrl, nameOfArtist)
 
     /**
