@@ -15,8 +15,8 @@ import java.net.URL
  * particular instance.
  */
 sealed class MusicSummary(
-    open val id: String,
-    open val name: String,
+    val id: String,
+    val name: String,
     val associatedImageUrl: URL,
     val associatedMetadata: String? = null,
 ) {
@@ -24,20 +24,20 @@ sealed class MusicSummary(
     /**
      * A data class that contains a summary of a single track.
      */
-    data class TrackSummary(
-        override val id: String,
-        override val name: String,
+    class TrackSummary(
+        id: String,
+        name: String,
+        associatedImageUrl: URL,
         val nameOfArtist: String,
-        val trackArtUrl: URL,
         val trackUrl: URL
-    ) : MusicSummary(id, name, trackArtUrl, nameOfArtist)
+    ) : MusicSummary(id, name, associatedImageUrl, nameOfArtist)
 
     /**
      * A data class that contains a summary of a single album.
      */
-    data class AlbumSummary(
-        override val id: String,
-        override val name: String,
+    class AlbumSummary(
+        id: String,
+        name: String,
         val nameOfArtist: String,
         val albumArtUrl: URL
     ) : MusicSummary(id, name, albumArtUrl, nameOfArtist)
@@ -45,20 +45,20 @@ sealed class MusicSummary(
     /**
      * A data class that contains a summary of a single artist.
      */
-    data class ArtistSummary(
-        override val id: String,
-        override val name: String,
-        val profilePictureUrl: URL
-    ) : MusicSummary(id, name, profilePictureUrl)
+    class ArtistSummary(
+        id: String,
+        name: String,
+        associatedImageUrl: URL
+    ) : MusicSummary(id, name, associatedImageUrl)
 
     /**
      * A data class that contains a summary of a single playlist.
      */
-    data class PlaylistSummary(
-        override val id: String,
-        override val name: String,
-        val playListArtUrl: URL
-    ) : MusicSummary(id, name, playListArtUrl)
+    class PlaylistSummary(
+        id: String,
+        name: String,
+        associatedImageUrl: URL
+    ) : MusicSummary(id, name, associatedImageUrl)
 }
 
 
