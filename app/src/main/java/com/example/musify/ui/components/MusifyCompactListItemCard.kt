@@ -96,7 +96,7 @@ fun MusifyCompactListItemCard(
             AsyncImage(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .aspectRatio(1f)
+                    .aspectRatio(1f, true)
                     .weight(1f)
                     .conditional(thumbnailShape != null) { clip(thumbnailShape!!) }
                     .placeholder(
