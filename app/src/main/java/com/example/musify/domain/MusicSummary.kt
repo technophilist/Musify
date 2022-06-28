@@ -40,7 +40,8 @@ sealed class MusicSummary(
         id: String,
         name: String,
         val nameOfArtist: String,
-        val albumArtUrl: URL
+        val albumArtUrl: URL,
+        val yearOfReleaseString: String,
     ) : MusicSummary(id, name, albumArtUrl, nameOfArtist)
 
     /**
