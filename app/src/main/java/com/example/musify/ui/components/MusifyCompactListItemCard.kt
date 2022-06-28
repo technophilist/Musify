@@ -95,7 +95,9 @@ fun MusifyCompactListItemCard(
         ) {
             AsyncImage(
                 modifier = Modifier
-                    .size(75.dp)
+                    .fillMaxHeight()
+                    .aspectRatio(1f)
+                    .weight(1f)
                     .conditional(thumbnailShape != null) { clip(thumbnailShape!!) }
                     .placeholder(
                         visible = isLoadingPlaceHolderVisible,
@@ -114,8 +116,10 @@ fun MusifyCompactListItemCard(
                 contentDescription = null
             )
             Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .weight(2f),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
                     text = title,
@@ -132,7 +136,10 @@ fun MusifyCompactListItemCard(
                     style = subtitleTextStyle
                 )
             }
-            IconButton(onClick = onTrailingButtonIconClick) {
+            IconButton(
+                modifier = Modifier.weight(1f),
+                onClick = onTrailingButtonIconClick
+            ) {
                 Icon(
                     imageVector = trailingButtonIcon,
                     contentDescription = null
