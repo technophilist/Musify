@@ -62,7 +62,7 @@ fun ArtistDetailScreen(
                 cardType = ListItemCardType.SONG,
                 thumbnailImageUrlString = it.associatedImageUrl.toString(),
                 title = it.name,
-                subtitle = "xx,xxx plays", // TODO
+                subtitle = "${it.numberOfPlays} plays",
                 onClick = { onTrackClicked(it) },
                 onTrailingButtonIconClick = { onTrackTrailingButtonIconClicked(it) }
             )
