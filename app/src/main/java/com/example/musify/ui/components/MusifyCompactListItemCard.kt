@@ -90,7 +90,6 @@ fun MusifyCompactListItemCard(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
@@ -116,9 +115,7 @@ fun MusifyCompactListItemCard(
                 contentDescription = null
             )
             Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .weight(2f),
+                modifier = Modifier.weight(2f),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
