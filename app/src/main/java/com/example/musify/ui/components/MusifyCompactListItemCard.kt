@@ -34,7 +34,9 @@ enum class ListItemCardType { ALBUM, ARTIST, SONG, PLAYLIST }
  * A composable that represents a compact list item. This composable
  * contain an argument for setting the [trailingButtonIcon]. To
  * automatically set the trailing icon and the shape of the thumbnail
- * based on the [ListItemCardType], use the other overload.
+ * based on the [ListItemCardType], use the other overload. The composable
+ * will ensure that it has a minimum height of 75.dp and a minimum width
+ * of 250.dp. Size values below the minimum values will be ignored.
  *
  * @param thumbnailImageUrlString the url of the image to use as the
  * thumbnail.
@@ -69,6 +71,7 @@ fun MusifyCompactListItemCard(
     onClick: () -> Unit,
     trailingButtonIcon: ImageVector,
     onTrailingButtonIconClick: () -> Unit,
+    modifier: Modifier = Modifier,
     thumbnailShape: Shape? = null,
     titleTextStyle: TextStyle = LocalTextStyle.current,
     subtitleTextStyle: TextStyle = LocalTextStyle.current,
@@ -80,8 +83,8 @@ fun MusifyCompactListItemCard(
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(75.dp),
+            .sizeIn(minHeight = 75.dp, minWidth = 250.dp)
+            .then(modifier),
         elevation = 0.dp,
         onClick = onClick
     ) {
@@ -142,7 +145,9 @@ fun MusifyCompactListItemCard(
 /**
  * A composable that represents a compact list item. This overload will
  * ensure the use of correct trailing icon and thumbnail shape based
- * on the [cardType].
+ * on the [cardType]. The composable will ensure that it has a minimum
+ * height of 75.dp and a minimum width of 250.dp. Size values below the
+ * minimum values will be ignored.
  * If a specific trailing icon is needed, use the other overload.
  *
  * @param thumbnailImageUrlString the url of the image to use as the
@@ -174,6 +179,7 @@ fun MusifyCompactListItemCard(
     subtitle: String,
     onClick: () -> Unit,
     onTrailingButtonIconClick: () -> Unit,
+    modifier: Modifier = Modifier,
     titleTextStyle: TextStyle = LocalTextStyle.current,
     subtitleTextStyle: TextStyle = LocalTextStyle.current,
     isLoadingPlaceHolderVisible: Boolean = false,
@@ -183,6 +189,7 @@ fun MusifyCompactListItemCard(
     placeholderHighlight: PlaceholderHighlight = PlaceholderHighlight.shimmer()
 ) {
     MusifyCompactListItemCard(
+        modifier = modifier,
         thumbnailImageUrlString = thumbnailImageUrlString,
         title = title,
         subtitle = subtitle,
