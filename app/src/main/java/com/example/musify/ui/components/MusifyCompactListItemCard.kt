@@ -37,6 +37,8 @@ enum class ListItemCardType { ALBUM, ARTIST, SONG, PLAYLIST }
  * based on the [ListItemCardType], use the other overload. The composable
  * will ensure that it has a minimum height of 56.dp and a minimum width
  * of 250.dp. Size values below the minimum values will be ignored.
+ * The maximum height of the composable can be of 80.dp. Any values
+ * higher than 80.dp will be ignored, and the size would be set to 80.dp.
  *
  * @param thumbnailImageUrlString the url of the image to use as the
  * thumbnail.
@@ -83,7 +85,7 @@ fun MusifyCompactListItemCard(
 ) {
     Card(
         modifier = Modifier
-            .sizeIn(minHeight = 56.dp, minWidth = 250.dp)
+            .sizeIn(minHeight = 56.dp, minWidth = 250.dp, maxHeight = 80.dp)
             .then(modifier),
         elevation = 0.dp,
         onClick = onClick
@@ -149,9 +151,9 @@ fun MusifyCompactListItemCard(
 /**
  * A composable that represents a compact list item. This overload will
  * ensure the use of correct trailing icon and thumbnail shape based
- * on the [cardType]. The composable has predefined minimum size values.
- * Size values below the minimum values will be ignored. See the other
- * overload to know the minimum size values.
+ * on the [cardType]. The composable has predefined size values.
+ * Size values below/above the minimum/maximum values will be ignored.
+ * See the other overload to know the minimum/maximum size values.
  * If a specific trailing icon is needed, use the other overload.
  *
  * @param thumbnailImageUrlString the url of the image to use as the
