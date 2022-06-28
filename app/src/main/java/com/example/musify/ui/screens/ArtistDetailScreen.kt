@@ -81,7 +81,7 @@ fun ArtistDetailScreen(
                 cardType = ListItemCardType.ALBUM,
                 thumbnailImageUrlString = it.albumArtUrl.toString(),
                 title = it.nameOfArtist,
-                subtitle = "Year of release", // TODO
+                subtitle = it.yearOfReleaseString,
                 onClick = { onAlbumClicked(it) },
                 onTrailingButtonIconClick = { onAlbumClicked(it) }
             )
