@@ -44,7 +44,7 @@ fun ArtistDetailScreen(
     ) {
         artistCoverArtHeaderItem(
             artistName = artistSummary.name,
-            artistCoverArtUrlString = artistSummary.profilePictureUrl.toString(),
+            artistCoverArtUrlString = artistSummary.associatedImageUrl.toString(),
             onBackButtonClicked = onBackButtonClicked,
             onPLayButtonClick = onPLayButtonClicked
         )
@@ -60,7 +60,7 @@ fun ArtistDetailScreen(
                     .height(64.dp)
                     .padding(horizontal = 16.dp),
                 cardType = ListItemCardType.SONG,
-                thumbnailImageUrlString = it.trackArtUrl.toString(),
+                thumbnailImageUrlString = it.associatedImageUrl.toString(),
                 title = it.name,
                 subtitle = "xx,xxx plays", // TODO
                 onClick = { onTrackClicked(it) },
