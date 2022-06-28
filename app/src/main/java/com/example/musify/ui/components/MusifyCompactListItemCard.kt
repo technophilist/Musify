@@ -32,7 +32,7 @@ enum class ListItemCardType { ALBUM, ARTIST, SONG, PLAYLIST }
 
 /**
  * A composable that represents a compact list item. This composable
- * contain an argument for setting the [trailingButtonIcon]. To
+ * contains an argument for setting the [trailingButtonIcon]. To
  * automatically set the trailing icon and the shape of the thumbnail
  * based on the [ListItemCardType], use the other overload. The composable
  * will ensure that it has a minimum height of 56.dp and a minimum width
