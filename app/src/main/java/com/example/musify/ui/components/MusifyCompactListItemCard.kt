@@ -92,13 +92,13 @@ fun MusifyCompactListItemCard(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             AsyncImage(
                 modifier = Modifier
                     .fillMaxHeight()
                     .aspectRatio(1f, true)
-                    .weight(1f)
                     .conditional(thumbnailShape != null) { clip(thumbnailShape!!) }
                     .placeholder(
                         visible = isLoadingPlaceHolderVisible,
@@ -117,7 +117,9 @@ fun MusifyCompactListItemCard(
                 contentDescription = null
             )
             Column(
-                modifier = Modifier.weight(2f),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
@@ -136,7 +138,6 @@ fun MusifyCompactListItemCard(
                 )
             }
             IconButton(
-                modifier = Modifier.weight(1f),
                 onClick = onTrailingButtonIconClick
             ) {
                 Icon(
