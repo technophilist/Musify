@@ -10,7 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,8 +19,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.example.musify.domain.MusicSummary
+import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.components.ListItemCardType
 import com.example.musify.ui.components.MusifyCompactListItemCard
 import com.google.accompanist.insets.navigationBarsHeight
@@ -41,7 +41,7 @@ fun ArtistDetailScreen(
     val subtitleTextColorWithAlpha = MaterialTheme.colors.onBackground.copy(
         alpha = ContentAlpha.disabled
     )
-
+    var isCoverArtPlaceholderVisible by remember { mutableStateOf(false) }
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -50,7 +50,10 @@ fun ArtistDetailScreen(
             artistName = artistSummary.name,
             artistCoverArtUrlString = artistSummary.associatedImageUrl.toString(),
             onBackButtonClicked = onBackButtonClicked,
-            onPLayButtonClick = onPLayButtonClicked
+            onPLayButtonClick = onPLayButtonClicked,
+            isLoadingPlaceholderVisible = isCoverArtPlaceholderVisible,
+            onCoverArtLoading = { isCoverArtPlaceholderVisible = true },
+            onCoverArtLoaded = { isCoverArtPlaceholderVisible = false }
         )
         item {
             SubtitleText(
@@ -118,7 +121,10 @@ private fun LazyListScope.artistCoverArtHeaderItem(
     artistName: String,
     artistCoverArtUrlString: String,
     onBackButtonClicked: () -> Unit,
-    onPLayButtonClick: () -> Unit
+    onPLayButtonClick: () -> Unit,
+    isLoadingPlaceholderVisible: Boolean = false,
+    onCoverArtLoading: (() -> Unit)? = null,
+    onCoverArtLoaded: ((Throwable?) -> Unit)? = null,
 ) {
     item {
         Box(
@@ -126,11 +132,14 @@ private fun LazyListScope.artistCoverArtHeaderItem(
                 .fillParentMaxHeight(0.6f)
                 .fillParentMaxWidth()
         ) {
-            AsyncImage(
+            AsyncImageWithPlaceholder(
                 modifier = Modifier.fillMaxSize(),
                 model = artistCoverArtUrlString,
                 contentScale = ContentScale.Crop,
-                contentDescription = null
+                contentDescription = null,
+                isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
+                onImageLoading = { onCoverArtLoading?.invoke() },
+                onImageLoadingFinished = { onCoverArtLoaded?.invoke(it) }
             )
             // scrim
             Box(
@@ -179,29 +188,4 @@ private fun LazyListScope.artistCoverArtHeaderItem(
             }
         }
     }
-}
-
-@ExperimentalMaterialApi
-@Composable
-private fun AlbumsList() {
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(10) {
-            MusifyCompactListItemCard(
-                modifier = Modifier
-                    .height(80.dp)
-                    .padding(horizontal = 16.dp),
-                cardType = ListItemCardType.ALBUM,
-                thumbnailImageUrlString = "https://picsum.photos/200/300",
-                title = "Beast (Original Motion Soundtrack)",
-                subtitle = "2022",
-                onClick = { },
-                onTrailingButtonIconClick = { }
-            )
-        }
-    }
-
-
 }
