@@ -17,12 +17,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
 import com.example.musify.R
 import com.example.musify.utils.conditional
 import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
 
 /**
@@ -57,10 +54,10 @@ enum class ListItemCardType { ALBUM, ARTIST, SONG, PLAYLIST }
  * as color, font, line height etc.
  * @param onThumbnailLoading the callback to execute when the thumbnail
  * image is loading.
- * @param onThumbnailLoadSuccess the callback to execute when the thumbnail
- * image was loaded successfully.
- * @param onThumbnailLoadFailure the callback to execute if an error occurs
- * while loading the thumbnail image.
+ * @param onThumbnailImageLoadingFinished the lambda to execute when the image
+ * is done loading. A nullable parameter of type [Throwable] is provided
+ * to the lambda, that indicates whether the image loading process was
+ * successful or not.
  * @param isLoadingPlaceHolderVisible indicates whether the loading
  * placeholder is visible for the thumbnail image.
  */
@@ -79,8 +76,7 @@ fun MusifyCompactListItemCard(
     subtitleTextStyle: TextStyle = LocalTextStyle.current,
     isLoadingPlaceHolderVisible: Boolean = false,
     onThumbnailLoading: (() -> Unit)? = null,
-    onThumbnailLoadFailure: (() -> Unit)? = null,
-    onThumbnailLoadSuccess: (() -> Unit)? = null,
+    onThumbnailImageLoadingFinished: ((Throwable?) -> Unit)? = null,
     placeholderHighlight: PlaceholderHighlight = PlaceholderHighlight.shimmer(),
 ) {
     Card(
@@ -95,25 +91,17 @@ fun MusifyCompactListItemCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            AsyncImage(
+            AsyncImageWithPlaceholder(
                 modifier = Modifier
                     .fillMaxHeight()
                     .aspectRatio(1f, true)
-                    .conditional(thumbnailShape != null) { clip(thumbnailShape!!) }
-                    .placeholder(
-                        visible = isLoadingPlaceHolderVisible,
-                        highlight = placeholderHighlight
-                    ),
+                    .conditional(thumbnailShape != null) { clip(thumbnailShape!!) },
                 model = thumbnailImageUrlString,
                 contentScale = ContentScale.Crop,
-                onState = {
-                    when (it) {
-                        is AsyncImagePainter.State.Empty -> {}
-                        is AsyncImagePainter.State.Loading -> onThumbnailLoading?.invoke()
-                        is AsyncImagePainter.State.Success -> onThumbnailLoadSuccess?.invoke()
-                        is AsyncImagePainter.State.Error -> onThumbnailLoadFailure?.invoke()
-                    }
-                },
+                isLoadingPlaceholderVisible = isLoadingPlaceHolderVisible,
+                onImageLoading = { onThumbnailLoading?.invoke() },
+                onImageLoadingFinished = { onThumbnailImageLoadingFinished?.invoke(it) },
+                placeholderHighlight = placeholderHighlight,
                 contentDescription = null
             )
             Column(
@@ -170,10 +158,10 @@ fun MusifyCompactListItemCard(
  * as color, font, line height etc.
  * @param onThumbnailLoading the callback to execute when the thumbnail
  * image is loading.
- * @param onThumbnailLoadSuccess the callback to execute when the thumbnail
- * image was loaded successfully.
- * @param onThumbnailLoadFailure the callback to execute if an error occurs
- * while loading the thumbnail image.
+ * @param onThumbnailImageLoadingFinished the lambda to execute when the image
+ * is done loading. A nullable parameter of type [Throwable] is provided
+ * to the lambda, that indicates whether the image loading process was
+ * successful or not.
  * @param isLoadingPlaceHolderVisible indicates whether the loading
  * placeholder is visible for the thumbnail image.
  */
@@ -191,8 +179,7 @@ fun MusifyCompactListItemCard(
     subtitleTextStyle: TextStyle = LocalTextStyle.current,
     isLoadingPlaceHolderVisible: Boolean = false,
     onThumbnailLoading: (() -> Unit)? = null,
-    onThumbnailLoadFailure: (() -> Unit)? = null,
-    onThumbnailLoadSuccess: (() -> Unit)? = null,
+    onThumbnailImageLoadingFinished: ((Throwable?) -> Unit)? = null,
     placeholderHighlight: PlaceholderHighlight = PlaceholderHighlight.shimmer()
 ) {
     MusifyCompactListItemCard(
@@ -211,8 +198,7 @@ fun MusifyCompactListItemCard(
         subtitleTextStyle = subtitleTextStyle,
         isLoadingPlaceHolderVisible = isLoadingPlaceHolderVisible,
         onThumbnailLoading = onThumbnailLoading,
-        onThumbnailLoadSuccess = onThumbnailLoadSuccess,
-        onThumbnailLoadFailure = onThumbnailLoadFailure,
+        onThumbnailImageLoadingFinished = onThumbnailImageLoadingFinished,
         placeholderHighlight = placeholderHighlight
     )
 }
