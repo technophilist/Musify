@@ -38,6 +38,11 @@ fun ArtistDetailScreen(
     onTrackTrailingButtonIconClicked: (MusicSummary.TrackSummary) -> Unit,
     onAlbumClicked: (MusicSummary.AlbumSummary) -> Unit,
 ) {
+    val subtitleTextStyle = MaterialTheme.typography.caption.copy(
+        MaterialTheme.colors.onBackground.copy(
+            alpha = ContentAlpha.disabled
+        )
+    )
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -63,6 +68,7 @@ fun ArtistDetailScreen(
                 thumbnailImageUrlString = it.associatedImageUrl.toString(),
                 title = it.name,
                 subtitle = "${it.numberOfPlays} plays",
+                subtitleTextStyle = subtitleTextStyle,
                 onClick = { onTrackClicked(it) },
                 onTrailingButtonIconClick = { onTrackTrailingButtonIconClicked(it) }
             )
@@ -82,6 +88,7 @@ fun ArtistDetailScreen(
                 thumbnailImageUrlString = it.albumArtUrl.toString(),
                 title = it.nameOfArtist,
                 subtitle = it.yearOfReleaseString,
+                subtitleTextStyle = subtitleTextStyle,
                 onClick = { onAlbumClicked(it) },
                 onTrailingButtonIconClick = { onAlbumClicked(it) }
             )
