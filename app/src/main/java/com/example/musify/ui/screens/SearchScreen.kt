@@ -110,8 +110,7 @@ fun SearchScreen(
                         isLoadingPlaceholderVisible = isLoadingMap.getOrPut(it.id) { true },
                         onClick = { onGenreItemClick(it) },
                         onImageLoading = { isLoadingMap[it.id] = true },
-                        onImageLoadFailure = { _ -> isLoadingMap[it.id] = false },
-                        onImageLoadSuccess = { isLoadingMap[it.id] = false }
+                        onImageLoadingFinished = { _ -> isLoadingMap[it.id] = false }
                     )
                 }
             }

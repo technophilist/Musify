@@ -13,12 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
 import com.example.musify.domain.Genre
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
 
 /**
  * A card that represents a Genre.
@@ -30,10 +25,10 @@ import com.google.accompanist.placeholder.material.shimmer
  * @param onClick the lambda to execute when the card is clicked.
  * @param onImageLoading the callback to execute when the background
  * image is loading.
- * @param onImageLoadSuccess the callback to execute when the background
- * image was loaded successfully.
- * @param onImageLoadFailure the callback to execute if an error occurs
- * while loading the background image. The callback provides an instance
+ * @param onImageLoadingFinished the lambda to execute when the image
+ * is done loading. A nullable parameter of type [Throwable] is provided
+ * to the lambda, that indicates whether the image loading process was
+ * successful or not.
  * of [Throwable] that can be used to identify what caused the error.
  */
 @ExperimentalMaterialApi
@@ -43,9 +38,8 @@ fun GenreCard(
     modifier: Modifier = Modifier,
     isLoadingPlaceholderVisible: Boolean = false,
     onClick: (() -> Unit)? = null,
-    onImageLoading: (() -> Unit)? = null,
-    onImageLoadSuccess: (() -> Unit)? = null,
-    onImageLoadFailure: ((Throwable) -> Unit)? = null
+    onImageLoading: () -> Unit,
+    onImageLoadingFinished: (Throwable?) -> Unit
 ) {
     Card(
         modifier = modifier,
@@ -54,22 +48,13 @@ fun GenreCard(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            AsyncImage(
-                modifier = Modifier.placeholder(
-                    isLoadingPlaceholderVisible,
-                    highlight = PlaceholderHighlight.shimmer()
-                ),
+            AsyncImageWithPlaceholder(
                 model = genre.coverArtUrl.toString(),
                 contentScale = ContentScale.Crop,
-                onState = {
-                    when (it) {
-                        is AsyncImagePainter.State.Empty -> {}
-                        is AsyncImagePainter.State.Loading -> onImageLoading?.invoke()
-                        is AsyncImagePainter.State.Success -> onImageLoadSuccess?.invoke()
-                        is AsyncImagePainter.State.Error -> onImageLoadFailure?.invoke(it.result.throwable)
-                    }
-                },
-                contentDescription = null
+                contentDescription = null,
+                isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
+                onImageLoading = onImageLoading,
+                onImageLoadingFinished = onImageLoadingFinished
             )
             Text(
                 modifier = Modifier
