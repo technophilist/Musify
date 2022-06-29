@@ -38,7 +38,8 @@ enum class ListItemCardType { ALBUM, ARTIST, SONG, PLAYLIST }
  * higher than 80.dp will be ignored, and the size would be set to 80.dp.
  *
  * @param thumbnailImageUrlString the url of the image to use as the
- * thumbnail.
+ * thumbnail. If this is null, only the text with subtitle will be
+ * displayed.
  * @param title the title of the card.
  * @param subtitle the subtitle of the card.
  * @param onClick the callback to execute when the card is clicked.
@@ -64,13 +65,13 @@ enum class ListItemCardType { ALBUM, ARTIST, SONG, PLAYLIST }
 @ExperimentalMaterialApi
 @Composable
 fun MusifyCompactListItemCard(
-    thumbnailImageUrlString: String,
     title: String,
     subtitle: String,
     onClick: () -> Unit,
     trailingButtonIcon: ImageVector,
     onTrailingButtonIconClick: () -> Unit,
     modifier: Modifier = Modifier,
+    thumbnailImageUrlString: String? = null,
     thumbnailShape: Shape? = null,
     titleTextStyle: TextStyle = LocalTextStyle.current,
     subtitleTextStyle: TextStyle = LocalTextStyle.current,
@@ -91,19 +92,21 @@ fun MusifyCompactListItemCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            AsyncImageWithPlaceholder(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .aspectRatio(1f, true)
-                    .conditional(thumbnailShape != null) { clip(thumbnailShape!!) },
-                model = thumbnailImageUrlString,
-                contentScale = ContentScale.Crop,
-                isLoadingPlaceholderVisible = isLoadingPlaceHolderVisible,
-                onImageLoading = { onThumbnailLoading?.invoke() },
-                onImageLoadingFinished = { onThumbnailImageLoadingFinished?.invoke(it) },
-                placeholderHighlight = placeholderHighlight,
-                contentDescription = null
-            )
+            thumbnailImageUrlString?.let {
+                AsyncImageWithPlaceholder(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .aspectRatio(1f, true)
+                        .conditional(thumbnailShape != null) { clip(thumbnailShape!!) },
+                    model = it,
+                    contentScale = ContentScale.Crop,
+                    isLoadingPlaceholderVisible = isLoadingPlaceHolderVisible,
+                    onImageLoading = { onThumbnailLoading?.invoke() },
+                    onImageLoadingFinished = { onThumbnailImageLoadingFinished?.invoke(it) },
+                    placeholderHighlight = placeholderHighlight,
+                    contentDescription = null
+                )
+            }
             Column(
                 modifier = Modifier
                     .weight(1f)
