@@ -34,7 +34,9 @@ fun SearchScreen(
     genreList: List<Genre>,
     onGenreItemClick: (Genre) -> Unit,
     onSearchTextChanged: (String) -> Unit,
-    searchQueryResult: List<MusicSummary>
+    searchQueryResult: List<MusicSummary>,
+    onSearchQueryItemClicked: (MusicSummary) -> Unit,
+    onSearchQueryItemTrailingIconButtonClicked: (MusicSummary) -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
     val isLoadingMap = remember { mutableStateMapOf<String, Boolean>() }
@@ -121,8 +123,8 @@ fun SearchScreen(
             ) {
                 SearchQueryList(
                     searchQueryResult = searchQueryResult,
-                    onItemClick = {},
-                    onTrailingIconButtonClick = {}
+                    onItemClick = { onSearchQueryItemClicked(it) },
+                    onTrailingIconButtonClick = { onSearchQueryItemTrailingIconButtonClicked(it) }
                 )
             }
         }
