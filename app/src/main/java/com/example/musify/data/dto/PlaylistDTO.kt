@@ -26,7 +26,7 @@ data class PlaylistDTO(
     data class NumberOfFollowersWrapper(@SerializedName("total") val value: String)
 
     /**
-     * A DTO object that contains a list of [items] of type [TrackDTOWithAlbumMetadataWrapper].
+     * A class that contains a list of [items] of type [TrackDTOWithAlbumMetadataWrapper].
      */
     data class Tracks(val items: List<TrackDTOWithAlbumMetadataWrapper>)
 
