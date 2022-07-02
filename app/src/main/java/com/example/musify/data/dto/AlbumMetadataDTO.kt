@@ -3,7 +3,10 @@ package com.example.musify.data.dto
 import com.google.gson.annotations.SerializedName
 
 /**
- * A DTO object that contains information about a specific album.
+ * A DTO object that contains metadata about a specific album.
+ * Note: The object only contains metadata. It doesn't contain
+ * the track list. [AlbumDTO] contains the track list in addition
+ * to the metadata.
  */
 data class AlbumMetadataDTO(
     val id: String,
