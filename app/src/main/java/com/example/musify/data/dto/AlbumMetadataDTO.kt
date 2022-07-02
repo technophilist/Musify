@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName
 data class AlbumMetadataDTO(
     val id: String,
     val name: String,
-    @SerializedName("albumType") val albumType: String, // album,single or compilation
+    @SerializedName("album_type") val albumType: String, // album,single or compilation
     val artists: List<ArtistInfoDTO>,
     val images: List<ImageDTO>,
     @SerializedName("release_date") val releaseDate: String,
