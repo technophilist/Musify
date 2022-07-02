@@ -1,17 +1,19 @@
 package com.example.musify.data.dto
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * A DTO object that contains information about a specific album.
  */
 data class AlbumDTO(
     val id: String,
     val name: String,
-    val album_type: String,
+    @SerializedName("albumType") val albumType: String, // album,single or compilation
     val artists: List<ArtistInfoDTO>,
     val images: List<ImageDTO>,
-    val release_date: String,
-    val release_date_precision: String,
-    val total_tracks: Int,
+    @SerializedName("release_date") val releaseDate: String,
+    @SerializedName("release_date_precision") val releaseDatePrecision: String, // year, month or day
+    @SerializedName("total_tracks") val totalTracks: Int,
     val type: String
 ) {
     /**
