@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * A DTO object that contains information about a specific album.
  */
-data class AlbumDTO(
+data class AlbumMetadataDTO(
     val id: String,
     val name: String,
     @SerializedName("albumType") val albumType: String, // album,single or compilation
@@ -17,8 +17,8 @@ data class AlbumDTO(
     val type: String
 ) {
     /**
-     * A DTO object associated with [AlbumDTO] that contains the artist
-     * information about an artist.
+     * A DTO object associated with [AlbumMetadataDTO] that contains information
+     * about an artist.
      */
     data class ArtistInfoDTO(
         val id: String,

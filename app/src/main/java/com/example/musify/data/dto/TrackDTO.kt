@@ -10,5 +10,5 @@ data class TrackDTO(
     val is_playable: Boolean,
     val explicit: Boolean,
     val duration_ms: Int,
-    val album: AlbumDTO
+    val album: AlbumMetadataDTO
 )

@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
  * metadata.
  */
 data class AlbumsDTO(
-    val items: List<AlbumDTO>,
+    val items: List<AlbumMetadataDTO>,
     val limit: Int, // indicates the number of items in the list
     @SerializedName("next") val nextPageUrlString: String,
     val offset: Int,
