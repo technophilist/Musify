@@ -1,14 +1,17 @@
 package com.example.musify.data.dto
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * A DTO object that contains information about a specific track.
  */
 data class TrackDTO(
     val id: String,
     val name: String,
-    val preview_url: String?,
-    val is_playable: Boolean,
+    @SerializedName("preview_url") val previewUrl: String?,
+    @SerializedName("is_playable") val isPlayable: Boolean,
     val explicit: Boolean,
-    val duration_ms: Int,
-    val album: AlbumMetadataDTO
+    @SerializedName("duration_ms") val durationInMillis: Int,
+    @SerializedName("album") val albumMetadata: AlbumMetadataDTO?
 )
+
