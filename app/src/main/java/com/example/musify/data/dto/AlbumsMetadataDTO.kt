@@ -11,6 +11,6 @@ data class AlbumsMetadataDTO(
     val limit: Int, // indicates the number of items in the list
     @JsonProperty("next") val nextPageUrlString: String,
     val offset: Int,
-    @JsonProperty("previous") val previousPageUrlString: Any,
+    @JsonProperty("previous") val previousPageUrlString: String?,
     @JsonProperty("total") val totalNumberOfItemsAvailable: Int
 )
