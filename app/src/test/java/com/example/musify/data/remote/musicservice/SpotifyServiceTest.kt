@@ -1,7 +1,6 @@
 package com.example.musify.data.remote.musicservice
 
 import com.example.musify.data.dto.AlbumMetadataDTO
-import com.example.musify.data.dto.SearchResultsDTO
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -10,7 +9,6 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.junit.Before
 import org.junit.Test
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 
@@ -56,7 +54,6 @@ class SpotifyServiceTest {
         assert(response.body() != null)
         // the id of the fetched id must match with the 'artistId'
         assert(response.body()!!.id == artistId)
-        println(response.body())
     }
 
     @Test
@@ -104,7 +101,7 @@ class SpotifyServiceTest {
             // the body of the response should not be null
             assert(response.body() != null)
             // the number of items should be equal to the specified limit
-            println(response.body()!!.items.size == 10)
+            assert(response.body()!!.items.size == 10)
         }
 
     @Test
@@ -197,22 +194,25 @@ class SpotifyServiceTest {
 
     @Test
     fun searchTrackTest_validSearchQueryWithLimit_returnsSearchResultsDTO() = runBlocking {
-        var response: Response<SearchResultsDTO>? = null
-        try {
-            // given an valid search query for a track
-            val searchQuery = "Visiting hours by Ed Sheeran"
-            // when performing search operation
-            response = musicService.search(
-                searchQuery = searchQuery,
-                type = buildSearchQueryWithTypes(SearchQueryType.TRACK),
-                market = "IN",
-                limit = 1 // limiting the number of results to one
-            )
-            // the body of the response should not be null
-        } catch (e: Exception) {
-            println(response!!.body() != null)
-        }
 
+        // given an valid search query for a track
+        val searchQuery = "Visiting hours by Ed Sheeran"
+        // when performing search operation
+        val responseBody = musicService.search(
+            searchQuery = searchQuery,
+            type = buildSearchQueryWithTypes(SearchQueryType.TRACK),
+            market = "IN",
+            limit = 1 // limiting the number of results to one
+        ).body()
+        // the body of the response should not be null
+        assert(responseBody != null)
+        // all other properties except the 'tracks' property should be null
+        with(responseBody!!) {
+            assert(tracks != null)
+            assert(albums == null)
+            assert(artists == null)
+            assert(playlists == null)
+        }
     }
 
     @Test
@@ -220,14 +220,21 @@ class SpotifyServiceTest {
         // given an valid search query for an album
         val searchQuery = "="
         // when performing search operation
-        val response = musicService.search(
+        val responseBody = musicService.search(
             searchQuery = searchQuery,
             type = buildSearchQueryWithTypes(SearchQueryType.ALBUM),
             market = "IN",
             limit = 1 // limiting the number of results to one
-        )
+        ).body()
         // the body of the response should not be null
-        assert(response.body() != null)
+        assert(responseBody != null)
+        // all other properties except the 'albums' property should be null
+        with(responseBody!!) {
+            assert(tracks == null)
+            assert(albums != null)
+            assert(artists == null)
+            assert(playlists == null)
+        }
     }
 
     @Test
@@ -235,14 +242,21 @@ class SpotifyServiceTest {
         // given an valid search query for an artist
         val searchQuery = "ed sheeran"
         // when performing search operation
-        val response = musicService.search(
+        val responseBody = musicService.search(
             searchQuery = searchQuery,
             type = buildSearchQueryWithTypes(SearchQueryType.ARTIST),
             market = "IN",
             limit = 1 // limiting the number of results to one
-        )
+        ).body()
         // the body of the response should not be null
-        assert(response.body() != null)
+        assert(responseBody != null)
+        // all other properties except the 'artists' property should be null
+        with(responseBody!!) {
+            assert(tracks == null)
+            assert(albums == null)
+            assert(artists != null)
+            assert(playlists == null)
+        }
     }
 
     @Test
@@ -250,14 +264,21 @@ class SpotifyServiceTest {
         // given an valid search query for a playlist
         val searchQuery = "Anirudh"
         // when performing search operation
-        val response = musicService.search(
+        val responseBody = musicService.search(
             searchQuery = searchQuery,
             type = buildSearchQueryWithTypes(SearchQueryType.PLAYLIST),
             market = "IN",
             limit = 1 // limiting the number of results to one
-        )
+        ).body()
         // the body of the response should not be null
-        assert(response.body() != null)
+        assert(responseBody != null)
+        // all other properties except the 'playlists' property should be null
+        with(responseBody!!) {
+            assert(tracks == null)
+            assert(albums == null)
+            assert(artists == null)
+            assert(playlists != null)
+        }
     }
 
     @Test
@@ -265,20 +286,20 @@ class SpotifyServiceTest {
         // given an valid search query
         val searchQuery = "Anirudh"
         // when performing search operation for all types
-        val response = musicService.search(
+        val responseBody = musicService.search(
             searchQuery = searchQuery,
             market = "IN",
             type = SpotifyEndPoints.Defaults.defaultSearchQueryTypes,
             limit = 1 // limiting the number of results for each type to one
-        )
+        ).body()
         // the body of the response should not be null
-        assert(response.body() != null)
-        // the results for each type should exactly be one
-        with(response.body()!!) {
-            assert(tracks.value.size == 1)
-            assert(albums.value.size == 1)
-            assert(artists.value.size == 1)
-            assert(playlists.value.size == 1)
+        assert(responseBody != null)
+        // all the propereties should not be null
+        with(responseBody!!) {
+            assert(tracks != null)
+            assert(albums != null)
+            assert(artists != null)
+            assert(playlists != null)
         }
     }
 
