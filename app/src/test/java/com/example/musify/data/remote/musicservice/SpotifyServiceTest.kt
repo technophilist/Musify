@@ -1,7 +1,7 @@
 package com.example.musify.data.remote.musicservice
 
 import com.example.musify.data.dto.AlbumMetadataDTO
-import com.fasterxml.jackson.databind.DeserializationFeature
+import com.example.musify.utils.DefaultMusifyJacksonConverterFactory
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.runBlocking
@@ -10,7 +10,6 @@ import okhttp3.OkHttpClient
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
-import retrofit2.converter.jackson.JacksonConverterFactory
 
 class SpotifyServiceTest {
     // artist id of 'Anirudh Ravichander'
@@ -30,16 +29,10 @@ class SpotifyServiceTest {
                 interceptorChain.proceed(request)
             })
             .build()
-        val jacksonConverterFactory = JacksonConverterFactory.create(
-            jacksonObjectMapper().configure(
-                DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                false
-            )
-        )
         musicService = Retrofit.Builder()
             .client(client)
             .baseUrl("https://api.spotify.com/")
-            .addConverterFactory(jacksonConverterFactory)
+            .addConverterFactory(DefaultMusifyJacksonConverterFactory)
             .build()
             .create(SpotifyService::class.java)
     }
