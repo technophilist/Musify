@@ -8,6 +8,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory
  * A [JacksonConverterFactory] that is configured to not throw an
  * exception when an unknown json property is encountered.
  */
-val DefaultMusifyJacksonConverterFactory: JacksonConverterFactory = JacksonConverterFactory.create(
+val defaultMusifyJacksonConverterFactory: JacksonConverterFactory = JacksonConverterFactory.create(
     jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 )
