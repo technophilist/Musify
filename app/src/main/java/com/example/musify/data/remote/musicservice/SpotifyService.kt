@@ -11,7 +11,7 @@ interface SpotifyService {
     @GET(SpotifyEndPoints.SpecificArtistEndPoint)
     suspend fun getArtistInfoWithId(@Path("id") artistId: String): Response<ArtistDTO>
 
-    @GET(SpotifyEndPoints.AlbumsEndPoint)
+    @GET(SpotifyEndPoints.SpecificArtistAlbumsEndPoint)
     suspend fun getAlbumsOfArtistWithId(
         @Path("id") artistId: String,
         @Query("market") market: String,
