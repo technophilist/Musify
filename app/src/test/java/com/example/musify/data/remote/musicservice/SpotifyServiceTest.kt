@@ -1,7 +1,7 @@
 package com.example.musify.data.remote.musicservice
 
 import com.example.musify.data.dto.AlbumMetadataDTO
-import com.example.musify.utils.DefaultMusifyJacksonConverterFactory
+import com.example.musify.utils.defaultMusifyJacksonConverterFactory
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.runBlocking
@@ -32,7 +32,7 @@ class SpotifyServiceTest {
         musicService = Retrofit.Builder()
             .client(client)
             .baseUrl("https://api.spotify.com/")
-            .addConverterFactory(DefaultMusifyJacksonConverterFactory)
+            .addConverterFactory(defaultMusifyJacksonConverterFactory)
             .build()
             .create(SpotifyService::class.java)
     }
