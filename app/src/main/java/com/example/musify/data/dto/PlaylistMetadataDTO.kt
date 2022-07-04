@@ -1,6 +1,6 @@
 package com.example.musify.data.dto
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
  * A DTO object that contains only the metadata associated with a
@@ -11,5 +11,5 @@ data class PlaylistMetadataDTO(
     val id: String,
     val name: String,
     val images: List<ImageDTO>,
-    @SerializedName("owner") val ownerName: PlaylistDTO.OwnerNameWrapper
+    @JsonProperty("owner") val ownerName: PlaylistDTO.OwnerNameWrapper
 )
