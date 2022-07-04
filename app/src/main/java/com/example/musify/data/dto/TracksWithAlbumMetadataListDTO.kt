@@ -1,8 +1,8 @@
 package com.example.musify.data.dto
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
  * A DTO object that contains a list of [TrackDTOWithAlbumMetadata].
  */
-data class TracksWithAlbumMetadataListDTO(@SerializedName("tracks") val value: List<TrackDTOWithAlbumMetadata>)
+data class TracksWithAlbumMetadataListDTO(@JsonProperty("tracks") val value: List<TrackDTOWithAlbumMetadata>)
