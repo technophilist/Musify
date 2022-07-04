@@ -1,12 +1,15 @@
 package com.example.musify.data.remote.musicservice
 
+import com.example.musify.data.dto.AlbumMetadataDTO
+import com.example.musify.utils.DefaultMusifyJacksonConverterFactory
+import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SpotifyServiceTest {
     // artist id of 'Anirudh Ravichander'
@@ -16,7 +19,7 @@ class SpotifyServiceTest {
     @Before
     fun setup() {
         val oAuthToken =
-            "BQC74Ea3XQImXi-C4vlZjSkvI0VxRxqTnYH2zXLGFAZGMpv_bKSoTdh188EAZn-7VrpHCjLRHR-AW1drIwI7ijemtdjCAmjBzgEFmbI55AY-lZybttOKmsGewna1WbqwHG1p3MtxOXD1wMmNDlLgjPkNVwZ-tlyNi0KDEM0d39JInhCPVBbzLjmw-TV1sOagLTM"
+            "BQAMfnRBpJ8H6x07NCUs0cE5EkYFM6gL8ly407kO-4E9rg8XK_hP0L8lPGKrCiTl7Fu2-L-eW0HNZph7QJtyIHL_OTONuCMdr6YZQ31QA5eosTdXMh7lWvzsMYvuJldtuVYxhOuHq5vms8ZaK-7c9h_7SbhNQSuMZn0M3kgn9cH0zAB51pHSBlpfgUJo1H4khbw"
         val client = OkHttpClient.Builder()
             .addInterceptor(Interceptor { interceptorChain ->
                 val request = interceptorChain.request()
@@ -29,7 +32,7 @@ class SpotifyServiceTest {
         musicService = Retrofit.Builder()
             .client(client)
             .baseUrl("https://api.spotify.com/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(DefaultMusifyJacksonConverterFactory)
             .build()
             .create(SpotifyService::class.java)
     }
@@ -91,7 +94,7 @@ class SpotifyServiceTest {
             // the body of the response should not be null
             assert(response.body() != null)
             // the number of items should be equal to the specified limit
-            println(response.body()!!.items.size == 10)
+            assert(response.body()!!.items.size == 10)
         }
 
     @Test
@@ -184,17 +187,25 @@ class SpotifyServiceTest {
 
     @Test
     fun searchTrackTest_validSearchQueryWithLimit_returnsSearchResultsDTO() = runBlocking {
+
         // given an valid search query for a track
         val searchQuery = "Visiting hours by Ed Sheeran"
         // when performing search operation
-        val response = musicService.search(
+        val responseBody = musicService.search(
             searchQuery = searchQuery,
             type = buildSearchQueryWithTypes(SearchQueryType.TRACK),
             market = "IN",
             limit = 1 // limiting the number of results to one
-        )
+        ).body()
         // the body of the response should not be null
-        assert(response.body() != null)
+        assert(responseBody != null)
+        // all other properties except the 'tracks' property should be null
+        with(responseBody!!) {
+            assert(tracks != null)
+            assert(albums == null)
+            assert(artists == null)
+            assert(playlists == null)
+        }
     }
 
     @Test
@@ -202,14 +213,21 @@ class SpotifyServiceTest {
         // given an valid search query for an album
         val searchQuery = "="
         // when performing search operation
-        val response = musicService.search(
+        val responseBody = musicService.search(
             searchQuery = searchQuery,
             type = buildSearchQueryWithTypes(SearchQueryType.ALBUM),
             market = "IN",
             limit = 1 // limiting the number of results to one
-        )
+        ).body()
         // the body of the response should not be null
-        assert(response.body() != null)
+        assert(responseBody != null)
+        // all other properties except the 'albums' property should be null
+        with(responseBody!!) {
+            assert(tracks == null)
+            assert(albums != null)
+            assert(artists == null)
+            assert(playlists == null)
+        }
     }
 
     @Test
@@ -217,14 +235,21 @@ class SpotifyServiceTest {
         // given an valid search query for an artist
         val searchQuery = "ed sheeran"
         // when performing search operation
-        val response = musicService.search(
+        val responseBody = musicService.search(
             searchQuery = searchQuery,
             type = buildSearchQueryWithTypes(SearchQueryType.ARTIST),
             market = "IN",
             limit = 1 // limiting the number of results to one
-        )
+        ).body()
         // the body of the response should not be null
-        assert(response.body() != null)
+        assert(responseBody != null)
+        // all other properties except the 'artists' property should be null
+        with(responseBody!!) {
+            assert(tracks == null)
+            assert(albums == null)
+            assert(artists != null)
+            assert(playlists == null)
+        }
     }
 
     @Test
@@ -232,14 +257,21 @@ class SpotifyServiceTest {
         // given an valid search query for a playlist
         val searchQuery = "Anirudh"
         // when performing search operation
-        val response = musicService.search(
+        val responseBody = musicService.search(
             searchQuery = searchQuery,
             type = buildSearchQueryWithTypes(SearchQueryType.PLAYLIST),
             market = "IN",
             limit = 1 // limiting the number of results to one
-        )
+        ).body()
         // the body of the response should not be null
-        assert(response.body() != null)
+        assert(responseBody != null)
+        // all other properties except the 'playlists' property should be null
+        with(responseBody!!) {
+            assert(tracks == null)
+            assert(albums == null)
+            assert(artists == null)
+            assert(playlists != null)
+        }
     }
 
     @Test
@@ -247,21 +279,46 @@ class SpotifyServiceTest {
         // given an valid search query
         val searchQuery = "Anirudh"
         // when performing search operation for all types
-        val response = musicService.search(
+        val responseBody = musicService.search(
             searchQuery = searchQuery,
             market = "IN",
             type = SpotifyEndPoints.Defaults.defaultSearchQueryTypes,
             limit = 1 // limiting the number of results for each type to one
-        )
+        ).body()
         // the body of the response should not be null
-        assert(response.body() != null)
-        // the results for each type should exactly be one
-        with(response.body()!!) {
-            assert(tracks.value.size == 1)
-            assert(albums.value.size == 1)
-            assert(artists.value.size == 1)
-            assert(playlists.value.size == 1)
+        assert(responseBody != null)
+        // all the propereties should not be null
+        with(responseBody!!) {
+            assert(tracks != null)
+            assert(albums != null)
+            assert(artists != null)
+            assert(playlists != null)
         }
     }
 
+    /**
+     * This test is written to check whether the mapping of a non-null
+     * property in a kotlin model class with a null value in json
+     * throws [MissingKotlinParameterException] exception. This is because
+     * other libraries such as Gson and moshi suppress this discrepancy.
+     * In the case of Gson, it just assigns a value of null to a non-null
+     * kotlin property, which is disastrous. In the case of Moshi,
+     * all properties in the kotlin object are converted to be of
+     * nullable type.
+     */
+    @Test(expected = MissingKotlinParameterException::class)
+    fun jacksonDeSerializationTest_nullValueForNonNullableKotlinProperty_throwsException() =
+        runBlocking {
+            // given a json string object with a value of non nullable
+            // kotlin property set to null
+            val jsonString = "{\"id\":null,\"name\":\"s\"}"
+            // when mapping the object to a kotlin class with the same field
+            // declared as non-nullable
+            jacksonObjectMapper().readValue(
+                jsonString,
+                AlbumMetadataDTO.ArtistInfoDTO::class.java
+            )
+            // an exception should be thrown
+            return@runBlocking Unit
+        }
 }

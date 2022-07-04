@@ -1,6 +1,6 @@
 package com.example.musify.data.dto
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
  * A DTO object that contains information about a specific track
@@ -9,10 +9,10 @@ import com.google.gson.annotations.SerializedName
 data class TrackDTOWithAlbumMetadata(
     val id: String,
     val name: String,
-    @SerializedName("preview_url") val previewUrl: String?,
-    @SerializedName("is_playable") val isPlayable: Boolean,
+    @JsonProperty("preview_url") val previewUrl: String?,
+    @JsonProperty("is_playable") val isPlayable: Boolean,
     val explicit: Boolean,
-    @SerializedName("duration_ms") val durationInMillis: Int,
-    @SerializedName("album") val albumMetadata: AlbumMetadataDTO
+    @JsonProperty("duration_ms") val durationInMillis: Int,
+    @JsonProperty("album") val albumMetadata: AlbumMetadataDTO
 )
 
