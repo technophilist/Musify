@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class AlbumDTO(
     val id: String,
     val name: String,
-    @JsonProperty("albumType") val albumType: String, // album,single or compilation
+    @JsonProperty("album_type") val albumType: String, // album,single or compilation
     val artists: List<ArtistDTO>,
     val images: List<ImageDTO>,
     @JsonProperty("release_date") val releaseDate: String,
