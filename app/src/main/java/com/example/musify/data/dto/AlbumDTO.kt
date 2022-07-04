@@ -11,7 +11,7 @@ data class AlbumDTO(
     val id: String,
     val name: String,
     @JsonProperty("album_type") val albumType: String, // album,single or compilation
-    val artists: List<ArtistDTO>,
+    val artists: List<ArtistDTOWithNullableImagesAndFollowers>,
     val images: List<ImageDTO>,
     @JsonProperty("release_date") val releaseDate: String,
     @JsonProperty("release_date_precision") val releaseDatePrecision: String, // year, month or day
@@ -37,5 +37,17 @@ data class AlbumDTO(
         @JsonProperty("is_playable") val isPlayable: Boolean,
         val explicit: Boolean,
         @JsonProperty("duration_ms") val durationInMillis: Int
+    )
+
+    /**
+     * A DTO object that contains information about an Artist.
+     * [ArtistDTO] mandates these two parameters whereas this object
+     * makes [images] and [followers] as nullable type.
+     */
+    data class ArtistDTOWithNullableImagesAndFollowers(
+        val id: String,
+        val name: String,
+        val images: List<ImageDTO>?,
+        val followers: ArtistDTO.Followers?
     )
 }
