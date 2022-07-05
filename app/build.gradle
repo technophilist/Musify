@@ -17,6 +17,11 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        // load fields from local.properties file
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+        buildConfigField "String", "SPOTIFY_CLIENT_ID", "\"${properties.getProperty("SPOTIFY_CLIENT_ID")}\""
+        buildConfigField "String", "SPOTIFY_CLIENT_SECRET", "\"${properties.getProperty("SPOTIFY_CLIENT_SECRET")}\""
     }
 
     buildTypes {
@@ -75,5 +80,6 @@ dependencies {
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
-    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.2' // Jackson support for kotlin types
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.2'
+    // Jackson support for kotlin types
 }
