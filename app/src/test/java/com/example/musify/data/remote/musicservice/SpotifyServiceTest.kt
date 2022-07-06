@@ -50,16 +50,6 @@ class SpotifyServiceTest {
     }
 
     @Test
-    fun getArtistInfoTest_invalidArtistId_returnsNull() = runBlocking {
-        // given an invalid artistId
-        val artistId = "-"
-        // when fetching the artist
-        val response = musicService.getArtistInfoWithId(artistId)
-        // the body of the response should be null
-        assert(response.body() == null)
-    }
-
-    @Test
     fun getAlbumsAssociatedWithArtistTest_validArtistId_returnsAlbumsDTO() = runBlocking {
         // given an invalid artistId
         val artistId = validArtistId
@@ -67,16 +57,6 @@ class SpotifyServiceTest {
         val response = musicService.getAlbumsOfArtistWithId(artistId, "IN")
         // the body of the response should not be null
         assert(response.body() != null)
-    }
-
-    @Test
-    fun getAlbumsAssociatedWithArtistTest_invalidArtistId_returnsNull() = runBlocking {
-        // given an invalid artistId
-        val artistId = "-"
-        // when fetching the artist
-        val response = musicService.getAlbumsOfArtistWithId(artistId, "IN")
-        // the body of the response should be null
-        assert(response.body() == null)
     }
 
     @Test
@@ -108,19 +88,6 @@ class SpotifyServiceTest {
         )
         // the body of the response should not be null
         assert(response.body() != null)
-    }
-
-    @Test
-    fun getTopTracksTest_invalidArtistId_returnsNull() = runBlocking {
-        // given an invalid artistId and limit
-        val artistId = "-"
-        // when fetching the top ten tracks
-        val response = musicService.getTopTenTracksForArtistWithId(
-            artistId = artistId,
-            market = "IN"
-        )
-        // the body of the response should be null
-        assert(response.body() == null)
     }
 
     @Test
@@ -160,19 +127,6 @@ class SpotifyServiceTest {
         )
         // the body of the response should not be null
         assert(response.body() != null)
-    }
-
-    @Test
-    fun getPlaylistTest_invalidPlaylistId_returnsNull() = runBlocking {
-        // given an invalid albumId
-        val albumId = "-"
-        // when fetching the album
-        val response = musicService.getPlaylistWithId(
-            playlistId = albumId,
-            market = "IN"
-        )
-        // the body of the response should be null
-        assert(response.body() == null)
     }
 
     @Test
