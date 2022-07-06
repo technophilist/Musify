@@ -15,7 +15,7 @@ import retrofit2.http.POST
  * included in the header of an authorization request to get an
  * **access token** from the spotify api. This is **not** a token
  * than can be used to directly access spotify's api. It is secret
- * that can be sent to spotify's server's using the [TokenManager.getAccessToken]
+ * that can be sent to spotify's server's using the [TokenManager.getNewAccessToken]
  * to get the actual token that can be used to communicate with
  * spotify's servers.
  */
@@ -31,7 +31,7 @@ interface TokenManager {
 
     @FormUrlEncoded
     @POST(SpotifyEndPoints.API_TOKEN_ENDPOINT)
-    suspend fun getAccessToken(
+    suspend fun getNewAccessToken(
         @Header("Authorization") secret: String,
         @Field("grant_type") grantType: String = defaultGrantType,
     ): AccessTokenResponseDTO

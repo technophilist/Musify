@@ -48,7 +48,7 @@ class TokenManagerTest {
         // given a valid client secret
         val clientSecret = TEST_SPOTIFY_CLIENT_SECRET_BASE64
         // the access token must be fetched without an exceptions
-        runBlocking { tokenManager.getAccessToken(clientSecret) }
+        runBlocking { tokenManager.getNewAccessToken(clientSecret) }
     }
 
     @Test
@@ -58,7 +58,7 @@ class TokenManagerTest {
         // when requesting an access token
         val accessTokenResponse = runBlocking {
             // the access token must be fetched without an exceptions
-            tokenManager.getAccessToken(clientSecret)
+            tokenManager.getNewAccessToken(clientSecret)
         }
         // when using the newly acquired access token to get an artist
         val spotifyService = Retrofit.Builder()
