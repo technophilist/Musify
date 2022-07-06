@@ -26,12 +26,14 @@ val SPOTIFY_CLIENT_SECRET_BASE64: String
         Base64.NO_WRAP
     )
 
+const val defaultGrantType = "client_credentials"
+
 interface TokenManager {
 
     @FormUrlEncoded
     @POST(SpotifyEndPoints.API_TOKEN_ENDPOINT)
     suspend fun getAccessToken(
-        @Field("grant_type") grantType: String,
-        @Header("Authorization") secret: String
+        @Header("Authorization") secret: String,
+        @Field("grant_type") grantType: String = defaultGrantType,
     ): Response<AccessTokenResponseDTO>
 }
