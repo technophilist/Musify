@@ -12,3 +12,12 @@ data class AccessTokenResponseDTO(
     @JsonProperty("expires_in") val secondsUntilExpiration: Int,
     @JsonProperty("token_type") val tokenType: String
 )
+
+/**
+ * A mapper function for converting an instance of [AccessTokenResponseDTO]
+ * to an instance of [BearerToken].
+ */
+fun AccessTokenResponseDTO.toBearerToken() = BearerToken(
+    tokenString = accessToken,
+    secondsUntilExpiration = secondsUntilExpiration
+)
