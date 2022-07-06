@@ -29,7 +29,7 @@ val SPOTIFY_CLIENT_SECRET_BASE64: String
 interface TokenManager {
 
     @FormUrlEncoded
-    @POST(SpotifyEndPoints.ApiTokenEndPoint)
+    @POST(SpotifyEndPoints.API_TOKEN_ENDPOINT)
     suspend fun getAccessToken(
         @Field("grant_type") grantType: String,
         @Header("Authorization") secret: String

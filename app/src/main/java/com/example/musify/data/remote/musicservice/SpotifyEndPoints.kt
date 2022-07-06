@@ -5,15 +5,14 @@ package com.example.musify.data.remote.musicservice
  * used by [SpotifyService]. It also contains certain defaults for the
  * api calls made by [SpotifyService].
  */
-// TODO use screaming case convention
 object SpotifyEndPoints {
-    const val SpecificArtistEndPoint = "v1/artists/{id}"
-    const val SpecificArtistAlbumsEndPoint = "v1/artists/{id}/albums"
-    const val SpecificAlbumEndPoint = "v1/albums/{id}"
-    const val TopTracksEndPoint = "v1/artists/{id}/top-tracks"
-    const val SpecificPlaylistEndPoint = "v1/playlists/{playlist_id}"
-    const val SearchEndPoint = "v1/search"
-    const val ApiTokenEndPoint = "api/token"
+    const val SPECIFIC_ARTIST_ENDPOINT = "v1/artists/{id}"
+    const val SPECIFIC_ARTIST_ALBUMS_ENDPOINT = "v1/artists/{id}/albums"
+    const val SPECIFIC_ALBUM_ENDPOINT = "v1/albums/{id}"
+    const val TOP_TRACKS_ENDPOINT = "v1/artists/{id}/top-tracks"
+    const val SPECIFIC_PLAYLIST_ENDPOINT = "v1/playlists/{playlist_id}"
+    const val SEARCH_ENDPOINT = "v1/search"
+    const val API_TOKEN_ENDPOINT = "api/token"
 
     object Defaults {
         const val defaultPlaylistFields =
