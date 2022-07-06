@@ -47,6 +47,15 @@ class SpotifyServiceTest {
         assert(fetchedArtist.id == artistId)
     }
 
+    @Test(expected = retrofit2.HttpException::class)
+    fun getArtistInfoTest_invalidArtistId_returnsNull() {
+        // given an invalid artistId
+        val artistId = "-"
+        // when fetching the artist info
+        runBlocking { musicService.getArtistInfoWithId(artistId) }
+        // a HttpException must be thrown
+    }
+
     @Test
     fun getAlbumsAssociatedWithArtistTest_validArtistId_returnsAlbumsDTO() {
         // given an valid artistId
