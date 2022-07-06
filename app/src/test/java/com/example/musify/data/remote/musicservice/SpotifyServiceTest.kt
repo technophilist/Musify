@@ -1,12 +1,11 @@
 package com.example.musify.data.remote.musicservice
 
 import com.example.musify.data.dto.AlbumMetadataDTO
+import com.example.musify.data.remote.token.BearerToken
 import com.example.musify.utils.defaultMusifyJacksonConverterFactory
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.runBlocking
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
@@ -14,23 +13,15 @@ import retrofit2.Retrofit
 class SpotifyServiceTest {
     // artist id of 'Anirudh Ravichander'
     private val validArtistId = "4zCH9qm4R2DADamUHMCa6O"
+    private val token = BearerToken(
+        tokenString = "BQCukGjYCVswY_DwKvN1BVl9lFl_l22CVg0InM5GaH4n4czqZlgjEyHbDyDVp36srhphqseVKsIl_QY6Rzh3VgAQ3cUgt9o-CAMvtgnPmVqZl2LG_x0",
+        secondsUntilExpiration = 3600
+    )
     lateinit var musicService: SpotifyService
 
     @Before
     fun setup() {
-        val oAuthToken =
-            "BQBnbeDCSUOwr8_zJRAoAP0PZUB1uAKJElbINCuAoRKb2zGrb3ldFxvu_0fwSWVeSZMjJrSfWDe64W6kLGjvjvjSUxXFZUQdE-mhSJlEEfYHmtKcKJI"
-        val client = OkHttpClient.Builder()
-            .addInterceptor(Interceptor { interceptorChain ->
-                val request = interceptorChain.request()
-                    .newBuilder()
-                    .addHeader("Authorization", "Bearer $oAuthToken")
-                    .build()
-                interceptorChain.proceed(request)
-            })
-            .build()
         musicService = Retrofit.Builder()
-            .client(client)
             .baseUrl("https://api.spotify.com/")
             .addConverterFactory(defaultMusifyJacksonConverterFactory)
             .build()
@@ -42,7 +33,7 @@ class SpotifyServiceTest {
         // given a valid artistId
         val artistId = validArtistId
         // the artist must be fetched successfully
-        val fetchedArtist = musicService.getArtistInfoWithId(artistId)
+        val fetchedArtist = musicService.getArtistInfoWithId(artistId, token)
         // the id of the fetched artist must match with the 'artistId'
         assert(fetchedArtist.id == artistId)
     }
@@ -52,7 +43,7 @@ class SpotifyServiceTest {
         // given an invalid artistId
         val artistId = "-"
         // when fetching the artist info
-        runBlocking { musicService.getArtistInfoWithId(artistId) }
+        runBlocking { musicService.getArtistInfoWithId(artistId, token) }
         // a HttpException must be thrown
     }
 
@@ -61,7 +52,7 @@ class SpotifyServiceTest {
         // given an valid artistId
         val artistId = validArtistId
         // the albums associated with the artist must be fetched successfully
-        runBlocking { musicService.getAlbumsOfArtistWithId(artistId, "IN") }
+        runBlocking { musicService.getAlbumsOfArtistWithId(artistId, "IN", token) }
     }
 
     @Test
@@ -75,7 +66,8 @@ class SpotifyServiceTest {
             musicService.getAlbumsOfArtistWithId(
                 artistId = artistId,
                 market = "IN",
-                limit = limit
+                limit = limit,
+                token = token
             )
         }
         // the number of items should be equal to the specified limit
@@ -89,7 +81,11 @@ class SpotifyServiceTest {
         runBlocking {
             // the top ten tracks associated with the artist must be
             // successfully fetched
-            musicService.getTopTenTracksForArtistWithId(artistId = artistId, market = "IN")
+            musicService.getTopTenTracksForArtistWithId(
+                artistId = artistId,
+                market = "IN",
+                token = token
+            )
         }
     }
 
@@ -99,7 +95,7 @@ class SpotifyServiceTest {
         val albumId = "4aawyAB9vmqN3uQ7FjRGTy"
         runBlocking {
             // the album must be fetched successfully
-            musicService.getAlbumWithId(albumId = albumId, market = "IN")
+            musicService.getAlbumWithId(albumId = albumId, market = "IN", token = token)
         }
     }
 
@@ -109,7 +105,7 @@ class SpotifyServiceTest {
         val albumId = "7sZbq8QGyMnhKPcLJvCUFD"
         runBlocking {
             // the playlist must be fetched successfully
-            musicService.getPlaylistWithId(playlistId = albumId, market = "IN")
+            musicService.getPlaylistWithId(playlistId = albumId, market = "IN", token = token)
         }
     }
 
@@ -134,6 +130,7 @@ class SpotifyServiceTest {
                 searchQuery = searchQuery,
                 type = buildSearchQueryWithTypes(SearchQueryType.TRACK),
                 market = "IN",
+                token = token,
                 limit = 1 // limiting the number of results to one
             )
         }
@@ -157,6 +154,7 @@ class SpotifyServiceTest {
                 searchQuery = searchQuery,
                 type = buildSearchQueryWithTypes(SearchQueryType.ALBUM),
                 market = "IN",
+                token = token,
                 limit = 1 // limiting the number of results to one
             )
         }
@@ -180,6 +178,7 @@ class SpotifyServiceTest {
                 searchQuery = searchQuery,
                 type = buildSearchQueryWithTypes(SearchQueryType.ARTIST),
                 market = "IN",
+                token = token,
                 limit = 1 // limiting the number of results to one
             )
         }
@@ -203,6 +202,7 @@ class SpotifyServiceTest {
                 searchQuery = searchQuery,
                 type = buildSearchQueryWithTypes(SearchQueryType.PLAYLIST),
                 market = "IN",
+                token = token,
                 limit = 1 // limiting the number of results to one
             )
         }
@@ -226,6 +226,7 @@ class SpotifyServiceTest {
                 searchQuery = searchQuery,
                 market = "IN",
                 type = SpotifyEndPoints.Defaults.defaultSearchQueryTypes,
+                token = token,
                 limit = 1 // limiting the number of results for each type to one
             )
         }
