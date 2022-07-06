@@ -4,7 +4,6 @@ import android.util.Base64
 import com.example.musify.BuildConfig
 import com.example.musify.data.remote.musicservice.SpotifyEndPoints
 import com.example.musify.data.remote.token.AccessTokenResponseDTO
-import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Header
@@ -35,5 +34,5 @@ interface TokenManager {
     suspend fun getAccessToken(
         @Header("Authorization") secret: String,
         @Field("grant_type") grantType: String = defaultGrantType,
-    ): Response<AccessTokenResponseDTO>
+    ): AccessTokenResponseDTO
 }
