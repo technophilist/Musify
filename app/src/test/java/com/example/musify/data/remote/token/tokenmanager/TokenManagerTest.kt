@@ -58,14 +58,16 @@ class TokenManagerTest {
     }
 
     @Test
-    fun useAccessTokenTest_newAccessToken_isAbleToSuccessfullyMakeRequest() = runBlocking {
+    fun useAccessTokenTest_newAccessToken_isAbleToSuccessfullyMakeRequest() {
         // given a valid client secret
         val clientSecret = TEST_SPOTIFY_CLIENT_SECRET_BASE64
         // when requesting an access token
-        val accessTokenResponse = tokenManager.getAccessToken(
-            "client_credentials",
-            clientSecret
-        ).body()
+        val accessTokenResponse = runBlocking {
+            tokenManager.getAccessToken(
+                "client_credentials",
+                clientSecret
+            ).body()
+        }
         // the access token must not be null
         assert(accessTokenResponse != null)
         // when using the newly acquired access token to get an artist
@@ -84,8 +86,7 @@ class TokenManagerTest {
             .addConverterFactory(defaultMusifyJacksonConverterFactory)
             .build()
             .create(SpotifyService::class.java)
-        val artistDTO = spotifyService.getArtistInfoWithId(validArtistId).body()
-        // artist must be fetched successfully
-        assert(artistDTO != null)
+        // the artist must be fetched successfully
+        runBlocking { spotifyService.getArtistInfoWithId(validArtistId) }
     }
 }
