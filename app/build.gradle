@@ -31,6 +31,8 @@ android {
         }
     }
     compileOptions {
+        // To enable the use of java.time api's with minSdk < 26
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
