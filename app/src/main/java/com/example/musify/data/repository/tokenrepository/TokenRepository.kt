@@ -8,7 +8,8 @@ import com.example.musify.data.remote.token.BearerToken
  */
 interface TokenRepository {
     /**
-     * Used to get an instance of [BearerToken].
+     * Used to get an instance of a valid [BearerToken].
+     * This method should always return a valid token.
      */
-    suspend fun getBearerToken(): BearerToken
+    suspend fun getValidBearerToken(): BearerToken
 }

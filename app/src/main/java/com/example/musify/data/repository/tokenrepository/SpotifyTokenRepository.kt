@@ -20,7 +20,7 @@ class SpotifyTokenRepository(
      * a valid token would always be returned. Thus, this function can
      * be safely called multiple times.
      */
-    override suspend fun getBearerToken(): BearerToken {
+    override suspend fun getValidBearerToken(): BearerToken {
         if (token == null || token?.isExpired == true) getAndAssignToken()
         return token!!
     }

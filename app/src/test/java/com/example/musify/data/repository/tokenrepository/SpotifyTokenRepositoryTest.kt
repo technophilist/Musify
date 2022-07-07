@@ -41,7 +41,7 @@ class SpotifyTokenRepositoryTest {
             // new expired token (because of the mock).
 
             // Given a token repository with expired token.
-            assert(tokenRepository.getBearerToken().isExpired)
+            assert(tokenRepository.getValidBearerToken().isExpired)
 
             // The repository would now have an expired token.
             // Since the previous token was expired, it should automatically
@@ -50,7 +50,7 @@ class SpotifyTokenRepositoryTest {
 
             // when getBearerToken() is called
             // the token must not not be expired.
-            assert(tokenRepository.getBearerToken().isExpired)
+            assert(tokenRepository.getValidBearerToken().isExpired)
         }
 
 
