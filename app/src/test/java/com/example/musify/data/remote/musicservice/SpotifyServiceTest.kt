@@ -9,13 +9,15 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
+import java.time.LocalDateTime
 
 class SpotifyServiceTest {
     // artist id of 'Anirudh Ravichander'
     private val validArtistId = "4zCH9qm4R2DADamUHMCa6O"
     private val token = BearerToken(
         tokenString = "BQCukGjYCVswY_DwKvN1BVl9lFl_l22CVg0InM5GaH4n4czqZlgjEyHbDyDVp36srhphqseVKsIl_QY6Rzh3VgAQ3cUgt9o-CAMvtgnPmVqZl2LG_x0",
-        secondsUntilExpiration = 3600
+        secondsUntilExpiration = 3600,
+        timeOfCreation = LocalDateTime.now()
     )
     lateinit var musicService: SpotifyService
 
