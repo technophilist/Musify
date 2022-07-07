@@ -1,5 +1,7 @@
 package com.example.musify.data.remote.token
 
+import java.time.LocalDateTime
+
 /**
  * A class that contains an OAuth Bearer token. A 'Bearer' token always
  * starts with the word 'Bearer' followed by the api token.
@@ -13,6 +15,7 @@ package com.example.musify.data.remote.token
  */
 data class BearerToken(
     private val tokenString: String,
+    val timeOfCreation: LocalDateTime,
     val secondsUntilExpiration: Int
 ) {
     val value get() = "Bearer $tokenString"
