@@ -1,12 +1,16 @@
 package com.example.musify.data.repository.tokenrepository
 
+import com.example.musify.data.encoder.Base64Encoder
 import com.example.musify.data.remote.token.BearerToken
 import com.example.musify.data.remote.token.isExpired
 import com.example.musify.data.remote.token.toBearerToken
 import com.example.musify.data.remote.token.tokenmanager.SPOTIFY_CLIENT_SECRET_BASE64
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
 
-class SpotifyTokenRepository(private val tokenManager: TokenManager) : TokenRepository {
+class SpotifyTokenRepository(
+    private val tokenManager: TokenManager,
+    private val base64Encoder: Base64Encoder
+) : TokenRepository {
     private var token: BearerToken? = null
     override suspend fun getBearerToken(): BearerToken {
         if (token == null || token?.isExpired == true) getAndAssignToken()
