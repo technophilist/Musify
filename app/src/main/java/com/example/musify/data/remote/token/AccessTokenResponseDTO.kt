@@ -1,6 +1,7 @@
 package com.example.musify.data.remote.token
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.LocalDateTime
 
 /**
  * A DTO object that contains the [accessToken] for any specific api.
@@ -19,5 +20,6 @@ data class AccessTokenResponseDTO(
  */
 fun AccessTokenResponseDTO.toBearerToken() = BearerToken(
     tokenString = accessToken,
+    timeOfCreation = LocalDateTime.now(),
     secondsUntilExpiration = secondsUntilExpiration
 )
