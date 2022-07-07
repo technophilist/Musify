@@ -19,6 +19,10 @@ import retrofit2.http.POST
  * to get the actual token that can be used to communicate with
  * spotify's servers.
  */
+@Deprecated(
+    message = "use getSpotifyClientSecret(base64Encoder: Base64Encoder)",
+    replaceWith = ReplaceWith("getSpotifyClientSecret()")
+)
 val SPOTIFY_CLIENT_SECRET_BASE64: String
     get() = Base64.encodeToString(
         "Basic ${BuildConfig.SPOTIFY_CLIENT_ID}:${BuildConfig.SPOTIFY_CLIENT_SECRET}".toByteArray(),
