@@ -12,6 +12,14 @@ class SpotifyTokenRepository(
     private val base64Encoder: Base64Encoder
 ) : TokenRepository {
     private var token: BearerToken? = null
+
+    /**
+     * Used to get an instance of [BearerToken].
+     * If the [token] is null or expired, a new token would be automatically
+     * requested and assigned. Therefore, this function guarantees that
+     * a valid token would always be returned. Thus, this function can
+     * be safely called multiple times.
+     */
     override suspend fun getBearerToken(): BearerToken {
         if (token == null || token?.isExpired == true) getAndAssignToken()
         return token!!
