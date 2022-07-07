@@ -11,4 +11,4 @@ interface TokenRepository {
      * Used to get an instance of [BearerToken].
      */
     suspend fun getBearerToken(): BearerToken
-}g
+}
