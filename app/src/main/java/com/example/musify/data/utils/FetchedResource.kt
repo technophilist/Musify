@@ -15,13 +15,13 @@ sealed class FetchedResource<ResourceType, FailureType> {
 
     /**
      * A class that encapsulates an un-successful fetch operation
-     * of a resource of type [ResourceType]. The [error] property
+     * of a resource of type [ResourceType]. The [cause] property
      * contains the [FailureType]. The [data] property contains an
-     * optional resource that can be used to speify the data to be
+     * optional resource that can be used to specify the data to be
      * used in the case of failure.
      */
     data class Failure<ResourceType, FailureType>(
-        val error: FailureType,
+        val cause: FailureType,
         val data: ResourceType? = null
     ) : FetchedResource<ResourceType, FailureType>()
 }
