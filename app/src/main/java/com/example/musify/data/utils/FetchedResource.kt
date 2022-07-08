@@ -10,9 +10,8 @@ sealed class FetchedResource<ResourceType, FailureType> {
      * A class that encapsulates a successful fetch of a resource of
      * type [ResourceType]. The [data] property  holds the resource.
      */
-    data class Success<ResourceType, FailureType>(
-        private val data: ResourceType
-    ) : FetchedResource<ResourceType, FailureType>()
+    data class Success<ResourceType, FailureType>(val data: ResourceType) :
+        FetchedResource<ResourceType, FailureType>()
 
     /**
      * A class that encapsulates an un-successful fetch operation
@@ -22,7 +21,7 @@ sealed class FetchedResource<ResourceType, FailureType> {
      * used in the case of failure.
      */
     data class Failure<ResourceType, FailureType>(
-        private val error: FailureType,
-        private val data: ResourceType? = null
+        val error: FailureType,
+        val data: ResourceType? = null
     ) : FetchedResource<ResourceType, FailureType>()
 }
