@@ -1,6 +1,7 @@
 package com.example.musify.data.encoder
 
 import android.util.Base64
+import javax.inject.Inject
 
 /**
  * This is a [Base64Encoder] that can be used for converting a byte
@@ -13,7 +14,7 @@ import android.util.Base64
  * equivalent to [java.util.Base64] only when [android.util.Base64.NO_WRAP]
  * is used in conjunction with [android.util.Base64.encodeToString].
  */
-class AndroidBase64Encoder : Base64Encoder {
+class AndroidBase64Encoder @Inject constructor() : Base64Encoder {
     override fun encodeToString(
         input: ByteArray
     ): String = Base64.encodeToString(input, Base64.NO_WRAP)
