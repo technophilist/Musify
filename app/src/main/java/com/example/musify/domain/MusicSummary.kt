@@ -28,9 +28,9 @@ sealed class MusicSummary(
         id: String,
         name: String,
         associatedImageUrl: URL,
-        val nameOfArtist: String,
+        val albumName: String,
         val trackUrl: URL?,
-    ) : MusicSummary(id, name, associatedImageUrl, nameOfArtist)
+    ) : MusicSummary(id, name, associatedImageUrl)
 
     /**
      * A data class that contains a summary of a single album.
