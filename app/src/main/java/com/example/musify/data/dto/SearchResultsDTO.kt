@@ -28,12 +28,12 @@ data class SearchResultsDTO(
  * A mapper function used to map an instance of [SearchResultsDTO] to
  * an instance of [SearchResult]. The [imageSize] parameter describes
  * the size of image to be used for the for associated [MusicSummary]
- * instances.
+ * instances excluding [SearchResult.playlists].
  */
 fun SearchResultsDTO.toSearchResult(imageSize: MapperImageSize) = SearchResult(
     tracks = tracks?.value?.map { it.toTrackSummary(imageSize) } ?: emptyList(),
     albums = albums?.value?.map { it.toAlbumSummary(imageSize) } ?: emptyList(),
     artists = artists?.value?.map { it.toArtistSummary(imageSize) } ?: emptyList(),
-    playlists = playlists?.value?.map { it.toPlaylistSummary(imageSize) } ?: emptyList()
+    playlists = playlists?.value?.map { it.toPlaylistSummary() } ?: emptyList()
 )
 
