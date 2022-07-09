@@ -1,6 +1,10 @@
 package com.example.musify.data.dto
 
+import com.example.musify.data.utils.MapperImageSize
+import com.example.musify.data.utils.getImageDtoForImageSize
+import com.example.musify.domain.MusicSummary
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.net.URL
 
 /**
  * A DTO object that contains information about a specific track
@@ -15,4 +19,20 @@ data class TrackDTOWithAlbumMetadata(
     @JsonProperty("duration_ms") val durationInMillis: Int,
     @JsonProperty("album") val albumMetadata: AlbumMetadataDTO
 )
+
+/**
+ * A mapper function used to map an instance of [TrackDTOWithAlbumMetadata] to
+ * an instance of [MusicSummary.TrackSummary]. The [imageSize]
+ * parameter describes the size of image to be used for the
+ * [MusicSummary.TrackSummary] instance.
+ */
+fun TrackDTOWithAlbumMetadata.toTrackSummary(imageSize: MapperImageSize) =
+    MusicSummary.TrackSummary(
+        id = id,
+        name = name,
+        associatedImageUrl = URL(albumMetadata.images.getImageDtoForImageSize(imageSize).url),
+        nameOfArtist = albumMetadata.artists.first().name, // TODO multiple artists
+        trackUrl = previewUrl?.let(::URL),
+        numberOfPlays = -1,// TODO There is no api to get the number of plays
+    )
 
