@@ -1,6 +1,7 @@
 package com.example.musify.data.dto
 
 import com.example.musify.data.utils.MapperImageSize
+import com.example.musify.data.utils.getImageDtoForImageSize
 import com.example.musify.domain.MusicSummary
 import java.net.URL
 
@@ -30,11 +31,5 @@ data class ArtistDTO(
 fun ArtistDTO.toArtistSummary(imageSize: MapperImageSize) = MusicSummary.ArtistSummary(
     id = id,
     name = name,
-    associatedImageUrl = URL(
-        when (imageSize) {
-            MapperImageSize.SMALL -> images[2]
-            MapperImageSize.MEDIUM -> images[1]
-            MapperImageSize.LARGE -> images[0]
-        }.url
-    )
+    associatedImageUrl = URL(images.getImageDtoForImageSize(imageSize).url)
 )
