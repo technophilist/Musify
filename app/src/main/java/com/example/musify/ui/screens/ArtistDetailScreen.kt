@@ -69,7 +69,7 @@ fun ArtistDetailScreen(
                 cardType = ListItemCardType.SONG,
                 thumbnailImageUrlString = it.associatedImageUrl.toString(),
                 title = it.name,
-                subtitle = "${it.numberOfPlays} plays",
+                subtitle = "${it.nameOfArtist}", // TODO change to display all artists
                 subtitleTextStyle = MaterialTheme.typography
                     .caption
                     .copy(color = subtitleTextColorWithAlpha),
