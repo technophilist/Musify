@@ -11,11 +11,12 @@ import com.example.musify.domain.MusifyHttpErrorType
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.musifyHttpErrorType
 import retrofit2.HttpException
+import javax.inject.Inject
 
 /**
  * A concrete implementation of [Repository].
  */
-class MusifyRepository(
+class MusifyRepository @Inject constructor(
     private val spotifyService: SpotifyService,
     private val tokenRepository: TokenRepository
 ) : Repository {
