@@ -90,7 +90,7 @@ fun ArtistDetailScreen(
                     .padding(horizontal = 16.dp),
                 cardType = ListItemCardType.ALBUM,
                 thumbnailImageUrlString = it.albumArtUrl.toString(),
-                title = it.nameOfArtist,
+                title = it.name,
                 titleTextStyle = MaterialTheme.typography.h6,
                 subtitle = it.yearOfReleaseString,
                 subtitleTextStyle = MaterialTheme.typography
