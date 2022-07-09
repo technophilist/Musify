@@ -6,8 +6,9 @@ import com.example.musify.data.remote.token.getSpotifyClientSecret
 import com.example.musify.data.remote.token.isExpired
 import com.example.musify.data.remote.token.toBearerToken
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
+import javax.inject.Inject
 
-class SpotifyTokenRepository(
+class SpotifyTokenRepository @Inject constructor(
     private val tokenManager: TokenManager,
     private val base64Encoder: Base64Encoder
 ) : TokenRepository {
