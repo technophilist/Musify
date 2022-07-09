@@ -72,7 +72,7 @@ fun MusicDetailScreen(
         items(trackList) {
             MusifyCompactListItemCard(
                 title = it.name,
-                subtitle = it.nameOfArtist,
+                subtitle = it.albumName,
                 onClick = { onTrackItemClick(it) },
                 trailingButtonIcon = Icons.Filled.MoreVert,
                 onTrailingButtonIconClick = { onTrackTrailingButtonClick(it) },
