@@ -1,5 +1,6 @@
 package com.example.musify.di
 
+import com.example.musify.data.remote.musicservice.SpotifyBaseUrls
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
 import com.example.musify.utils.defaultMusifyJacksonConverterFactory
@@ -16,7 +17,7 @@ object MusicServiceModule {
     @Provides
     @Singleton
     fun provideSpotifyService(): SpotifyService = Retrofit.Builder()
-        .baseUrl("https://api.spotify.com/") // TODO move const to separate file
+        .baseUrl(SpotifyBaseUrls.API_URL)
         .addConverterFactory(defaultMusifyJacksonConverterFactory)
         .build()
         .create(SpotifyService::class.java)
@@ -24,7 +25,7 @@ object MusicServiceModule {
     @Provides
     @Singleton
     fun provideTokenManager(): TokenManager = Retrofit.Builder()
-        .baseUrl("https://accounts.spotify.com/")// TODO move const to separate file
+        .baseUrl(SpotifyBaseUrls.AUTHENTICATION_URL)
         .addConverterFactory(defaultMusifyJacksonConverterFactory)
         .build()
         .create(TokenManager::class.java)
