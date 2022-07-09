@@ -30,7 +30,6 @@ sealed class MusicSummary(
         associatedImageUrl: URL,
         val nameOfArtist: String,
         val trackUrl: URL?,
-        val numberOfPlays: Long,
     ) : MusicSummary(id, name, associatedImageUrl, nameOfArtist)
 
     /**
