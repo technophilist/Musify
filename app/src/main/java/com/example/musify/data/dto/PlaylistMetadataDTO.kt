@@ -1,6 +1,5 @@
 package com.example.musify.data.dto
 
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getImageDtoForImageSize
 import com.example.musify.domain.MusicSummary
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -20,14 +19,14 @@ data class PlaylistMetadataDTO(
 
 /**
  * A mapper function used to map an instance of [PlaylistMetadataDTO] to
- * an instance of [MusicSummary.PlaylistSummary]. The [imageSize]
- * parameter describes the size of image to be used for the
- * [MusicSummary.PlaylistSummary] instance.
+ * an instance of [MusicSummary.PlaylistSummary].
+ *
+ * Note:[getImageDtoForImageSize] cannot be used because playlists usually
+ * contain only a single image. Therefore, the url of the first image
+ * is mapped to [MusicSummary.PlaylistSummary.associatedImageUrl].
  */
-fun PlaylistMetadataDTO.toPlaylistSummary(
-    imageSize: MapperImageSize
-) = MusicSummary.PlaylistSummary(
+fun PlaylistMetadataDTO.toPlaylistSummary() = MusicSummary.PlaylistSummary(
     id = id,
     name = name,
-    associatedImageUrl = URL(images.getImageDtoForImageSize(imageSize).url)
+    associatedImageUrl = URL(images.first().url)
 )
