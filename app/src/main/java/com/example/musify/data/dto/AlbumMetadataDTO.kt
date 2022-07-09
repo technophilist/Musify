@@ -1,6 +1,10 @@
 package com.example.musify.data.dto
 
+import com.example.musify.data.utils.MapperImageSize
+import com.example.musify.data.utils.getImageDtoForImageSize
+import com.example.musify.domain.MusicSummary
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.net.URL
 
 /**
  * A DTO object that contains metadata about a specific album.
@@ -28,3 +32,17 @@ data class AlbumMetadataDTO(
         val name: String
     )
 }
+
+/**
+ * A mapper function used to map an instance of [AlbumMetadataDTO] to
+ * an instance of [MusicSummary.AlbumSummary]. The [imageSize]
+ * parameter describes the size of image to be used for the
+ * [MusicSummary.AlbumSummary] instance.
+ */
+fun AlbumMetadataDTO.toAlbumSummary(imageSize: MapperImageSize) = MusicSummary.AlbumSummary(
+    id = id,
+    name = name,
+    nameOfArtist = artists.first().name,  // TODO
+    albumArtUrl = URL(images.getImageDtoForImageSize(imageSize).url),
+    yearOfReleaseString = releaseDate // TODO
+)
