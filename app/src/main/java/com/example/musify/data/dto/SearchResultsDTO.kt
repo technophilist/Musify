@@ -31,9 +31,9 @@ data class SearchResultsDTO(
  * instances excluding [SearchResults.playlists].
  */
 fun SearchResultsDTO.toSearchResults(imageSize: MapperImageSize) = SearchResults(
-    tracks = tracks?.value?.map { it.toTrackSummary(imageSize) } ?: emptyList(),
-    albums = albums?.value?.map { it.toAlbumSummary(imageSize) } ?: emptyList(),
-    artists = artists?.value?.map { it.toArtistSummary(imageSize) } ?: emptyList(),
-    playlists = playlists?.value?.map { it.toPlaylistSummary() } ?: emptyList()
+    tracks = tracks?.value?.map { it.toTrackSearchResult(imageSize) } ?: emptyList(),
+    albums = albums?.value?.map { it.toAlbumSearchResult(imageSize) } ?: emptyList(),
+    artists = artists?.value?.map { it.toArtistSearchResult(imageSize) } ?: emptyList(),
+    playlists = playlists?.value?.map { it.toPlaylistSearchResult() } ?: emptyList()
 )
 
