@@ -3,6 +3,7 @@ package com.example.musify.data.dto
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getImageDtoForImageSize
 import com.example.musify.domain.MusicSummary
+import com.example.musify.domain.searchresult.ArtistSearchResult
 import java.net.URL
 
 
@@ -32,4 +33,16 @@ fun ArtistDTO.toArtistSummary(imageSize: MapperImageSize) = MusicSummary.ArtistS
     id = id,
     name = name,
     associatedImageUrl = URL(images.getImageDtoForImageSize(imageSize).url)
+)
+
+/**
+ * A mapper function used to map an instance of [ArtistDTO] to
+ * an instance of [ArtistSearchResult]. The [imageSize]
+ * parameter describes the size of image to be used for the
+ * [ArtistSearchResult] instance.
+ */
+fun ArtistDTO.toArtistSearchResult(imageSize: MapperImageSize) = ArtistSearchResult(
+    id = id,
+    name = name,
+    imageUrlString = images.getImageDtoForImageSize(imageSize).url
 )
