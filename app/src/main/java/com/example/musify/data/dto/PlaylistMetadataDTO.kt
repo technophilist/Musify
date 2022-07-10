@@ -2,7 +2,7 @@ package com.example.musify.data.dto
 
 import com.example.musify.data.utils.getImageDtoForImageSize
 import com.example.musify.domain.MusicSummary
-import com.example.musify.domain.searchresult.PlaylistSearchResult
+import com.example.musify.domain.SearchResult.PlaylistSearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 
