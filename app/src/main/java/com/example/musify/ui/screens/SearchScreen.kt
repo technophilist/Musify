@@ -21,7 +21,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.musify.domain.Genre
-import com.example.musify.domain.MusicSummary
+import com.example.musify.domain.SearchResult
+import com.example.musify.domain.SearchResults
 import com.example.musify.ui.components.GenreCard
 import com.example.musify.ui.components.ListItemCardType
 import com.example.musify.ui.components.MusifyCompactListItemCard
@@ -34,9 +35,9 @@ fun SearchScreen(
     genreList: List<Genre>,
     onGenreItemClick: (Genre) -> Unit,
     onSearchTextChanged: (String) -> Unit,
-    searchQueryResult: List<MusicSummary>,
-    onSearchQueryItemClicked: (MusicSummary) -> Unit,
-    onSearchQueryItemTrailingIconButtonClicked: (MusicSummary) -> Unit
+    searchQueryResult: SearchResults,
+    onSearchQueryItemClicked: (SearchResult) -> Unit,
+    onSearchQueryItemTrailingIconButtonClicked: (SearchResult) -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
     val isLoadingMap = remember { mutableStateMapOf<String, Boolean>() }
@@ -122,9 +123,9 @@ fun SearchScreen(
                 exit = fadeOut()
             ) {
                 SearchQueryList(
-                    searchQueryResult = searchQueryResult,
+                    searchResults = searchQueryResult,
                     onItemClick = { onSearchQueryItemClicked(it) },
-                    onTrailingIconButtonClick = { onSearchQueryItemTrailingIconButtonClicked(it) }
+                    onTrailingIconButtonClick = { /*TODO*/ }
                 )
             }
         }
@@ -134,9 +135,9 @@ fun SearchScreen(
 @ExperimentalMaterialApi
 @Composable
 private fun SearchQueryList(
-    searchQueryResult: List<MusicSummary>,
-    onItemClick: (MusicSummary) -> Unit,
-    onTrailingIconButtonClick: (MusicSummary) -> Unit
+    searchResults: SearchResults,
+    onItemClick: (SearchResult) -> Unit,
+    onTrailingIconButtonClick: (SearchResult) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -144,12 +145,42 @@ private fun SearchQueryList(
             .background(MaterialTheme.colors.background),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(searchQueryResult) {
+        items(searchResults.tracks) {
             MusifyCompactListItemCard(
                 cardType = it.getAssociatedListCardType(),
-                thumbnailImageUrlString = it.associatedImageUrl.toString(),
+                thumbnailImageUrlString = it.imageUrlString,
                 title = it.name,
-                subtitle = it.associatedMetadata ?: "",
+                subtitle = it.artistsString,
+                onClick = { onItemClick(it) },
+                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) }
+            )
+        }
+        items(searchResults.albums) {
+            MusifyCompactListItemCard(
+                cardType = it.getAssociatedListCardType(),
+                thumbnailImageUrlString = it.albumArtUrlString,
+                title = it.name,
+                subtitle = it.artistsString,
+                onClick = { onItemClick(it) },
+                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) }
+            )
+        }
+        items(searchResults.artists) {
+            MusifyCompactListItemCard(
+                cardType = it.getAssociatedListCardType(),
+                thumbnailImageUrlString = it.imageUrlString,
+                title = it.name,
+                subtitle = "Artist",
+                onClick = { onItemClick(it) },
+                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) }
+            )
+        }
+        items(searchResults.playlists) {
+            MusifyCompactListItemCard(
+                cardType = it.getAssociatedListCardType(),
+                thumbnailImageUrlString = it.imageUrlString,
+                title = it.name,
+                subtitle = "Playlist",
                 onClick = { onItemClick(it) },
                 onTrailingButtonIconClick = { onTrailingIconButtonClick(it) }
             )
@@ -157,9 +188,9 @@ private fun SearchQueryList(
     }
 }
 
-private fun MusicSummary.getAssociatedListCardType(): ListItemCardType = when (this) {
-    is MusicSummary.AlbumSummary -> ListItemCardType.ALBUM
-    is MusicSummary.ArtistSummary -> ListItemCardType.ARTIST
-    is MusicSummary.PlaylistSummary -> ListItemCardType.PLAYLIST
-    is MusicSummary.TrackSummary -> ListItemCardType.SONG
+private fun SearchResult.getAssociatedListCardType(): ListItemCardType = when (this) {
+    is SearchResult.AlbumSearchResult -> ListItemCardType.ALBUM
+    is SearchResult.ArtistSearchResult -> ListItemCardType.ARTIST
+    is SearchResult.PlaylistSearchResult -> ListItemCardType.PLAYLIST
+    is SearchResult.TrackSearchResult -> ListItemCardType.SONG
 }
