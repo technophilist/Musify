@@ -1,9 +1,6 @@
 package com.example.musify.domain
 
-import com.example.musify.domain.SearchResult.AlbumSearchResult
-import com.example.musify.domain.SearchResult.ArtistSearchResult
-import com.example.musify.domain.SearchResult.PlaylistSearchResult
-import com.example.musify.domain.SearchResult.TrackSearchResult
+import com.example.musify.domain.SearchResult.*
 
 /**
  * A class that models a search result. It contains all the [tracks],
@@ -14,4 +11,15 @@ data class SearchResults(
     val albums: List<AlbumSearchResult>,
     val artists: List<ArtistSearchResult>,
     val playlists: List<PlaylistSearchResult>,
+)
+
+/**
+ * A utility function that returns an instance of  [SearchResults] with
+ * empty read-only lists.
+ */
+fun emptySearchResults() = SearchResults(
+    tracks = emptyList(),
+    albums = emptyList(),
+    artists = emptyList(),
+    playlists = emptyList()
 )
