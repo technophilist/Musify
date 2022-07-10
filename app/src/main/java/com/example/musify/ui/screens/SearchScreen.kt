@@ -36,8 +36,7 @@ fun SearchScreen(
     onGenreItemClick: (Genre) -> Unit,
     onSearchTextChanged: (String) -> Unit,
     searchQueryResult: SearchResults,
-    onSearchQueryItemClicked: (SearchResult) -> Unit,
-    onSearchQueryItemTrailingIconButtonClicked: (SearchResult) -> Unit
+    onSearchQueryItemClicked: (SearchResult) -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
     val isLoadingMap = remember { mutableStateMapOf<String, Boolean>() }
