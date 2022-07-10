@@ -1,9 +1,9 @@
 package com.example.musify.domain
 
-import com.example.musify.domain.searchresult.AlbumSearchResult
-import com.example.musify.domain.searchresult.ArtistSearchResult
-import com.example.musify.domain.searchresult.PlaylistSearchResult
-import com.example.musify.domain.searchresult.TrackSearchResult
+import com.example.musify.domain.SearchResult.AlbumSearchResult
+import com.example.musify.domain.SearchResult.ArtistSearchResult
+import com.example.musify.domain.SearchResult.PlaylistSearchResult
+import com.example.musify.domain.SearchResult.TrackSearchResult
 
 /**
  * A class that models a search result. It contains all the [tracks],
