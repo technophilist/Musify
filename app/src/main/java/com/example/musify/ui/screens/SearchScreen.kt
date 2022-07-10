@@ -26,6 +26,7 @@ import com.example.musify.domain.SearchResults
 import com.example.musify.ui.components.GenreCard
 import com.example.musify.ui.components.ListItemCardType
 import com.example.musify.ui.components.MusifyCompactListItemCard
+import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
 
 @ExperimentalMaterialApi
@@ -183,6 +184,9 @@ private fun SearchQueryList(
                 onClick = { onItemClick(it) },
                 onTrailingButtonIconClick = { onTrailingIconButtonClick(it) }
             )
+        }
+        item {
+            Spacer(modifier = Modifier.navigationBarsHeight())
         }
     }
 }
