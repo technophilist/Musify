@@ -57,7 +57,7 @@ fun AlbumMetadataDTO.toAlbumSummary(imageSize: MapperImageSize) = MusicSummary.A
 fun AlbumMetadataDTO.toAlbumSearchResult(imageSize: MapperImageSize) = AlbumSearchResult(
     id = id,
     name = name,
-    artistsString = artists.joinToString(","),
+    artistsString = artists.joinToString(",") { it.name },
     albumArtUrlString = images.getImageDtoForImageSize(imageSize).url,
     yearOfReleaseString = releaseDate // TODO
 )
