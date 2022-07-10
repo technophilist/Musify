@@ -3,6 +3,7 @@ package com.example.musify.data.dto
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getImageDtoForImageSize
 import com.example.musify.domain.MusicSummary
+import com.example.musify.domain.searchresult.AlbumSearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 
@@ -44,5 +45,19 @@ fun AlbumMetadataDTO.toAlbumSummary(imageSize: MapperImageSize) = MusicSummary.A
     name = name,
     nameOfArtist = artists.first().name,  // TODO
     albumArtUrl = URL(images.getImageDtoForImageSize(imageSize).url),
+    yearOfReleaseString = releaseDate // TODO
+)
+
+/**
+ * A mapper function used to map an instance of [AlbumMetadataDTO] to
+ * an instance of [AlbumSearchResult]. The [imageSize]
+ * parameter describes the size of image to be used for the
+ * [AlbumSearchResult] instance.
+ */
+fun AlbumMetadataDTO.toAlbumSearchResult(imageSize: MapperImageSize) = AlbumSearchResult(
+    id = id,
+    name = name,
+    artistsString = artists.joinToString(","),
+    albumArtUrlString = images.getImageDtoForImageSize(imageSize).url,
     yearOfReleaseString = releaseDate // TODO
 )
