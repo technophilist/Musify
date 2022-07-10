@@ -8,7 +8,7 @@ import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusicSummary
 import com.example.musify.domain.MusifyHttpErrorType
-import com.example.musify.domain.SearchResult
+import com.example.musify.domain.SearchResults
 import com.example.musify.domain.musifyHttpErrorType
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -79,7 +79,7 @@ class MusifyRepository @Inject constructor(
         searchQuery: String,
         imageSize: MapperImageSize,
         countryCode: String
-    ): FetchedResource<SearchResult, MusifyHttpErrorType> = withToken {
-        spotifyService.search(searchQuery, countryCode, it).toSearchResult(imageSize)
+    ): FetchedResource<SearchResults, MusifyHttpErrorType> = withToken {
+        spotifyService.search(searchQuery, countryCode, it).toSearchResults(imageSize)
     }
 }

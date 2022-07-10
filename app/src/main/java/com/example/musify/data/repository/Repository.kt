@@ -4,7 +4,7 @@ import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusicSummary
 import com.example.musify.domain.MusifyHttpErrorType
-import com.example.musify.domain.SearchResult
+import com.example.musify.domain.SearchResults
 
 /**
  * An interface the consists of all the methods that are a requisite for
@@ -43,5 +43,5 @@ interface Repository {
         searchQuery: String,
         imageSize: MapperImageSize,
         countryCode: String
-    ): FetchedResource<SearchResult, MusifyHttpErrorType>
+    ): FetchedResource<SearchResults, MusifyHttpErrorType>
 }
