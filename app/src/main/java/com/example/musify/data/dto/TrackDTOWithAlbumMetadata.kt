@@ -3,6 +3,7 @@ package com.example.musify.data.dto
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getImageDtoForImageSize
 import com.example.musify.domain.MusicSummary
+import com.example.musify.domain.searchresult.TrackSearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 
@@ -35,3 +36,16 @@ fun TrackDTOWithAlbumMetadata.toTrackSummary(imageSize: MapperImageSize) =
         trackUrl = previewUrl?.let(::URL)
     )
 
+/**
+ * A mapper function used to map an instance of [TrackDTOWithAlbumMetadata] to
+ * an instance of [TrackSearchResult]. The [imageSize]
+ * parameter describes the size of image to be used for the
+ * [TrackSearchResult] instance.
+ */
+fun TrackDTOWithAlbumMetadata.toTrackSearchResult(imageSize: MapperImageSize) = TrackSearchResult(
+    id = id,
+    name = name,
+    imageUrlString = albumMetadata.images.getImageDtoForImageSize(imageSize).url,
+    artistsString = albumMetadata.artists.joinToString(","),
+    trackUrlString = previewUrl
+)
