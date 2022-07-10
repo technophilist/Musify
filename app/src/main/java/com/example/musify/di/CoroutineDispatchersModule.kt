@@ -1,5 +1,6 @@
 package com.example.musify.di
 
+import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
@@ -17,6 +18,7 @@ annotation class IODispatcher
 annotation class DefaultDispatcher
 
 
+@Module
 @InstallIn(ActivityRetainedComponent::class)
 object CoroutineDispatchersModule {
     @Provides
