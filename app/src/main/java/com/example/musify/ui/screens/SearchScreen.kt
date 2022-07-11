@@ -168,7 +168,7 @@ private fun SearchQueryList(
         items(searchResults.artists) {
             MusifyCompactListItemCard(
                 cardType = it.getAssociatedListCardType(),
-                thumbnailImageUrlString = it.imageUrlString,
+                thumbnailImageUrlString = it.imageUrlString ?: "",
                 title = it.name,
                 subtitle = "Artist",
                 onClick = { onItemClick(it) },
