@@ -1,8 +1,7 @@
 package com.example.musify.ui.screens
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -40,9 +40,22 @@ fun SearchScreen(
     onSearchQueryItemClicked: (SearchResult) -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
+    var isClearSearchTextButtonVisible by remember { mutableStateOf(false) }
     val isLoadingMap = remember { mutableStateMapOf<String, Boolean>() }
     var isSearchListVisible by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
+    val textFieldTrailingIcon = @Composable {
+        AnimatedVisibility(
+            visible = isClearSearchTextButtonVisible,
+            enter = fadeIn() + slideInHorizontally { it },
+            exit = slideOutHorizontally() + fadeOut()
+        ) {
+            IconButton(
+                onClick = { searchText = "" },
+                content = { Icon(imageVector = Icons.Filled.Close, contentDescription = null) }
+            )
+        }
+    }
     BackHandler(isSearchListVisible) {
         searchText = ""
         // remove focus on the search text field
@@ -66,7 +79,10 @@ fun SearchScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged {
-                    if (it.isFocused) isSearchListVisible = true
+                    if (it.isFocused) {
+                        isSearchListVisible = true
+                        isClearSearchTextButtonVisible = true
+                    }
                 },
             leadingIcon = {
                 Icon(
@@ -74,6 +90,7 @@ fun SearchScreen(
                     contentDescription = null
                 )
             },
+            trailingIcon = textFieldTrailingIcon,
             placeholder = {
                 Text(
                     text = "Artists, songs, or podcasts",
@@ -90,6 +107,7 @@ fun SearchScreen(
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.White,
                 leadingIconColor = Color.Black,
+                trailingIconColor = Color.Black,
                 placeholderColor = Color.Black,
                 textColor = Color.Black
             )
