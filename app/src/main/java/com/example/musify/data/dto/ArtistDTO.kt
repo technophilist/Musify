@@ -44,5 +44,8 @@ fun ArtistDTO.toArtistSummary(imageSize: MapperImageSize) = MusicSummary.ArtistS
 fun ArtistDTO.toArtistSearchResult(imageSize: MapperImageSize) = ArtistSearchResult(
     id = id,
     name = name,
-    imageUrlString = images.getImageDtoForImageSize(imageSize).url
+    imageUrlString = if (images.isEmpty()) null
+    else if (images.size != 3) images.first().url
+    else images.getImageDtoForImageSize(imageSize).url
 )
+
