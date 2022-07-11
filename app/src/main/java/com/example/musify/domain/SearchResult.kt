@@ -32,7 +32,7 @@ sealed class SearchResult {
     data class PlaylistSearchResult(
         val id: String,
         val name: String,
-        val imageUrlString: String
+        val imageUrlString: String?
     ) : SearchResult()
 
     /**
