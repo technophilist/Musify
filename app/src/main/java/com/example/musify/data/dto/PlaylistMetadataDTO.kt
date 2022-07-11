@@ -43,5 +43,5 @@ fun PlaylistMetadataDTO.toPlaylistSummary() = MusicSummary.PlaylistSummary(
 fun PlaylistMetadataDTO.toPlaylistSearchResult() = PlaylistSearchResult(
     id = id,
     name = name,
-    imageUrlString = images.first().url
+    imageUrlString = images.firstOrNull()?.url
 )
