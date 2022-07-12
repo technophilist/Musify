@@ -51,7 +51,11 @@ fun SearchScreen(
             exit = slideOutHorizontally() + fadeOut()
         ) {
             IconButton(
-                onClick = { searchText = "" },
+                onClick = {
+                    searchText = ""
+                    // notify the caller that the search text is empty
+                    onSearchTextChanged("")
+                },
                 content = { Icon(imageVector = Icons.Filled.Close, contentDescription = null) }
             )
         }
@@ -153,7 +157,7 @@ fun SearchScreen(
                     onImageLoadingFinished = { item, _ ->
                         isSearchItemLoadingPlaceholderVisibleMap[item] = false
                     },
-                    onImageLoading = { isSearchItemLoadingPlaceholderVisibleMap[it] = true}
+                    onImageLoading = { isSearchItemLoadingPlaceholderVisibleMap[it] = true }
                 )
             }
         }
