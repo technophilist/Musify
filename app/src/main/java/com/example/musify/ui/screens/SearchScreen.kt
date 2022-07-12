@@ -40,9 +40,9 @@ fun SearchScreen(
     onSearchQueryItemClicked: (SearchResult) -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
-    var isClearSearchTextButtonVisible by remember { mutableStateOf(false) }
     val isGenreImageLoadingMap = remember { mutableStateMapOf<String, Boolean>() }
     var isSearchListVisible by remember { mutableStateOf(false) }
+    val isClearSearchTextButtonVisible by remember { derivedStateOf { isSearchListVisible && searchText.isNotEmpty() } }
     val focusManager = LocalFocusManager.current
     val textFieldTrailingIcon = @Composable {
         AnimatedVisibility(
@@ -87,9 +87,6 @@ fun SearchScreen(
                 .onFocusChanged {
                     if (it.isFocused) {
                         isSearchListVisible = true
-                        isClearSearchTextButtonVisible = true
-                    } else {
-                        isClearSearchTextButtonVisible = false
                     }
                 },
             leadingIcon = {
