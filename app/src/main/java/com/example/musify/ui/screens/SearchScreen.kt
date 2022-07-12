@@ -41,7 +41,7 @@ fun SearchScreen(
 ) {
     var searchText by remember { mutableStateOf("") }
     var isClearSearchTextButtonVisible by remember { mutableStateOf(false) }
-    val isLoadingMap = remember { mutableStateMapOf<String, Boolean>() }
+    val isGenreImageLoadingMap = remember { mutableStateMapOf<String, Boolean>() }
     var isSearchListVisible by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val textFieldTrailingIcon = @Composable {
@@ -55,6 +55,9 @@ fun SearchScreen(
                 content = { Icon(imageVector = Icons.Filled.Close, contentDescription = null) }
             )
         }
+    }
+    val isSearchItemLoadingPlaceholderVisibleMap = remember {
+        mutableStateMapOf<SearchResult, Boolean>()
     }
     BackHandler(isSearchListVisible) {
         searchText = ""
@@ -128,10 +131,10 @@ fun SearchScreen(
                     GenreCard(
                         genre = it,
                         modifier = Modifier.height(120.dp),
-                        isLoadingPlaceholderVisible = isLoadingMap.getOrPut(it.id) { true },
+                        isLoadingPlaceholderVisible = isGenreImageLoadingMap.getOrPut(it.id) { true },
                         onClick = { onGenreItemClick(it) },
-                        onImageLoading = { isLoadingMap[it.id] = true },
-                        onImageLoadingFinished = { _ -> isLoadingMap[it.id] = false }
+                        onImageLoading = { isGenreImageLoadingMap[it.id] = true },
+                        onImageLoadingFinished = { _ -> isGenreImageLoadingMap[it.id] = false }
                     )
                 }
             }
@@ -143,7 +146,14 @@ fun SearchScreen(
                 SearchQueryList(
                     searchResults = searchQueryResult,
                     onItemClick = { onSearchQueryItemClicked(it) },
-                    onTrailingIconButtonClick = { /*TODO*/ }
+                    onTrailingIconButtonClick = { /*TODO*/ },
+                    isLoadingPlaceholderVisible = { item ->
+                        isSearchItemLoadingPlaceholderVisibleMap.getOrPut(item) { false }
+                    },
+                    onImageLoadingFinished = { item, _ ->
+                        isSearchItemLoadingPlaceholderVisibleMap[item] = false
+                    },
+                    onImageLoading = { isSearchItemLoadingPlaceholderVisibleMap[it] = true}
                 )
             }
         }
@@ -155,7 +165,10 @@ fun SearchScreen(
 private fun SearchQueryList(
     searchResults: SearchResults,
     onItemClick: (SearchResult) -> Unit,
-    onTrailingIconButtonClick: (SearchResult) -> Unit
+    onTrailingIconButtonClick: (SearchResult) -> Unit,
+    isLoadingPlaceholderVisible: (SearchResult) -> Boolean,
+    onImageLoading: (SearchResult) -> Unit,
+    onImageLoadingFinished: (SearchResult, Throwable?) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -170,7 +183,12 @@ private fun SearchQueryList(
                 title = it.name,
                 subtitle = it.artistsString,
                 onClick = { onItemClick(it) },
-                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) }
+                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
+                isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
+                onThumbnailImageLoadingFinished = { throwable ->
+                    onImageLoadingFinished(it, throwable)
+                },
+                onThumbnailLoading = { onImageLoading(it) }
             )
         }
         items(searchResults.albums) {
@@ -180,7 +198,12 @@ private fun SearchQueryList(
                 title = it.name,
                 subtitle = it.artistsString,
                 onClick = { onItemClick(it) },
-                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) }
+                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
+                isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
+                onThumbnailImageLoadingFinished = { throwable ->
+                    onImageLoadingFinished(it, throwable)
+                },
+                onThumbnailLoading = { onImageLoading(it) }
             )
         }
         items(searchResults.artists) {
@@ -190,7 +213,12 @@ private fun SearchQueryList(
                 title = it.name,
                 subtitle = "Artist",
                 onClick = { onItemClick(it) },
-                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) }
+                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
+                isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
+                onThumbnailImageLoadingFinished = { throwable ->
+                    onImageLoadingFinished(it, throwable)
+                },
+                onThumbnailLoading = { onImageLoading(it) }
             )
         }
         items(searchResults.playlists) {
@@ -200,7 +228,12 @@ private fun SearchQueryList(
                 title = it.name,
                 subtitle = "Playlist",
                 onClick = { onItemClick(it) },
-                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) }
+                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
+                isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
+                onThumbnailImageLoadingFinished = { throwable ->
+                    onImageLoadingFinished(it, throwable)
+                },
+                onThumbnailLoading = { onImageLoading(it) }
             )
         }
         item {
