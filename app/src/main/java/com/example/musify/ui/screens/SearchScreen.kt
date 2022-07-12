@@ -89,6 +89,8 @@ fun SearchScreen(
                     if (it.isFocused) {
                         isSearchListVisible = true
                         isClearSearchTextButtonVisible = true
+                    } else {
+                        isClearSearchTextButtonVisible = false
                     }
                 },
             leadingIcon = {
