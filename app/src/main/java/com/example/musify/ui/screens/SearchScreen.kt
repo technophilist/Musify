@@ -66,7 +66,7 @@ fun SearchScreen(
     BackHandler(isSearchListVisible) {
         // remove focus on the search text field
         focusManager.clearFocus()
-        isSearchListVisible = false
+        if (searchText.isEmpty()) isSearchListVisible = false
     }
     Column(
         modifier = Modifier
