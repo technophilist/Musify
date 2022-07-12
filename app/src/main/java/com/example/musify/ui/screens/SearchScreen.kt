@@ -48,7 +48,7 @@ fun SearchScreen(
         AnimatedVisibility(
             visible = isClearSearchTextButtonVisible,
             enter = fadeIn() + slideInHorizontally { it },
-            exit = slideOutHorizontally() + fadeOut()
+            exit = slideOutHorizontally { it } + fadeOut()
         ) {
             IconButton(
                 onClick = {
