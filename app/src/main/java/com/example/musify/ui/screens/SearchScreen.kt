@@ -64,7 +64,6 @@ fun SearchScreen(
         mutableStateMapOf<SearchResult, Boolean>()
     }
     BackHandler(isSearchListVisible) {
-        searchText = ""
         // remove focus on the search text field
         focusManager.clearFocus()
         isSearchListVisible = false
