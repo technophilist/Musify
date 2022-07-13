@@ -9,17 +9,26 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.LottieComposition
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.musify.R
 import com.example.musify.domain.Genre
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.SearchResults
@@ -36,6 +45,7 @@ fun SearchScreen(
     genreList: List<Genre>,
     onGenreItemClick: (Genre) -> Unit,
     onSearchTextChanged: (String) -> Unit,
+    isSearchResultLoading:Boolean,
     searchQueryResult: SearchResults,
     onSearchQueryItemClicked: (SearchResult) -> Unit
 ) {
@@ -63,6 +73,10 @@ fun SearchScreen(
     val isSearchItemLoadingPlaceholderVisibleMap = remember {
         mutableStateMapOf<SearchResult, Boolean>()
     }
+    val searchResultsLoadingAnimationComposition by rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(R.raw.lottie_loading_anim)
+    )
+
     BackHandler(isSearchListVisible) {
         // remove focus on the search text field
         focusManager.clearFocus()
@@ -155,7 +169,9 @@ fun SearchScreen(
                     onImageLoadingFinished = { item, _ ->
                         isSearchItemLoadingPlaceholderVisibleMap[item] = false
                     },
-                    onImageLoading = { isSearchItemLoadingPlaceholderVisibleMap[it] = true }
+                    onImageLoading = { isSearchItemLoadingPlaceholderVisibleMap[it] = true },
+                    isSearchResultsLoadingAnimationVisible = isSearchResultLoading,
+                    lottieComposition = searchResultsLoadingAnimationComposition
                 )
             }
         }
@@ -171,75 +187,97 @@ private fun SearchQueryList(
     isLoadingPlaceholderVisible: (SearchResult) -> Boolean,
     onImageLoading: (SearchResult) -> Unit,
     onImageLoadingFinished: (SearchResult, Throwable?) -> Unit,
+    isSearchResultsLoadingAnimationVisible: Boolean = false,
+    lottieComposition: LottieComposition?
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.background),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(searchResults.tracks) {
-            MusifyCompactListItemCard(
-                cardType = it.getAssociatedListCardType(),
-                thumbnailImageUrlString = it.imageUrlString,
-                title = it.name,
-                subtitle = it.artistsString,
-                onClick = { onItemClick(it) },
-                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
-                isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
-                onThumbnailImageLoadingFinished = { throwable ->
-                    onImageLoadingFinished(it, throwable)
-                },
-                onThumbnailLoading = { onImageLoading(it) }
-            )
+    Box {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.background),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(searchResults.tracks) {
+                MusifyCompactListItemCard(
+                    cardType = it.getAssociatedListCardType(),
+                    thumbnailImageUrlString = it.imageUrlString,
+                    title = it.name,
+                    subtitle = it.artistsString,
+                    onClick = { onItemClick(it) },
+                    onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
+                    isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
+                    onThumbnailImageLoadingFinished = { throwable ->
+                        onImageLoadingFinished(it, throwable)
+                    },
+                    onThumbnailLoading = { onImageLoading(it) }
+                )
+            }
+            items(searchResults.albums) {
+                MusifyCompactListItemCard(
+                    cardType = it.getAssociatedListCardType(),
+                    thumbnailImageUrlString = it.albumArtUrlString,
+                    title = it.name,
+                    subtitle = it.artistsString,
+                    onClick = { onItemClick(it) },
+                    onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
+                    isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
+                    onThumbnailImageLoadingFinished = { throwable ->
+                        onImageLoadingFinished(it, throwable)
+                    },
+                    onThumbnailLoading = { onImageLoading(it) }
+                )
+            }
+            items(searchResults.artists) {
+                MusifyCompactListItemCard(
+                    cardType = it.getAssociatedListCardType(),
+                    thumbnailImageUrlString = it.imageUrlString ?: "",
+                    title = it.name,
+                    subtitle = "Artist",
+                    onClick = { onItemClick(it) },
+                    onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
+                    isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
+                    onThumbnailImageLoadingFinished = { throwable ->
+                        onImageLoadingFinished(it, throwable)
+                    },
+                    onThumbnailLoading = { onImageLoading(it) }
+                )
+            }
+            items(searchResults.playlists) {
+                MusifyCompactListItemCard(
+                    cardType = it.getAssociatedListCardType(),
+                    thumbnailImageUrlString = it.imageUrlString ?: "",
+                    title = it.name,
+                    subtitle = "Playlist",
+                    onClick = { onItemClick(it) },
+                    onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
+                    isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
+                    onThumbnailImageLoadingFinished = { throwable ->
+                        onImageLoadingFinished(it, throwable)
+                    },
+                    onThumbnailLoading = { onImageLoading(it) }
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.navigationBarsHeight())
+            }
         }
-        items(searchResults.albums) {
-            MusifyCompactListItemCard(
-                cardType = it.getAssociatedListCardType(),
-                thumbnailImageUrlString = it.albumArtUrlString,
-                title = it.name,
-                subtitle = it.artistsString,
-                onClick = { onItemClick(it) },
-                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
-                isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
-                onThumbnailImageLoadingFinished = { throwable ->
-                    onImageLoadingFinished(it, throwable)
-                },
-                onThumbnailLoading = { onImageLoading(it) }
+        AnimatedVisibility(
+            modifier = Modifier
+                .padding(16.dp)
+                .size(128.dp) // the actual size will be mush lesser because of padding and offset
+                .align(Alignment.Center)
+                .offset(y = (-100).dp)
+                .clip(RoundedCornerShape(5))
+                .background(Color.White.copy(alpha = 0.1f))
+                .padding(16.dp),
+            visible = isSearchResultsLoadingAnimationVisible,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            LottieAnimation(
+                composition = lottieComposition,
+                iterations = LottieConstants.IterateForever
             )
-        }
-        items(searchResults.artists) {
-            MusifyCompactListItemCard(
-                cardType = it.getAssociatedListCardType(),
-                thumbnailImageUrlString = it.imageUrlString ?: "",
-                title = it.name,
-                subtitle = "Artist",
-                onClick = { onItemClick(it) },
-                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
-                isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
-                onThumbnailImageLoadingFinished = { throwable ->
-                    onImageLoadingFinished(it, throwable)
-                },
-                onThumbnailLoading = { onImageLoading(it) }
-            )
-        }
-        items(searchResults.playlists) {
-            MusifyCompactListItemCard(
-                cardType = it.getAssociatedListCardType(),
-                thumbnailImageUrlString = it.imageUrlString ?: "",
-                title = it.name,
-                subtitle = "Playlist",
-                onClick = { onItemClick(it) },
-                onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
-                isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
-                onThumbnailImageLoadingFinished = { throwable ->
-                    onImageLoadingFinished(it, throwable)
-                },
-                onThumbnailLoading = { onImageLoading(it) }
-            )
-        }
-        item {
-            Spacer(modifier = Modifier.navigationBarsHeight())
         }
     }
 }
