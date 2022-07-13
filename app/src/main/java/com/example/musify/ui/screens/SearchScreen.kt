@@ -45,7 +45,7 @@ fun SearchScreen(
     genreList: List<Genre>,
     onGenreItemClick: (Genre) -> Unit,
     onSearchTextChanged: (String) -> Unit,
-    isSearchResultLoading:Boolean,
+    isSearchResultLoading: Boolean,
     searchQueryResult: SearchResults,
     onSearchQueryItemClicked: (SearchResult) -> Unit
 ) {
@@ -197,7 +197,7 @@ private fun SearchQueryList(
                 .background(MaterialTheme.colors.background),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(searchResults.tracks) {
+            items(searchResults.tracks, key = { it.id }) {
                 MusifyCompactListItemCard(
                     cardType = it.getAssociatedListCardType(),
                     thumbnailImageUrlString = it.imageUrlString,
@@ -212,7 +212,7 @@ private fun SearchQueryList(
                     onThumbnailLoading = { onImageLoading(it) }
                 )
             }
-            items(searchResults.albums) {
+            items(searchResults.albums, key = { it.id }) {
                 MusifyCompactListItemCard(
                     cardType = it.getAssociatedListCardType(),
                     thumbnailImageUrlString = it.albumArtUrlString,
@@ -227,7 +227,7 @@ private fun SearchQueryList(
                     onThumbnailLoading = { onImageLoading(it) }
                 )
             }
-            items(searchResults.artists) {
+            items(searchResults.artists, key = { it.id }) {
                 MusifyCompactListItemCard(
                     cardType = it.getAssociatedListCardType(),
                     thumbnailImageUrlString = it.imageUrlString ?: "",
@@ -242,7 +242,7 @@ private fun SearchQueryList(
                     onThumbnailLoading = { onImageLoading(it) }
                 )
             }
-            items(searchResults.playlists) {
+            items(searchResults.playlists, key = { it.id }) {
                 MusifyCompactListItemCard(
                     cardType = it.getAssociatedListCardType(),
                     thumbnailImageUrlString = it.imageUrlString ?: "",
