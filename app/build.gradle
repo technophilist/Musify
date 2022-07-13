@@ -76,6 +76,8 @@ dependencies {
 
     // image handling
     implementation "io.coil-kt:coil-compose:2.1.0"
+    // lottie compose
+    implementation "com.airbnb.android:lottie-compose:5.2.0"
 
     // testing
     testImplementation 'junit:junit:4.13.2'
