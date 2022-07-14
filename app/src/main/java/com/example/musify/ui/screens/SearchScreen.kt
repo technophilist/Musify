@@ -42,8 +42,8 @@ import com.google.accompanist.insets.statusBarsPadding
  * An enum that contains the different filters that can be applied to
  * the search results in the [SearchScreen].
  */
-// TODO add 'ALL' enum
 enum class SearchScreenFilters(val filterLabel: String) {
+    ALL("All"),
     ALBUMS("Albums"),
     TRACKS("Tracks"),
     ARTISTS("Artists"),
