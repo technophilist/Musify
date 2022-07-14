@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.LottieComposition
@@ -319,12 +320,18 @@ private fun FilterChipGroup(
     filters: List<SearchScreenFilters>,
     currentlySelectedFilter: SearchScreenFilters,
     onFilterClicked: (SearchScreenFilters) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp)
 ) {
+    val currentLayoutDirection = LocalLayoutDirection.current
+    val startPadding = contentPadding.calculateStartPadding(currentLayoutDirection)
+    val endPadding = contentPadding.calculateEndPadding(currentLayoutDirection)
     Row(
         modifier = modifier.horizontalScroll(scrollState),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+
+        Spacer(modifier = Modifier.width(startPadding))
         filters.forEach {
             FilterChip(
                 text = it.filterLabel,
@@ -332,6 +339,7 @@ private fun FilterChipGroup(
                 isSelected = it == currentlySelectedFilter
             )
         }
+        Spacer(modifier = Modifier.width(endPadding))
     }
 }
 
