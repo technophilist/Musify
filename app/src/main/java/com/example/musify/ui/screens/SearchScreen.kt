@@ -2,10 +2,7 @@ package com.example.musify.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
@@ -45,6 +42,7 @@ import com.google.accompanist.insets.statusBarsPadding
  * An enum that contains the different filters that can be applied to
  * the search results in the [SearchScreen].
  */
+// TODO add 'ALL' enum
 enum class SearchScreenFilters(val filterLabel: String) {
     ALBUMS("Albums"),
     TRACKS("Tracks"),
@@ -90,7 +88,8 @@ fun SearchScreen(
     val searchResultsLoadingAnimationComposition by rememberLottieComposition(
         spec = LottieCompositionSpec.RawRes(R.raw.lottie_loading_anim)
     )
-
+    val isFilterChipGroupVisible by remember { derivedStateOf { isSearchListVisible } }
+    var currentlySelectedSearchScreenFilter by remember { mutableStateOf(SearchScreenFilters.TRACKS) }
     BackHandler(isSearchListVisible) {
         // remove focus on the search text field
         focusManager.clearFocus()
@@ -145,6 +144,14 @@ fun SearchScreen(
                 textColor = Color.Black
             )
         )
+        AnimatedVisibility(visible = isFilterChipGroupVisible) {
+            FilterChipGroup(
+                scrollState = rememberScrollState(),
+                filters = SearchScreenFilters.values().toList(), // TODO hoist
+                currentlySelectedFilter = currentlySelectedSearchScreenFilter,
+                onFilterClicked = { currentlySelectedSearchScreenFilter = it }
+            )
+        }
         Box {
             Text(
                 text = "Genres",
