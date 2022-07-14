@@ -37,28 +37,47 @@ class SearchViewModel @Inject constructor(
     private val emptySearchResults = emptySearchResults()
     private val _uiState = mutableStateOf(SearchScreenUiState.IDLE)
     private val _searchResults = mutableStateOf(emptySearchResults)
-    val searchResults = _searchResults as State<SearchResults>
+    private val filteredSearchResults = mutableStateOf(emptySearchResults)
+    val searchResults = filteredSearchResults as State<SearchResults>
     val uiState = _uiState as State<SearchScreenUiState>
 
-    fun search(searchQuery: String) {
-        _uiState.value = SearchScreenUiState.LOADING
+    // TODO test locale
+    private fun getCountryCode(): String = getApplication<MusifyApplication>()
+        .resources
+        .configuration
+        .locale
+        .country
+
+    fun searchWithFilter(
+        searchQuery: String,
+        searchFilter: SearchFilter = SearchFilter.ALL
+    ) {
         searchJob?.cancel()
-        if (searchQuery.isBlank()) {
-            _searchResults.value = emptySearchResults
-            _uiState.value = SearchScreenUiState.SUCCESS
-            return
-        }
-        // TODO Test locale
-        val countryCode = getApplication<MusifyApplication>().resources.configuration.locale.country
+        if (searchQuery.isBlank()) return
+        _uiState.value = SearchScreenUiState.LOADING
         searchJob = viewModelScope.launch(ioDispatcher) {
             delay(1_500)
             val searchResult = repository
                 .fetchSearchResultsForQuery(
                     searchQuery = searchQuery.trim(),
                     imageSize = MapperImageSize.SMALL,
-                    countryCode = countryCode
+                    countryCode = getCountryCode()
                 )
-            if (searchResult is FetchedResource.Success) _searchResults.value = searchResult.data
+            if (searchResult is FetchedResource.Success) {
+                _searchResults.value = searchResult.data
+                filteredSearchResults.value = if (searchFilter != SearchFilter.ALL) {
+                    SearchResults(
+                        tracks = if (searchFilter == SearchFilter.TRACKS) _searchResults.value.tracks
+                        else emptyList(),
+                        albums = if (searchFilter == SearchFilter.ALBUMS) _searchResults.value.albums
+                        else emptyList(),
+                        artists = if (searchFilter == SearchFilter.ARTISTS) _searchResults.value.artists
+                        else emptyList(),
+                        playlists = if (searchFilter == SearchFilter.PLAYLISTS) _searchResults.value.playlists
+                        else emptyList()
+                    )
+                } else _searchResults.value
+            }
             _uiState.value = SearchScreenUiState.SUCCESS
         }
     }
