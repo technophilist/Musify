@@ -48,7 +48,7 @@ fun SearchScreen(
     searchScreenFilters: List<SearchFilter>,
     onSearchFilterClicked: (SearchFilter) -> Unit,
     onGenreItemClick: (Genre) -> Unit,
-    onSearchTextChanged: (String) -> Unit,
+    onSearchTextChanged: (searchText: String, filter: SearchFilter) -> Unit,
     isSearchResultLoading: Boolean,
     searchQueryResult: SearchResults,
     onSearchQueryItemClicked: (SearchResult) -> Unit
@@ -58,6 +58,7 @@ fun SearchScreen(
     var isSearchListVisible by remember { mutableStateOf(false) }
     val isClearSearchTextButtonVisible by remember { derivedStateOf { isSearchListVisible && searchText.isNotEmpty() } }
     val focusManager = LocalFocusManager.current
+    var currentlySelectedSearchScreenFilter by remember { mutableStateOf(SearchFilter.TRACKS) }
     val textFieldTrailingIcon = @Composable {
         AnimatedVisibility(
             visible = isClearSearchTextButtonVisible,
@@ -68,7 +69,7 @@ fun SearchScreen(
                 onClick = {
                     searchText = ""
                     // notify the caller that the search text is empty
-                    onSearchTextChanged("")
+                    onSearchTextChanged("", currentlySelectedSearchScreenFilter)
                 },
                 content = { Icon(imageVector = Icons.Filled.Close, contentDescription = null) }
             )
@@ -81,7 +82,6 @@ fun SearchScreen(
         spec = LottieCompositionSpec.RawRes(R.raw.lottie_loading_anim)
     )
     val isFilterChipGroupVisible by remember { derivedStateOf { isSearchListVisible } }
-    var currentlySelectedSearchScreenFilter by remember { mutableStateOf(SearchFilter.TRACKS) }
     // Using separate horizontal padding modifier because the filter
     // group should be edge to edge. Adding a padding to the parent
     // composable will not allow the filter group to span to the edges.
@@ -130,7 +130,7 @@ fun SearchScreen(
             value = searchText,
             onValueChange = {
                 searchText = it
-                onSearchTextChanged(it)
+                onSearchTextChanged(it, currentlySelectedSearchScreenFilter)
             },
             textStyle = LocalTextStyle.current.copy(fontWeight = FontWeight.SemiBold),
             colors = TextFieldDefaults.textFieldColors(
