@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.musify.data.repository.MusifyRepository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
+import com.example.musify.di.DefaultDispatcher
 import com.example.musify.di.IODispatcher
 import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.SearchResults
@@ -29,7 +30,8 @@ enum class SearchScreenUiState { LOADING, SUCCESS, IDLE }
 class SearchViewModel @Inject constructor(
     application: Application,
     private val repository: MusifyRepository,
-    @IODispatcher private val defaultDispatcher: CoroutineDispatcher
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher
 ) : AndroidViewModel(application) {
     private var searchJob: Job? = null
     private val emptySearchResults = emptySearchResults()
@@ -48,7 +50,7 @@ class SearchViewModel @Inject constructor(
         }
         // TODO Test locale
         val countryCode = getApplication<MusifyApplication>().resources.configuration.locale.country
-        searchJob = viewModelScope.launch(defaultDispatcher) {
+        searchJob = viewModelScope.launch(ioDispatcher) {
             delay(1_500)
             val searchResult = repository
                 .fetchSearchResultsForQuery(
