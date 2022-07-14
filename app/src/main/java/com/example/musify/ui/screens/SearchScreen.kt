@@ -4,10 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -39,6 +36,7 @@ import com.example.musify.ui.components.MusifyCompactListItemCard
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
@@ -91,6 +89,8 @@ fun SearchScreen(
         focusManager.clearFocus()
         if (searchText.isEmpty()) isSearchListVisible = false
     }
+    val lazyListState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -149,6 +149,7 @@ fun SearchScreen(
                 onFilterClicked = {
                     currentlySelectedSearchScreenFilter = it
                     onSearchFilterClicked(it)
+                    coroutineScope.launch { lazyListState.animateScrollToItem(0) }
                 }
             )
         }
@@ -192,7 +193,8 @@ fun SearchScreen(
                     },
                     onImageLoading = { isSearchItemLoadingPlaceholderVisibleMap[it] = true },
                     isSearchResultsLoadingAnimationVisible = isSearchResultLoading,
-                    lottieComposition = searchResultsLoadingAnimationComposition
+                    lottieComposition = searchResultsLoadingAnimationComposition,
+                    lazyListState = lazyListState
                 )
             }
         }
@@ -208,15 +210,17 @@ private fun SearchQueryList(
     isLoadingPlaceholderVisible: (SearchResult) -> Boolean,
     onImageLoading: (SearchResult) -> Unit,
     onImageLoadingFinished: (SearchResult, Throwable?) -> Unit,
+    lottieComposition: LottieComposition?,
+    lazyListState: LazyListState = rememberLazyListState(),
     isSearchResultsLoadingAnimationVisible: Boolean = false,
-    lottieComposition: LottieComposition?
 ) {
     Box {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            state = lazyListState,
         ) {
             items(searchResults.tracks, key = { it.id }) {
                 MusifyCompactListItemCard(
