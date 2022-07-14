@@ -92,6 +92,10 @@ fun SearchScreen(
     )
     val isFilterChipGroupVisible by remember { derivedStateOf { isSearchListVisible } }
     var currentlySelectedSearchScreenFilter by remember { mutableStateOf(SearchScreenFilters.TRACKS) }
+    // Using separate horizontal padding modifier because the filter
+    // group should be edge to edge. Adding a padding to the parent
+    // composable will not allow the filter group to span to the edges.
+    val horizontalPaddingModifier = Modifier.padding(horizontal = 16.dp)
     BackHandler(isSearchListVisible) {
         // remove focus on the search text field
         focusManager.clearFocus()
@@ -101,11 +105,11 @@ fun SearchScreen(
         modifier = Modifier
             .fillMaxWidth()
             .statusBarsPadding()
-            .padding(top = 16.dp)
-            .padding(horizontal = 16.dp),
+            .padding(top = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
+            modifier = horizontalPaddingModifier,
             text = "Search",
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.h5
@@ -113,6 +117,7 @@ fun SearchScreen(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
+                .then(horizontalPaddingModifier)
                 .onFocusChanged {
                     if (it.isFocused) {
                         isSearchListVisible = true
@@ -157,7 +162,7 @@ fun SearchScreen(
                 }
             )
         }
-        Box {
+        Box(modifier = horizontalPaddingModifier) {
             Text(
                 text = "Genres",
                 fontWeight = FontWeight.Bold,
