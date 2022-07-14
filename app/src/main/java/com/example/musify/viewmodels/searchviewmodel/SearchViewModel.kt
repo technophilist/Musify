@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.musify.data.repository.MusifyRepository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
-import com.example.musify.di.DefaultDispatcher
 import com.example.musify.di.IODispatcher
 import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.SearchResults
@@ -30,8 +29,7 @@ enum class SearchScreenUiState { LOADING, SUCCESS, IDLE }
 class SearchViewModel @Inject constructor(
     application: Application,
     private val repository: MusifyRepository,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : AndroidViewModel(application) {
     private var searchJob: Job? = null
     private val emptySearchResults = emptySearchResults()
