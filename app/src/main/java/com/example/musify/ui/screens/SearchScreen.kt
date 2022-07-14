@@ -3,7 +3,9 @@ package com.example.musify.ui.screens
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
@@ -32,6 +34,7 @@ import com.example.musify.R
 import com.example.musify.domain.Genre
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.SearchResults
+import com.example.musify.ui.components.FilterChip
 import com.example.musify.ui.components.GenreCard
 import com.example.musify.ui.components.ListItemCardType
 import com.example.musify.ui.components.MusifyCompactListItemCard
@@ -288,6 +291,28 @@ private fun SearchQueryList(
             LottieAnimation(
                 composition = lottieComposition,
                 iterations = LottieConstants.IterateForever
+            )
+        }
+    }
+}
+
+@Composable
+private fun FilterChipGroup(
+    scrollState: ScrollState,
+    filters: List<SearchScreenFilters>,
+    currentlySelectedFilter: SearchScreenFilters,
+    onFilterClicked: (SearchScreenFilters) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.horizontalScroll(scrollState),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        filters.forEach {
+            FilterChip(
+                text = it.filterLabel,
+                onClick = { onFilterClicked(it) },
+                isSelected = it == currentlySelectedFilter
             )
         }
     }
