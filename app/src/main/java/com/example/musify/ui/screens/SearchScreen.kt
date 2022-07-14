@@ -38,6 +38,12 @@ import com.example.musify.ui.components.MusifyCompactListItemCard
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
 
+/**
+ * An enum that contains the different filters that can be applied to
+ * the search results in the [SearchScreen].
+ */
+enum class SearchScreenFilters { ALBUMS, TRACKS, ARTISTS, PLAYLISTS }
+
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
