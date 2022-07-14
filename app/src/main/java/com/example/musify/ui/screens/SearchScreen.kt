@@ -55,6 +55,8 @@ enum class SearchScreenFilters(val filterLabel: String) {
 @Composable
 fun SearchScreen(
     genreList: List<Genre>,
+    searchScreenFilters: List<SearchScreenFilters>,
+    onSearchFilterClicked: (SearchScreenFilters) -> Unit,
     onGenreItemClick: (Genre) -> Unit,
     onSearchTextChanged: (String) -> Unit,
     isSearchResultLoading: Boolean,
@@ -147,9 +149,12 @@ fun SearchScreen(
         AnimatedVisibility(visible = isFilterChipGroupVisible) {
             FilterChipGroup(
                 scrollState = rememberScrollState(),
-                filters = SearchScreenFilters.values().toList(), // TODO hoist
+                filters = searchScreenFilters,
                 currentlySelectedFilter = currentlySelectedSearchScreenFilter,
-                onFilterClicked = { currentlySelectedSearchScreenFilter = it }
+                onFilterClicked = {
+                    currentlySelectedSearchScreenFilter = it
+                    onSearchFilterClicked(it)
+                }
             )
         }
         Box {
