@@ -1,4 +1,4 @@
-package com.example.musify.viewmodels
+package com.example.musify.viewmodels.searchviewmodel
 
 import android.app.Application
 import androidx.compose.runtime.State
