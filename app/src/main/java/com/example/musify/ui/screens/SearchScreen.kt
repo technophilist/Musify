@@ -36,7 +36,7 @@ import com.example.musify.ui.components.FilterChip
 import com.example.musify.ui.components.GenreCard
 import com.example.musify.ui.components.ListItemCardType
 import com.example.musify.ui.components.MusifyCompactListItemCard
-import com.example.musify.viewmodels.searchviewmodel.SearchFilters
+import com.example.musify.viewmodels.searchviewmodel.SearchFilter
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
 
@@ -45,8 +45,8 @@ import com.google.accompanist.insets.statusBarsPadding
 @Composable
 fun SearchScreen(
     genreList: List<Genre>,
-    searchScreenFilters: List<SearchFilters>,
-    onSearchFilterClicked: (SearchFilters) -> Unit,
+    searchScreenFilters: List<SearchFilter>,
+    onSearchFilterClicked: (SearchFilter) -> Unit,
     onGenreItemClick: (Genre) -> Unit,
     onSearchTextChanged: (String) -> Unit,
     isSearchResultLoading: Boolean,
@@ -81,7 +81,7 @@ fun SearchScreen(
         spec = LottieCompositionSpec.RawRes(R.raw.lottie_loading_anim)
     )
     val isFilterChipGroupVisible by remember { derivedStateOf { isSearchListVisible } }
-    var currentlySelectedSearchScreenFilter by remember { mutableStateOf(SearchFilters.TRACKS) }
+    var currentlySelectedSearchScreenFilter by remember { mutableStateOf(SearchFilter.TRACKS) }
     // Using separate horizontal padding modifier because the filter
     // group should be edge to edge. Adding a padding to the parent
     // composable will not allow the filter group to span to the edges.
@@ -306,9 +306,9 @@ private fun SearchQueryList(
 @Composable
 private fun FilterChipGroup(
     scrollState: ScrollState,
-    filters: List<SearchFilters>,
-    currentlySelectedFilter: SearchFilters,
-    onFilterClicked: (SearchFilters) -> Unit,
+    filters: List<SearchFilter>,
+    currentlySelectedFilter: SearchFilter,
+    onFilterClicked: (SearchFilter) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp)
 ) {
