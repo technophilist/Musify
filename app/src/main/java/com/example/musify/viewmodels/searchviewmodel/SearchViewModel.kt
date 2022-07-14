@@ -48,6 +48,21 @@ class SearchViewModel @Inject constructor(
         .locale
         .country
 
+    private fun getSearchResultsObjectForFilter(
+        searchFilter: SearchFilter
+    ) = if (searchFilter != SearchFilter.ALL) {
+        SearchResults(
+            tracks = if (searchFilter == SearchFilter.TRACKS) _searchResults.value.tracks
+            else emptyList(),
+            albums = if (searchFilter == SearchFilter.ALBUMS) _searchResults.value.albums
+            else emptyList(),
+            artists = if (searchFilter == SearchFilter.ARTISTS) _searchResults.value.artists
+            else emptyList(),
+            playlists = if (searchFilter == SearchFilter.PLAYLISTS) _searchResults.value.playlists
+            else emptyList()
+        )
+    } else _searchResults.value
+
     fun searchWithFilter(
         searchQuery: String,
         searchFilter: SearchFilter = SearchFilter.ALL
@@ -65,20 +80,13 @@ class SearchViewModel @Inject constructor(
                 )
             if (searchResult is FetchedResource.Success) {
                 _searchResults.value = searchResult.data
-                filteredSearchResults.value = if (searchFilter != SearchFilter.ALL) {
-                    SearchResults(
-                        tracks = if (searchFilter == SearchFilter.TRACKS) _searchResults.value.tracks
-                        else emptyList(),
-                        albums = if (searchFilter == SearchFilter.ALBUMS) _searchResults.value.albums
-                        else emptyList(),
-                        artists = if (searchFilter == SearchFilter.ARTISTS) _searchResults.value.artists
-                        else emptyList(),
-                        playlists = if (searchFilter == SearchFilter.PLAYLISTS) _searchResults.value.playlists
-                        else emptyList()
-                    )
-                } else _searchResults.value
+                filteredSearchResults.value = getSearchResultsObjectForFilter(searchFilter)
             }
             _uiState.value = SearchScreenUiState.SUCCESS
         }
+    }
+
+    fun applyFilterToSearchResults(searchFilter: SearchFilter) {
+        filteredSearchResults.value = getSearchResultsObjectForFilter(searchFilter)
     }
 }
