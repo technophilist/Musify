@@ -36,20 +36,9 @@ import com.example.musify.ui.components.FilterChip
 import com.example.musify.ui.components.GenreCard
 import com.example.musify.ui.components.ListItemCardType
 import com.example.musify.ui.components.MusifyCompactListItemCard
+import com.example.musify.viewmodels.searchviewmodel.SearchFilters
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
-
-/**
- * An enum that contains the different filters that can be applied to
- * the search results in the [SearchScreen].
- */
-enum class SearchFilters(val filterLabel: String) {
-    ALL("All"),
-    ALBUMS("Albums"),
-    TRACKS("Tracks"),
-    ARTISTS("Artists"),
-    PLAYLISTS("Playlists")
-}
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
