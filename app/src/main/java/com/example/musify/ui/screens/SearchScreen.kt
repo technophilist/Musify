@@ -43,7 +43,7 @@ import com.google.accompanist.insets.statusBarsPadding
  * An enum that contains the different filters that can be applied to
  * the search results in the [SearchScreen].
  */
-enum class SearchScreenFilters(val filterLabel: String) {
+enum class SearchFilters(val filterLabel: String) {
     ALL("All"),
     ALBUMS("Albums"),
     TRACKS("Tracks"),
@@ -56,8 +56,8 @@ enum class SearchScreenFilters(val filterLabel: String) {
 @Composable
 fun SearchScreen(
     genreList: List<Genre>,
-    searchScreenFilters: List<SearchScreenFilters>,
-    onSearchFilterClicked: (SearchScreenFilters) -> Unit,
+    searchScreenFilters: List<SearchFilters>,
+    onSearchFilterClicked: (SearchFilters) -> Unit,
     onGenreItemClick: (Genre) -> Unit,
     onSearchTextChanged: (String) -> Unit,
     isSearchResultLoading: Boolean,
@@ -92,7 +92,7 @@ fun SearchScreen(
         spec = LottieCompositionSpec.RawRes(R.raw.lottie_loading_anim)
     )
     val isFilterChipGroupVisible by remember { derivedStateOf { isSearchListVisible } }
-    var currentlySelectedSearchScreenFilter by remember { mutableStateOf(SearchScreenFilters.TRACKS) }
+    var currentlySelectedSearchScreenFilter by remember { mutableStateOf(SearchFilters.TRACKS) }
     // Using separate horizontal padding modifier because the filter
     // group should be edge to edge. Adding a padding to the parent
     // composable will not allow the filter group to span to the edges.
@@ -317,9 +317,9 @@ private fun SearchQueryList(
 @Composable
 private fun FilterChipGroup(
     scrollState: ScrollState,
-    filters: List<SearchScreenFilters>,
-    currentlySelectedFilter: SearchScreenFilters,
-    onFilterClicked: (SearchScreenFilters) -> Unit,
+    filters: List<SearchFilters>,
+    currentlySelectedFilter: SearchFilters,
+    onFilterClicked: (SearchFilters) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp)
 ) {
