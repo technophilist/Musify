@@ -66,7 +66,11 @@ class SearchViewModel @Inject constructor(
         searchFilter: SearchFilter = SearchFilter.ALL
     ) {
         searchJob?.cancel()
-        if (searchQuery.isBlank()) return
+        if (searchQuery.isBlank()) {
+            _searchResults.value = emptySearchResults
+            filteredSearchResults.value = _searchResults.value
+            return
+        }
         _uiState.value = SearchScreenUiState.LOADING
         searchJob = viewModelScope.launch(ioDispatcher) {
             delay(1_500)
