@@ -46,20 +46,19 @@ class SearchViewModel @Inject constructor(
         .locale
         .country
 
-    private fun getSearchResultsObjectForFilter(
-        searchFilter: SearchFilter
-    ) = if (searchFilter != SearchFilter.ALL) {
-        SearchResults(
-            tracks = if (searchFilter == SearchFilter.TRACKS) _searchResults.value.tracks
-            else emptyList(),
-            albums = if (searchFilter == SearchFilter.ALBUMS) _searchResults.value.albums
-            else emptyList(),
-            artists = if (searchFilter == SearchFilter.ARTISTS) _searchResults.value.artists
-            else emptyList(),
-            playlists = if (searchFilter == SearchFilter.PLAYLISTS) _searchResults.value.playlists
-            else emptyList()
-        )
-    } else _searchResults.value
+    private fun getSearchResultsObjectForFilter(searchFilter: SearchFilter) =
+        if (searchFilter != SearchFilter.ALL) {
+            SearchResults(
+                tracks = if (searchFilter == SearchFilter.TRACKS) _searchResults.value.tracks
+                else emptyList(),
+                albums = if (searchFilter == SearchFilter.ALBUMS) _searchResults.value.albums
+                else emptyList(),
+                artists = if (searchFilter == SearchFilter.ARTISTS) _searchResults.value.artists
+                else emptyList(),
+                playlists = if (searchFilter == SearchFilter.PLAYLISTS) _searchResults.value.playlists
+                else emptyList()
+            )
+        } else _searchResults.value
 
     fun searchWithFilter(
         searchQuery: String,
@@ -74,6 +73,12 @@ class SearchViewModel @Inject constructor(
         }
         _uiState.value = SearchScreenUiState.LOADING
         searchJob = viewModelScope.launch(ioDispatcher) {
+            // add artificial delay to limit the number of calls to
+            // the api when the user is typing the search query.
+            // adding this delay allows for a short window of time
+            // which could be used to cancel this coroutine if the
+            // search text is currently being typed; preventing
+            // un-necessary calls to the api
             delay(500)
             val searchResult = repository
                 .fetchSearchResultsForQuery(
