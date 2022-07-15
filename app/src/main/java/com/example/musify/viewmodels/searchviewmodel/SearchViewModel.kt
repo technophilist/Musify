@@ -74,7 +74,7 @@ class SearchViewModel @Inject constructor(
         }
         _uiState.value = SearchScreenUiState.LOADING
         searchJob = viewModelScope.launch(ioDispatcher) {
-            delay(1_500)
+            delay(500)
             val searchResult = repository
                 .fetchSearchResultsForQuery(
                     searchQuery = searchQuery.trim(),
