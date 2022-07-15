@@ -91,6 +91,7 @@ fun SearchScreen(
     }
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+    val filterChipGroupScrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -143,7 +144,7 @@ fun SearchScreen(
         )
         AnimatedVisibility(visible = isFilterChipGroupVisible) {
             FilterChipGroup(
-                scrollState = rememberScrollState(),
+                scrollState = filterChipGroupScrollState,
                 filters = searchScreenFilters,
                 currentlySelectedFilter = currentlySelectedSearchScreenFilter,
                 onFilterClicked = {
