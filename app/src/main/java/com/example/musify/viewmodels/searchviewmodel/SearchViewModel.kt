@@ -69,6 +69,7 @@ class SearchViewModel @Inject constructor(
         if (searchQuery.isBlank()) {
             _searchResults.value = emptySearchResults
             filteredSearchResults.value = _searchResults.value
+            _uiState.value = SearchScreenUiState.IDLE
             return
         }
         _uiState.value = SearchScreenUiState.LOADING
