@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
@@ -59,6 +60,7 @@ enum class ListItemCardType { ALBUM, ARTIST, SONG, PLAYLIST }
  * is done loading. A nullable parameter of type [Throwable] is provided
  * to the lambda, that indicates whether the image loading process was
  * successful or not.
+ * @param errorPainter A [Painter] that is displayed when the image request is unsuccessful.
  * @param isLoadingPlaceHolderVisible indicates whether the loading
  * placeholder is visible for the thumbnail image.
  */
@@ -78,6 +80,7 @@ fun MusifyCompactListItemCard(
     isLoadingPlaceHolderVisible: Boolean = false,
     onThumbnailLoading: (() -> Unit)? = null,
     onThumbnailImageLoadingFinished: ((Throwable?) -> Unit)? = null,
+    errorPainter: Painter? = null,
     placeholderHighlight: PlaceholderHighlight = PlaceholderHighlight.shimmer(),
 ) {
     Card(
@@ -104,6 +107,7 @@ fun MusifyCompactListItemCard(
                     onImageLoading = { onThumbnailLoading?.invoke() },
                     onImageLoadingFinished = { onThumbnailImageLoadingFinished?.invoke(it) },
                     placeholderHighlight = placeholderHighlight,
+                    errorPainter = errorPainter,
                     contentDescription = null
                 )
             }
@@ -165,6 +169,7 @@ fun MusifyCompactListItemCard(
  * is done loading. A nullable parameter of type [Throwable] is provided
  * to the lambda, that indicates whether the image loading process was
  * successful or not.
+ * @param errorPainter A [Painter] that is displayed when the image request is unsuccessful.
  * @param isLoadingPlaceHolderVisible indicates whether the loading
  * placeholder is visible for the thumbnail image.
  */
@@ -183,6 +188,7 @@ fun MusifyCompactListItemCard(
     isLoadingPlaceHolderVisible: Boolean = false,
     onThumbnailLoading: (() -> Unit)? = null,
     onThumbnailImageLoadingFinished: ((Throwable?) -> Unit)? = null,
+    errorPainter: Painter? = null,
     placeholderHighlight: PlaceholderHighlight = PlaceholderHighlight.shimmer()
 ) {
     MusifyCompactListItemCard(
@@ -202,6 +208,7 @@ fun MusifyCompactListItemCard(
         isLoadingPlaceHolderVisible = isLoadingPlaceHolderVisible,
         onThumbnailLoading = onThumbnailLoading,
         onThumbnailImageLoadingFinished = onThumbnailImageLoadingFinished,
-        placeholderHighlight = placeholderHighlight
+        placeholderHighlight = placeholderHighlight,
+        errorPainter = errorPainter
     )
 }
