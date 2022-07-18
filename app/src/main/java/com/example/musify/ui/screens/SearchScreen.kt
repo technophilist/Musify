@@ -16,8 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.LottieComposition
@@ -38,6 +41,9 @@ import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
+/**
+ * TODO  Placholder for missing images,testing viewmodel,genres, check image caching coil
+ */
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
@@ -215,6 +221,8 @@ private fun SearchQueryList(
     lazyListState: LazyListState = rememberLazyListState(),
     isSearchResultsLoadingAnimationVisible: Boolean = false,
 ) {
+    val artistImageErrorPainter =
+        rememberVectorPainter(ImageVector.vectorResource(id = R.drawable.ic_outline_account_circle_24))
     Box {
         LazyColumn(
             modifier = Modifier
@@ -265,7 +273,8 @@ private fun SearchQueryList(
                     onThumbnailImageLoadingFinished = { throwable ->
                         onImageLoadingFinished(it, throwable)
                     },
-                    onThumbnailLoading = { onImageLoading(it) }
+                    onThumbnailLoading = { onImageLoading(it) },
+                    errorPainter = artistImageErrorPainter
                 )
             }
             items(searchResults.playlists, key = { it.id }) {
@@ -280,7 +289,7 @@ private fun SearchQueryList(
                     onThumbnailImageLoadingFinished = { throwable ->
                         onImageLoadingFinished(it, throwable)
                     },
-                    onThumbnailLoading = { onImageLoading(it) }
+                    onThumbnailLoading = { onImageLoading(it) },
                 )
             }
             item {
