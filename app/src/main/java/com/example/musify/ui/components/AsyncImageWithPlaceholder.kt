@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
-import coil.compose.AsyncImagePainter.State
 import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
@@ -37,9 +36,7 @@ import com.google.accompanist.placeholder.material.shimmer
  * is visible.
  * @param placeholderHighlight highlight optional highlight animation
  * for the placeholder. The default animation is [PlaceholderHighlight.shimmer()].
- * @param transform A callback to transform a new [State] before
- * it's applied to the [AsyncImagePainter]. Typically this is used
- * to modify the state's [Painter].
+ * @param errorPainter A [Painter] that is displayed when the image request is unsuccessful.
  * @param alignment Optional alignment parameter used to place the
  * [AsyncImagePainter] in the given bounds defined by the width
  * and height.
@@ -62,7 +59,7 @@ fun AsyncImageWithPlaceholder(
     onImageLoading: () -> Unit,
     modifier: Modifier = Modifier,
     placeholderHighlight: PlaceholderHighlight = PlaceholderHighlight.shimmer(),
-    transform: (AsyncImagePainter.State) -> AsyncImagePainter.State = AsyncImagePainter.DefaultTransform,
+    errorPainter: Painter? = null,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     alpha: Float = DefaultAlpha,
@@ -76,19 +73,14 @@ fun AsyncImageWithPlaceholder(
         ),
         model = model,
         contentDescription = contentDescription,
-        transform = transform,
         alignment = alignment,
         contentScale = contentScale,
         alpha = alpha,
         colorFilter = colorFilter,
         filterQuality = filterQuality,
-        onState = {
-            when (it) {
-                AsyncImagePainter.State.Empty -> {}
-                is AsyncImagePainter.State.Loading -> onImageLoading()
-                is AsyncImagePainter.State.Success -> onImageLoadingFinished(null)
-                is AsyncImagePainter.State.Error -> onImageLoadingFinished(it.result.throwable)
-            }
-        }
+        onError = { onImageLoadingFinished(it.result.throwable) },
+        onSuccess = { onImageLoadingFinished(null) },
+        onLoading = { onImageLoading() },
+        error = errorPainter
     )
 }
