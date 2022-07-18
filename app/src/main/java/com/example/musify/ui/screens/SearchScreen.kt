@@ -41,9 +41,6 @@ import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
-/**
- * TODO  Placholder for missing images,testing viewmodel,genres, check image caching coil
- */
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
@@ -223,6 +220,8 @@ private fun SearchQueryList(
 ) {
     val artistImageErrorPainter =
         rememberVectorPainter(ImageVector.vectorResource(id = R.drawable.ic_outline_account_circle_24))
+    val playlistImageErrorPainter =
+        rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.ic_outline_music_note_24))
     Box {
         LazyColumn(
             modifier = Modifier
@@ -277,7 +276,7 @@ private fun SearchQueryList(
                     errorPainter = artistImageErrorPainter
                 )
             }
-            items(searchResults.playlists, key = { it.id }) {
+            itemsIndexed(searchResults.playlists) { index, it ->
                 MusifyCompactListItemCard(
                     cardType = it.getAssociatedListCardType(),
                     thumbnailImageUrlString = it.imageUrlString ?: "",
@@ -290,6 +289,7 @@ private fun SearchQueryList(
                         onImageLoadingFinished(it, throwable)
                     },
                     onThumbnailLoading = { onImageLoading(it) },
+                    errorPainter = playlistImageErrorPainter
                 )
             }
             item {
