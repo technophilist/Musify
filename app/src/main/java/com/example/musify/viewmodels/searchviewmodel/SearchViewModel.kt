@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.musify.data.repository.MusifyRepository
+import com.example.musify.data.repository.Repository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.IODispatcher
@@ -28,7 +28,7 @@ enum class SearchScreenUiState { LOADING, SUCCESS, IDLE }
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     application: Application,
-    private val repository: MusifyRepository,
+    private val repository: Repository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : AndroidViewModel(application) {
     private var searchJob: Job? = null
