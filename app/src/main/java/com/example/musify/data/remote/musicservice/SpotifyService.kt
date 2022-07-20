@@ -7,6 +7,28 @@ import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+/**
+ * An enum that contains all the generes supported by the spotify api.
+ * Note: It is not an exhaustive collection of all the genres supported
+ * by the spotify api.
+ * @param queryStringValue depicts the actual string value that will be
+ * appended to the query when the GET request is made. This value will
+ * be the returned when [SupportedSpotifyGenres.toString] is called.
+ */
+enum class SupportedSpotifyGenres(private val queryStringValue: String) {
+    AMBIENT("ambient"),
+    CHILL("chill"),
+    CLASSICAL("classical"),
+    DANCE("dance"),
+    ELECTRONIC("electronic"),
+    METAL("metal"),
+    RAINY_DAY("rainy-day"),
+    ROCK("rock"),
+    PIANO("piano");
+
+    override fun toString() = queryStringValue
+
+}
 
 interface SpotifyService {
     @GET(SpotifyEndPoints.SPECIFIC_ARTIST_ENDPOINT)
@@ -56,4 +78,5 @@ interface SpotifyService {
         @Query("offset") offset: Int = 0,
         @Query("type") type: String = SpotifyEndPoints.Defaults.defaultSearchQueryTypes,
     ): SearchResultsDTO
+
 }
