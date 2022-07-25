@@ -24,7 +24,8 @@ enum class SupportedSpotifyGenres(private val queryStringValue: String) {
     METAL("metal"),
     RAINY_DAY("rainy-day"),
     ROCK("rock"),
-    PIANO("piano");
+    PIANO("piano"),
+    POP("pop");
 
     override fun toString() = queryStringValue
 
