@@ -1,6 +1,7 @@
 package com.example.musify.data.remote.musicservice
 
 import com.example.musify.data.dto.AlbumMetadataDTO
+import com.example.musify.data.dto.TracksWithAlbumMetadataListDTO
 import com.example.musify.data.encoder.TestBase64Encoder
 import com.example.musify.data.remote.token.BearerToken
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
@@ -8,7 +9,7 @@ import com.example.musify.data.repository.tokenrepository.SpotifyTokenRepository
 import com.example.musify.utils.defaultMusifyJacksonConverterFactory
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
@@ -277,5 +278,32 @@ class SpotifyServiceTest {
             AlbumMetadataDTO.ArtistInfoDTO::class.java
         )
         // an exception should be thrown
+    }
+
+    @Test
+    fun getTracksForGenreTest_validSupportedGenre_returnsValidResult() {
+        val genre = SupportedSpotifyGenres.CHILL
+        val tracksWithAlbumMetadataListDTO = runBlockingWithToken {
+            musicService.getTracksForGenre(genre, "IN", it)
+        }
+        assert(tracksWithAlbumMetadataListDTO.value.isNotEmpty())
+    }
+
+    @Test
+    fun getTracksForGenreTest_allSupportedGenres_listIsNotEmpty() = runBlockingWithToken { token ->
+        // given a list of all genres
+        val genres = SupportedSpotifyGenres.values().toList()
+        val results = mutableListOf<Deferred<TracksWithAlbumMetadataListDTO>>()
+        coroutineScope {
+            genres.forEach { genre ->
+                // when fetching the track list for all genres
+                val tracksWithAlbumMetadataListDTO = async {
+                    musicService.getTracksForGenre(genre = genre, market = "IN", token = token)
+                }
+                results.add(tracksWithAlbumMetadataListDTO)
+            }
+        }
+        // each genre must contain at least one track
+        assert(results.awaitAll().all { it.value.isNotEmpty() })
     }
 }
