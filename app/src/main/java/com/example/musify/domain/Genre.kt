@@ -1,5 +1,7 @@
 package com.example.musify.domain
 
+import com.example.musify.data.remote.musicservice.SupportedSpotifyGenres
+
 /**
  * A class that models a specific genre.
  * @param id unique id of the genre
@@ -22,4 +24,21 @@ data class Genre(
         PIANO,
         POP
     }
+}
+
+/**
+ * A mapper function used to map an enum of type [Genre.GenreType] to
+ * the corresponding enum of type [SupportedSpotifyGenres].
+ */
+fun Genre.GenreType.toSupportedSpotifyGenreType() = when (this) {
+    Genre.GenreType.AMBIENT -> SupportedSpotifyGenres.AMBIENT
+    Genre.GenreType.CHILL -> SupportedSpotifyGenres.CHILL
+    Genre.GenreType.CLASSICAL -> SupportedSpotifyGenres.CLASSICAL
+    Genre.GenreType.DANCE -> SupportedSpotifyGenres.DANCE
+    Genre.GenreType.ELECTRONIC -> SupportedSpotifyGenres.ELECTRONIC
+    Genre.GenreType.METAL -> SupportedSpotifyGenres.METAL
+    Genre.GenreType.RAINY_DAY -> SupportedSpotifyGenres.RAINY_DAY
+    Genre.GenreType.ROCK -> SupportedSpotifyGenres.ROCK
+    Genre.GenreType.PIANO -> SupportedSpotifyGenres.PIANO
+    Genre.GenreType.POP -> SupportedSpotifyGenres.POP
 }
