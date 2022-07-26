@@ -26,7 +26,8 @@ enum class SupportedSpotifyGenres(private val queryStringValue: String) {
     RAINY_DAY("rainy-day"),
     ROCK("rock"),
     PIANO("piano"),
-    POP("pop");
+    POP("pop"),
+    SLEEP("sleep");
 
     override fun toString() = queryStringValue
 
@@ -72,6 +73,7 @@ private fun SupportedSpotifyGenres.getGenreType() = when (this) {
     SupportedSpotifyGenres.ROCK -> Genre.GenreType.ROCK
     SupportedSpotifyGenres.PIANO -> Genre.GenreType.PIANO
     SupportedSpotifyGenres.POP -> Genre.GenreType.POP
+    SupportedSpotifyGenres.SLEEP -> TODO()
 }
 
 interface SpotifyService {
