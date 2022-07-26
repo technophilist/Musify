@@ -97,4 +97,6 @@ class SearchViewModel @Inject constructor(
     fun applyFilterToSearchResults(searchFilter: SearchFilter) {
         filteredSearchResults.value = getSearchResultsObjectForFilter(searchFilter)
     }
+
+    fun getAvailableGenres() = repository.fetchAvailableGenres()
 }
