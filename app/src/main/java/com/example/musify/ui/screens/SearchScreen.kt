@@ -184,6 +184,9 @@ fun SearchScreen(
                         backgroundColor = getBackgroundColorForGenreType(it.genreType)
                     )
                 }
+                item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {
+                    Spacer(modifier = Modifier.navigationBarsHeight())
+                }
             }
             androidx.compose.animation.AnimatedVisibility(
                 visible = isSearchListVisible,
