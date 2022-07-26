@@ -41,6 +41,7 @@ import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
+// FIXME launching the app takes a while because of loading thumbnails of genres
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
@@ -284,7 +285,7 @@ private fun SearchQueryList(
                     errorPainter = artistImageErrorPainter
                 )
             }
-            itemsIndexed(searchResults.playlists) { index, it ->
+            items(searchResults.playlists, key = { it.id }) {
                 MusifyCompactListItemCard(
                     cardType = it.getAssociatedListCardType(),
                     thumbnailImageUrlString = it.imageUrlString ?: "",
