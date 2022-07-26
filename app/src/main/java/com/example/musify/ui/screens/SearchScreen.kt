@@ -350,7 +350,7 @@ private fun SearchResult.getAssociatedListCardType(): ListItemCardType = when (t
     is SearchResult.AlbumSearchResult -> ListItemCardType.ALBUM
     is SearchResult.ArtistSearchResult -> ListItemCardType.ARTIST
     is SearchResult.PlaylistSearchResult -> ListItemCardType.PLAYLIST
-    is SearchResult.TrackSearchResult -> ListItemCardType.SONG
+    is SearchResult.TrackSearchResult -> ListItemCardType.TRACK
 }
 
 private fun getImageResourceForGenreType(genre: Genre.GenreType) = when (genre) {
