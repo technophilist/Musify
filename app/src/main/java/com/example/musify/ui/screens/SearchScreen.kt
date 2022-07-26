@@ -89,7 +89,12 @@ fun SearchScreen(
     BackHandler(isSearchListVisible) {
         // remove focus on the search text field
         focusManager.clearFocus()
-        if (searchText.isEmpty()) isSearchListVisible = false
+        if (searchText.isNotEmpty()) {
+            searchText = ""
+            // notify the caller that the text has been emptied out
+            onSearchTextChanged(searchText, currentlySelectedSearchScreenFilter)
+        }
+        isSearchListVisible = false
     }
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
