@@ -50,6 +50,7 @@ fun SupportedSpotifyGenres.toGenre(): Genre {
         Genre.GenreType.ROCK -> "Rock"
         Genre.GenreType.PIANO -> "Piano"
         Genre.GenreType.POP -> "Pop"
+        Genre.GenreType.SLEEP -> "Sleep"
     }
     return Genre(
         id = "${this.name} $ordinal", // TODO
@@ -73,7 +74,7 @@ private fun SupportedSpotifyGenres.getGenreType() = when (this) {
     SupportedSpotifyGenres.ROCK -> Genre.GenreType.ROCK
     SupportedSpotifyGenres.PIANO -> Genre.GenreType.PIANO
     SupportedSpotifyGenres.POP -> Genre.GenreType.POP
-    SupportedSpotifyGenres.SLEEP -> TODO()
+    SupportedSpotifyGenres.SLEEP -> Genre.GenreType.SLEEP
 }
 
 interface SpotifyService {
