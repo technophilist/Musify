@@ -13,6 +13,7 @@ object SpotifyEndPoints {
     const val SPECIFIC_PLAYLIST_ENDPOINT = "v1/playlists/{playlist_id}"
     const val SEARCH_ENDPOINT = "v1/search"
     const val API_TOKEN_ENDPOINT = "api/token"
+    const val RECOMMENDATIONS_ENDPOINT = "v1/recommendations"
 
     object Defaults {
         const val defaultPlaylistFields =

@@ -6,6 +6,7 @@ import com.example.musify.data.remote.token.tokenmanager.TokenManager
 import com.example.musify.data.repository.tokenrepository.SpotifyTokenRepository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
+import com.example.musify.domain.Genre
 import com.example.musify.domain.MusifyHttpErrorType
 import com.example.musify.utils.defaultMusifyJacksonConverterFactory
 import kotlinx.coroutines.runBlocking
@@ -147,6 +148,24 @@ class RepositoryTest {
         }
         // the return type must be of type FetchedResource.Success
         assert(result is FetchedResource.Success)
+    }
+
+    @Test
+    fun fetchTracksForGenreTest_validGenre_tracksSuccessfullyFetched() {
+        val validGenre = Genre(
+            id = "",
+            name = "",
+            genreType = Genre.GenreType.AMBIENT
+        )
+        val result = runBlocking {
+            repository.fetchTracksForGenre(
+                validGenre,
+                MapperImageSize.SMALL,
+                "IN"
+            )
+        }
+        assert(result is FetchedResource.Success)
+        assert((result as FetchedResource.Success).data.isNotEmpty())
     }
 
 }

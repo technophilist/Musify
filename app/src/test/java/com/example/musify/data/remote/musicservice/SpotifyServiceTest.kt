@@ -1,25 +1,36 @@
 package com.example.musify.data.remote.musicservice
 
 import com.example.musify.data.dto.AlbumMetadataDTO
+import com.example.musify.data.dto.TracksWithAlbumMetadataListDTO
+import com.example.musify.data.encoder.TestBase64Encoder
 import com.example.musify.data.remote.token.BearerToken
+import com.example.musify.data.remote.token.tokenmanager.TokenManager
+import com.example.musify.data.repository.tokenrepository.SpotifyTokenRepository
 import com.example.musify.utils.defaultMusifyJacksonConverterFactory
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
-import java.time.LocalDateTime
 
 class SpotifyServiceTest {
     // artist id of 'Anirudh Ravichander'
     private val validArtistId = "4zCH9qm4R2DADamUHMCa6O"
-    private val token = BearerToken(
-        tokenString = "BQCukGjYCVswY_DwKvN1BVl9lFl_l22CVg0InM5GaH4n4czqZlgjEyHbDyDVp36srhphqseVKsIl_QY6Rzh3VgAQ3cUgt9o-CAMvtgnPmVqZl2LG_x0",
-        secondsUntilExpiration = 3600,
-        timeOfCreation = LocalDateTime.now()
+    private val tokenRepository = SpotifyTokenRepository(
+        Retrofit.Builder()
+            .baseUrl(SpotifyBaseUrls.AUTHENTICATION_URL)
+            .addConverterFactory(defaultMusifyJacksonConverterFactory)
+            .build()
+            .create(TokenManager::class.java),
+        TestBase64Encoder()
     )
     lateinit var musicService: SpotifyService
+
+    private fun <R> runBlockingWithToken(block: suspend (BearerToken) -> R): R = runBlocking {
+        block(tokenRepository.getValidBearerToken())
+    }
+
 
     @Before
     fun setup() {
@@ -31,11 +42,11 @@ class SpotifyServiceTest {
     }
 
     @Test
-    fun getArtistInfoTest_validArtistId_returnsValidArtistDTO() = runBlocking {
+    fun getArtistInfoTest_validArtistId_returnsValidArtistDTO() {
         // given a valid artistId
         val artistId = validArtistId
         // the artist must be fetched successfully
-        val fetchedArtist = musicService.getArtistInfoWithId(artistId, token)
+        val fetchedArtist = runBlockingWithToken { musicService.getArtistInfoWithId(artistId, it) }
         // the id of the fetched artist must match with the 'artistId'
         assert(fetchedArtist.id == artistId)
     }
@@ -45,7 +56,9 @@ class SpotifyServiceTest {
         // given an invalid artistId
         val artistId = "-"
         // when fetching the artist info
-        runBlocking { musicService.getArtistInfoWithId(artistId, token) }
+        runBlockingWithToken {
+            musicService.getArtistInfoWithId(artistId, it)
+        }
         // a HttpException must be thrown
     }
 
@@ -54,7 +67,9 @@ class SpotifyServiceTest {
         // given an valid artistId
         val artistId = validArtistId
         // the albums associated with the artist must be fetched successfully
-        runBlocking { musicService.getAlbumsOfArtistWithId(artistId, "IN", token) }
+        runBlockingWithToken {
+            musicService.getAlbumsOfArtistWithId(artistId, "IN", it)
+        }
     }
 
     @Test
@@ -63,13 +78,13 @@ class SpotifyServiceTest {
         val artistId = validArtistId
         // when fetching the artist with limit set to 10
         val limit = 10
-        val albums = runBlocking {
+        val albums = runBlockingWithToken {
             // the albums associated with the artist must be fetched successfully
             musicService.getAlbumsOfArtistWithId(
                 artistId = artistId,
                 market = "IN",
                 limit = limit,
-                token = token
+                token = it
             )
         }
         // the number of items should be equal to the specified limit
@@ -80,13 +95,13 @@ class SpotifyServiceTest {
     fun getTopTracksTest_validArtistId_returnsTopTracksDTO() {
         // given a valid artistId
         val artistId = validArtistId
-        runBlocking {
+        runBlockingWithToken {
             // the top ten tracks associated with the artist must be
             // successfully fetched
             musicService.getTopTenTracksForArtistWithId(
                 artistId = artistId,
                 market = "IN",
-                token = token
+                token = it
             )
         }
     }
@@ -95,9 +110,9 @@ class SpotifyServiceTest {
     fun getAlbumTest_validAlbumId_returnsAlbumDTO() {
         // given an valid albumId
         val albumId = "4aawyAB9vmqN3uQ7FjRGTy"
-        runBlocking {
+        runBlockingWithToken {
             // the album must be fetched successfully
-            musicService.getAlbumWithId(albumId = albumId, market = "IN", token = token)
+            musicService.getAlbumWithId(albumId = albumId, market = "IN", token = it)
         }
     }
 
@@ -105,9 +120,9 @@ class SpotifyServiceTest {
     fun getPlaylistTest_validPlaylistId_returnsPlaylistDTO() {
         // given an valid playlistId
         val albumId = "7sZbq8QGyMnhKPcLJvCUFD"
-        runBlocking {
+        runBlockingWithToken {
             // the playlist must be fetched successfully
-            musicService.getPlaylistWithId(playlistId = albumId, market = "IN", token = token)
+            musicService.getPlaylistWithId(playlistId = albumId, market = "IN", token = it)
         }
     }
 
@@ -126,13 +141,13 @@ class SpotifyServiceTest {
         // given an valid search query for a track
         val searchQuery = "Visiting hours by Ed Sheeran"
         // when performing search operation
-        val searchResultsDTO = runBlocking {
+        val searchResultsDTO = runBlockingWithToken {
             // the search results must be fetched successfully
             musicService.search(
                 searchQuery = searchQuery,
                 type = buildSearchQueryWithTypes(SearchQueryType.TRACK),
                 market = "IN",
-                token = token,
+                token = it,
                 limit = 1 // limiting the number of results to one
             )
         }
@@ -150,13 +165,13 @@ class SpotifyServiceTest {
         // given an valid search query for an album
         val searchQuery = "="
         // when performing search operation
-        val searchResultsDTO = runBlocking {
+        val searchResultsDTO = runBlockingWithToken {
             // the search results must be fetched successfully
             musicService.search(
                 searchQuery = searchQuery,
                 type = buildSearchQueryWithTypes(SearchQueryType.ALBUM),
                 market = "IN",
-                token = token,
+                token = it,
                 limit = 1 // limiting the number of results to one
             )
         }
@@ -174,13 +189,13 @@ class SpotifyServiceTest {
         // given an valid search query for an artist
         val searchQuery = "ed sheeran"
         // when performing search operation
-        val searchResultsDTO = runBlocking {
+        val searchResultsDTO = runBlockingWithToken {
             // the search results must be fetched successfully
             musicService.search(
                 searchQuery = searchQuery,
                 type = buildSearchQueryWithTypes(SearchQueryType.ARTIST),
                 market = "IN",
-                token = token,
+                token = it,
                 limit = 1 // limiting the number of results to one
             )
         }
@@ -198,13 +213,13 @@ class SpotifyServiceTest {
         // given an valid search query for a playlist
         val searchQuery = "Anirudh"
         // when performing search operation
-        val searchResultsDTO = runBlocking {
+        val searchResultsDTO = runBlockingWithToken {
             // the search results must be fetched successfully
             musicService.search(
                 searchQuery = searchQuery,
                 type = buildSearchQueryWithTypes(SearchQueryType.PLAYLIST),
                 market = "IN",
-                token = token,
+                token = it,
                 limit = 1 // limiting the number of results to one
             )
         }
@@ -222,13 +237,13 @@ class SpotifyServiceTest {
         // given an valid search query
         val searchQuery = "Anirudh"
         // when performing search operation for all types
-        val searchResultsDTO = runBlocking {
+        val searchResultsDTO = runBlockingWithToken {
             // the search results must be fetched successfully
             musicService.search(
                 searchQuery = searchQuery,
                 market = "IN",
                 type = SpotifyEndPoints.Defaults.defaultSearchQueryTypes,
-                token = token,
+                token = it,
                 limit = 1 // limiting the number of results for each type to one
             )
         }
@@ -263,5 +278,32 @@ class SpotifyServiceTest {
             AlbumMetadataDTO.ArtistInfoDTO::class.java
         )
         // an exception should be thrown
+    }
+
+    @Test
+    fun getTracksForGenreTest_validSupportedGenre_returnsValidResult() {
+        val genre = SupportedSpotifyGenres.CHILL
+        val tracksWithAlbumMetadataListDTO = runBlockingWithToken {
+            musicService.getTracksForGenre(genre, "IN", it)
+        }
+        assert(tracksWithAlbumMetadataListDTO.value.isNotEmpty())
+    }
+
+    @Test
+    fun getTracksForGenreTest_allSupportedGenres_listIsNotEmpty() = runBlockingWithToken { token ->
+        // given a list of all genres
+        val genres = SupportedSpotifyGenres.values().toList()
+        val results = mutableListOf<Deferred<TracksWithAlbumMetadataListDTO>>()
+        coroutineScope {
+            genres.forEach { genre ->
+                // when fetching the track list for all genres
+                val tracksWithAlbumMetadataListDTO = async {
+                    musicService.getTracksForGenre(genre = genre, market = "IN", token = token)
+                }
+                results.add(tracksWithAlbumMetadataListDTO)
+            }
+        }
+        // each genre must contain at least one track
+        assert(results.awaitAll().all { it.value.isNotEmpty() })
     }
 }

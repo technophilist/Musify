@@ -1,16 +1,44 @@
 package com.example.musify.domain
 
-import java.net.URL
+import com.example.musify.data.remote.musicservice.SupportedSpotifyGenres
 
 /**
  * A class that models a specific genre.
  * @param id unique id of the genre
  * @param name the name of the genre
- * @param coverArtUrl an instance of [URL] that specifies the url for
- * the cover art associated with the genre.
  */
 data class Genre(
     val id: String,
     val name: String,
-    val coverArtUrl: URL
-)
+    val genreType: GenreType
+) {
+    enum class GenreType {
+        AMBIENT,
+        CHILL,
+        CLASSICAL,
+        DANCE,
+        ELECTRONIC,
+        METAL,
+        RAINY_DAY,
+        ROCK,
+        PIANO,
+        POP
+    }
+}
+
+/**
+ * A mapper function used to map an enum of type [Genre.GenreType] to
+ * the corresponding enum of type [SupportedSpotifyGenres].
+ */
+fun Genre.GenreType.toSupportedSpotifyGenreType() = when (this) {
+    Genre.GenreType.AMBIENT -> SupportedSpotifyGenres.AMBIENT
+    Genre.GenreType.CHILL -> SupportedSpotifyGenres.CHILL
+    Genre.GenreType.CLASSICAL -> SupportedSpotifyGenres.CLASSICAL
+    Genre.GenreType.DANCE -> SupportedSpotifyGenres.DANCE
+    Genre.GenreType.ELECTRONIC -> SupportedSpotifyGenres.ELECTRONIC
+    Genre.GenreType.METAL -> SupportedSpotifyGenres.METAL
+    Genre.GenreType.RAINY_DAY -> SupportedSpotifyGenres.RAINY_DAY
+    Genre.GenreType.ROCK -> SupportedSpotifyGenres.ROCK
+    Genre.GenreType.PIANO -> SupportedSpotifyGenres.PIANO
+    Genre.GenreType.POP -> SupportedSpotifyGenres.POP
+}
