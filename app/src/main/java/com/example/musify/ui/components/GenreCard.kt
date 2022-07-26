@@ -56,7 +56,7 @@ fun GenreCard(
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(16.dp),
-                text = genre.name,
+                text = genre.label,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.h6
             )

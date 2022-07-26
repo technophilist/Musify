@@ -5,11 +5,11 @@ import com.example.musify.data.remote.musicservice.SupportedSpotifyGenres
 /**
  * A class that models a specific genre.
  * @param id unique id of the genre
- * @param name the name of the genre
+ * @param label the label associated with the genre
  */
 data class Genre(
     val id: String,
-    val name: String,
+    val label: String,
     val genreType: GenreType
 ) {
     enum class GenreType {
