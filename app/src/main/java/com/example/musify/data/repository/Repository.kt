@@ -2,10 +2,7 @@ package com.example.musify.data.repository
 
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
-import com.example.musify.domain.Genre
-import com.example.musify.domain.MusicSummary
-import com.example.musify.domain.MusifyHttpErrorType
-import com.example.musify.domain.SearchResults
+import com.example.musify.domain.*
 
 /**
  * An interface the consists of all the methods that are a requisite for
@@ -47,4 +44,9 @@ interface Repository {
     ): FetchedResource<SearchResults, MusifyHttpErrorType>
 
     fun fetchAvailableGenres(): List<Genre>
+    suspend fun fetchTracksForGenre(
+        genre: Genre,
+        imageSize: MapperImageSize,
+        countryCode: String
+    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyHttpErrorType>
 }

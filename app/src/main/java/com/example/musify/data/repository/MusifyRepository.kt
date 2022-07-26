@@ -85,4 +85,18 @@ class MusifyRepository @Inject constructor(
     override fun fetchAvailableGenres(): List<Genre> = SupportedSpotifyGenres.values().map {
         it.toGenre()
     }
+
+    override suspend fun fetchTracksForGenre(
+        genre: Genre,
+        imageSize: MapperImageSize,
+        countryCode: String
+    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyHttpErrorType> = withToken {
+        spotifyService.getTracksForGenre(
+            genre = genre.genreType.toSupportedSpotifyGenreType(),
+            market = countryCode,
+            token = it
+        ).value.map { trackDTOWithAlbumMetadata ->
+            trackDTOWithAlbumMetadata.toTrackSearchResult(imageSize)
+        }
+    }
 }
