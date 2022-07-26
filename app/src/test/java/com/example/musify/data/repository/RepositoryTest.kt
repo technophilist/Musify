@@ -154,7 +154,7 @@ class RepositoryTest {
     fun fetchTracksForGenreTest_validGenre_tracksSuccessfullyFetched() {
         val validGenre = Genre(
             id = "",
-            name = "",
+            label = "",
             genreType = Genre.GenreType.AMBIENT
         )
         val result = runBlocking {
