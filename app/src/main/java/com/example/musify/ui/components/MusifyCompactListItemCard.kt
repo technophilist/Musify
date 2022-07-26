@@ -26,7 +26,7 @@ import com.google.accompanist.placeholder.material.shimmer
 /**
  * An enum containing the all the types of list item cards.
  */
-enum class ListItemCardType { ALBUM, ARTIST, SONG, PLAYLIST }
+enum class ListItemCardType { ALBUM, ARTIST, TRACK, PLAYLIST }
 
 /**
  * A composable that represents a compact list item. This composable
@@ -198,7 +198,7 @@ fun MusifyCompactListItemCard(
         subtitle = subtitle,
         onClick = onClick,
         trailingButtonIcon = when (cardType) {
-            ListItemCardType.SONG -> Icons.Filled.MoreVert
+            ListItemCardType.TRACK -> Icons.Filled.MoreVert
             else -> ImageVector.vectorResource(id = R.drawable.ic_baseline_chevron_right_24)
         },
         onTrailingButtonIconClick = onTrailingButtonIconClick,
