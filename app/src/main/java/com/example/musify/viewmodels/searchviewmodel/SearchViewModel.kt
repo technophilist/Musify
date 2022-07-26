@@ -83,7 +83,7 @@ class SearchViewModel @Inject constructor(
             val searchResult = repository
                 .fetchSearchResultsForQuery(
                     searchQuery = searchQuery.trim(),
-                    imageSize = MapperImageSize.SMALL,
+                    imageSize = MapperImageSize.MEDIUM,
                     countryCode = getCountryCode()
                 )
             if (searchResult is FetchedResource.Success) {
