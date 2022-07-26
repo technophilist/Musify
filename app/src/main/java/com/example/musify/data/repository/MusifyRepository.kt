@@ -2,14 +2,13 @@ package com.example.musify.data.repository
 
 import com.example.musify.data.dto.*
 import com.example.musify.data.remote.musicservice.SpotifyService
+import com.example.musify.data.remote.musicservice.SupportedSpotifyGenres
+import com.example.musify.data.remote.musicservice.toGenre
 import com.example.musify.data.remote.token.BearerToken
 import com.example.musify.data.repository.tokenrepository.TokenRepository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
-import com.example.musify.domain.MusicSummary
-import com.example.musify.domain.MusifyHttpErrorType
-import com.example.musify.domain.SearchResults
-import com.example.musify.domain.musifyHttpErrorType
+import com.example.musify.domain.*
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -81,5 +80,9 @@ class MusifyRepository @Inject constructor(
         countryCode: String
     ): FetchedResource<SearchResults, MusifyHttpErrorType> = withToken {
         spotifyService.search(searchQuery, countryCode, it).toSearchResults(imageSize)
+    }
+
+    override fun fetchAvailableGenres(): List<Genre> = SupportedSpotifyGenres.values().map {
+        it.toGenre()
     }
 }

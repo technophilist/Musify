@@ -2,6 +2,7 @@ package com.example.musify.data.repository
 
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
+import com.example.musify.domain.Genre
 import com.example.musify.domain.MusicSummary
 import com.example.musify.domain.MusifyHttpErrorType
 import com.example.musify.domain.SearchResults
@@ -44,4 +45,6 @@ interface Repository {
         imageSize: MapperImageSize,
         countryCode: String
     ): FetchedResource<SearchResults, MusifyHttpErrorType>
+
+    fun fetchAvailableGenres(): List<Genre>
 }
