@@ -156,18 +156,20 @@ fun SearchScreen(
                 }
             )
         }
-        Box(modifier = horizontalPaddingModifier) {
-            Text(
-                text = "Genres",
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.subtitle1
-            )
 
+        Box(modifier = horizontalPaddingModifier) {
             LazyVerticalGrid(
                 cells = GridCells.Adaptive(170.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {
+                    Text(
+                        text = "Genres",
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                }
                 items(items = genreList) {
                     GenreCard(
                         genre = it,
