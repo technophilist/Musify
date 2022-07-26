@@ -49,7 +49,7 @@ fun GenreCard(
             modifier = Modifier.fillMaxSize()
         ) {
             AsyncImageWithPlaceholder(
-                model = genre.coverArtUrl.toString(),
+                model = "", // TODO
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
                 isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
