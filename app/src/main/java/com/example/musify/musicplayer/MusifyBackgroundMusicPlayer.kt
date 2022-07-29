@@ -25,15 +25,6 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
             ))
             .build().apply { setPlayer(exoPlayer) }
 
-    override fun playTrackFromUrlString(urlString: String) {
-        with(exoPlayer) {
-            if (isPlaying) exoPlayer.stop()
-            setMediaItem(MediaItem.fromUri(urlString))
-            prepare()
-            play()
-        }
-    }
-
     override fun playTrack(track: MusicPlayer.Track) {
         with(exoPlayer) {
             if (isPlaying) exoPlayer.stop()

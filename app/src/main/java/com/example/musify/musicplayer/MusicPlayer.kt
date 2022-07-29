@@ -3,7 +3,6 @@ package com.example.musify.musicplayer
 import android.graphics.Bitmap
 
 interface MusicPlayer {
-    fun playTrackFromUrlString(urlString: String)
     fun pauseCurrentlyPlayingTrack()
     fun stopPlayingTrack()
     fun playTrack(track: Track)
@@ -12,6 +11,6 @@ interface MusicPlayer {
         val title: String,
         val artistsString: String,
         val albumArt: Bitmap,
-        val trackUrlString:String
+        val trackUrlString: String
     )
 }
