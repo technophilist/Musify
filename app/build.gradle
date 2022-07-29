@@ -87,7 +87,6 @@ dependencies {
     testImplementation "org.robolectric:robolectric:4.8.1"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1"
 
-
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
@@ -97,4 +96,9 @@ dependencies {
     // hilt
     implementation "com.google.dagger:hilt-android:2.38.1"
     kapt "com.google.dagger:hilt-compiler:2.38.1"
+
+    //exoplayer
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.18.1'
+    // for PlayerNotificationManager
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.1'
 }
