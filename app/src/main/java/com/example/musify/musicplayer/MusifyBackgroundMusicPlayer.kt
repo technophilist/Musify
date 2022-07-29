@@ -5,10 +5,12 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
 
-class MusifyBackgroundMusicPlayer(
-    context: Context,
+class MusifyBackgroundMusicPlayer @Inject constructor(
+    @ApplicationContext context: Context,
     private val exoPlayer: ExoPlayer
 ) : MusicPlayer {
     private val notificationManager =
