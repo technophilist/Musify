@@ -1,5 +1,8 @@
 package com.example.musify.domain
 
+import android.graphics.Bitmap
+import com.example.musify.musicplayer.MusicPlayer
+
 sealed class SearchResult {
     /**
      * A class that models the result of a search operation for a
@@ -48,4 +51,19 @@ sealed class SearchResult {
         val artistsString: String,
         val trackUrlString: String?
     ) : SearchResult()
+}
+
+/**
+ * A mapper method used to map an instance of
+ * [SearchResult.TrackSearchResult] to an instance of [MusicPlayer.Track].
+ */
+fun SearchResult.TrackSearchResult.toMusicPlayerTrack(albumArtBitmap: Bitmap): MusicPlayer.Track {
+    if (trackUrlString == null) throw IllegalStateException("The trackUrlString cannot be null during conversion")
+    return MusicPlayer.Track(
+        id = id,
+        title = name,
+        artistsString = artistsString,
+        albumArt = albumArtBitmap,
+        trackUrlString = trackUrlString
+    )
 }
