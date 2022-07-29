@@ -21,7 +21,7 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
             .setMediaDescriptionAdapter(MediaDescriptionAdapter(
                 getCurrentContentText = { currentlyPlayingTrack?.artistsString ?: "" },
                 getCurrentContentTitle = { currentlyPlayingTrack?.title ?: "" },
-                getCurrentLargeIcon = { _, _ -> null }
+                getCurrentLargeIcon = { _, _ -> currentlyPlayingTrack?.albumArt }
             ))
             .build().apply { setPlayer(exoPlayer) }
 
