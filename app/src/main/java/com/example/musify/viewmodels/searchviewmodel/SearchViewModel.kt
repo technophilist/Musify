@@ -3,13 +3,8 @@ package com.example.musify.viewmodels.searchviewmodel
 import android.app.Application
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import coil.ImageLoader
-import coil.request.ImageRequest
-import coil.request.ImageResult
-import coil.request.SuccessResult
 import com.example.musify.data.repository.Repository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
@@ -18,10 +13,12 @@ import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.SearchResults
 import com.example.musify.domain.emptySearchResults
-import com.example.musify.domain.toMusicPlayerTrack
-import com.example.musify.musicplayer.MusicPlayer
+import com.example.musify.usecases.playtrackusecase.PlayTrackWithMediaNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -35,7 +32,7 @@ class SearchViewModel @Inject constructor(
     application: Application,
     private val repository: Repository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val musicPlayer: MusicPlayer
+    private val playTrackWithMediaNotificationUseCase: PlayTrackWithMediaNotificationUseCase
 ) : AndroidViewModel(application) {
     private var searchJob: Job? = null
     private val emptySearchResults = emptySearchResults()
@@ -65,13 +62,6 @@ class SearchViewModel @Inject constructor(
                 else emptyList()
             )
         } else _searchResults.value
-
-    private suspend fun downloadBitmapFromUrl(urlString: String): ImageResult {
-        val imageRequest = ImageRequest.Builder(getApplication())
-            .data(urlString)
-            .build()
-        return ImageLoader(getApplication()).execute(imageRequest)
-    }
 
     fun searchWithFilter(
         searchQuery: String,
@@ -114,16 +104,11 @@ class SearchViewModel @Inject constructor(
     fun playTrack(track: SearchResult.TrackSearchResult) {
         if (track.trackUrlString == null) return
         viewModelScope.launch(ioDispatcher) {
-            _uiState.value = SearchScreenUiState.LOADING
-            val downloadAlbumArtResult = downloadBitmapFromUrl(track.imageUrlString)
-            if (downloadAlbumArtResult is SuccessResult) {
-                withContext(Dispatchers.Main){
-                    musicPlayer.playTrack(track.toMusicPlayerTrack(downloadAlbumArtResult.drawable.toBitmap()))
-                }
-                _uiState.value = SearchScreenUiState.SUCCESS
-            }else{
-                _uiState.value = SearchScreenUiState.IDLE
-            }
+            playTrackWithMediaNotificationUseCase.invoke(
+                track,
+                onLoading = { _uiState.value = SearchScreenUiState.LOADING },
+                onFinishedLoading = { _uiState.value = SearchScreenUiState.IDLE }
+            )
         }
     }
 
