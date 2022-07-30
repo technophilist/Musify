@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.musify.domain.MusicSummary
+import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.components.ListItemCardType
 import com.example.musify.ui.components.MusifyCompactListItemCard
@@ -29,7 +30,7 @@ import com.google.accompanist.insets.statusBarsPadding
 @ExperimentalMaterialApi
 @Composable
 fun ArtistDetailScreen(
-    artistSummary: MusicSummary.ArtistSummary,
+    artistSearchResult: SearchResult.ArtistSearchResult,
     popularTracks: List<MusicSummary.TrackSummary>,
     popularReleases: List<MusicSummary.AlbumSummary>,
     onBackButtonClicked: () -> Unit,
@@ -47,8 +48,8 @@ fun ArtistDetailScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         artistCoverArtHeaderItem(
-            artistName = artistSummary.name,
-            artistCoverArtUrlString = artistSummary.associatedImageUrl.toString(),
+            artistName = artistSearchResult.name,
+            artistCoverArtUrlString = artistSearchResult.imageUrlString ?: "", // TODO
             onBackButtonClicked = onBackButtonClicked,
             onPLayButtonClick = onPLayButtonClicked,
             isLoadingPlaceholderVisible = isCoverArtPlaceholderVisible,
