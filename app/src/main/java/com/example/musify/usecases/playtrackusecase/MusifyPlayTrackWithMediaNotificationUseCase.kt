@@ -30,7 +30,6 @@ class MusifyPlayTrackWithMediaNotificationUseCase @Inject constructor(
         return ImageLoader(context).execute(imageRequest)
     }
 
-    // TODO docs -  mention that callbacks will be called on the main thread
     override suspend fun invoke(
         track: SearchResult.TrackSearchResult,
         onLoading: () -> Unit,
