@@ -19,7 +19,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.musify.domain.MusicSummary
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.components.ListItemCardType
@@ -31,13 +30,13 @@ import com.google.accompanist.insets.statusBarsPadding
 @Composable
 fun ArtistDetailScreen(
     artistSearchResult: SearchResult.ArtistSearchResult,
-    popularTracks: List<MusicSummary.TrackSummary>,
-    popularReleases: List<MusicSummary.AlbumSummary>,
+    popularTracks: List<SearchResult.TrackSearchResult>,
+    popularReleases: List<SearchResult.AlbumSearchResult>,
     onBackButtonClicked: () -> Unit,
     onPLayButtonClicked: () -> Unit,
-    onTrackClicked: (MusicSummary.TrackSummary) -> Unit,
-    onTrackTrailingButtonIconClicked: (MusicSummary.TrackSummary) -> Unit,
-    onAlbumClicked: (MusicSummary.AlbumSummary) -> Unit,
+    onTrackClicked: (SearchResult.TrackSearchResult) -> Unit,
+    onTrackTrailingButtonIconClicked: (SearchResult.TrackSearchResult) -> Unit,
+    onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit,
 ) {
     val subtitleTextColorWithAlpha = MaterialTheme.colors.onBackground.copy(
         alpha = ContentAlpha.disabled
@@ -68,9 +67,9 @@ fun ArtistDetailScreen(
                     .height(64.dp)
                     .padding(horizontal = 16.dp),
                 cardType = ListItemCardType.TRACK,
-                thumbnailImageUrlString = it.associatedImageUrl.toString(),
+                thumbnailImageUrlString = it.imageUrlString,
                 title = it.name,
-                subtitle = it.albumName,
+                subtitle = it.artistsString,
                 subtitleTextStyle = MaterialTheme.typography
                     .caption
                     .copy(color = subtitleTextColorWithAlpha),
@@ -90,7 +89,7 @@ fun ArtistDetailScreen(
                     .height(80.dp)
                     .padding(horizontal = 16.dp),
                 cardType = ListItemCardType.ALBUM,
-                thumbnailImageUrlString = it.albumArtUrl.toString(),
+                thumbnailImageUrlString = it.albumArtUrlString,
                 title = it.name,
                 titleTextStyle = MaterialTheme.typography.h6,
                 subtitle = it.yearOfReleaseString,
