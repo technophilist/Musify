@@ -33,9 +33,8 @@ fun ArtistDetailScreen(
     popularTracks: List<SearchResult.TrackSearchResult>,
     popularReleases: List<SearchResult.AlbumSearchResult>,
     onBackButtonClicked: () -> Unit,
-    onPLayButtonClicked: () -> Unit,
+    onPlayButtonClicked: () -> Unit,
     onTrackClicked: (SearchResult.TrackSearchResult) -> Unit,
-    onTrackTrailingButtonIconClicked: (SearchResult.TrackSearchResult) -> Unit,
     onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit,
 ) {
     val subtitleTextColorWithAlpha = MaterialTheme.colors.onBackground.copy(
@@ -50,7 +49,7 @@ fun ArtistDetailScreen(
             artistName = artistSearchResult.name,
             artistCoverArtUrlString = artistSearchResult.imageUrlString ?: "", // TODO
             onBackButtonClicked = onBackButtonClicked,
-            onPLayButtonClick = onPLayButtonClicked,
+            onPLayButtonClick = onPlayButtonClicked,
             isLoadingPlaceholderVisible = isCoverArtPlaceholderVisible,
             onCoverArtLoading = { isCoverArtPlaceholderVisible = true },
             onCoverArtLoaded = { isCoverArtPlaceholderVisible = false }
@@ -74,7 +73,7 @@ fun ArtistDetailScreen(
                     .caption
                     .copy(color = subtitleTextColorWithAlpha),
                 onClick = { onTrackClicked(it) },
-                onTrailingButtonIconClick = { onTrackTrailingButtonIconClicked(it) }
+                onTrailingButtonIconClick = { /*TODO*/ }
             )
         }
         item {
