@@ -12,6 +12,7 @@ import com.example.musify.di.IODispatcher
 import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.SearchResults
 import com.example.musify.domain.emptySearchResults
+import com.example.musify.musicplayer.MusicPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
@@ -29,7 +30,8 @@ enum class SearchScreenUiState { LOADING, SUCCESS, IDLE }
 class SearchViewModel @Inject constructor(
     application: Application,
     private val repository: Repository,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val musicPlayer: MusicPlayer
 ) : AndroidViewModel(application) {
     private var searchJob: Job? = null
     private val emptySearchResults = emptySearchResults()
