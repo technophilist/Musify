@@ -101,4 +101,8 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-core:2.18.1'
     // for PlayerNotificationManager
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.1'
+
+    // paging
+    implementation "androidx.paging:paging-runtime:3.1.1"
+    implementation "androidx.paging:paging-compose:1.0.0-alpha15"
 }
