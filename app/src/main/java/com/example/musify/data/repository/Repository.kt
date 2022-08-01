@@ -24,7 +24,7 @@ interface Repository {
         artistId: String,
         imageSize: MapperImageSize,
         countryCode: String
-    ): FetchedResource<List<MusicSummary.TrackSummary>, MusifyHttpErrorType>
+    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyHttpErrorType>
 
     suspend fun fetchAlbumWithId(
         albumId: String,
