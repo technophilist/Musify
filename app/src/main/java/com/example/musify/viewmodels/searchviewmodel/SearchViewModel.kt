@@ -8,14 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.musify.data.repository.Repository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
-import com.example.musify.di.IODispatcher
 import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.SearchResults
 import com.example.musify.domain.emptySearchResults
 import com.example.musify.usecases.playtrackusecase.PlayTrackWithMediaNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,7 +29,6 @@ enum class SearchScreenUiState { LOADING, SUCCESS, IDLE }
 class SearchViewModel @Inject constructor(
     application: Application,
     private val repository: Repository,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val playTrackWithMediaNotificationUseCase: PlayTrackWithMediaNotificationUseCase
 ) : AndroidViewModel(application) {
     private var searchJob: Job? = null
@@ -75,7 +72,7 @@ class SearchViewModel @Inject constructor(
             return
         }
         _uiState.value = SearchScreenUiState.LOADING
-        searchJob = viewModelScope.launch(ioDispatcher) {
+        searchJob = viewModelScope.launch {
             // add artificial delay to limit the number of calls to
             // the api when the user is typing the search query.
             // adding this delay allows for a short window of time
@@ -103,7 +100,7 @@ class SearchViewModel @Inject constructor(
 
     fun playTrack(track: SearchResult.TrackSearchResult) {
         if (track.trackUrlString == null) return
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             playTrackWithMediaNotificationUseCase.invoke(
                 track,
                 onLoading = { _uiState.value = SearchScreenUiState.LOADING },
