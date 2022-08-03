@@ -13,7 +13,7 @@ import com.example.musify.data.repository.tokenrepository.TokenRepository
  * define how to fetch the required type, taking care of handling any
  * exceptions.
  */
-sealed class SpotifySearchPagingSource<V : Any>(
+sealed class SpotifyPagingSource<V : Any>(
     private val tokenRepository: TokenRepository,
     private val loadBlock: suspend (
         limit: Int,
