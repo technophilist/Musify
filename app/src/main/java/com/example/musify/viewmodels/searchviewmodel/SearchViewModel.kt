@@ -10,8 +10,6 @@ import com.example.musify.data.repository.Repository
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.SearchResult
-import com.example.musify.domain.SearchResults
-import com.example.musify.domain.emptySearchResults
 import com.example.musify.usecases.playtrackusecase.PlayTrackWithMediaNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -34,10 +32,7 @@ class SearchViewModel @Inject constructor(
     private val playTrackWithMediaNotificationUseCase: PlayTrackWithMediaNotificationUseCase
 ) : AndroidViewModel(application) {
     private var searchJob: Job? = null
-    private val emptySearchResults = emptySearchResults()
     private val _uiState = mutableStateOf(SearchScreenUiState.IDLE)
-    private val _searchResults = mutableStateOf(emptySearchResults)
-    private val filteredSearchResults = mutableStateOf(emptySearchResults)
     val uiState = _uiState as State<SearchScreenUiState>
 
     private val _albumListForSearchQuery =
@@ -66,20 +61,6 @@ class SearchViewModel @Inject constructor(
         .configuration
         .locale
         .country
-
-    private fun getSearchResultsObjectForFilter(searchFilter: SearchFilter) =
-        if (searchFilter != SearchFilter.ALL) {
-            SearchResults(
-                tracks = if (searchFilter == SearchFilter.TRACKS) _searchResults.value.tracks
-                else emptyList(),
-                albums = if (searchFilter == SearchFilter.ALBUMS) _searchResults.value.albums
-                else emptyList(),
-                artists = if (searchFilter == SearchFilter.ARTISTS) _searchResults.value.artists
-                else emptyList(),
-                playlists = if (searchFilter == SearchFilter.PLAYLISTS) _searchResults.value.playlists
-                else emptyList()
-            )
-        } else _searchResults.value
 
     private fun collectAndAssignSearchResults(
         searchQuery: String,
@@ -119,6 +100,13 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    private fun setEmptyValuesToAllSearchResults() {
+        _albumListForSearchQuery.value = PagingData.empty()
+        _artistListForSearchQuery.value = PagingData.empty()
+        _trackListForSearchQuery.value = PagingData.empty()
+        _playlistListForSearchQuery.value = PagingData.empty()
+    }
+
     private fun <T> Flow<T>.collectInViewModelScope(collectBlock: suspend (value: T) -> Unit) {
         viewModelScope.launch { collect { collectBlock(it) } }
     }
@@ -129,8 +117,7 @@ class SearchViewModel @Inject constructor(
     ) {
         searchJob?.cancel()
         if (searchQuery.isBlank()) {
-            _searchResults.value = emptySearchResults
-            filteredSearchResults.value = _searchResults.value
+            setEmptyValuesToAllSearchResults()
             _uiState.value = SearchScreenUiState.IDLE
             return
         }
@@ -146,10 +133,6 @@ class SearchViewModel @Inject constructor(
             collectAndAssignSearchResults(searchQuery, MapperImageSize.MEDIUM)
             _uiState.value = SearchScreenUiState.SUCCESS // fixme
         }
-    }
-
-    fun applyFilterToSearchResults(searchFilter: SearchFilter) {
-        filteredSearchResults.value = getSearchResultsObjectForFilter(searchFilter)
     }
 
     fun playTrack(track: SearchResult.TrackSearchResult) {
