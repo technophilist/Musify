@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.example.musify.data.repository.Repository
-import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.SearchResult
@@ -39,9 +38,6 @@ class SearchViewModel @Inject constructor(
     private val _uiState = mutableStateOf(SearchScreenUiState.IDLE)
     private val _searchResults = mutableStateOf(emptySearchResults)
     private val filteredSearchResults = mutableStateOf(emptySearchResults)
-
-    @Deprecated("Use separate paginated item flows")
-    val searchResults = filteredSearchResults as State<SearchResults>
     val uiState = _uiState as State<SearchScreenUiState>
 
     private val _albumListForSearchQuery =
@@ -143,17 +139,7 @@ class SearchViewModel @Inject constructor(
             // search text is currently being typed; preventing
             // un-necessary calls to the api
             delay(500)
-            val searchResult = repository
-                .fetchSearchResultsForQuery(
-                    searchQuery = searchQuery.trim(),
-                    imageSize = MapperImageSize.MEDIUM,
-                    countryCode = getCountryCode()
-                )
             collectAndAssignSearchResults(searchQuery, MapperImageSize.MEDIUM)
-            if (searchResult is FetchedResource.Success) {
-                _searchResults.value = searchResult.data
-                filteredSearchResults.value = getSearchResultsObjectForFilter(searchFilter)
-            }
             _uiState.value = SearchScreenUiState.SUCCESS
         }
     }
