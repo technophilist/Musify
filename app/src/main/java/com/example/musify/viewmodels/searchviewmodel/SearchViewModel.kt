@@ -85,6 +85,44 @@ class SearchViewModel @Inject constructor(
             )
         } else _searchResults.value
 
+    private suspend fun collectAndAssignSearchResults(
+        searchQuery: String,
+        imageSize: MapperImageSize
+    ) {
+        repository.getPaginatedSearchStreamForType(
+            paginatedStreamType = Repository.PaginatedStreamType.ALBUMS,
+            searchQuery = searchQuery,
+            countryCode = getCountryCode(),
+            imageSize = imageSize
+        ).collect {
+            _albumListForSearchQuery.value = it as PagingData<SearchResult.AlbumSearchResult>
+        }
+        repository.getPaginatedSearchStreamForType(
+            paginatedStreamType = Repository.PaginatedStreamType.ARTISTS,
+            searchQuery = searchQuery,
+            countryCode = getCountryCode(),
+            imageSize = imageSize
+        ).collect {
+            _artistListForSearchQuery.value = it as PagingData<SearchResult.ArtistSearchResult>
+        }
+        repository.getPaginatedSearchStreamForType(
+            paginatedStreamType = Repository.PaginatedStreamType.TRACKS,
+            searchQuery = searchQuery,
+            countryCode = getCountryCode(),
+            imageSize = imageSize
+        ).collect {
+            _trackListForSearchQuery.value = it as PagingData<SearchResult.TrackSearchResult>
+        }
+        repository.getPaginatedSearchStreamForType(
+            paginatedStreamType = Repository.PaginatedStreamType.PLAYLISTS,
+            searchQuery = searchQuery,
+            countryCode = getCountryCode(),
+            imageSize = imageSize
+        ).collect {
+            _playlistListForSearchQuery.value = it as PagingData<SearchResult.PlaylistSearchResult>
+        }
+    }
+
     fun searchWithFilter(
         searchQuery: String,
         searchFilter: SearchFilter = SearchFilter.ALL
@@ -111,6 +149,7 @@ class SearchViewModel @Inject constructor(
                     imageSize = MapperImageSize.MEDIUM,
                     countryCode = getCountryCode()
                 )
+            collectAndAssignSearchResults(searchQuery, MapperImageSize.MEDIUM)
             if (searchResult is FetchedResource.Success) {
                 _searchResults.value = searchResult.data
                 filteredSearchResults.value = getSearchResultsObjectForFilter(searchFilter)
