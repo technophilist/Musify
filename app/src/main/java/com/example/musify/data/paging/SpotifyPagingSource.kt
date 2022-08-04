@@ -2,8 +2,6 @@ package com.example.musify.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.musify.data.remote.token.BearerToken
-import com.example.musify.data.repository.tokenrepository.TokenRepository
 
 /**
  * A sealed class that contains the logic to manage keys for a paginated
@@ -14,13 +12,11 @@ import com.example.musify.data.repository.tokenrepository.TokenRepository
  * exceptions.
  */
 sealed class SpotifyPagingSource<V : Any>(
-    private val tokenRepository: TokenRepository,
     private val loadBlock: suspend (
         limit: Int,
         offset: Int,
         prevKey: Int?,
-        nextKey: Int?,
-        token: BearerToken
+        nextKey: Int?
     ) -> LoadResult<Int, V>
 ) : PagingSource<Int, V>() {
     private var isLastPage: Boolean = false
@@ -39,8 +35,7 @@ sealed class SpotifyPagingSource<V : Any>(
             params.loadSize.coerceAtMost(50), // Spotify API doesn't allow 'limit' to exceed 50
             params.loadSize * pageNumber,
             previousKey,
-            nextKey,
-            tokenRepository.getValidBearerToken(),
+            nextKey
         )
         if (loadResult is LoadResult.Page) isLastPage = loadResult.itemsAfter == 0
         return loadResult
