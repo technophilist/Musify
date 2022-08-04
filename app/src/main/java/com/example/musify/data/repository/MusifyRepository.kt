@@ -110,7 +110,7 @@ class MusifyRepository @Inject constructor(
         searchQuery: String,
         countryCode: String,
         imageSize: MapperImageSize
-    ): Flow<PagingData<out SearchResult>> {
+    ): Flow<PagingData<SearchResult>> {
         val pagingSource = when (paginatedStreamType) {
             Repository.PaginatedStreamType.ALBUMS -> SpotifyAlbumSearchPagingSource(
                 searchQuery = searchQuery,
@@ -141,7 +141,8 @@ class MusifyRepository @Inject constructor(
                 spotifyService = spotifyService
             )
         }
-        return Pager(PagingConfig(SpotifyPagingSource.DEFAULT_PAGE_SIZE)) { pagingSource }.flow
+        return Pager(PagingConfig(SpotifyPagingSource.DEFAULT_PAGE_SIZE)) { pagingSource }
+            .flow as Flow<PagingData<SearchResult>>
     }
 
 }
