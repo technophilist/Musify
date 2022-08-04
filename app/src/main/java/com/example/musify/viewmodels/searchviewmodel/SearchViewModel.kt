@@ -81,7 +81,7 @@ class SearchViewModel @Inject constructor(
             )
         } else _searchResults.value
 
-    private suspend fun collectAndAssignSearchResults(
+    private fun collectAndAssignSearchResults(
         searchQuery: String,
         imageSize: MapperImageSize
     ) {
@@ -90,7 +90,7 @@ class SearchViewModel @Inject constructor(
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
-        ).collect {
+        ).collectInViewModelScope {
             _albumListForSearchQuery.value = it as PagingData<SearchResult.AlbumSearchResult>
         }
         repository.getPaginatedSearchStreamForType(
@@ -98,7 +98,7 @@ class SearchViewModel @Inject constructor(
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
-        ).collect {
+        ).collectInViewModelScope {
             _artistListForSearchQuery.value = it as PagingData<SearchResult.ArtistSearchResult>
         }
         repository.getPaginatedSearchStreamForType(
@@ -106,7 +106,7 @@ class SearchViewModel @Inject constructor(
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
-        ).collect {
+        ).collectInViewModelScope {
             _trackListForSearchQuery.value = it as PagingData<SearchResult.TrackSearchResult>
         }
         repository.getPaginatedSearchStreamForType(
@@ -114,9 +114,13 @@ class SearchViewModel @Inject constructor(
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
-        ).collect {
+        ).collectInViewModelScope {
             _playlistListForSearchQuery.value = it as PagingData<SearchResult.PlaylistSearchResult>
         }
+    }
+
+    private fun <T> Flow<T>.collectInViewModelScope(collectBlock: suspend (value: T) -> Unit) {
+        viewModelScope.launch { collect { collectBlock(it) } }
     }
 
     fun searchWithFilter(
@@ -140,7 +144,7 @@ class SearchViewModel @Inject constructor(
             // un-necessary calls to the api
             delay(500)
             collectAndAssignSearchResults(searchQuery, MapperImageSize.MEDIUM)
-            _uiState.value = SearchScreenUiState.SUCCESS
+            _uiState.value = SearchScreenUiState.SUCCESS // fixme
         }
     }
 
