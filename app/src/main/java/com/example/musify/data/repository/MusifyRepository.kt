@@ -1,6 +1,10 @@
 package com.example.musify.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.musify.data.dto.*
+import com.example.musify.data.paging.*
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.musicservice.SupportedSpotifyGenres
 import com.example.musify.data.remote.musicservice.toGenre
@@ -9,6 +13,7 @@ import com.example.musify.data.repository.tokenrepository.TokenRepository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.*
+import kotlinx.coroutines.flow.Flow
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -99,4 +104,44 @@ class MusifyRepository @Inject constructor(
             trackDTOWithAlbumMetadata.toTrackSearchResult(imageSize)
         }
     }
+
+    override fun getPaginatedSearchStreamForType(
+        paginatedStreamType: Repository.PaginatedStreamType,
+        searchQuery: String,
+        countryCode: String,
+        imageSize: MapperImageSize
+    ): Flow<PagingData<out SearchResult>> {
+        val pagingSource = when (paginatedStreamType) {
+            Repository.PaginatedStreamType.ALBUMS -> SpotifyAlbumSearchPagingSource(
+                searchQuery = searchQuery,
+                countryCode = countryCode,
+                imageSize = imageSize,
+                tokenRepository = tokenRepository,
+                spotifyService = spotifyService
+            )
+            Repository.PaginatedStreamType.ARTISTS -> SpotifyArtistSearchPagingSource(
+                searchQuery = searchQuery,
+                countryCode = countryCode,
+                imageSize = imageSize,
+                tokenRepository = tokenRepository,
+                spotifyService = spotifyService
+            )
+            Repository.PaginatedStreamType.TRACKS -> SpotifyTrackSearchPagingSource(
+                searchQuery = searchQuery,
+                countryCode = countryCode,
+                imageSize = imageSize,
+                tokenRepository = tokenRepository,
+                spotifyService = spotifyService
+            )
+            Repository.PaginatedStreamType.PLAYLISTS -> SpotifyPlaylistSearchPagingSource(
+                searchQuery = searchQuery,
+                countryCode = countryCode,
+                imageSize = imageSize,
+                tokenRepository = tokenRepository,
+                spotifyService = spotifyService
+            )
+        }
+        return Pager(PagingConfig(SpotifyPagingSource.DEFAULT_PAGE_SIZE)) { pagingSource }.flow
+    }
+
 }
