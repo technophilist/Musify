@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.example.musify.data.repository.Repository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
@@ -16,6 +17,8 @@ import com.example.musify.usecases.playtrackusecase.PlayTrackWithMediaNotificati
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,8 +39,30 @@ class SearchViewModel @Inject constructor(
     private val _uiState = mutableStateOf(SearchScreenUiState.IDLE)
     private val _searchResults = mutableStateOf(emptySearchResults)
     private val filteredSearchResults = mutableStateOf(emptySearchResults)
+
+    @Deprecated("Use separate paginated item flows")
     val searchResults = filteredSearchResults as State<SearchResults>
     val uiState = _uiState as State<SearchScreenUiState>
+
+    private val _albumListForSearchQuery =
+        MutableStateFlow<PagingData<SearchResult.AlbumSearchResult>>(PagingData.empty())
+    val albumListForSearchQuery =
+        _albumListForSearchQuery as Flow<PagingData<SearchResult.AlbumSearchResult>>
+
+    private val _artistListForSearchQuery =
+        MutableStateFlow<PagingData<SearchResult.ArtistSearchResult>>(PagingData.empty())
+    val artistListForSearchQuery =
+        _artistListForSearchQuery as Flow<PagingData<SearchResult.ArtistSearchResult>>
+
+    private val _trackListForSearchQuery =
+        MutableStateFlow<PagingData<SearchResult.TrackSearchResult>>(PagingData.empty())
+    val trackListForSearchQuery =
+        _trackListForSearchQuery as Flow<PagingData<SearchResult.TrackSearchResult>>
+
+    private val _playlistListForSearchQuery =
+        MutableStateFlow<PagingData<SearchResult.PlaylistSearchResult>>(PagingData.empty())
+    val playlistListForSearchQuery =
+        _playlistListForSearchQuery as Flow<PagingData<SearchResult.PlaylistSearchResult>>
 
     // TODO test locale
     private fun getCountryCode(): String = getApplication<MusifyApplication>()
