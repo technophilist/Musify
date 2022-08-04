@@ -60,5 +60,5 @@ interface Repository {
         searchQuery: String,
         countryCode: String,
         imageSize: MapperImageSize
-    ): Flow<PagingData<out SearchResult>>
+    ): Flow<PagingData<SearchResult>>
 }
