@@ -49,7 +49,6 @@ import kotlinx.coroutines.launch
 fun SearchScreen(
     genreList: List<Genre>,
     searchScreenFilters: List<SearchFilter>,
-    onSearchFilterClicked: (SearchFilter) -> Unit,
     onGenreItemClick: (Genre) -> Unit,
     onSearchTextChanged: (searchText: String, filter: SearchFilter) -> Unit,
     isSearchResultLoading: Boolean,
@@ -161,7 +160,6 @@ fun SearchScreen(
                 currentlySelectedFilter = currentlySelectedSearchScreenFilter,
                 onFilterClicked = {
                     currentlySelectedSearchScreenFilter = it
-                    onSearchFilterClicked(it)
                     coroutineScope.launch { lazyListState.animateScrollToItem(0) }
                 }
             )
