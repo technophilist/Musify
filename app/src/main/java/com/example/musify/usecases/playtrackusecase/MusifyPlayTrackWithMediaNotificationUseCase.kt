@@ -3,10 +3,7 @@ package com.example.musify.usecases.playtrackusecase
 import android.content.Context
 import androidx.core.graphics.drawable.toBitmap
 import coil.ImageLoader
-import coil.request.ErrorResult
-import coil.request.ImageRequest
-import coil.request.ImageResult
-import coil.request.SuccessResult
+import coil.request.*
 import com.example.musify.di.IODispatcher
 import com.example.musify.di.MainDispatcher
 import com.example.musify.domain.SearchResult
@@ -26,6 +23,7 @@ class MusifyPlayTrackWithMediaNotificationUseCase @Inject constructor(
     private suspend fun downloadBitmapFromUrl(urlString: String): ImageResult {
         val imageRequest = ImageRequest.Builder(context)
             .data(urlString)
+            .diskCachePolicy(CachePolicy.DISABLED)
             .build()
         return ImageLoader(context).execute(imageRequest)
     }
