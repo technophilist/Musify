@@ -50,7 +50,7 @@ fun SearchScreen(
     genreList: List<Genre>,
     searchScreenFilters: List<SearchFilter>,
     onGenreItemClick: (Genre) -> Unit,
-    onSearchTextChanged: (searchText: String, filter: SearchFilter) -> Unit,
+    onSearchTextChanged: (searchText: String) -> Unit,
     isSearchResultLoading: Boolean,
     albumListForSearchQuery: LazyPagingItems<SearchResult.AlbumSearchResult>,
     artistListForSearchQuery: LazyPagingItems<SearchResult.ArtistSearchResult>,
@@ -73,7 +73,7 @@ fun SearchScreen(
                 onClick = {
                     searchText = ""
                     // notify the caller that the search text is empty
-                    onSearchTextChanged("", currentlySelectedSearchScreenFilter)
+                    onSearchTextChanged("")
                 },
                 content = { Icon(imageVector = Icons.Filled.Close, contentDescription = null) }
             )
@@ -96,7 +96,7 @@ fun SearchScreen(
         if (searchText.isNotEmpty()) {
             searchText = ""
             // notify the caller that the text has been emptied out
-            onSearchTextChanged(searchText, currentlySelectedSearchScreenFilter)
+            onSearchTextChanged(searchText)
         }
         isSearchListVisible = false
     }
@@ -142,7 +142,7 @@ fun SearchScreen(
             value = searchText,
             onValueChange = {
                 searchText = it
-                onSearchTextChanged(it, currentlySelectedSearchScreenFilter)
+                onSearchTextChanged(it)
             },
             textStyle = LocalTextStyle.current.copy(fontWeight = FontWeight.SemiBold),
             colors = TextFieldDefaults.textFieldColors(
