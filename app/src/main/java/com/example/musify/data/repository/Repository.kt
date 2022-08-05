@@ -1,14 +1,18 @@
 package com.example.musify.data.repository
 
+import androidx.paging.PagingData
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.*
+import kotlinx.coroutines.flow.Flow
 
 /**
  * An interface the consists of all the methods that are a requisite for
  * an instance of [Repository].
  */
 interface Repository {
+    enum class PaginatedStreamType { ALBUMS, ARTISTS, TRACKS, PLAYLISTS }
+
     suspend fun fetchArtistSummaryForId(
         artistId: String,
         imageSize: MapperImageSize
@@ -44,9 +48,17 @@ interface Repository {
     ): FetchedResource<SearchResults, MusifyHttpErrorType>
 
     fun fetchAvailableGenres(): List<Genre>
+
     suspend fun fetchTracksForGenre(
         genre: Genre,
         imageSize: MapperImageSize,
         countryCode: String
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyHttpErrorType>
+
+    fun getPaginatedSearchStreamForType(
+        paginatedStreamType: PaginatedStreamType,
+        searchQuery: String,
+        countryCode: String,
+        imageSize: MapperImageSize
+    ): Flow<PagingData<SearchResult>>
 }
