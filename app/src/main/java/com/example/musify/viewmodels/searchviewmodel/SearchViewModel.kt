@@ -32,6 +32,7 @@ class SearchViewModel @Inject constructor(
     private val playTrackWithMediaNotificationUseCase: PlayTrackWithMediaNotificationUseCase
 ) : AndroidViewModel(application) {
     private var searchJob: Job? = null
+    
     private val _uiState = mutableStateOf(SearchScreenUiState.IDLE)
     val uiState = _uiState as State<SearchScreenUiState>
 
@@ -111,10 +112,7 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch { collect { collectBlock(it) } }
     }
 
-    fun searchWithFilter(
-        searchQuery: String,
-        searchFilter: SearchFilter = SearchFilter.ALL
-    ) {
+    fun search(searchQuery: String) {
         searchJob?.cancel()
         if (searchQuery.isBlank()) {
             setEmptyValuesToAllSearchResults()
