@@ -2,6 +2,8 @@ package com.example.musify.ui.screens.searchscreen
 
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
@@ -19,19 +21,24 @@ fun LazyListScope.searchTrackListItems(
 ) {
     items(tracksListForSearchQuery, key = { it.id }) {
         it?.let {
-            MusifyCompactListItemCard(
-                cardType = ListItemCardType.TRACK,
-                thumbnailImageUrlString = it.imageUrlString,
-                title = it.name,
-                subtitle = it.artistsString,
-                onClick = { onItemClick(it) },
-                onTrailingButtonIconClick = { /* TODO*/ },
-                isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
-                onThumbnailImageLoadingFinished = { throwable ->
-                    onImageLoadingFinished(it, throwable)
-                },
-                onThumbnailLoading = { onImageLoading(it) }
-            )
+            // set alpha based on whether the track is available for playback
+            CompositionLocalProvider(
+                LocalContentAlpha.provides(if (it.trackUrlString == null) 0.5f else 1f)
+            ) {
+                MusifyCompactListItemCard(
+                    cardType = ListItemCardType.TRACK,
+                    thumbnailImageUrlString = it.imageUrlString,
+                    title = it.name,
+                    subtitle = it.artistsString,
+                    onClick = { onItemClick(it) },
+                    onTrailingButtonIconClick = { /* TODO*/ },
+                    isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
+                    onThumbnailImageLoadingFinished = { throwable ->
+                        onImageLoadingFinished(it, throwable)
+                    },
+                    onThumbnailLoading = { onImageLoading(it) }
+                )
+            }
         }
     }
 }
@@ -132,7 +139,7 @@ fun LazyListScope.allItems(
     isLoadingPlaceholderVisible: (SearchResult) -> Boolean,
     onImageLoading: (SearchResult) -> Unit,
     onImageLoadingFinished: (SearchResult, Throwable?) -> Unit,
-    artistImageErrorPainter:Painter,
+    artistImageErrorPainter: Painter,
     playlistImageErrorPainter: Painter
 ) {
     searchAlbumListItems(
