@@ -37,6 +37,8 @@ enum class ListItemCardType { ALBUM, ARTIST, TRACK, PLAYLIST }
  * of 250.dp. Size values below the minimum values will be ignored.
  * The maximum height of the composable can be of 80.dp. Any values
  * higher than 80.dp will be ignored, and the size would be set to 80.dp.
+ * Also, note that the alpha value of the thumbnail image is set to
+ * the current value of [LocalContentAlpha].
  *
  * @param thumbnailImageUrlString the url of the image to use as the
  * thumbnail. If this is null, only the text with subtitle will be
@@ -108,6 +110,7 @@ fun MusifyCompactListItemCard(
                     onImageLoadingFinished = { onThumbnailImageLoadingFinished?.invoke(it) },
                     placeholderHighlight = placeholderHighlight,
                     errorPainter = errorPainter,
+                    alpha = LocalContentAlpha.current,
                     contentDescription = null
                 )
             }
@@ -151,6 +154,8 @@ fun MusifyCompactListItemCard(
  * Size values below/above the minimum/maximum values will be ignored.
  * See the other overload to know the minimum/maximum size values.
  * If a specific trailing icon is needed, use the other overload.
+ * Note that the alpha value of the thumbnail image is set to
+ * the current value of [LocalContentAlpha].
  *
  * @param thumbnailImageUrlString the url of the image to use as the
  * thumbnail.
