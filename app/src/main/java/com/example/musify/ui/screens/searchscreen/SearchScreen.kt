@@ -201,7 +201,6 @@ fun SearchScreen(
                     tracksListForSearchQuery = tracksListForSearchQuery,
                     playlistListForSearchQuery = playlistListForSearchQuery,
                     onItemClick = { onSearchQueryItemClicked(it) },
-                    onTrailingIconButtonClick = { /*TODO*/ },
                     isLoadingPlaceholderVisible = { item ->
                         isSearchItemLoadingPlaceholderVisibleMap.getOrPut(item) { false }
                     },
@@ -228,7 +227,6 @@ private fun SearchQueryList(
     playlistListForSearchQuery: LazyPagingItems<SearchResult.PlaylistSearchResult>,
     onItemClick: (SearchResult) -> Unit,
     currentlySelectedFilter: SearchFilter,
-    onTrailingIconButtonClick: (SearchResult) -> Unit,
     isLoadingPlaceholderVisible: (SearchResult) -> Boolean,
     onImageLoading: (SearchResult) -> Unit,
     onImageLoadingFinished: (SearchResult, Throwable?) -> Unit,
