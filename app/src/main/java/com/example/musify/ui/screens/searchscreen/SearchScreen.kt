@@ -1,4 +1,4 @@
-package com.example.musify.ui.screens
+package com.example.musify.ui.screens.searchscreen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
