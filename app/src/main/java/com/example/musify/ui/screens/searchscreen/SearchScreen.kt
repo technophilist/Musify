@@ -180,8 +180,8 @@ fun SearchScreen(
                         genre = it,
                         modifier = Modifier.height(120.dp),
                         onClick = { onGenreItemClick(it) },
-                        imageResourceId = it.genreType.getImageResourceForGenreType(),
-                        backgroundColor = it.genreType.getBackgroundColorForGenreType()
+                        imageResourceId = it.genreType.getAssociatedImageResource(),
+                        backgroundColor = it.genreType.getAssociatedBackgroundColor()
                     )
                 }
                 item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {

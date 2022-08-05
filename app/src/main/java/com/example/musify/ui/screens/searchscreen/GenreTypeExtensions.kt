@@ -4,8 +4,10 @@ import androidx.compose.ui.graphics.Color
 import com.example.musify.R
 import com.example.musify.domain.Genre
 
-
-fun Genre.GenreType.getImageResourceForGenreType(): Int = when (this) {
+/**
+ * Used to get the associated image resource id of the [Genre.GenreType].
+ */
+fun Genre.GenreType.getAssociatedImageResource(): Int = when (this) {
     Genre.GenreType.AMBIENT -> R.drawable.genre_img_ambient
     Genre.GenreType.CHILL -> R.drawable.genre_img_chill
     Genre.GenreType.CLASSICAL -> R.drawable.genre_img_classical
@@ -20,14 +22,13 @@ fun Genre.GenreType.getImageResourceForGenreType(): Int = when (this) {
 }
 
 /**
- * Utility function used to get the associated background color of the
- * [genreType]. The were directly scraped from the official spotify
- * web app.
+ * Used to get the associated background color of the [Genre.GenreType].
+ * They were directly scraped from the official spotify web app.
  * Note: Certain colors may not match with the official app. This
  * is because, all genres listed in the api where not listed in the
  * spotify web app.
  */
-fun Genre.GenreType.getBackgroundColorForGenreType() = when (this) {
+fun Genre.GenreType.getAssociatedBackgroundColor() = when (this) {
     Genre.GenreType.AMBIENT -> Color(0, 48, 72)
     Genre.GenreType.CHILL -> Color(71, 126, 149)
     Genre.GenreType.CLASSICAL -> Color(141, 103, 171)
