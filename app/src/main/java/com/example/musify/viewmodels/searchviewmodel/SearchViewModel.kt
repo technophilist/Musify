@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.musify.data.repository.Repository
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.IODispatcher
@@ -73,7 +74,7 @@ class SearchViewModel @Inject constructor(
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
-        ).collectInViewModelScope {
+        ).cachedIn(viewModelScope).collectInViewModelScope {
             _albumListForSearchQuery.value = it as PagingData<SearchResult.AlbumSearchResult>
         }
         repository.getPaginatedSearchStreamForType(
@@ -81,7 +82,7 @@ class SearchViewModel @Inject constructor(
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
-        ).collectInViewModelScope {
+        ).cachedIn(viewModelScope).collectInViewModelScope {
             _artistListForSearchQuery.value = it as PagingData<SearchResult.ArtistSearchResult>
         }
         repository.getPaginatedSearchStreamForType(
@@ -89,7 +90,7 @@ class SearchViewModel @Inject constructor(
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
-        ).collectInViewModelScope {
+        ).cachedIn(viewModelScope).collectInViewModelScope {
             _trackListForSearchQuery.value = it as PagingData<SearchResult.TrackSearchResult>
         }
         repository.getPaginatedSearchStreamForType(
@@ -97,7 +98,7 @@ class SearchViewModel @Inject constructor(
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
-        ).collectInViewModelScope {
+        ).cachedIn(viewModelScope).collectInViewModelScope {
             _playlistListForSearchQuery.value = it as PagingData<SearchResult.PlaylistSearchResult>
         }
     }
