@@ -24,7 +24,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -35,8 +34,6 @@ import com.example.musify.domain.Genre
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.FilterChip
 import com.example.musify.ui.components.GenreCard
-import com.example.musify.ui.components.ListItemCardType
-import com.example.musify.ui.components.MusifyCompactListItemCard
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
@@ -212,7 +209,8 @@ fun SearchScreen(
                     onImageLoading = { isSearchItemLoadingPlaceholderVisibleMap[it] = true },
                     isSearchResultsLoadingAnimationVisible = isSearchResultLoading,
                     lottieComposition = searchResultsLoadingAnimationComposition,
-                    lazyListState = lazyListState
+                    lazyListState = lazyListState,
+                    currentlySelectedFilter = currentlySelectedSearchScreenFilter
                 )
             }
         }
@@ -227,6 +225,7 @@ private fun SearchQueryList(
     tracksListForSearchQuery: LazyPagingItems<SearchResult.TrackSearchResult>,
     playlistListForSearchQuery: LazyPagingItems<SearchResult.PlaylistSearchResult>,
     onItemClick: (SearchResult) -> Unit,
+    currentlySelectedFilter: SearchFilter,
     onTrailingIconButtonClick: (SearchResult) -> Unit,
     isLoadingPlaceholderVisible: (SearchResult) -> Boolean,
     onImageLoading: (SearchResult) -> Unit,
@@ -247,77 +246,49 @@ private fun SearchQueryList(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             state = lazyListState,
         ) {
-            items(tracksListForSearchQuery, key = { it.id }) {
-                it?.let {
-                    MusifyCompactListItemCard(
-                        cardType = it.getAssociatedListCardType(),
-                        thumbnailImageUrlString = it.imageUrlString,
-                        title = it.name,
-                        subtitle = it.artistsString,
-                        onClick = { onItemClick(it) },
-                        onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
-                        isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
-                        onThumbnailImageLoadingFinished = { throwable ->
-                            onImageLoadingFinished(it, throwable)
-                        },
-                        onThumbnailLoading = { onImageLoading(it) }
-                    )
-                }
-            }
-
-            items(albumListForSearchQuery, key = { it.id }) {
-                it?.let {
-                    MusifyCompactListItemCard(
-                        cardType = it.getAssociatedListCardType(),
-                        thumbnailImageUrlString = it.albumArtUrlString,
-                        title = it.name,
-                        subtitle = it.artistsString,
-                        onClick = { onItemClick(it) },
-                        onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
-                        isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
-                        onThumbnailImageLoadingFinished = { throwable ->
-                            onImageLoadingFinished(it, throwable)
-                        },
-                        onThumbnailLoading = { onImageLoading(it) }
-                    )
-                }
-            }
-            items(artistListForSearchQuery, key = { it.id }) {
-                it?.let {
-                    MusifyCompactListItemCard(
-                        cardType = it.getAssociatedListCardType(),
-                        thumbnailImageUrlString = it.imageUrlString ?: "",
-                        title = it.name,
-                        subtitle = "Artist",
-                        onClick = { onItemClick(it) },
-                        onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
-                        isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
-                        onThumbnailImageLoadingFinished = { throwable ->
-                            onImageLoadingFinished(it, throwable)
-                        },
-                        onThumbnailLoading = { onImageLoading(it) },
-                        errorPainter = artistImageErrorPainter
-                    )
-                }
-            }
-            items(playlistListForSearchQuery, key = { it.id }) {
-                it?.let {
-                    MusifyCompactListItemCard(
-                        cardType = it.getAssociatedListCardType(),
-                        thumbnailImageUrlString = it.imageUrlString ?: "",
-                        title = it.name,
-                        subtitle = "Playlist",
-                        onClick = { onItemClick(it) },
-                        onTrailingButtonIconClick = { onTrailingIconButtonClick(it) },
-                        isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
-                        onThumbnailImageLoadingFinished = { throwable ->
-                            onImageLoadingFinished(it, throwable)
-                        },
-                        onThumbnailLoading = { onImageLoading(it) },
-                        errorPainter = playlistImageErrorPainter
-                    )
-                }
-
+            when (currentlySelectedFilter) {
+                SearchFilter.ALL -> allItems(
+                    albumListForSearchQuery = albumListForSearchQuery,
+                    artistListForSearchQuery = artistListForSearchQuery,
+                    tracksListForSearchQuery = tracksListForSearchQuery,
+                    playlistListForSearchQuery = playlistListForSearchQuery,
+                    onItemClick = onItemClick,
+                    isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
+                    onImageLoading = onImageLoading,
+                    onImageLoadingFinished = onImageLoadingFinished,
+                    artistImageErrorPainter = artistImageErrorPainter,
+                    playlistImageErrorPainter = playlistImageErrorPainter
+                )
+                SearchFilter.ALBUMS -> searchAlbumListItems(
+                    albumListForSearchQuery = albumListForSearchQuery,
+                    onItemClick = onItemClick,
+                    isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
+                    onImageLoading = onImageLoading,
+                    onImageLoadingFinished = onImageLoadingFinished
+                )
+                SearchFilter.TRACKS -> searchTrackListItems(
+                    tracksListForSearchQuery = tracksListForSearchQuery,
+                    onItemClick = onItemClick,
+                    isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
+                    onImageLoading = onImageLoading,
+                    onImageLoadingFinished = onImageLoadingFinished
+                )
+                SearchFilter.ARTISTS -> searchArtistListItems(
+                    artistListForSearchQuery = artistListForSearchQuery,
+                    onItemClick = onItemClick,
+                    isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
+                    onImageLoading = onImageLoading,
+                    onImageLoadingFinished = onImageLoadingFinished,
+                    artistImageErrorPainter = artistImageErrorPainter
+                )
+                SearchFilter.PLAYLISTS -> searchPlaylistListItems(
+                    playlistListForSearchQuery = playlistListForSearchQuery,
+                    onItemClick = onItemClick,
+                    isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
+                    onImageLoading = onImageLoading,
+                    onImageLoadingFinished = onImageLoadingFinished,
+                    playlistImageErrorPainter = playlistImageErrorPainter
+                )
             }
             item {
                 Spacer(modifier = Modifier.navigationBarsHeight())
@@ -343,6 +314,7 @@ private fun SearchQueryList(
         }
     }
 }
+
 
 @Composable
 private fun FilterChipGroup(
@@ -371,13 +343,6 @@ private fun FilterChipGroup(
         }
         Spacer(modifier = Modifier.width(endPadding))
     }
-}
-
-private fun SearchResult.getAssociatedListCardType(): ListItemCardType = when (this) {
-    is SearchResult.AlbumSearchResult -> ListItemCardType.ALBUM
-    is SearchResult.ArtistSearchResult -> ListItemCardType.ARTIST
-    is SearchResult.PlaylistSearchResult -> ListItemCardType.PLAYLIST
-    is SearchResult.TrackSearchResult -> ListItemCardType.TRACK
 }
 
 private fun getImageResourceForGenreType(genre: Genre.GenreType) = when (genre) {
