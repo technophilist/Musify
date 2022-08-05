@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +41,7 @@ import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
 // FIXME launching the app takes a while because of loading thumbnails of genres
+// fix lazy list scrolling to top after config change
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
@@ -55,11 +57,11 @@ fun SearchScreen(
     playlistListForSearchQuery: LazyPagingItems<SearchResult.PlaylistSearchResult>,
     onSearchQueryItemClicked: (SearchResult) -> Unit
 ) {
-    var searchText by remember { mutableStateOf("") }
-    var isSearchListVisible by remember { mutableStateOf(false) }
+    var searchText by rememberSaveable { mutableStateOf("") }
+    var isSearchListVisible by rememberSaveable { mutableStateOf(false) }
     val isClearSearchTextButtonVisible by remember { derivedStateOf { isSearchListVisible && searchText.isNotEmpty() } }
     val focusManager = LocalFocusManager.current
-    var currentlySelectedSearchScreenFilter by remember { mutableStateOf(SearchFilter.TRACKS) }
+    var currentlySelectedSearchScreenFilter by rememberSaveable { mutableStateOf(SearchFilter.TRACKS) }
     val textFieldTrailingIcon = @Composable {
         AnimatedVisibility(
             visible = isClearSearchTextButtonVisible,
