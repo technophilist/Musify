@@ -8,16 +8,15 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.example.musify.data.repository.Repository
 import com.example.musify.data.utils.MapperImageSize
+import com.example.musify.di.IODispatcher
 import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.SearchResult
 import com.example.musify.usecases.playtrackusecase.PlayTrackWithMediaNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -29,6 +28,7 @@ enum class SearchScreenUiState { LOADING, SUCCESS, IDLE }
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     application: Application,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val repository: Repository,
     private val playTrackWithMediaNotificationUseCase: PlayTrackWithMediaNotificationUseCase
 ) : AndroidViewModel(application) {
@@ -110,7 +110,9 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun <T> Flow<T>.collectInViewModelScope(collector: FlowCollector<T>) {
-        viewModelScope.launch { collect(collector) }
+        viewModelScope.launch {
+            withContext(ioDispatcher) { collect(collector) }
+        }
     }
 
     fun search(searchQuery: String) {
