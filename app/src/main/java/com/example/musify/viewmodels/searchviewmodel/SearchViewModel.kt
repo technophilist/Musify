@@ -15,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,7 +33,7 @@ class SearchViewModel @Inject constructor(
     private val playTrackWithMediaNotificationUseCase: PlayTrackWithMediaNotificationUseCase
 ) : AndroidViewModel(application) {
     private var searchJob: Job? = null
-    
+
     private val _uiState = mutableStateOf(SearchScreenUiState.IDLE)
     val uiState = _uiState as State<SearchScreenUiState>
 
@@ -108,8 +109,8 @@ class SearchViewModel @Inject constructor(
         _playlistListForSearchQuery.value = PagingData.empty()
     }
 
-    private fun <T> Flow<T>.collectInViewModelScope(collectBlock: suspend (value: T) -> Unit) {
-        viewModelScope.launch { collect { collectBlock(it) } }
+    private fun <T> Flow<T>.collectInViewModelScope(collector: FlowCollector<T>) {
+        viewModelScope.launch { collect(collector) }
     }
 
     fun search(searchQuery: String) {
