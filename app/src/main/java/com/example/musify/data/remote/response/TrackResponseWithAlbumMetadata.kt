@@ -1,7 +1,7 @@
 package com.example.musify.data.remote.response
 
 import com.example.musify.data.utils.MapperImageSize
-import com.example.musify.data.utils.getImageDtoForImageSize
+import com.example.musify.data.utils.getImageResponseForImageSize
 import com.example.musify.domain.MusicSummary
 import com.example.musify.domain.SearchResult.TrackSearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -31,7 +31,7 @@ fun TrackResponseWithAlbumMetadata.toTrackSummary(imageSize: MapperImageSize) =
     MusicSummary.TrackSummary(
         id = id,
         name = name,
-        associatedImageUrl = URL(albumMetadata.images.getImageDtoForImageSize(imageSize).url),
+        associatedImageUrl = URL(albumMetadata.images.getImageResponseForImageSize(imageSize).url),
         albumName = albumMetadata.name,
         trackUrl = previewUrl?.let(::URL)
     )
@@ -45,7 +45,7 @@ fun TrackResponseWithAlbumMetadata.toTrackSummary(imageSize: MapperImageSize) =
 fun TrackResponseWithAlbumMetadata.toTrackSearchResult(imageSize: MapperImageSize) = TrackSearchResult(
     id = id,
     name = name,
-    imageUrlString = albumMetadata.images.getImageDtoForImageSize(imageSize).url,
+    imageUrlString = albumMetadata.images.getImageResponseForImageSize(imageSize).url,
     artistsString = albumMetadata.artists.joinToString(",") { it.name },
     trackUrlString = previewUrl
 )
