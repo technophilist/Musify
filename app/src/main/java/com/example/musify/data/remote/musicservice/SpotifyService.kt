@@ -1,6 +1,6 @@
 package com.example.musify.data.remote.musicservice
 
-import com.example.musify.data.dto.*
+import com.example.musify.data.response.*
 import com.example.musify.data.remote.token.BearerToken
 import com.example.musify.domain.Genre
 import retrofit2.http.GET

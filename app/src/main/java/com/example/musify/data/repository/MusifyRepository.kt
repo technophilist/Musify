@@ -3,7 +3,7 @@ package com.example.musify.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.musify.data.dto.*
+import com.example.musify.data.response.*
 import com.example.musify.data.paging.*
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.musicservice.SupportedSpotifyGenres
