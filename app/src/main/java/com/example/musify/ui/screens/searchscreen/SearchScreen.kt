@@ -48,6 +48,8 @@ import kotlinx.coroutines.launch
 fun SearchScreen(
     genreList: List<Genre>,
     searchScreenFilters: List<SearchFilter>,
+    currentlySelectedFilter: SearchFilter,
+    onSearchFilterChanged: (SearchFilter) -> Unit,
     onGenreItemClick: (Genre) -> Unit,
     onSearchTextChanged: (searchText: String) -> Unit,
     isSearchResultLoading: Boolean,
@@ -55,13 +57,12 @@ fun SearchScreen(
     artistListForSearchQuery: LazyPagingItems<SearchResult.ArtistSearchResult>,
     tracksListForSearchQuery: LazyPagingItems<SearchResult.TrackSearchResult>,
     playlistListForSearchQuery: LazyPagingItems<SearchResult.PlaylistSearchResult>,
-    onSearchQueryItemClicked: (SearchResult) -> Unit
+    onSearchQueryItemClicked: (SearchResult) -> Unit,
 ) {
     var searchText by rememberSaveable { mutableStateOf("") }
     var isSearchListVisible by rememberSaveable { mutableStateOf(false) }
     val isClearSearchTextButtonVisible by remember { derivedStateOf { isSearchListVisible && searchText.isNotEmpty() } }
     val focusManager = LocalFocusManager.current
-    var currentlySelectedSearchScreenFilter by rememberSaveable { mutableStateOf(SearchFilter.TRACKS) }
     val textFieldTrailingIcon = @Composable {
         AnimatedVisibility(
             visible = isClearSearchTextButtonVisible,
@@ -156,9 +157,9 @@ fun SearchScreen(
             FilterChipGroup(
                 scrollState = filterChipGroupScrollState,
                 filters = searchScreenFilters,
-                currentlySelectedFilter = currentlySelectedSearchScreenFilter,
+                currentlySelectedFilter = currentlySelectedFilter,
                 onFilterClicked = {
-                    currentlySelectedSearchScreenFilter = it
+                    onSearchFilterChanged(it)
                     coroutineScope.launch { lazyListState.animateScrollToItem(0) }
                 }
             )
@@ -211,7 +212,7 @@ fun SearchScreen(
                     isSearchResultsLoadingAnimationVisible = isSearchResultLoading,
                     lottieComposition = searchResultsLoadingAnimationComposition,
                     lazyListState = lazyListState,
-                    currentlySelectedFilter = currentlySelectedSearchScreenFilter
+                    currentlySelectedFilter = currentlySelectedFilter
                 )
             }
         }
