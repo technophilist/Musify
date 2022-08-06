@@ -1,4 +1,4 @@
-package com.example.musify.data.response
+package com.example.musify.data.remote.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
