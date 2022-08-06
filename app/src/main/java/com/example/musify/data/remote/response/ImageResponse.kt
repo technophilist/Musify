@@ -1,7 +1,7 @@
 package com.example.musify.data.remote.response
 
 /**
- * A DTO object the contains information about an image's [height],
+ * A response object the contains information about an image's [height],
  * [width] and [url].
  */
 data class ImageResponse(

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 
 /**
- * A DTO that contains information related to a specific Playlist.
+ * A response that contains information related to a specific Playlist.
  */
 data class PlaylistResponse(
     val id: String,

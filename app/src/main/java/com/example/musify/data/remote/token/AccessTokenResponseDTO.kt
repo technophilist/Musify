@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 
 /**
- * A DTO object that contains the [accessToken] for any specific api.
+ * A response object that contains the [accessToken] for any specific api.
  * It also contains additional information such as the [secondsUntilExpiration]
  * and the [tokenType].
  */

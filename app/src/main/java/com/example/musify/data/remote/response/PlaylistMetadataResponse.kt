@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 
 /**
- * A DTO object that contains only the metadata associated with a
+ * A response object that contains only the metadata associated with a
  * particular playlist. [PlaylistResponse] contains additional
  * tracks and followers properties.
  */

@@ -5,7 +5,7 @@ import com.example.musify.domain.MusicSummary
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
- * A DTO that contains a list of albums together with additional
+ * A response that contains a list of albums together with additional
  * metadata.
  */
 data class AlbumsMetadataResponse(
