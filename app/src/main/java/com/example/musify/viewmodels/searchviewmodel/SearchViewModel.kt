@@ -16,7 +16,6 @@ import com.example.musify.usecases.playtrackusecase.PlayTrackWithMediaNotificati
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
@@ -78,33 +77,38 @@ class SearchViewModel @Inject constructor(
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
-        ).cachedIn(viewModelScope).collectInViewModelScope {
-            _albumListForSearchQuery.value = it as PagingData<SearchResult.AlbumSearchResult>
-        }
+        ).cachedIn(viewModelScope)
+            .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.ALBUMS) {
+                _albumListForSearchQuery.value = it as PagingData<SearchResult.AlbumSearchResult>
+            }
         repository.getPaginatedSearchStreamForType(
             paginatedStreamType = Repository.PaginatedStreamType.ARTISTS,
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
-        ).cachedIn(viewModelScope).collectInViewModelScope {
-            _artistListForSearchQuery.value = it as PagingData<SearchResult.ArtistSearchResult>
-        }
+        ).cachedIn(viewModelScope)
+            .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.ARTISTS) {
+                _artistListForSearchQuery.value = it as PagingData<SearchResult.ArtistSearchResult>
+            }
         repository.getPaginatedSearchStreamForType(
             paginatedStreamType = Repository.PaginatedStreamType.TRACKS,
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
-        ).cachedIn(viewModelScope).collectInViewModelScope {
-            _trackListForSearchQuery.value = it as PagingData<SearchResult.TrackSearchResult>
-        }
+        ).cachedIn(viewModelScope)
+            .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.TRACKS) {
+                _trackListForSearchQuery.value = it as PagingData<SearchResult.TrackSearchResult>
+            }
         repository.getPaginatedSearchStreamForType(
             paginatedStreamType = Repository.PaginatedStreamType.PLAYLISTS,
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
-        ).cachedIn(viewModelScope).collectInViewModelScope {
-            _playlistListForSearchQuery.value = it as PagingData<SearchResult.PlaylistSearchResult>
-        }
+        ).cachedIn(viewModelScope)
+            .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.PLAYLISTS) {
+                _playlistListForSearchQuery.value =
+                    it as PagingData<SearchResult.PlaylistSearchResult>
+            }
     }
 
     private fun setEmptyValuesToAllSearchResults() {
@@ -114,9 +118,40 @@ class SearchViewModel @Inject constructor(
         _playlistListForSearchQuery.value = PagingData.empty()
     }
 
-    private fun <T> Flow<T>.collectInViewModelScope(collector: FlowCollector<T>) {
+    /**
+     * Used to collect a flow and set the the [_uiState] to
+     * [SearchScreenUiState.SUCCESS] based on the [updateUiStatePredicate]
+     * after running the [collectBlock]. The [_uiState] will be set to
+     * [SearchScreenUiState.SUCCESS] if, and only if, [updateUiStatePredicate]
+     * is true and the current value of [_uiState] is equal to
+     * [SearchScreenUiState.LOADING].
+     *
+     * This method is mainly used to update the [_uiState] to
+     * [SearchScreenUiState.SUCCESS] based on the [currentlySelectedFilter].
+     * This prevents the [_uiState] to be assigned to [SearchScreenUiState.LOADING]
+     * for as long as all the flows get collected. Instead, the ui state will be
+     * updated to [SearchScreenUiState.SUCCESS] as soon as the flow
+     * for the [currentlySelectedFilter] is collected.
+     *
+     * For eg: If the user has selected the current filter to be [SearchFilter.ALBUMS],
+     * this [_uiState] will be set to [SearchScreenUiState.SUCCESS] immediately
+     * after the search results for the album has been set. This precludes the
+     * need for waiting for other flows, such as artists/tracks to be collected
+     * before setting the [_uiState] to [SearchScreenUiState.SUCCESS]
+     * for the search results since the user just wants to see the album list.
+     */
+    private fun <T> Flow<T>.collectInViewModelScopeUpdatingUiState(
+        updateUiStatePredicate: Boolean,
+        collectBlock: (T) -> Unit
+    ) {
         viewModelScope.launch {
-            withContext(ioDispatcher) { collect(collector) }
+            withContext(ioDispatcher) {
+                collect {
+                    collectBlock(it)
+                    if (_uiState.value == SearchScreenUiState.LOADING && updateUiStatePredicate)
+                        _uiState.value = SearchScreenUiState.SUCCESS
+                }
+            }
         }
     }
 
@@ -137,7 +172,6 @@ class SearchViewModel @Inject constructor(
             // un-necessary calls to the api
             delay(500)
             collectAndAssignSearchResults(searchQuery, MapperImageSize.MEDIUM)
-            _uiState.value = SearchScreenUiState.SUCCESS // fixme
         }
     }
 
