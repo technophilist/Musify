@@ -1,6 +1,6 @@
 package com.example.musify.data.utils
 
-import com.example.musify.data.dto.ImageResponse
+import com.example.musify.data.response.ImageResponse
 
 /**
  * A helper a function that is used to get an instance of [ImageResponse]

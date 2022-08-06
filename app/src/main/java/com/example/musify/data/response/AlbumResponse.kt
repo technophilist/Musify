@@ -1,4 +1,4 @@
-package com.example.musify.data.dto
+package com.example.musify.data.response
 
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getImageDtoForImageSize

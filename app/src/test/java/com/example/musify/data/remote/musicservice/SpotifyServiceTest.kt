@@ -1,7 +1,7 @@
 package com.example.musify.data.remote.musicservice
 
-import com.example.musify.data.dto.AlbumMetadataResponse
-import com.example.musify.data.dto.TracksWithAlbumMetadataListResponse
+import com.example.musify.data.response.AlbumMetadataResponse
+import com.example.musify.data.response.TracksWithAlbumMetadataListResponse
 import com.example.musify.data.encoder.TestBase64Encoder
 import com.example.musify.data.remote.token.BearerToken
 import com.example.musify.data.remote.token.tokenmanager.TokenManager

@@ -1,4 +1,4 @@
-package com.example.musify.data.dto
+package com.example.musify.data.response
 
 /**
  * A DTO object the contains information about an image's [height],
