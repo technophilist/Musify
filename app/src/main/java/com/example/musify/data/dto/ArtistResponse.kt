@@ -10,10 +10,10 @@ import java.net.URL
 /**
  * A DTO object that contains information about an Artist.
  */
-data class ArtistDTO(
+data class ArtistResponse(
     val id: String,
     val name: String,
-    val images: List<ImageDTO>,
+    val images: List<ImageResponse>,
     val followers: Followers
 ) {
     /**
@@ -24,24 +24,24 @@ data class ArtistDTO(
 }
 
 /**
- * A mapper function used to map an instance of [ArtistDTO] to
+ * A mapper function used to map an instance of [ArtistResponse] to
  * an instance of [MusicSummary.ArtistSummary]. The [imageSize]
  * parameter describes the size of image to be used for the
  * [MusicSummary.ArtistSummary] instance.
  */
-fun ArtistDTO.toArtistSummary(imageSize: MapperImageSize) = MusicSummary.ArtistSummary(
+fun ArtistResponse.toArtistSummary(imageSize: MapperImageSize) = MusicSummary.ArtistSummary(
     id = id,
     name = name,
     associatedImageUrl = URL(images.getImageDtoForImageSize(imageSize).url)
 )
 
 /**
- * A mapper function used to map an instance of [ArtistDTO] to
+ * A mapper function used to map an instance of [ArtistResponse] to
  * an instance of [ArtistSearchResult]. The [imageSize]
  * parameter describes the size of image to be used for the
  * [ArtistSearchResult] instance.
  */
-fun ArtistDTO.toArtistSearchResult(imageSize: MapperImageSize) = ArtistSearchResult(
+fun ArtistResponse.toArtistSearchResult(imageSize: MapperImageSize) = ArtistSearchResult(
     id = id,
     name = name,
     imageUrlString = if (images.isEmpty()) null

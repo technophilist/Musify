@@ -82,7 +82,7 @@ interface SpotifyService {
     suspend fun getArtistInfoWithId(
         @Path("id") artistId: String,
         @Header("Authorization") token: BearerToken,
-    ): ArtistDTO
+    ): ArtistResponse
 
     @GET(SpotifyEndPoints.SPECIFIC_ARTIST_ALBUMS_ENDPOINT)
     suspend fun getAlbumsOfArtistWithId(
@@ -92,21 +92,21 @@ interface SpotifyService {
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0,
         @Query("include_groups") includeGroups: String? = null,
-    ): AlbumsMetadataDTO
+    ): AlbumsMetadataResponse
 
     @GET(SpotifyEndPoints.TOP_TRACKS_ENDPOINT)
     suspend fun getTopTenTracksForArtistWithId(
         @Path("id") artistId: String,
         @Query("market") market: String,
         @Header("Authorization") token: BearerToken
-    ): TracksWithAlbumMetadataListDTO
+    ): TracksWithAlbumMetadataListResponse
 
     @GET(SpotifyEndPoints.SPECIFIC_ALBUM_ENDPOINT)
     suspend fun getAlbumWithId(
         @Path("id") albumId: String,
         @Query("market") market: String,
         @Header("Authorization") token: BearerToken
-    ): AlbumDTO
+    ): AlbumResponse
 
     @GET(SpotifyEndPoints.SPECIFIC_PLAYLIST_ENDPOINT)
     suspend fun getPlaylistWithId(
@@ -114,7 +114,7 @@ interface SpotifyService {
         @Query("market") market: String,
         @Header("Authorization") token: BearerToken,
         @Query("fields") fields: String = SpotifyEndPoints.Defaults.defaultPlaylistFields
-    ): PlaylistDTO
+    ): PlaylistResponse
 
     @GET(SpotifyEndPoints.SEARCH_ENDPOINT)
     suspend fun search(
@@ -124,7 +124,7 @@ interface SpotifyService {
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0,
         @Query("type") type: String = SpotifyEndPoints.Defaults.defaultSearchQueryTypes,
-    ): SearchResultsDTO
+    ): SearchResultsResponse
 
     @GET(SpotifyEndPoints.RECOMMENDATIONS_ENDPOINT)
     suspend fun getTracksForGenre(
@@ -132,5 +132,5 @@ interface SpotifyService {
         @Query("market") market: String,
         @Header("Authorization") token: BearerToken,
         @Query("limit") limit: Int = 20
-    ): TracksWithAlbumMetadataListDTO
+    ): TracksWithAlbumMetadataListResponse
 }

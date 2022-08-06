@@ -11,23 +11,23 @@ import java.net.URL
  * A DTO object that contains information about a specific track
  * together with the metadata of the associated album.
  */
-data class TrackDTOWithAlbumMetadata(
+data class TrackResponseWithAlbumMetadata(
     val id: String,
     val name: String,
     @JsonProperty("preview_url") val previewUrl: String?,
     @JsonProperty("is_playable") val isPlayable: Boolean,
     val explicit: Boolean,
     @JsonProperty("duration_ms") val durationInMillis: Int,
-    @JsonProperty("album") val albumMetadata: AlbumMetadataDTO
+    @JsonProperty("album") val albumMetadata: AlbumMetadataResponse
 )
 
 /**
- * A mapper function used to map an instance of [TrackDTOWithAlbumMetadata] to
+ * A mapper function used to map an instance of [TrackResponseWithAlbumMetadata] to
  * an instance of [MusicSummary.TrackSummary]. The [imageSize]
  * parameter describes the size of image to be used for the
  * [MusicSummary.TrackSummary] instance.
  */
-fun TrackDTOWithAlbumMetadata.toTrackSummary(imageSize: MapperImageSize) =
+fun TrackResponseWithAlbumMetadata.toTrackSummary(imageSize: MapperImageSize) =
     MusicSummary.TrackSummary(
         id = id,
         name = name,
@@ -37,12 +37,12 @@ fun TrackDTOWithAlbumMetadata.toTrackSummary(imageSize: MapperImageSize) =
     )
 
 /**
- * A mapper function used to map an instance of [TrackDTOWithAlbumMetadata] to
+ * A mapper function used to map an instance of [TrackResponseWithAlbumMetadata] to
  * an instance of [TrackSearchResult]. The [imageSize]
  * parameter describes the size of image to be used for the
  * [TrackSearchResult] instance.
  */
-fun TrackDTOWithAlbumMetadata.toTrackSearchResult(imageSize: MapperImageSize) = TrackSearchResult(
+fun TrackResponseWithAlbumMetadata.toTrackSearchResult(imageSize: MapperImageSize) = TrackSearchResult(
     id = id,
     name = name,
     imageUrlString = albumMetadata.images.getImageDtoForImageSize(imageSize).url,
