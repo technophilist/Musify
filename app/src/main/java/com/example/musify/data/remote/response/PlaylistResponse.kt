@@ -1,6 +1,6 @@
 package com.example.musify.data.remote.response
 
-import com.example.musify.data.utils.getImageDtoForImageSize
+import com.example.musify.data.utils.getImageResponseForImageSize
 import com.example.musify.domain.MusicSummary
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
@@ -43,7 +43,7 @@ data class PlaylistResponse(
  * A mapper function used to map an instance of [PlaylistResponse] to
  * an instance of [MusicSummary.PlaylistSummary].
  *
- * Note:[getImageDtoForImageSize] cannot be used because playlists usually
+ * Note:[getImageResponseForImageSize] cannot be used because playlists usually
  * contain only a single image. Therefore, the url of the first image
  * is mapped to [MusicSummary.PlaylistSummary.associatedImageUrl].
  */

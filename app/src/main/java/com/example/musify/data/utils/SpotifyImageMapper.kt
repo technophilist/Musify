@@ -9,7 +9,7 @@ import com.example.musify.data.remote.response.ImageResponse
  * the first image will always be the widest. If the list doesn't have
  * three items, an [IllegalStateException] will be thrown.
  */
-fun List<ImageResponse>.getImageDtoForImageSize(imageSize: MapperImageSize): ImageResponse {
+fun List<ImageResponse>.getImageResponseForImageSize(imageSize: MapperImageSize): ImageResponse {
     if (this.size < 3) throw IllegalStateException("This list must contain at least 3 items")
     return when (imageSize) {
         MapperImageSize.LARGE -> this[0]

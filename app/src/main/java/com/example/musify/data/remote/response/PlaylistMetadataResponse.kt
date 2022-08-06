@@ -1,6 +1,6 @@
 package com.example.musify.data.remote.response
 
-import com.example.musify.data.utils.getImageDtoForImageSize
+import com.example.musify.data.utils.getImageResponseForImageSize
 import com.example.musify.domain.MusicSummary
 import com.example.musify.domain.SearchResult.PlaylistSearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -22,7 +22,7 @@ data class PlaylistMetadataResponse(
  * A mapper function used to map an instance of [PlaylistMetadataResponse] to
  * an instance of [MusicSummary.PlaylistSummary].
  *
- * Note:[getImageDtoForImageSize] cannot be used because playlists usually
+ * Note:[getImageResponseForImageSize] cannot be used because playlists usually
  * contain only a single image. Therefore, the url of the first image
  * is mapped to [MusicSummary.PlaylistSummary.associatedImageUrl].
  */
@@ -36,7 +36,7 @@ fun PlaylistMetadataResponse.toPlaylistSummary() = MusicSummary.PlaylistSummary(
  * A mapper function used to map an instance of [PlaylistMetadataResponse] to
  * an instance of [PlaylistSearchResult].
  *
- * Note:[getImageDtoForImageSize] cannot be used because playlists usually
+ * Note:[getImageResponseForImageSize] cannot be used because playlists usually
  * contain only a single image. Therefore, the url of the first image
  * is mapped to [PlaylistSearchResult.imageUrlString].
  */

@@ -1,7 +1,7 @@
 package com.example.musify.data.remote.response
 
 import com.example.musify.data.utils.MapperImageSize
-import com.example.musify.data.utils.getImageDtoForImageSize
+import com.example.musify.data.utils.getImageResponseForImageSize
 import com.example.musify.domain.MusicSummary
 import com.example.musify.domain.SearchResult.ArtistSearchResult
 import java.net.URL
@@ -32,7 +32,7 @@ data class ArtistResponse(
 fun ArtistResponse.toArtistSummary(imageSize: MapperImageSize) = MusicSummary.ArtistSummary(
     id = id,
     name = name,
-    associatedImageUrl = URL(images.getImageDtoForImageSize(imageSize).url)
+    associatedImageUrl = URL(images.getImageResponseForImageSize(imageSize).url)
 )
 
 /**
@@ -46,6 +46,6 @@ fun ArtistResponse.toArtistSearchResult(imageSize: MapperImageSize) = ArtistSear
     name = name,
     imageUrlString = if (images.isEmpty()) null
     else if (images.size != 3) images.first().url
-    else images.getImageDtoForImageSize(imageSize).url
+    else images.getImageResponseForImageSize(imageSize).url
 )
 
