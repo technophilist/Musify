@@ -11,7 +11,7 @@ import java.net.URL
  * particular playlist. [PlaylistResponse] contains additional
  * tracks and followers properties.
  */
-data class PlaylistMetadataDTO(
+data class PlaylistMetadataResponse(
     val id: String,
     val name: String,
     val images: List<ImageResponse>,
@@ -19,28 +19,28 @@ data class PlaylistMetadataDTO(
 )
 
 /**
- * A mapper function used to map an instance of [PlaylistMetadataDTO] to
+ * A mapper function used to map an instance of [PlaylistMetadataResponse] to
  * an instance of [MusicSummary.PlaylistSummary].
  *
  * Note:[getImageDtoForImageSize] cannot be used because playlists usually
  * contain only a single image. Therefore, the url of the first image
  * is mapped to [MusicSummary.PlaylistSummary.associatedImageUrl].
  */
-fun PlaylistMetadataDTO.toPlaylistSummary() = MusicSummary.PlaylistSummary(
+fun PlaylistMetadataResponse.toPlaylistSummary() = MusicSummary.PlaylistSummary(
     id = id,
     name = name,
     associatedImageUrl = URL(images.first().url)
 )
 
 /**
- * A mapper function used to map an instance of [PlaylistMetadataDTO] to
+ * A mapper function used to map an instance of [PlaylistMetadataResponse] to
  * an instance of [PlaylistSearchResult].
  *
  * Note:[getImageDtoForImageSize] cannot be used because playlists usually
  * contain only a single image. Therefore, the url of the first image
  * is mapped to [PlaylistSearchResult.imageUrlString].
  */
-fun PlaylistMetadataDTO.toPlaylistSearchResult() = PlaylistSearchResult(
+fun PlaylistMetadataResponse.toPlaylistSearchResult() = PlaylistSearchResult(
     id = id,
     name = name,
     imageUrlString = images.firstOrNull()?.url
