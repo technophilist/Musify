@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 
 /**
- * A DTO object that represents an album. It also contains additional
+ * A response object that represents an album. It also contains additional
  * meta data about the album and includes information about the
  * artists.
  */
@@ -29,7 +29,7 @@ data class AlbumResponse(
     data class TracksWithoutAlbumMetadataListResponse(@JsonProperty("items") val value: List<TrackDTOWithoutAlbumMetadataResponse>)
 
     /**
-     * A DTO object that contains information about a specific track
+     * A response object that contains information about a specific track
      * without containing metadata about the album.
      * [TrackResponseWithAlbumMetadata] contains both, information about
      * the track and the metadata about the associated album.
@@ -44,7 +44,7 @@ data class AlbumResponse(
     )
 
     /**
-     * A DTO object that contains information about an Artist.
+     * A response object that contains information about an Artist.
      * [ArtistResponse] mandates these two parameters whereas this object
      * makes [images] and [followers] as nullable type.
      */

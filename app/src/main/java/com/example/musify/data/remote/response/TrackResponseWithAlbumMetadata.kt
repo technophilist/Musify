@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 
 /**
- * A DTO object that contains information about a specific track
+ * A response object that contains information about a specific track
  * together with the metadata of the associated album.
  */
 data class TrackResponseWithAlbumMetadata(

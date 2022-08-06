@@ -6,7 +6,7 @@ import com.example.musify.domain.SearchResults
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
- * A DTO that contains the results of a search operation.
+ * A response that contains the results of a search operation.
  * All the properties are nullable because a search operation
  * for just [tracks],[albums],[artists] or [playlists], or
  * a combination of any of the above can be made, in which

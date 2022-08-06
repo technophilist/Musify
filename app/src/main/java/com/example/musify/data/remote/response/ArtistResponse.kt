@@ -8,7 +8,7 @@ import java.net.URL
 
 
 /**
- * A DTO object that contains information about an Artist.
+ * A response object that contains information about an Artist.
  */
 data class ArtistResponse(
     val id: String,
@@ -17,7 +17,7 @@ data class ArtistResponse(
     val followers: Followers
 ) {
     /**
-     * A DTO class that holds the number of followers that follow
+     * A response class that holds the number of followers that follow
      * an Artist.
      */
     data class Followers(val total: String)

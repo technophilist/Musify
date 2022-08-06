@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 
 /**
- * A DTO object that contains metadata about a specific album.
+ * A response object that contains metadata about a specific album.
  * Note: The object only contains metadata. It doesn't contain
  * the track list. [AlbumResponse] contains the track list in addition
  * to the metadata.
@@ -25,7 +25,7 @@ data class AlbumMetadataResponse(
     val type: String
 ) {
     /**
-     * A DTO object associated with [AlbumMetadataResponse] that contains information
+     * A response object associated with [AlbumMetadataResponse] that contains information
      * about an artist.
      */
     data class ArtistInfoResponse(
