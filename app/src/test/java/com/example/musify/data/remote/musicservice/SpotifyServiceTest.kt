@@ -1,7 +1,7 @@
 package com.example.musify.data.remote.musicservice
 
-import com.example.musify.data.dto.AlbumMetadataDTO
-import com.example.musify.data.dto.TracksWithAlbumMetadataListDTO
+import com.example.musify.data.dto.AlbumMetadataResponse
+import com.example.musify.data.dto.TracksWithAlbumMetadataListResponse
 import com.example.musify.data.encoder.TestBase64Encoder
 import com.example.musify.data.remote.token.BearerToken
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
@@ -275,7 +275,7 @@ class SpotifyServiceTest {
         // declared as non-nullable
         jacksonObjectMapper().readValue(
             jsonString,
-            AlbumMetadataDTO.ArtistInfoDTO::class.java
+            AlbumMetadataResponse.ArtistInfoResponse::class.java
         )
         // an exception should be thrown
     }
@@ -293,7 +293,7 @@ class SpotifyServiceTest {
     fun getTracksForGenreTest_allSupportedGenres_listIsNotEmpty() = runBlockingWithToken { token ->
         // given a list of all genres
         val genres = SupportedSpotifyGenres.values().toList()
-        val results = mutableListOf<Deferred<TracksWithAlbumMetadataListDTO>>()
+        val results = mutableListOf<Deferred<TracksWithAlbumMetadataListResponse>>()
         coroutineScope {
             genres.forEach { genre ->
                 // when fetching the track list for all genres

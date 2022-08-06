@@ -8,10 +8,10 @@ import java.net.URL
 /**
  * A DTO that contains information related to a specific Playlist.
  */
-data class PlaylistDTO(
+data class PlaylistResponse(
     val id: String,
     val name: String,
-    val images: List<ImageDTO>,
+    val images: List<ImageResponse>,
     @JsonProperty("owner") val ownerName: OwnerNameWrapper,
     @JsonProperty("followers") val numberOfFollowers: NumberOfFollowersWrapper,
     val tracks: Tracks
@@ -29,25 +29,25 @@ data class PlaylistDTO(
     data class NumberOfFollowersWrapper(@JsonProperty("total") val value: String)
 
     /**
-     * A class that contains a list of [items] of type [TrackDTOWithAlbumMetadataWrapper].
+     * A class that contains a list of [items] of type [TrackResponseWithAlbumMetadataWrapper].
      */
-    data class Tracks(val items: List<TrackDTOWithAlbumMetadataWrapper>)
+    data class Tracks(val items: List<TrackResponseWithAlbumMetadataWrapper>)
 
     /**
-     * A wrapper class that wraps an instance of [TrackDTOWithAlbumMetadata]
+     * A wrapper class that wraps an instance of [TrackResponseWithAlbumMetadata]
      */
-    data class TrackDTOWithAlbumMetadataWrapper(@JsonProperty("track") val track: TrackDTOWithAlbumMetadata)
+    data class TrackResponseWithAlbumMetadataWrapper(@JsonProperty("track") val track: TrackResponseWithAlbumMetadata)
 }
 
 /**
- * A mapper function used to map an instance of [PlaylistDTO] to
+ * A mapper function used to map an instance of [PlaylistResponse] to
  * an instance of [MusicSummary.PlaylistSummary].
  *
  * Note:[getImageDtoForImageSize] cannot be used because playlists usually
  * contain only a single image. Therefore, the url of the first image
  * is mapped to [MusicSummary.PlaylistSummary.associatedImageUrl].
  */
-fun PlaylistDTO.toPlayListSummary() = MusicSummary.PlaylistSummary(
+fun PlaylistResponse.toPlayListSummary() = MusicSummary.PlaylistSummary(
     id = id,
     name = name,
     associatedImageUrl = URL(images.first().url)

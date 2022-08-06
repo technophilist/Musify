@@ -8,14 +8,14 @@ import java.net.URL
 
 /**
  * A DTO object that contains only the metadata associated with a
- * particular playlist. [PlaylistDTO] contains additional
+ * particular playlist. [PlaylistResponse] contains additional
  * tracks and followers properties.
  */
 data class PlaylistMetadataDTO(
     val id: String,
     val name: String,
-    val images: List<ImageDTO>,
-    @JsonProperty("owner") val ownerName: PlaylistDTO.OwnerNameWrapper
+    val images: List<ImageResponse>,
+    @JsonProperty("owner") val ownerName: PlaylistResponse.OwnerNameWrapper
 )
 
 /**
