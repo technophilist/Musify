@@ -1,6 +1,6 @@
 package com.example.musify.data.paging
 
-import com.example.musify.data.response.SearchResultsResponse
+import com.example.musify.data.remote.response.SearchResultsResponse
 import com.example.musify.data.remote.musicservice.SearchQueryType
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.repository.tokenrepository.TokenRepository

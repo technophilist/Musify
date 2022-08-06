@@ -8,6 +8,7 @@ import com.example.musify.data.paging.*
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.musicservice.SupportedSpotifyGenres
 import com.example.musify.data.remote.musicservice.toGenre
+import com.example.musify.data.remote.response.*
 import com.example.musify.data.remote.token.BearerToken
 import com.example.musify.data.repository.tokenrepository.TokenRepository
 import com.example.musify.data.utils.FetchedResource

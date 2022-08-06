@@ -1,4 +1,4 @@
-package com.example.musify.data.response
+package com.example.musify.data.remote.response
 
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusicSummary
