@@ -1,7 +1,7 @@
 package com.example.musify.data.repository.tokenrepository
 
 import com.example.musify.data.encoder.TestBase64Encoder
-import com.example.musify.data.remote.token.AccessTokenResponseDTO
+import com.example.musify.data.remote.token.AccessTokenResponse
 import com.example.musify.data.remote.token.isExpired
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
 import kotlinx.coroutines.runBlocking
@@ -23,7 +23,7 @@ class SpotifyTokenRepositoryTest {
             override suspend fun getNewAccessToken(
                 secret: String,
                 grantType: String
-            ): AccessTokenResponseDTO = AccessTokenResponseDTO(
+            ): AccessTokenResponse = AccessTokenResponse(
                 accessToken = "Fake Token",
                 secondsUntilExpiration = if (++numberOfCallsToGetNewAccessToken == 1) 0
                 else 3600,

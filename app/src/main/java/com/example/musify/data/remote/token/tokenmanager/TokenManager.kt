@@ -1,7 +1,7 @@
 package com.example.musify.data.remote.token.tokenmanager
 
 import com.example.musify.data.remote.musicservice.SpotifyEndPoints
-import com.example.musify.data.remote.token.AccessTokenResponseDTO
+import com.example.musify.data.remote.token.AccessTokenResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Header
@@ -16,5 +16,5 @@ interface TokenManager {
     suspend fun getNewAccessToken(
         @Header("Authorization") secret: String,
         @Field("grant_type") grantType: String = defaultGrantType,
-    ): AccessTokenResponseDTO
+    ): AccessTokenResponse
 }
