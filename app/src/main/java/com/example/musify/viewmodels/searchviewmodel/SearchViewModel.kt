@@ -33,10 +33,14 @@ class SearchViewModel @Inject constructor(
     private val repository: Repository,
     private val playTrackWithMediaNotificationUseCase: PlayTrackWithMediaNotificationUseCase
 ) : AndroidViewModel(application) {
+
     private var searchJob: Job? = null
 
     private val _uiState = mutableStateOf(SearchScreenUiState.IDLE)
     val uiState = _uiState as State<SearchScreenUiState>
+
+    private val _currentlySelectedFilter = mutableStateOf(SearchFilter.ALL)
+    val currentlySelectedFilter = _currentlySelectedFilter as State<SearchFilter>
 
     private val _albumListForSearchQuery =
         MutableStateFlow<PagingData<SearchResult.AlbumSearchResult>>(PagingData.empty())
