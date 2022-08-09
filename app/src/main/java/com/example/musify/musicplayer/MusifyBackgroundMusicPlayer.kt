@@ -1,6 +1,7 @@
 package com.example.musify.musicplayer
 
 import android.content.Context
+import com.example.musify.R
 import com.example.musify.musicplayer.utils.MediaDescriptionAdapter
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
@@ -23,6 +24,8 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
                 getCurrentContentTitle = { currentlyPlayingTrack?.title ?: "" },
                 getCurrentLargeIcon = { _, _ -> currentlyPlayingTrack?.albumArt }
             ))
+            .setChannelNameResourceId(R.string.notification_channel_name)
+            .setChannelDescriptionResourceId(R.string.notification_channel_description)
             .build().apply { setPlayer(exoPlayer) }
 
     override fun playTrack(track: MusicPlayer.Track) {
