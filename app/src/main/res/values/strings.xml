@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Musify</string>
+    <string name="notification_channel_name">Media playback notifications</string>
+    <string name="notification_channel_description">Notifications that contain playback controls</string>
 </resources>
