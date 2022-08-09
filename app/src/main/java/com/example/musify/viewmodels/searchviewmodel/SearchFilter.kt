@@ -5,7 +5,6 @@ package com.example.musify.viewmodels.searchviewmodel
  * the search results.
  */
 enum class SearchFilter(val filterLabel: String) {
-    ALL("All"),
     ALBUMS("Albums"),
     TRACKS("Tracks"),
     ARTISTS("Artists"),

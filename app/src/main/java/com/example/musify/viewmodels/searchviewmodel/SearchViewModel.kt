@@ -38,7 +38,7 @@ class SearchViewModel @Inject constructor(
     private val _uiState = mutableStateOf(SearchScreenUiState.IDLE)
     val uiState = _uiState as State<SearchScreenUiState>
 
-    private val _currentlySelectedFilter = mutableStateOf(SearchFilter.ALL)
+    private val _currentlySelectedFilter = mutableStateOf(SearchFilter.TRACKS)
     val currentlySelectedFilter = _currentlySelectedFilter as State<SearchFilter>
 
     private val _albumListForSearchQuery =

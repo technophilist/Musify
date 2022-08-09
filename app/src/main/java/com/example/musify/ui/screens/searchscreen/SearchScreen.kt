@@ -248,18 +248,6 @@ private fun SearchQueryList(
             state = lazyListState,
         ) {
             when (currentlySelectedFilter) {
-                SearchFilter.ALL -> allItems(
-                    albumListForSearchQuery = albumListForSearchQuery,
-                    artistListForSearchQuery = artistListForSearchQuery,
-                    tracksListForSearchQuery = tracksListForSearchQuery,
-                    playlistListForSearchQuery = playlistListForSearchQuery,
-                    onItemClick = onItemClick,
-                    isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
-                    onImageLoading = onImageLoading,
-                    onImageLoadingFinished = onImageLoadingFinished,
-                    artistImageErrorPainter = artistImageErrorPainter,
-                    playlistImageErrorPainter = playlistImageErrorPainter
-                )
                 SearchFilter.ALBUMS -> searchAlbumListItems(
                     albumListForSearchQuery = albumListForSearchQuery,
                     onItemClick = onItemClick,
