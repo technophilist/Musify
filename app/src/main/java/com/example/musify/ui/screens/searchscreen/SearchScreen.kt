@@ -6,6 +6,8 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActionScope
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -13,6 +15,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
@@ -43,6 +46,7 @@ import kotlinx.coroutines.launch
 
 // FIXME launching the app takes a while because of loading thumbnails of genres
 // fix lazy list scrolling to top after config change
+@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
@@ -60,6 +64,7 @@ fun SearchScreen(
     tracksListForSearchQuery: LazyPagingItems<SearchResult.TrackSearchResult>,
     playlistListForSearchQuery: LazyPagingItems<SearchResult.PlaylistSearchResult>,
     onSearchQueryItemClicked: (SearchResult) -> Unit,
+    onImeDoneButtonClicked: KeyboardActionScope.(searchText: String) -> Unit,
 ) {
     var searchText by rememberSaveable { mutableStateOf("") }
     var isSearchListVisible by rememberSaveable { mutableStateOf(false) }
@@ -153,7 +158,8 @@ fun SearchScreen(
                 trailingIconColor = Color.Black,
                 placeholderColor = Color.Black,
                 textColor = Color.Black
-            )
+            ),
+            keyboardActions = KeyboardActions(onDone = { onImeDoneButtonClicked(this, searchText) })
         )
         AnimatedVisibility(visible = isFilterChipGroupVisible) {
             FilterChipGroup(
