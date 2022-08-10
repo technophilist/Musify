@@ -54,11 +54,15 @@ fun NavGraphBuilder.searchScreen(route: String) {
             onSearchFilterChanged = viewModel::updateSearchFilter,
             isSearchErrorMessageVisible = isLoadingError,
             onImeDoneButtonClicked = {
-                // FIXME search results start loading immediately when the search text is changed.
-                //  Since the keyboard action is also displayed, the use might click the
-                // search button as well, which will cause the search to repeat twice
-                // wasting bandwidth
-                viewModel.search(it)
+                // Search only if there was an error while loading.
+                // A manual call to search() is not required
+                // when there is no error because, search()
+                // will be called automatically, everytime the
+                // search text changes. This prevents duplicate
+                // calls when the user manually clicks the done
+                // button after typing the search text, in
+                // which case, the keyboard will just be hidden.
+                if (isLoadingError) viewModel.search(it)
                 controller?.hide()
             }
         )
