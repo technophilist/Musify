@@ -37,6 +37,7 @@ import com.example.musify.ui.components.FilterChip
 import com.example.musify.ui.components.GenreCard
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
 import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
@@ -53,6 +54,7 @@ fun SearchScreen(
     onGenreItemClick: (Genre) -> Unit,
     onSearchTextChanged: (searchText: String) -> Unit,
     isSearchResultLoading: Boolean,
+    isSearchErrorMessageVisible: Boolean,
     albumListForSearchQuery: LazyPagingItems<SearchResult.AlbumSearchResult>,
     artistListForSearchQuery: LazyPagingItems<SearchResult.ArtistSearchResult>,
     tracksListForSearchQuery: LazyPagingItems<SearchResult.TrackSearchResult>,
@@ -212,7 +214,8 @@ fun SearchScreen(
                     isSearchResultsLoadingAnimationVisible = isSearchResultLoading,
                     lottieComposition = searchResultsLoadingAnimationComposition,
                     lazyListState = lazyListState,
-                    currentlySelectedFilter = currentlySelectedFilter
+                    currentlySelectedFilter = currentlySelectedFilter,
+                    isSearchErrorMessageVisible = isSearchErrorMessageVisible
                 )
             }
         }
@@ -234,53 +237,79 @@ private fun SearchQueryList(
     lottieComposition: LottieComposition?,
     lazyListState: LazyListState = rememberLazyListState(),
     isSearchResultsLoadingAnimationVisible: Boolean = false,
+    isSearchErrorMessageVisible: Boolean = false,
 ) {
     val artistImageErrorPainter =
         rememberVectorPainter(ImageVector.vectorResource(id = R.drawable.ic_outline_account_circle_24))
     val playlistImageErrorPainter =
         rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.ic_outline_music_note_24))
-    Box {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            state = lazyListState,
-        ) {
-            when (currentlySelectedFilter) {
-                SearchFilter.ALBUMS -> searchAlbumListItems(
-                    albumListForSearchQuery = albumListForSearchQuery,
-                    onItemClick = onItemClick,
-                    isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
-                    onImageLoading = onImageLoading,
-                    onImageLoadingFinished = onImageLoadingFinished
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
+    ) {
+        if (isSearchErrorMessageVisible) {
+            Column(
+                modifier = Modifier
+                    .navigationBarsWithImePadding()
+                    .align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Oops! Something doesn't look right",
+                    style = MaterialTheme.typography.h6,
+                    fontWeight = FontWeight.SemiBold
                 )
-                SearchFilter.TRACKS -> searchTrackListItems(
-                    tracksListForSearchQuery = tracksListForSearchQuery,
-                    onItemClick = onItemClick,
-                    isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
-                    onImageLoading = onImageLoading,
-                    onImageLoadingFinished = onImageLoadingFinished
-                )
-                SearchFilter.ARTISTS -> searchArtistListItems(
-                    artistListForSearchQuery = artistListForSearchQuery,
-                    onItemClick = onItemClick,
-                    isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
-                    onImageLoading = onImageLoading,
-                    onImageLoadingFinished = onImageLoadingFinished,
-                    artistImageErrorPainter = artistImageErrorPainter
-                )
-                SearchFilter.PLAYLISTS -> searchPlaylistListItems(
-                    playlistListForSearchQuery = playlistListForSearchQuery,
-                    onItemClick = onItemClick,
-                    isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
-                    onImageLoading = onImageLoading,
-                    onImageLoadingFinished = onImageLoadingFinished,
-                    playlistImageErrorPainter = playlistImageErrorPainter
+                Text(
+                    text = "Please check the internet connection",
+                    style = MaterialTheme.typography.subtitle2
                 )
             }
-            item {
-                Spacer(modifier = Modifier.navigationBarsHeight())
+
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.background),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                state = lazyListState,
+            ) {
+                when (currentlySelectedFilter) {
+                    SearchFilter.ALBUMS -> searchAlbumListItems(
+                        albumListForSearchQuery = albumListForSearchQuery,
+                        onItemClick = onItemClick,
+                        isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
+                        onImageLoading = onImageLoading,
+                        onImageLoadingFinished = onImageLoadingFinished
+                    )
+                    SearchFilter.TRACKS -> searchTrackListItems(
+                        tracksListForSearchQuery = tracksListForSearchQuery,
+                        onItemClick = onItemClick,
+                        isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
+                        onImageLoading = onImageLoading,
+                        onImageLoadingFinished = onImageLoadingFinished
+                    )
+                    SearchFilter.ARTISTS -> searchArtistListItems(
+                        artistListForSearchQuery = artistListForSearchQuery,
+                        onItemClick = onItemClick,
+                        isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
+                        onImageLoading = onImageLoading,
+                        onImageLoadingFinished = onImageLoadingFinished,
+                        artistImageErrorPainter = artistImageErrorPainter
+                    )
+                    SearchFilter.PLAYLISTS -> searchPlaylistListItems(
+                        playlistListForSearchQuery = playlistListForSearchQuery,
+                        onItemClick = onItemClick,
+                        isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
+                        onImageLoading = onImageLoading,
+                        onImageLoadingFinished = onImageLoadingFinished,
+                        playlistImageErrorPainter = playlistImageErrorPainter
+                    )
+                }
+                item {
+                    Spacer(modifier = Modifier.navigationBarsHeight())
+                }
             }
         }
         AnimatedVisibility(
