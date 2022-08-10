@@ -252,8 +252,9 @@ private fun SearchQueryList(
         if (isSearchErrorMessageVisible) {
             Column(
                 modifier = Modifier
+                    .align(Alignment.Center)
                     .navigationBarsWithImePadding()
-                    .align(Alignment.Center),
+                    .padding(bottom = 56.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
