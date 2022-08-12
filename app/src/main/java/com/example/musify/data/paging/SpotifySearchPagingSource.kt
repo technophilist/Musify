@@ -54,3 +54,20 @@ class SpotifySearchPagingSource<T : SearchResult>(
         }
     }
 )
+
+/**
+ * A load result sealed class that is associated with [SpotifySearchPagingSource].
+ */
+sealed class SpotifyLoadResult<Value : Any> {
+    /**
+     * A class that models a successful load with the specified [data]
+     * of type [Value].
+     */
+    data class PageData<Value : Any>(val data: List<Value>) : SpotifyLoadResult<Value>()
+
+    /**
+     * A class that models an error that happened during a load. It contains
+     * a [throwable] that specifies the exception that occured.
+     */
+    data class Error<Value : Any>(val throwable: Throwable) : SpotifyLoadResult<Value>()
+}
