@@ -29,7 +29,7 @@ class SpotifySearchPagingSource<T : SearchResult>(
     spotifyService: SpotifyService,
     resultsBlock: (SearchResultsResponse) -> List<T>
 ) : SpotifyPagingSource<T>(
-    loadBlock = { limit: Int, offset: Int, prevKey: Int?, nextKey: Int? ->
+    loadBlock = { limit: Int, offset: Int ->
         try {
             val searchResultsDTO = spotifyService.search(
                 searchQuery = searchQuery,
@@ -39,18 +39,12 @@ class SpotifySearchPagingSource<T : SearchResult>(
                 offset = offset,
                 type = searchQueryType.value
             )
-            val data = resultsBlock(searchResultsDTO)
-            LoadResult.Page(
-                data = data,
-                prevKey = prevKey,
-                nextKey = nextKey,
-                itemsAfter = data.size
-            )
+            SpotifyLoadResult.PageData(resultsBlock(searchResultsDTO))
         } catch (httpException: HttpException) {
-            LoadResult.Error(httpException)
+            SpotifyLoadResult.Error(httpException)
         } catch (ioException: IOException) {
             // indicates that there was some network error
-            LoadResult.Error(ioException)
+            SpotifyLoadResult.Error(ioException)
         }
     }
 )
