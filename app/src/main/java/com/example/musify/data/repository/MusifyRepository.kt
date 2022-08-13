@@ -141,7 +141,12 @@ class MusifyRepository @Inject constructor(
                 spotifyService = spotifyService
             )
         }
-        return Pager(PagingConfig(SpotifyPagingSource.DEFAULT_PAGE_SIZE)) { pagingSource }
+        return Pager(
+            PagingConfig(
+                pageSize = SpotifyPagingSource.DEFAULT_PAGE_SIZE,
+                initialLoadSize = SpotifyPagingSource.DEFAULT_PAGE_SIZE
+            )
+        ) { pagingSource }
             .flow as Flow<PagingData<SearchResult>>
     }
 
