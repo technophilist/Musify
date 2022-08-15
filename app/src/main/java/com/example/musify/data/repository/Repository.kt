@@ -61,4 +61,10 @@ interface Repository {
         countryCode: String,
         imageSize: MapperImageSize
     ): Flow<PagingData<SearchResult>>
+
+    fun getPaginatedStreamForAlbumsOfArtist(
+        artistId: String,
+        countryCode: String,
+        imageSize: MapperImageSize
+    ):Flow<PagingData<SearchResult.AlbumSearchResult>>
 }
