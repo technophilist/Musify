@@ -51,9 +51,6 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
     companion object {
         private const val NOTIFICATION_CHANNEL_ID =
             "com.example.musify.musicplayer.MusicPlayerService.NOTIFICATION_CHANNEL_ID"
-        private const val NOTIFICATION_CHANNEL_NAME = "Playback controls"
         private const val NOTIFICATION_ID = 1
-        private const val NOTIFICATION_CHANNEL_DESCRIPTION =
-            "Notifications that are used to control playback"
     }
 }
