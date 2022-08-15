@@ -31,7 +31,7 @@ class SpotifySearchPagingSource<T : SearchResult>(
 ) : SpotifyPagingSource<T>(
     loadBlock = { limit: Int, offset: Int ->
         try {
-            val searchResultsDTO = spotifyService.search(
+            val searchResultsResponse = spotifyService.search(
                 searchQuery = searchQuery,
                 market = countryCode,
                 token = tokenRepository.getValidBearerToken(),
@@ -39,7 +39,7 @@ class SpotifySearchPagingSource<T : SearchResult>(
                 offset = offset,
                 type = searchQueryType.value
             )
-            SpotifyLoadResult.PageData(resultsBlock(searchResultsDTO))
+            SpotifyLoadResult.PageData(resultsBlock(searchResultsResponse))
         } catch (httpException: HttpException) {
             SpotifyLoadResult.Error(httpException)
         } catch (ioException: IOException) {
