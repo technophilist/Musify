@@ -6,7 +6,7 @@ import androidx.compose.material.LocalContentAlpha
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
+import androidx.paging.compose.itemsIndexed
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.ListItemCardType
 import com.example.musify.ui.components.MusifyCompactListItemCard
@@ -19,8 +19,11 @@ fun LazyListScope.searchTrackListItems(
     onImageLoading: (SearchResult) -> Unit,
     onImageLoadingFinished: (SearchResult.TrackSearchResult, Throwable?) -> Unit
 ) {
-    items(tracksListForSearchQuery, key = { it.id }) {
-        it?.let {
+    itemsIndexed(
+        items = tracksListForSearchQuery,
+        key = { index, track -> "$index${track.id}" }
+    ) { _, track ->
+        track?.let {
             // set alpha based on whether the track is available for playback
             CompositionLocalProvider(
                 LocalContentAlpha.provides(if (it.trackUrlString == null) 0.5f else 1f)
@@ -52,8 +55,11 @@ fun LazyListScope.searchAlbumListItems(
     onImageLoadingFinished: (SearchResult.AlbumSearchResult, Throwable?) -> Unit
 ) {
 
-    items(albumListForSearchQuery, key = { it.id }) {
-        it?.let {
+    itemsIndexed(
+        items = albumListForSearchQuery,
+        key = { index, album -> "$index${album.id}" }
+    ) { _, album ->
+        album?.let {
             MusifyCompactListItemCard(
                 cardType = ListItemCardType.ALBUM,
                 thumbnailImageUrlString = it.albumArtUrlString,
@@ -80,8 +86,11 @@ fun LazyListScope.searchArtistListItems(
     onImageLoadingFinished: (SearchResult.ArtistSearchResult, Throwable?) -> Unit,
     artistImageErrorPainter: Painter
 ) {
-    items(artistListForSearchQuery, key = { it.id }) {
-        it?.let {
+    itemsIndexed(
+        items = artistListForSearchQuery,
+        key = { index, artist -> "$index${artist.id}" }
+    ) { _, artist ->
+        artist?.let {
             MusifyCompactListItemCard(
                 cardType = ListItemCardType.ARTIST,
                 thumbnailImageUrlString = it.imageUrlString ?: "",
@@ -109,8 +118,11 @@ fun LazyListScope.searchPlaylistListItems(
     onImageLoadingFinished: (SearchResult.PlaylistSearchResult, Throwable?) -> Unit,
     playlistImageErrorPainter: Painter
 ) {
-    items(playlistListForSearchQuery, key = { it.id }) {
-        it?.let {
+    itemsIndexed(
+        items = playlistListForSearchQuery,
+        key = { index, playlist -> "$index${playlist.id}" }
+    ) { _, playlist ->
+        playlist?.let {
             MusifyCompactListItemCard(
                 cardType = ListItemCardType.PLAYLIST,
                 thumbnailImageUrlString = it.imageUrlString ?: "",
