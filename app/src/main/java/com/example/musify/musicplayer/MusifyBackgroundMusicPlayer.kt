@@ -16,7 +16,7 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
     private val exoPlayer: ExoPlayer
 ) : MusicPlayer {
     private var currentlyPlayingTrack: MusicPlayer.Track? = null
-    private val notificationManager =
+    private val notificationManagerBuilder by lazy {
         PlayerNotificationManager.Builder(context, NOTIFICATION_ID, NOTIFICATION_CHANNEL_ID)
             .setChannelImportance(NotificationUtil.IMPORTANCE_LOW)
             .setMediaDescriptionAdapter(MediaDescriptionAdapter(
@@ -26,7 +26,8 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
             ))
             .setChannelNameResourceId(R.string.notification_channel_name)
             .setChannelDescriptionResourceId(R.string.notification_channel_description)
-            .build().apply { setPlayer(exoPlayer) }
+    }
+
 
     override fun playTrack(track: MusicPlayer.Track) {
         with(exoPlayer) {
@@ -34,6 +35,7 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
             currentlyPlayingTrack = track
             setMediaItem(MediaItem.fromUri(track.trackUrlString))
             prepare()
+            notificationManagerBuilder.build().apply { setPlayer(exoPlayer) }
             play()
         }
     }
