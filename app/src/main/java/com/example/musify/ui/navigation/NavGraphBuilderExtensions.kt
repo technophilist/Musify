@@ -1,5 +1,6 @@
 package com.example.musify.ui.navigation
 
+import android.util.Base64
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.derivedStateOf
@@ -13,10 +14,13 @@ import androidx.navigation.compose.composable
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.musify.domain.SearchResult
+import com.example.musify.ui.screens.ArtistDetailScreen
 import com.example.musify.ui.screens.searchscreen.SearchScreen
+import com.example.musify.viewmodels.artistviewmodel.ArtistDetailViewModel
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
 import com.example.musify.viewmodels.searchviewmodel.SearchScreenUiState
 import com.example.musify.viewmodels.searchviewmodel.SearchViewModel
+import java.nio.charset.Charset
 
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
@@ -65,6 +69,33 @@ fun NavGraphBuilder.searchScreen(route: String) {
                 if (isLoadingError) viewModel.search(it)
                 controller?.hide()
             }
+        )
+    }
+}
+
+@ExperimentalMaterialApi
+fun NavGraphBuilder.artistDetailScreen(
+    route: String,
+    onBackButtonClicked: () -> Unit,
+    onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit
+) {
+    composable(route) { backStackEntry ->
+        val viewModel = hiltViewModel<ArtistDetailViewModel>(backStackEntry)
+        val artistName =
+            backStackEntry.arguments!!.getString(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ARTIST_NAME)!!
+        val decodedUrlStringByteArray =
+            backStackEntry.arguments!!.getString(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ENCODED_IMAGE_URL_STRING)!!
+                .run { Base64.decode(this, Base64.NO_WRAP) }
+        val artistImageUrlString = String(decodedUrlStringByteArray, Charset.forName("US-ASCII"))
+        ArtistDetailScreen(
+            artistName = artistName,
+            artistImageUrlString = artistImageUrlString,
+            popularTracks = viewModel.popularTracks.value,
+            releases = viewModel.albumsOfArtistFlow.collectAsLazyPagingItems(),
+            onBackButtonClicked = onBackButtonClicked,
+            onPlayButtonClicked = { /*TODO*/ },
+            onTrackClicked = {},
+            onAlbumClicked = onAlbumClicked
         )
     }
 }
