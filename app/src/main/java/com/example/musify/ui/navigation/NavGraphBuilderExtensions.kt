@@ -25,7 +25,10 @@ import java.nio.charset.Charset
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
-fun NavGraphBuilder.searchScreen(route: String) {
+fun NavGraphBuilder.searchScreen(
+    route: String,
+    onArtistSearchResultClicked: (SearchResult.ArtistSearchResult) -> Unit
+) {
     composable(route = route) {
         val viewModel = hiltViewModel<SearchViewModel>()
         val albums = viewModel.albumListForSearchQuery.collectAsLazyPagingItems()
@@ -53,6 +56,7 @@ fun NavGraphBuilder.searchScreen(route: String) {
             playlistListForSearchQuery = playlists,
             onSearchQueryItemClicked = {
                 if (it is SearchResult.TrackSearchResult) viewModel.playTrack(it)
+                if (it is SearchResult.ArtistSearchResult) onArtistSearchResultClicked(it)
             },
             currentlySelectedFilter = viewModel.currentlySelectedFilter.value,
             onSearchFilterChanged = viewModel::updateSearchFilter,
