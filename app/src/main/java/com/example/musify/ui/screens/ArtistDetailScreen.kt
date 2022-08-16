@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -33,8 +35,11 @@ import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.components.ListItemCardType
 import com.example.musify.ui.components.MusifyCompactListItemCard
 import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
+import kotlinx.coroutines.launch
 
+// TODO temporarily used item{} for artist image header
 @ExperimentalMaterialApi
 @Composable
 fun ArtistDetailScreen(
@@ -53,10 +58,13 @@ fun ArtistDetailScreen(
         alpha = ContentAlpha.disabled
     )
     var isCoverArtPlaceholderVisible by remember { mutableStateOf(false) }
+    val lazyListState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
     Box {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
+            state = lazyListState
         ) {
             artistCoverArtHeaderItem(
                 artistName = artistName,
@@ -135,6 +143,20 @@ fun ArtistDetailScreen(
                 composition = loadingAnimationComposition,
                 iterations = LottieConstants.IterateForever
             )
+        }
+        AnimatedVisibility(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .navigationBarsPadding()
+                .padding(bottom = 16.dp, end = 16.dp),
+            visible = lazyListState.firstVisibleItemIndex > 10,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            FloatingActionButton(
+                backgroundColor = MaterialTheme.colors.primary,
+                onClick = { coroutineScope.launch { lazyListState.animateScrollToItem(0) } },
+            ) { Icon(imageVector = Icons.Filled.KeyboardArrowUp, contentDescription = null) }
         }
     }
 }
