@@ -1,5 +1,8 @@
 package com.example.musify.ui.navigation
 
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
+
 sealed class MusifyNavigationDestinations(val route: String) {
     object SearchScreen :
         MusifyNavigationDestinations("MusifyNavigationDestinations.SearchScreen")
@@ -12,8 +15,12 @@ sealed class MusifyNavigationDestinations(val route: String) {
         fun buildRoute(
             artistId: String,
             artistName: String,
-            encodedImageUrlString: String
-        ) =
-            "MusifyNavigationDestinations.ArtistDetailScreen/$artistId/$artistName/$encodedImageUrlString"
+            imageUrlString: String?
+        ): String {
+            val encodedImageUrl =
+                URLEncoder.encode(imageUrlString ?: "", StandardCharsets.UTF_8.toString())
+            return "MusifyNavigationDestinations.ArtistDetailScreen/$artistId/$artistName/$encodedImageUrl"
+        }
+
     }
 }
