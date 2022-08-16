@@ -28,7 +28,7 @@ fun MusifyNavigation() {
         )
         artistDetailScreen(
             route = MusifyNavigationDestinations.ArtistDetailScreen.route,
-            onBackButtonClicked = {},
+            onBackButtonClicked = { navController.popBackStack() },
             onAlbumClicked = {}
         )
     }
