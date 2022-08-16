@@ -29,7 +29,8 @@ import com.google.accompanist.insets.statusBarsPadding
 @ExperimentalMaterialApi
 @Composable
 fun ArtistDetailScreen(
-    artistSearchResult: SearchResult.ArtistSearchResult,
+    artistName: String,
+    artistImageUrlString: String,
     popularTracks: List<SearchResult.TrackSearchResult>,
     popularReleases: List<SearchResult.AlbumSearchResult>,
     onBackButtonClicked: () -> Unit,
@@ -46,8 +47,8 @@ fun ArtistDetailScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         artistCoverArtHeaderItem(
-            artistName = artistSearchResult.name,
-            artistCoverArtUrlString = artistSearchResult.imageUrlString ?: "", // TODO
+            artistName = artistName,
+            artistCoverArtUrlString = artistImageUrlString, // TODO
             onBackButtonClicked = onBackButtonClicked,
             onPLayButtonClick = onPlayButtonClicked,
             isLoadingPlaceholderVisible = isCoverArtPlaceholderVisible,
