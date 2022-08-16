@@ -12,9 +12,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.musify.R
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.screens.ArtistDetailScreen
 import com.example.musify.ui.screens.searchscreen.SearchScreen
+import com.example.musify.viewmodels.artistviewmodel.ArtistDetailScreenUiState
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailViewModel
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
 import com.example.musify.viewmodels.searchviewmodel.SearchScreenUiState
@@ -91,15 +95,24 @@ fun NavGraphBuilder.artistDetailScreen(
         val artistImageUrlString =
             arguments.getString(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ENCODED_IMAGE_URL_STRING)!!
                 .run { URLDecoder.decode(this, StandardCharsets.UTF_8.toString()) }
+        val releases = viewModel.albumsOfArtistFlow.collectAsLazyPagingItems()
+        val uiState by viewModel.uiState
+        val loadingAnimationComposition by rememberLottieComposition(
+            spec = LottieCompositionSpec.RawRes(
+                R.raw.lottie_loading_anim
+            )
+        )
         ArtistDetailScreen(
             artistName = artistName,
             artistImageUrlString = artistImageUrlString,
             popularTracks = viewModel.popularTracks.value,
-            releases = viewModel.albumsOfArtistFlow.collectAsLazyPagingItems(),
+            releases = releases,
             onBackButtonClicked = onBackButtonClicked,
             onPlayButtonClicked = { /*TODO*/ },
             onTrackClicked = {},
-            onAlbumClicked = onAlbumClicked
+            onAlbumClicked = onAlbumClicked,
+            isLoading = uiState == ArtistDetailScreenUiState.LOADING,
+            loadingAnimationComposition = loadingAnimationComposition
         )
     }
 }
