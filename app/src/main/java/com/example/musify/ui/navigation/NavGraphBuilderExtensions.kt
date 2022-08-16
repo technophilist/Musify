@@ -1,6 +1,5 @@
 package com.example.musify.ui.navigation
 
-import android.util.Base64
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.derivedStateOf
@@ -20,7 +19,8 @@ import com.example.musify.viewmodels.artistviewmodel.ArtistDetailViewModel
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
 import com.example.musify.viewmodels.searchviewmodel.SearchScreenUiState
 import com.example.musify.viewmodels.searchviewmodel.SearchViewModel
-import java.nio.charset.Charset
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
@@ -85,12 +85,12 @@ fun NavGraphBuilder.artistDetailScreen(
 ) {
     composable(route) { backStackEntry ->
         val viewModel = hiltViewModel<ArtistDetailViewModel>(backStackEntry)
+        val arguments = backStackEntry.arguments!!
         val artistName =
-            backStackEntry.arguments!!.getString(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ARTIST_NAME)!!
-        val decodedUrlStringByteArray =
-            backStackEntry.arguments!!.getString(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ENCODED_IMAGE_URL_STRING)!!
-                .run { Base64.decode(this, Base64.NO_WRAP) }
-        val artistImageUrlString = String(decodedUrlStringByteArray, Charset.forName("US-ASCII"))
+            arguments.getString(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ARTIST_NAME)!!
+        val artistImageUrlString =
+            arguments.getString(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ENCODED_IMAGE_URL_STRING)!!
+                .run { URLDecoder.decode(this, StandardCharsets.UTF_8.toString()) }
         ArtistDetailScreen(
             artistName = artistName,
             artistImageUrlString = artistImageUrlString,
