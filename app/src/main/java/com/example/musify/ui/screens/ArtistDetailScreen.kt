@@ -19,6 +19,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemsIndexed
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.components.ListItemCardType
@@ -32,7 +34,7 @@ fun ArtistDetailScreen(
     artistName: String,
     artistImageUrlString: String,
     popularTracks: List<SearchResult.TrackSearchResult>,
-    popularReleases: List<SearchResult.AlbumSearchResult>,
+    releases: LazyPagingItems<SearchResult.AlbumSearchResult>,
     onBackButtonClicked: () -> Unit,
     onPlayButtonClicked: () -> Unit,
     onTrackClicked: (SearchResult.TrackSearchResult) -> Unit,
@@ -80,25 +82,30 @@ fun ArtistDetailScreen(
         item {
             SubtitleText(
                 modifier = Modifier.padding(start = 16.dp),
-                text = "Popular Releases"
+                text = "Releases"
             )
         }
-        items(popularReleases) {
-            MusifyCompactListItemCard(
-                modifier = Modifier
-                    .height(80.dp)
-                    .padding(horizontal = 16.dp),
-                cardType = ListItemCardType.ALBUM,
-                thumbnailImageUrlString = it.albumArtUrlString,
-                title = it.name,
-                titleTextStyle = MaterialTheme.typography.h6,
-                subtitle = it.yearOfReleaseString,
-                subtitleTextStyle = MaterialTheme.typography
-                    .subtitle2
-                    .copy(color = subtitleTextColorWithAlpha),
-                onClick = { onAlbumClicked(it) },
-                onTrailingButtonIconClick = { onAlbumClicked(it) }
-            )
+        itemsIndexed(
+            items = releases,
+            key = { index, album -> "$index$album" }
+        ) { _, album ->
+            album?.let {
+                MusifyCompactListItemCard(
+                    modifier = Modifier
+                        .height(80.dp)
+                        .padding(horizontal = 16.dp),
+                    cardType = ListItemCardType.ALBUM,
+                    thumbnailImageUrlString = it.albumArtUrlString,
+                    title = it.name,
+                    titleTextStyle = MaterialTheme.typography.h6,
+                    subtitle = it.yearOfReleaseString,
+                    subtitleTextStyle = MaterialTheme.typography
+                        .subtitle2
+                        .copy(color = subtitleTextColorWithAlpha),
+                    onClick = { onAlbumClicked(it) },
+                    onTrailingButtonIconClick = { onAlbumClicked(it) }
+                )
+            }
         }
         item {
             Spacer(modifier = Modifier.navigationBarsHeight())
