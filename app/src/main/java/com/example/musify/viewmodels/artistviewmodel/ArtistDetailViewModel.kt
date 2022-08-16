@@ -12,6 +12,7 @@ import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.SearchResult
+import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,7 +37,8 @@ class ArtistDetailViewModel @Inject constructor(
     val uiState = _uiState as State<ArtistDetailScreenUiState>
 
     private val defaultMapperImageSize = MapperImageSize.MEDIUM
-    private val artistId = savedStateHandle.get<String>(SAVED_STATE_ARTIST_ID_KEY)!!
+    private val artistId =
+        savedStateHandle.get<String>(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ARTIST_ID)!!
 
     val albumsOfArtistFlow = repository.getPaginatedStreamForAlbumsOfArtist(
         artistId = artistId,
@@ -71,10 +73,5 @@ class ArtistDetailViewModel @Inject constructor(
                 _uiState.value = ArtistDetailScreenUiState.IDLE
             }
         }
-    }
-
-    companion object {
-        const val SAVED_STATE_ARTIST_ID_KEY =
-            "com.example.musify.viewmodels.artistviewmodel.ArtistViewModel.ARTIST_ID_SAVED_STATE_NAV_ARG"
     }
 }
