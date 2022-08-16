@@ -144,7 +144,7 @@ private fun SubtitleText(modifier: Modifier = Modifier, text: String) {
     Text(
         modifier = modifier,
         text = text,
-        style = MaterialTheme.typography.subtitle1,
+        style = MaterialTheme.typography.h5,
         fontWeight = FontWeight.Bold
     )
 }
