@@ -10,9 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
-import com.example.musify.ui.navigation.searchScreen
+import com.example.musify.ui.screens.MusifyNavigation
 import com.example.musify.ui.theme.MusifyTheme
 import com.google.accompanist.insets.ProvideWindowInsets
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,13 +27,9 @@ class MainActivity : ComponentActivity() {
                 ProvideWindowInsets {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colors.background
-                    ) {
-                        val navController = rememberNavController()
-                        NavHost(navController = navController, startDestination = "search") {
-                            searchScreen("search")
-                        }
-                    }
+                        color = MaterialTheme.colors.background,
+                        content = { MusifyNavigation() }
+                    )
                 }
             }
         }
