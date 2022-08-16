@@ -24,6 +24,11 @@ class MusifyRepository @Inject constructor(
     private val spotifyService: SpotifyService,
     private val tokenRepository: TokenRepository
 ) : Repository {
+    private val defaultPagingConfig = PagingConfig(
+        pageSize = SpotifyPagingSource.DEFAULT_PAGE_SIZE,
+        initialLoadSize = SpotifyPagingSource.DEFAULT_PAGE_SIZE
+    )
+
     private suspend fun <R> withToken(block: suspend (BearerToken) -> R): FetchedResource<R, MusifyHttpErrorType> =
         try {
             FetchedResource.Success(block(tokenRepository.getValidBearerToken()))
@@ -141,13 +146,21 @@ class MusifyRepository @Inject constructor(
                 spotifyService = spotifyService
             )
         }
-        return Pager(
-            PagingConfig(
-                pageSize = SpotifyPagingSource.DEFAULT_PAGE_SIZE,
-                initialLoadSize = SpotifyPagingSource.DEFAULT_PAGE_SIZE
-            )
-        ) { pagingSource }
+        return Pager(defaultPagingConfig) { pagingSource }
             .flow as Flow<PagingData<SearchResult>>
     }
 
+    override fun getPaginatedStreamForAlbumsOfArtist(
+        artistId: String,
+        countryCode: String,
+        imageSize: MapperImageSize
+    ): Flow<PagingData<SearchResult.AlbumSearchResult>> = Pager(defaultPagingConfig) {
+        AlbumsOfArtistPagingSource(
+            artistId = artistId,
+            market = countryCode,
+            mapperImageSize = imageSize,
+            tokenRepository = tokenRepository,
+            spotifyService = spotifyService
+        )
+    }.flow
 }

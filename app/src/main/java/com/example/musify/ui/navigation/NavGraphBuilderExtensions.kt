@@ -13,15 +13,22 @@ import androidx.navigation.compose.composable
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.musify.domain.SearchResult
+import com.example.musify.ui.screens.ArtistDetailScreen
 import com.example.musify.ui.screens.searchscreen.SearchScreen
+import com.example.musify.viewmodels.artistviewmodel.ArtistDetailViewModel
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
 import com.example.musify.viewmodels.searchviewmodel.SearchScreenUiState
 import com.example.musify.viewmodels.searchviewmodel.SearchViewModel
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
-fun NavGraphBuilder.searchScreen(route: String) {
+fun NavGraphBuilder.searchScreen(
+    route: String,
+    onArtistSearchResultClicked: (SearchResult.ArtistSearchResult) -> Unit
+) {
     composable(route = route) {
         val viewModel = hiltViewModel<SearchViewModel>()
         val albums = viewModel.albumListForSearchQuery.collectAsLazyPagingItems()
@@ -49,6 +56,7 @@ fun NavGraphBuilder.searchScreen(route: String) {
             playlistListForSearchQuery = playlists,
             onSearchQueryItemClicked = {
                 if (it is SearchResult.TrackSearchResult) viewModel.playTrack(it)
+                if (it is SearchResult.ArtistSearchResult) onArtistSearchResultClicked(it)
             },
             currentlySelectedFilter = viewModel.currentlySelectedFilter.value,
             onSearchFilterChanged = viewModel::updateSearchFilter,
@@ -65,6 +73,33 @@ fun NavGraphBuilder.searchScreen(route: String) {
                 if (isLoadingError) viewModel.search(it)
                 controller?.hide()
             }
+        )
+    }
+}
+
+@ExperimentalMaterialApi
+fun NavGraphBuilder.artistDetailScreen(
+    route: String,
+    onBackButtonClicked: () -> Unit,
+    onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit
+) {
+    composable(route) { backStackEntry ->
+        val viewModel = hiltViewModel<ArtistDetailViewModel>(backStackEntry)
+        val arguments = backStackEntry.arguments!!
+        val artistName =
+            arguments.getString(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ARTIST_NAME)!!
+        val artistImageUrlString =
+            arguments.getString(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ENCODED_IMAGE_URL_STRING)!!
+                .run { URLDecoder.decode(this, StandardCharsets.UTF_8.toString()) }
+        ArtistDetailScreen(
+            artistName = artistName,
+            artistImageUrlString = artistImageUrlString,
+            popularTracks = viewModel.popularTracks.value,
+            releases = viewModel.albumsOfArtistFlow.collectAsLazyPagingItems(),
+            onBackButtonClicked = onBackButtonClicked,
+            onPlayButtonClicked = { /*TODO*/ },
+            onTrackClicked = {},
+            onAlbumClicked = onAlbumClicked
         )
     }
 }
