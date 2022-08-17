@@ -1,8 +1,10 @@
 package com.example.musify.ui.screens
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,7 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -35,6 +41,7 @@ import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
 // TODO remove temporarily used item{} for artist image header
+// TODO display error messages - network error
 @ExperimentalMaterialApi
 @Composable
 fun ArtistDetailScreen(
@@ -48,6 +55,7 @@ fun ArtistDetailScreen(
     onTrackClicked: (SearchResult.TrackSearchResult) -> Unit,
     onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit,
     isLoading: Boolean,
+    @DrawableRes fallbackImageRes: Int,
     loadingAnimationComposition: LottieComposition?,
 ) {
     val subtitleTextColorWithAlpha = MaterialTheme.colors.onBackground.copy(
@@ -56,6 +64,8 @@ fun ArtistDetailScreen(
     var isCoverArtPlaceholderVisible by remember { mutableStateOf(false) }
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+    val fallbackImagePainter =
+        rememberVectorPainter(ImageVector.vectorResource(id = fallbackImageRes))
     Box {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -69,7 +79,8 @@ fun ArtistDetailScreen(
                 onPLayButtonClick = onPlayButtonClicked,
                 isLoadingPlaceholderVisible = isCoverArtPlaceholderVisible,
                 onCoverArtLoading = { isCoverArtPlaceholderVisible = true },
-                onCoverArtLoaded = { isCoverArtPlaceholderVisible = false }
+                onCoverArtLoaded = { isCoverArtPlaceholderVisible = false },
+                fallbackImagePainter = fallbackImagePainter
             )
             item {
                 SubtitleText(
@@ -170,7 +181,8 @@ private fun SubtitleText(modifier: Modifier = Modifier, text: String) {
 
 private fun LazyListScope.artistCoverArtHeaderItem(
     artistName: String,
-    artistCoverArtUrlString: String,
+    artistCoverArtUrlString: String?,
+    fallbackImagePainter: Painter,
     onBackButtonClicked: () -> Unit,
     onPLayButtonClick: () -> Unit,
     isLoadingPlaceholderVisible: Boolean = false,
@@ -183,15 +195,24 @@ private fun LazyListScope.artistCoverArtHeaderItem(
                 .fillParentMaxHeight(0.6f)
                 .fillParentMaxWidth()
         ) {
-            AsyncImageWithPlaceholder(
-                modifier = Modifier.fillMaxSize(),
-                model = artistCoverArtUrlString,
-                contentScale = ContentScale.Crop,
-                contentDescription = null,
-                isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
-                onImageLoading = { onCoverArtLoading?.invoke() },
-                onImageLoadingFinished = { onCoverArtLoaded?.invoke(it) }
-            )
+            if (artistCoverArtUrlString != null) {
+                AsyncImageWithPlaceholder(
+                    modifier = Modifier.fillMaxSize(),
+                    model = artistCoverArtUrlString,
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                    isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
+                    onImageLoading = { onCoverArtLoading?.invoke() },
+                    onImageLoadingFinished = { onCoverArtLoaded?.invoke(it) }
+                )
+            } else {
+                Image(
+                    modifier = Modifier.fillMaxSize(),
+                    painter = fallbackImagePainter,
+                    contentDescription = null
+                )
+            }
+
             // scrim
             Box(
                 modifier = Modifier
