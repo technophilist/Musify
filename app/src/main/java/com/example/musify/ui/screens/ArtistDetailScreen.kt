@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -28,13 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.airbnb.lottie.LottieComposition
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieConstants
 import com.example.musify.domain.SearchResult
-import com.example.musify.ui.components.AsyncImageWithPlaceholder
-import com.example.musify.ui.components.ListItemCardType
-import com.example.musify.ui.components.MusifyCompactListItemCard
-import com.example.musify.ui.components.MusifyCompactTrackCard
+import com.example.musify.ui.components.*
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
@@ -143,21 +137,10 @@ fun ArtistDetailScreen(
                 Spacer(modifier = Modifier.navigationBarsHeight())
             }
         }
-        AnimatedVisibility(
-            modifier = Modifier
-                .size(128.dp) // the actual size will be mush lesser because of padding and offset
-                .align(Alignment.Center)
-                .clip(RoundedCornerShape(5))
-                .background(Color.Black.copy(alpha = 0.3f)),
-            visible = isLoading,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            LottieAnimation(
-                composition = loadingAnimationComposition,
-                iterations = LottieConstants.IterateForever
-            )
-        }
+        DefaultMusifyLoadingAnimation(
+            modifier = Modifier.align(Alignment.Center),
+            isVisible = isLoading
+        )
         AnimatedVisibility(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
