@@ -5,7 +5,6 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
@@ -17,7 +16,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -29,13 +27,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.airbnb.lottie.LottieComposition
-import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.musify.R
 import com.example.musify.domain.Genre
 import com.example.musify.domain.SearchResult
+import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
 import com.example.musify.ui.components.FilterChip
 import com.example.musify.ui.components.GenreCard
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
@@ -319,24 +316,12 @@ private fun SearchQueryList(
                 }
             }
         }
-        AnimatedVisibility(
+        DefaultMusifyLoadingAnimation(
             modifier = Modifier
-                .padding(16.dp)
-                .size(128.dp) // the actual size will be mush lesser because of padding and offset
                 .align(Alignment.Center)
-                .offset(y = (-100).dp)
-                .clip(RoundedCornerShape(5))
-                .background(Color.White.copy(alpha = 0.1f))
-                .padding(16.dp),
-            visible = isSearchResultsLoadingAnimationVisible,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            LottieAnimation(
-                composition = lottieComposition,
-                iterations = LottieConstants.IterateForever
-            )
-        }
+                .offset(y = (-100).dp),
+            isVisible = isSearchResultsLoadingAnimationVisible
+        )
     }
 }
 
