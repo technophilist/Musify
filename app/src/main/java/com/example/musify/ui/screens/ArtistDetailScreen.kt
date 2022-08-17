@@ -32,7 +32,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemsIndexed
-import com.airbnb.lottie.LottieComposition
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.*
 import com.google.accompanist.insets.navigationBarsHeight
@@ -55,8 +54,7 @@ fun ArtistDetailScreen(
     onTrackClicked: (SearchResult.TrackSearchResult) -> Unit,
     onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit,
     isLoading: Boolean,
-    @DrawableRes fallbackImageRes: Int,
-    loadingAnimationComposition: LottieComposition?,
+    @DrawableRes fallbackImageRes: Int
 ) {
     val subtitleTextColorWithAlpha = MaterialTheme.colors.onBackground.copy(
         alpha = ContentAlpha.disabled
