@@ -109,7 +109,7 @@ fun NavGraphBuilder.artistDetailScreen(
             releases = releases,
             onBackButtonClicked = onBackButtonClicked,
             onPlayButtonClicked = { /*TODO*/ },
-            onTrackClicked = {},
+            onTrackClicked = viewModel::playTrack,
             onAlbumClicked = onAlbumClicked,
             isLoading = uiState == ArtistDetailScreenUiState.LOADING,
             loadingAnimationComposition = loadingAnimationComposition
