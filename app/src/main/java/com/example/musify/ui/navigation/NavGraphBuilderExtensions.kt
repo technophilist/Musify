@@ -83,7 +83,7 @@ fun NavGraphBuilder.searchScreen(
 fun NavGraphBuilder.artistDetailScreen(
     route: String,
     onBackButtonClicked: () -> Unit,
-    onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit
+    onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit,
 ) {
     composable(route) { backStackEntry ->
         val viewModel = hiltViewModel<ArtistDetailViewModel>(backStackEntry)
@@ -91,8 +91,8 @@ fun NavGraphBuilder.artistDetailScreen(
         val artistName =
             arguments.getString(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ARTIST_NAME)!!
         val artistImageUrlString =
-            arguments.getString(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ENCODED_IMAGE_URL_STRING)!!
-                .run { URLDecoder.decode(this, StandardCharsets.UTF_8.toString()) }
+            arguments.getString(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ENCODED_IMAGE_URL_STRING)
+                ?.run { URLDecoder.decode(this, StandardCharsets.UTF_8.toString()) }
         val releases = viewModel.albumsOfArtistFlow.collectAsLazyPagingItems()
         val uiState by viewModel.uiState
         ArtistDetailScreen(
