@@ -34,6 +34,7 @@ import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.components.ListItemCardType
 import com.example.musify.ui.components.MusifyCompactListItemCard
+import com.example.musify.ui.components.MusifyCompactTrackCard
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
@@ -47,7 +48,7 @@ fun ArtistDetailScreen(
     artistImageUrlString: String,
     popularTracks: List<SearchResult.TrackSearchResult>,
     releases: LazyPagingItems<SearchResult.AlbumSearchResult>,
-    currentlyPlayingTrack:SearchResult.TrackSearchResult?,
+    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     onBackButtonClicked: () -> Unit,
     onPlayButtonClicked: () -> Unit,
     onTrackClicked: (SearchResult.TrackSearchResult) -> Unit,
@@ -61,9 +62,6 @@ fun ArtistDetailScreen(
     var isCoverArtPlaceholderVisible by remember { mutableStateOf(false) }
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    val trackPlayingTextStyle = LocalTextStyle.current.copy(
-        color = MaterialTheme.colors.primary
-    )
     Box {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -100,18 +98,16 @@ fun ArtistDetailScreen(
                         ),
                         text = "${index + 1}"
                     )
-                    MusifyCompactListItemCard(
-                        cardType = ListItemCardType.TRACK,
-                        thumbnailImageUrlString = track.imageUrlString,
-                        title = track.name,
-                        subtitle = track.artistsString,
+                    MusifyCompactTrackCard(
+                        track = track,
                         subtitleTextStyle = MaterialTheme.typography
                             .caption
                             .copy(color = subtitleTextColorWithAlpha),
-                        onClick = { onTrackClicked(track) },
-                        onTrailingButtonIconClick = { /*TODO*/ },
-                        titleTextStyle = if (track == currentlyPlayingTrack)
-                            trackPlayingTextStyle else LocalTextStyle.current,
+                        onClick = onTrackClicked,
+                        isLoadingPlaceholderVisible = false,
+                        onImageLoading = {},
+                        onImageLoadingFinished = { _, _ -> },
+                        isCurrentlyPlaying = track == currentlyPlayingTrack
                     )
                 }
             }
