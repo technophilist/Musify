@@ -7,7 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,7 +39,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
-// TODO temporarily used item{} for artist image header
+// TODO remove temporarily used item{} for artist image header
 @ExperimentalMaterialApi
 @Composable
 fun ArtistDetailScreen(
@@ -81,21 +81,33 @@ fun ArtistDetailScreen(
                     text = "Popular tracks"
                 )
             }
-            items(popularTracks) {
-                MusifyCompactListItemCard(
-                    modifier = Modifier
-                        .height(64.dp)
-                        .padding(horizontal = 16.dp),
-                    cardType = ListItemCardType.TRACK,
-                    thumbnailImageUrlString = it.imageUrlString,
-                    title = it.name,
-                    subtitle = it.artistsString,
-                    subtitleTextStyle = MaterialTheme.typography
-                        .caption
-                        .copy(color = subtitleTextColorWithAlpha),
-                    onClick = { onTrackClicked(it) },
-                    onTrailingButtonIconClick = { /*TODO*/ }
-                )
+            itemsIndexed(popularTracks) { index, track ->
+                Row(
+                    modifier = Modifier.height(64.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        modifier = if (index + 1 < 10) Modifier.padding(16.dp)
+                        else Modifier.padding(
+                            top = 16.dp,
+                            bottom = 16.dp,
+                            start = 16.dp,
+                            end = 8.dp
+                        ),
+                        text = "${index + 1}"
+                    )
+                    MusifyCompactListItemCard(
+                        cardType = ListItemCardType.TRACK,
+                        thumbnailImageUrlString = track.imageUrlString,
+                        title = track.name,
+                        subtitle = track.artistsString,
+                        subtitleTextStyle = MaterialTheme.typography
+                            .caption
+                            .copy(color = subtitleTextColorWithAlpha),
+                        onClick = { onTrackClicked(track) },
+                        onTrailingButtonIconClick = { /*TODO*/ }
+                    )
+                }
             }
             item {
                 SubtitleText(
