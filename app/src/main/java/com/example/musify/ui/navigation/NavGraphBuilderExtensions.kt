@@ -12,8 +12,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.musify.R
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.screens.ArtistDetailScreen
@@ -97,11 +95,6 @@ fun NavGraphBuilder.artistDetailScreen(
                 .run { URLDecoder.decode(this, StandardCharsets.UTF_8.toString()) }
         val releases = viewModel.albumsOfArtistFlow.collectAsLazyPagingItems()
         val uiState by viewModel.uiState
-        val loadingAnimationComposition by rememberLottieComposition(
-            spec = LottieCompositionSpec.RawRes(
-                R.raw.lottie_loading_anim
-            )
-        )
         ArtistDetailScreen(
             artistName = artistName,
             artistImageUrlString = artistImageUrlString,
@@ -117,7 +110,7 @@ fun NavGraphBuilder.artistDetailScreen(
             onTrackClicked = viewModel::playTrack,
             onAlbumClicked = onAlbumClicked,
             isLoading = uiState is ArtistDetailScreenUiState.Loading,
-            loadingAnimationComposition = loadingAnimationComposition
+            fallbackImageRes = R.drawable.ic_outline_account_circle_24
         )
     }
 }
