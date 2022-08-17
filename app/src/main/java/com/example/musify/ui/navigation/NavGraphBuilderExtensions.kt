@@ -107,12 +107,16 @@ fun NavGraphBuilder.artistDetailScreen(
             artistImageUrlString = artistImageUrlString,
             popularTracks = viewModel.popularTracks.value,
             releases = releases,
-            currentlyPlayingTrack = null, // TODO
+            currentlyPlayingTrack = if (uiState is ArtistDetailScreenUiState.PlayingTrack) {
+                (uiState as ArtistDetailScreenUiState.PlayingTrack).currentlyPlayingTrack
+            } else {
+                null
+            },
             onBackButtonClicked = onBackButtonClicked,
             onPlayButtonClicked = { /*TODO*/ },
             onTrackClicked = viewModel::playTrack,
             onAlbumClicked = onAlbumClicked,
-            isLoading = uiState == ArtistDetailScreenUiState.LOADING,
+            isLoading = uiState is ArtistDetailScreenUiState.Loading,
             loadingAnimationComposition = loadingAnimationComposition
         )
     }
