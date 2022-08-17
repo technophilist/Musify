@@ -2,14 +2,13 @@ package com.example.musify.ui.screens.searchscreen
 
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.ListItemCardType
 import com.example.musify.ui.components.MusifyCompactListItemCard
+import com.example.musify.ui.components.MusifyCompactTrackCard
 
 @ExperimentalMaterialApi
 fun LazyListScope.searchTrackListItems(
@@ -24,24 +23,13 @@ fun LazyListScope.searchTrackListItems(
         key = { index, track -> "$index${track.id}" }
     ) { _, track ->
         track?.let {
-            // set alpha based on whether the track is available for playback
-            CompositionLocalProvider(
-                LocalContentAlpha.provides(if (it.trackUrlString == null) 0.5f else 1f)
-            ) {
-                MusifyCompactListItemCard(
-                    cardType = ListItemCardType.TRACK,
-                    thumbnailImageUrlString = it.imageUrlString,
-                    title = it.name,
-                    subtitle = it.artistsString,
-                    onClick = { onItemClick(it) },
-                    onTrailingButtonIconClick = { /* TODO*/ },
-                    isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
-                    onThumbnailImageLoadingFinished = { throwable ->
-                        onImageLoadingFinished(it, throwable)
-                    },
-                    onThumbnailLoading = { onImageLoading(it) }
-                )
-            }
+            MusifyCompactTrackCard(
+                track = it,
+                onClick = onItemClick,
+                isLoadingPlaceholderVisible = isLoadingPlaceholderVisible(it),
+                onImageLoading = onImageLoading,
+                onImageLoadingFinished = onImageLoadingFinished
+            )
         }
     }
 }
