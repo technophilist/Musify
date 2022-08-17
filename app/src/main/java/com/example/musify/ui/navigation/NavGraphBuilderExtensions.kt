@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.paging.LoadState
@@ -84,8 +85,9 @@ fun NavGraphBuilder.artistDetailScreen(
     route: String,
     onBackButtonClicked: () -> Unit,
     onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit,
+    arguments: List<NamedNavArgument> = emptyList()
 ) {
-    composable(route) { backStackEntry ->
+    composable(route, arguments) { backStackEntry ->
         val viewModel = hiltViewModel<ArtistDetailViewModel>(backStackEntry)
         val arguments = backStackEntry.arguments!!
         val artistName =
