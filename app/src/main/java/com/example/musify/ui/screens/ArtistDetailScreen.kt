@@ -47,6 +47,7 @@ fun ArtistDetailScreen(
     artistImageUrlString: String,
     popularTracks: List<SearchResult.TrackSearchResult>,
     releases: LazyPagingItems<SearchResult.AlbumSearchResult>,
+    currentlyPlayingTrack:SearchResult.TrackSearchResult?,
     onBackButtonClicked: () -> Unit,
     onPlayButtonClicked: () -> Unit,
     onTrackClicked: (SearchResult.TrackSearchResult) -> Unit,
@@ -60,6 +61,9 @@ fun ArtistDetailScreen(
     var isCoverArtPlaceholderVisible by remember { mutableStateOf(false) }
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+    val trackPlayingTextStyle = LocalTextStyle.current.copy(
+        color = MaterialTheme.colors.primary
+    )
     Box {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -105,7 +109,9 @@ fun ArtistDetailScreen(
                             .caption
                             .copy(color = subtitleTextColorWithAlpha),
                         onClick = { onTrackClicked(track) },
-                        onTrailingButtonIconClick = { /*TODO*/ }
+                        onTrailingButtonIconClick = { /*TODO*/ },
+                        titleTextStyle = if (track == currentlyPlayingTrack)
+                            trackPlayingTextStyle else LocalTextStyle.current,
                     )
                 }
             }

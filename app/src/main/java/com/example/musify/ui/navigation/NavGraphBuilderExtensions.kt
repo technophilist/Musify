@@ -107,6 +107,7 @@ fun NavGraphBuilder.artistDetailScreen(
             artistImageUrlString = artistImageUrlString,
             popularTracks = viewModel.popularTracks.value,
             releases = releases,
+            currentlyPlayingTrack = null, // TODO
             onBackButtonClicked = onBackButtonClicked,
             onPlayButtonClicked = { /*TODO*/ },
             onTrackClicked = viewModel::playTrack,
