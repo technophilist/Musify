@@ -76,4 +76,15 @@ class ArtistDetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun playTrack(track: SearchResult.TrackSearchResult) {
+        if (track.trackUrlString == null) return
+        viewModelScope.launch {
+            playTrackWithMediaNotificationUseCase.invoke(
+                track,
+                onLoading = { _uiState.value = ArtistDetailScreenUiState.LOADING },
+                onFinishedLoading = { _uiState.value = ArtistDetailScreenUiState.IDLE }
+            )
+        }
+    }
 }
