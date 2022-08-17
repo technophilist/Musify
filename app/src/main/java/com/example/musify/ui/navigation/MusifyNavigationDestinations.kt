@@ -9,17 +9,20 @@ sealed class MusifyNavigationDestinations(val route: String) {
         MusifyNavigationDestinations("MusifyNavigationDestinations.SearchScreen")
 
     object ArtistDetailScreen :
-        MusifyNavigationDestinations("MusifyNavigationDestinations.ArtistDetailScreen/{artistId}/{artistName}/{encodedImageUrlString}") {
+        MusifyNavigationDestinations("MusifyNavigationDestinations.ArtistDetailScreen/{artistId}/{artistName}?encodedUrlString={encodedImageUrlString}") {
         const val NAV_ARG_ARTIST_ID = "artistId"
         const val NAV_ARG_ARTIST_NAME = "artistName"
         const val NAV_ARG_ENCODED_IMAGE_URL_STRING = "encodedImageUrlString"
 
         fun buildRoute(artistSearchResult: SearchResult.ArtistSearchResult): String {
+            val routeWithoutUrl =
+                "MusifyNavigationDestinations.ArtistDetailScreen/${artistSearchResult.id}/${artistSearchResult.name}"
+            if (artistSearchResult.imageUrlString == null) return routeWithoutUrl
             val encodedImageUrl = URLEncoder.encode(
-                artistSearchResult.imageUrlString ?: "",
+                artistSearchResult.imageUrlString,
                 StandardCharsets.UTF_8.toString()
             )
-            return "MusifyNavigationDestinations.ArtistDetailScreen/${artistSearchResult.id}/${artistSearchResult.name}/$encodedImageUrl"
+            return "$routeWithoutUrl?encodedUrlString=$encodedImageUrl"
         }
 
     }
