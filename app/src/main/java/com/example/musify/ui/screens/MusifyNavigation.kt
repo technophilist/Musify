@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.ui.navigation.artistDetailScreen
 import com.example.musify.ui.navigation.searchScreen
@@ -28,6 +29,11 @@ fun MusifyNavigation() {
         )
         artistDetailScreen(
             route = MusifyNavigationDestinations.ArtistDetailScreen.route,
+            arguments = listOf(
+                navArgument(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ENCODED_IMAGE_URL_STRING) {
+                    nullable = true
+                }
+            ),
             onBackButtonClicked = { navController.popBackStack() },
             onAlbumClicked = {}
         )
