@@ -19,10 +19,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * An enum consisting of all UI states that are related to a screen
+ * A sealed class hierarchy consisting of all UI states that are related to a screen
  * displaying the details of an artist.
  */
-enum class ArtistDetailScreenUiState { IDLE, LOADING, ERROR }
+sealed class ArtistDetailScreenUiState {
+    object Idle : ArtistDetailScreenUiState()
+    object Loading : ArtistDetailScreenUiState()
+    data class PlayingTrack(
+        val currentlyPlayingTrack: SearchResult.TrackSearchResult
+    ) : ArtistDetailScreenUiState()
+
+    data class Error(private val message: String) : ArtistDetailScreenUiState()
+}
 
 @HiltViewModel
 class ArtistDetailViewModel @Inject constructor(
@@ -35,12 +43,13 @@ class ArtistDetailViewModel @Inject constructor(
     private val _popularTracks = mutableStateOf<List<SearchResult.TrackSearchResult>>(emptyList())
     val popularTracks = _popularTracks as State<List<SearchResult.TrackSearchResult>>
 
-    private val _uiState = mutableStateOf(ArtistDetailScreenUiState.IDLE)
+    private val _uiState = mutableStateOf<ArtistDetailScreenUiState>(ArtistDetailScreenUiState.Idle)
     val uiState = _uiState as State<ArtistDetailScreenUiState>
 
     private val defaultMapperImageSize = MapperImageSize.MEDIUM
     private val artistId =
         savedStateHandle.get<String>(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ARTIST_ID)!!
+
 
     val albumsOfArtistFlow = repository.getPaginatedStreamForAlbumsOfArtist(
         artistId = artistId,
@@ -60,7 +69,7 @@ class ArtistDetailViewModel @Inject constructor(
         .country
 
     private suspend fun fetchAndAssignPopularTracks() {
-        _uiState.value = ArtistDetailScreenUiState.LOADING
+        _uiState.value = ArtistDetailScreenUiState.Loading
         val fetchResult = repository.fetchTopTenTracksForArtistWithId(
             artistId = artistId,
             imageSize = defaultMapperImageSize,
@@ -68,11 +77,12 @@ class ArtistDetailViewModel @Inject constructor(
         )
         when (fetchResult) {
             is FetchedResource.Failure -> {
-                _uiState.value = ArtistDetailScreenUiState.ERROR
+                _uiState.value =
+                    ArtistDetailScreenUiState.Error("Error loading tracks, please check internet connection")
             }
             is FetchedResource.Success -> {
                 _popularTracks.value = fetchResult.data
-                _uiState.value = ArtistDetailScreenUiState.IDLE
+                _uiState.value = ArtistDetailScreenUiState.Idle
             }
         }
     }
@@ -82,8 +92,11 @@ class ArtistDetailViewModel @Inject constructor(
         viewModelScope.launch {
             playTrackWithMediaNotificationUseCase.invoke(
                 track,
-                onLoading = { _uiState.value = ArtistDetailScreenUiState.LOADING },
-                onFinishedLoading = { _uiState.value = ArtistDetailScreenUiState.IDLE }
+                onLoading = { _uiState.value = ArtistDetailScreenUiState.Loading },
+                onFinishedLoading = {
+                    _uiState.value = if (it == null) ArtistDetailScreenUiState.PlayingTrack(track)
+                    else ArtistDetailScreenUiState.Error("Unable to play track. Please check internet connection")
+                }
             )
         }
     }
