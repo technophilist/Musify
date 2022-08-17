@@ -205,7 +205,7 @@ private fun LazyListScope.artistCoverArtHeaderItem(
                     .padding(16.dp)
                     .size(50.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colors.background.copy(alpha = 0.5f)),
+                    .background(MaterialTheme.colors.background.copy(alpha = 0.7f)),
                 onClick = onBackButtonClicked
             ) {
                 Icon(
