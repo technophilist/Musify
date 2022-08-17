@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ArtistDetailScreen(
     artistName: String,
-    artistImageUrlString: String,
+    artistImageUrlString: String?,
     popularTracks: List<SearchResult.TrackSearchResult>,
     releases: LazyPagingItems<SearchResult.AlbumSearchResult>,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?,
