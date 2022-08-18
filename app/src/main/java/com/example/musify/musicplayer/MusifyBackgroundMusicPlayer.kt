@@ -5,6 +5,7 @@ import com.example.musify.R
 import com.example.musify.musicplayer.utils.MediaDescriptionAdapter
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -27,7 +28,7 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
             .setChannelNameResourceId(R.string.notification_channel_name)
             .setChannelDescriptionResourceId(R.string.notification_channel_description)
     }
-
+    private var listener: Player.Listener? = null
 
     override fun playTrack(track: MusicPlayer.Track) {
         with(exoPlayer) {
@@ -46,6 +47,25 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
 
     override fun stopPlayingTrack() {
         exoPlayer.stop()
+    }
+
+    override fun addOnPlaybackStateChangedListener(onPlaybackStateChanged: (MusicPlayer.PlaybackState) -> Unit) {
+        listener = object : Player.Listener {
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                when {
+                    exoPlayer.playerError != null -> onPlaybackStateChanged(MusicPlayer.PlaybackState.ERROR)
+                    isPlaying -> onPlaybackStateChanged(MusicPlayer.PlaybackState.PLAYING)
+                    !isPlaying && !exoPlayer.playWhenReady -> onPlaybackStateChanged(MusicPlayer.PlaybackState.PAUSED)
+                    !isPlaying && (exoPlayer.playbackState == ExoPlayer.STATE_ENDED) ->
+                        onPlaybackStateChanged(MusicPlayer.PlaybackState.STOPPED)
+                }
+            }
+        }
+        exoPlayer.addListener(listener!!)
+    }
+
+    override fun removeListenersIfAny() {
+        listener?.let(exoPlayer::removeListener)
     }
 
     companion object {
