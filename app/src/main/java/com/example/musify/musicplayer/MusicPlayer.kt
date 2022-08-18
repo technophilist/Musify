@@ -22,6 +22,7 @@ interface MusicPlayer {
         val title: String,
         val artistsString: String,
         val albumArt: Bitmap,
+        val albumArtUrlString:String,
         val trackUrlString: String
     )
 }
