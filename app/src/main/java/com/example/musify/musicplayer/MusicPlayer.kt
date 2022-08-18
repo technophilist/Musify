@@ -3,7 +3,7 @@ package com.example.musify.musicplayer
 import android.graphics.Bitmap
 
 interface MusicPlayer {
-    enum class PlaybackState { PLAYING, PAUSED, STOPPED, ERROR }
+    enum class PlaybackState { PLAYING, PAUSED, STOPPED, ERROR, IDLE }
 
     fun pauseCurrentlyPlayingTrack()
     fun stopPlayingTrack()
