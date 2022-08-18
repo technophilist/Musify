@@ -53,11 +53,15 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
         listener = object : Player.Listener {
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 when {
-                    exoPlayer.playerError != null -> onPlaybackStateChanged(MusicPlayer.PlaybackState.ERROR)
-                    isPlaying -> onPlaybackStateChanged(MusicPlayer.PlaybackState.PLAYING)
-                    !isPlaying && !exoPlayer.playWhenReady -> onPlaybackStateChanged(MusicPlayer.PlaybackState.PAUSED)
+                    exoPlayer.playerError != null -> onPlaybackStateChanged(MusicPlayer.PlaybackState.Error)
+                    isPlaying -> {
+                        currentlyPlayingTrack?.let {
+                            onPlaybackStateChanged(MusicPlayer.PlaybackState.Playing(it))
+                        }
+                    }
+                    !isPlaying && !exoPlayer.playWhenReady -> onPlaybackStateChanged(MusicPlayer.PlaybackState.Paused)
                     !isPlaying && (exoPlayer.playbackState == ExoPlayer.STATE_ENDED) ->
-                        onPlaybackStateChanged(MusicPlayer.PlaybackState.STOPPED)
+                        onPlaybackStateChanged(MusicPlayer.PlaybackState.Stopped)
                 }
             }
         }
