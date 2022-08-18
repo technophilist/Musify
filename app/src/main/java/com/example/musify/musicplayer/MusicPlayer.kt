@@ -14,6 +14,9 @@ interface MusicPlayer {
     fun pauseCurrentlyPlayingTrack()
     fun stopPlayingTrack()
     fun playTrack(track: Track)
+    fun addOnPlaybackStateChangedListener(onPlaybackStateChanged: (PlaybackState) -> Unit)
+    fun removeListenersIfAny()
+
     data class Track(
         val id: String,
         val title: String,
@@ -21,7 +24,4 @@ interface MusicPlayer {
         val albumArt: Bitmap,
         val trackUrlString: String
     )
-
-    fun addOnPlaybackStateChangedListener(onPlaybackStateChanged: (PlaybackState) -> Unit)
-    fun removeListenersIfAny()
 }
