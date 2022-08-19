@@ -26,9 +26,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.airbnb.lottie.LottieComposition
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.musify.R
 import com.example.musify.domain.Genre
 import com.example.musify.domain.SearchResult
@@ -50,6 +47,7 @@ import kotlinx.coroutines.launch
 fun SearchScreen(
     genreList: List<Genre>,
     searchScreenFilters: List<SearchFilter>,
+    currentlyPlayingTrack:SearchResult.TrackSearchResult?,
     currentlySelectedFilter: SearchFilter,
     onSearchFilterChanged: (SearchFilter) -> Unit,
     onGenreItemClick: (Genre) -> Unit,
@@ -86,9 +84,6 @@ fun SearchScreen(
     val isSearchItemLoadingPlaceholderVisibleMap = remember {
         mutableStateMapOf<SearchResult, Boolean>()
     }
-    val searchResultsLoadingAnimationComposition by rememberLottieComposition(
-        spec = LottieCompositionSpec.RawRes(R.raw.lottie_loading_anim)
-    )
     val isFilterChipGroupVisible by remember { derivedStateOf { isSearchListVisible } }
     // Using separate horizontal padding modifier because the filter
     // group should be edge to edge. Adding a padding to the parent
@@ -215,7 +210,7 @@ fun SearchScreen(
                     },
                     onImageLoading = { isSearchItemLoadingPlaceholderVisibleMap[it] = true },
                     isSearchResultsLoadingAnimationVisible = isLoading,
-                    lottieComposition = searchResultsLoadingAnimationComposition,
+                    currentlyPlayingTrack = currentlyPlayingTrack,
                     lazyListState = lazyListState,
                     currentlySelectedFilter = currentlySelectedFilter,
                     isSearchErrorMessageVisible = isSearchErrorMessageVisible
@@ -237,7 +232,7 @@ private fun SearchQueryList(
     isLoadingPlaceholderVisible: (SearchResult) -> Boolean,
     onImageLoading: (SearchResult) -> Unit,
     onImageLoadingFinished: (SearchResult, Throwable?) -> Unit,
-    lottieComposition: LottieComposition?,
+    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     lazyListState: LazyListState = rememberLazyListState(),
     isSearchResultsLoadingAnimationVisible: Boolean = false,
     isSearchErrorMessageVisible: Boolean = false,
@@ -292,7 +287,8 @@ private fun SearchQueryList(
                         onItemClick = onItemClick,
                         isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
                         onImageLoading = onImageLoading,
-                        onImageLoadingFinished = onImageLoadingFinished
+                        onImageLoadingFinished = onImageLoadingFinished,
+                        currentlyPlayingTrack = currentlyPlayingTrack
                     )
                     SearchFilter.ARTISTS -> searchArtistListItems(
                         artistListForSearchQuery = artistListForSearchQuery,
