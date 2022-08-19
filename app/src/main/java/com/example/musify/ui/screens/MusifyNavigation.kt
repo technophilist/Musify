@@ -29,6 +29,9 @@ fun MusifyNavigation(
     ) {
         searchScreen(
             route = MusifyNavigationDestinations.SearchScreen.route,
+            currentlyPlayingTrack = currentlyPlayingTrack,
+            isPlaybackLoading = isPlaybackLoading,
+            isPlaybackPaused = isPlaybackPaused,
             onArtistSearchResultClicked = {
                 navController.navigate(MusifyNavigationDestinations.ArtistDetailScreen.buildRoute(it))
             }
