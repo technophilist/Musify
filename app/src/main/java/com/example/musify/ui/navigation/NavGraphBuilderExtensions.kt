@@ -84,6 +84,10 @@ fun NavGraphBuilder.searchScreen(
 fun NavGraphBuilder.artistDetailScreen(
     route: String,
     onBackButtonClicked: () -> Unit,
+    onPlayTrack: (SearchResult.TrackSearchResult) -> Unit,
+    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
+    isPlaybackLoading: Boolean,
+    isPlaybackPaused: Boolean,
     onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit,
     arguments: List<NamedNavArgument> = emptyList()
 ) {
@@ -102,16 +106,12 @@ fun NavGraphBuilder.artistDetailScreen(
             artistImageUrlString = artistImageUrlString,
             popularTracks = viewModel.popularTracks.value,
             releases = releases,
-            currentlyPlayingTrack = if (uiState is ArtistDetailScreenUiState.PlayingTrack) {
-                (uiState as ArtistDetailScreenUiState.PlayingTrack).currentlyPlayingTrack
-            } else {
-                null
-            },
+            currentlyPlayingTrack = currentlyPlayingTrack,
             onBackButtonClicked = onBackButtonClicked,
             onPlayButtonClicked = { /*TODO*/ },
-            onTrackClicked = viewModel::playTrack,
+            onTrackClicked = onPlayTrack,
             onAlbumClicked = onAlbumClicked,
-            isLoading = uiState is ArtistDetailScreenUiState.Loading,
+            isLoading = uiState is ArtistDetailScreenUiState.Loading || isPlaybackLoading,
             fallbackImageRes = R.drawable.ic_outline_account_circle_24
         )
     }
