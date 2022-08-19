@@ -13,7 +13,6 @@ import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
-import com.example.musify.usecases.playtrackusecase.PlayTrackWithMediaNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,7 +36,6 @@ class ArtistDetailViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
     private val repository: MusifyRepository,
-    private val playTrackWithMediaNotificationUseCase: PlayTrackWithMediaNotificationUseCase,
 ) : AndroidViewModel(application) {
 
     private val _popularTracks = mutableStateOf<List<SearchResult.TrackSearchResult>>(emptyList())
@@ -84,20 +82,6 @@ class ArtistDetailViewModel @Inject constructor(
                 _popularTracks.value = fetchResult.data
                 _uiState.value = ArtistDetailScreenUiState.Idle
             }
-        }
-    }
-
-    fun playTrack(track: SearchResult.TrackSearchResult) {
-        if (track.trackUrlString == null) return
-        viewModelScope.launch {
-            playTrackWithMediaNotificationUseCase.invoke(
-                track,
-                onLoading = { _uiState.value = ArtistDetailScreenUiState.Loading },
-                onFinishedLoading = {
-                    _uiState.value = if (it == null) ArtistDetailScreenUiState.PlayingTrack(track)
-                    else ArtistDetailScreenUiState.Error("Unable to play track. Please check internet connection")
-                }
-            )
         }
     }
 }
