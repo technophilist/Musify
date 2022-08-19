@@ -31,8 +31,9 @@ import java.nio.charset.StandardCharsets
 fun NavGraphBuilder.searchScreen(
     route: String,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?,
-    isPlaybackLoading:Boolean,
+    isPlaybackLoading: Boolean,
     isPlaybackPaused: Boolean,
+    onPlayTrack: (SearchResult.TrackSearchResult) -> Unit,
     onArtistSearchResultClicked: (SearchResult.ArtistSearchResult) -> Unit
 ) {
     composable(route = route) {
@@ -61,7 +62,7 @@ fun NavGraphBuilder.searchScreen(
             tracksListForSearchQuery = tracks,
             playlistListForSearchQuery = playlists,
             onSearchQueryItemClicked = {
-                if (it is SearchResult.TrackSearchResult) viewModel.playTrack(it)
+                if (it is SearchResult.TrackSearchResult) onPlayTrack(it)
                 if (it is SearchResult.ArtistSearchResult) onArtistSearchResultClicked(it)
             },
             currentlySelectedFilter = viewModel.currentlySelectedFilter.value,
