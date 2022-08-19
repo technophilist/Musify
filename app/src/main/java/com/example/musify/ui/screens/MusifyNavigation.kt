@@ -7,6 +7,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.ui.navigation.artistDetailScreen
 import com.example.musify.ui.navigation.searchScreen
@@ -15,7 +16,11 @@ import com.example.musify.ui.navigation.searchScreen
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @Composable
-fun MusifyNavigation() {
+fun MusifyNavigation(
+    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
+    isPaused:Boolean,
+    playTrack: (SearchResult.TrackSearchResult) -> Unit,
+) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
