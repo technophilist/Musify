@@ -52,6 +52,11 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -87,6 +92,7 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     testImplementation "org.robolectric:robolectric:4.8.1"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1"
+    testImplementation 'org.mockito:mockito-core:3.9.0'
 
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

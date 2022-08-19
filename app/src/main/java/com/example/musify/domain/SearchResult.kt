@@ -64,6 +64,7 @@ fun SearchResult.TrackSearchResult.toMusicPlayerTrack(albumArtBitmap: Bitmap): M
         title = name,
         artistsString = artistsString,
         albumArt = albumArtBitmap,
-        trackUrlString = trackUrlString
+        albumArtUrlString = this.imageUrlString,
+        trackUrlString = trackUrlString,
     )
 }
