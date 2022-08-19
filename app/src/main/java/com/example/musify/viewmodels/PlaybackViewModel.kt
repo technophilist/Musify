@@ -21,15 +21,13 @@ class PlaybackViewModel @Inject constructor(
     private val downloadDrawableFromUrlUseCase: DownloadDrawableFromUrlUseCase
 ) : AndroidViewModel(application) {
 
-    sealed class PlaybackState {
+    sealed class PlaybackState(val currentlyPlayingTrack: SearchResult.TrackSearchResult? = null) {
         object Idle : PlaybackState()
         object Paused : PlaybackState()
         object Stopped : PlaybackState()
         object Loading : PlaybackState()
         data class Error(val errorMessage: String) : PlaybackState()
-        data class Playing(
-            val currentlyPlayingTrack: SearchResult.TrackSearchResult
-        ) : PlaybackState()
+        data class Playing(val track: SearchResult.TrackSearchResult) : PlaybackState(track)
     }
 
     private val _playbackState = mutableStateOf<PlaybackState>(PlaybackState.Idle)

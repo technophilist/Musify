@@ -59,7 +59,7 @@ class PlaybackViewModelTest {
         val track = fakeTrackSearchResult
         playbackViewModelWithSuccessfulImageFetch.playTrack(track)
         assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value is PlaybackViewModel.PlaybackState.Playing)
-        assert((playbackViewModelWithSuccessfulImageFetch.playbackState.value as PlaybackViewModel.PlaybackState.Playing).currentlyPlayingTrack == track)
+        assert((playbackViewModelWithSuccessfulImageFetch.playbackState.value as PlaybackViewModel.PlaybackState.Playing).track == track)
     }
 
     @Test
