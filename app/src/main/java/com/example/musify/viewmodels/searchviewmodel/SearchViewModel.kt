@@ -12,7 +12,6 @@ import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.IODispatcher
 import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.SearchResult
-import com.example.musify.usecases.playtrackusecase.PlayTrackWithMediaNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
@@ -30,7 +29,6 @@ class SearchViewModel @Inject constructor(
     application: Application,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val repository: Repository,
-    private val playTrackWithMediaNotificationUseCase: PlayTrackWithMediaNotificationUseCase
 ) : AndroidViewModel(application) {
 
     private var searchJob: Job? = null
@@ -172,17 +170,6 @@ class SearchViewModel @Inject constructor(
             // un-necessary calls to the api
             delay(500)
             collectAndAssignSearchResults(searchQuery, MapperImageSize.MEDIUM)
-        }
-    }
-
-    fun playTrack(track: SearchResult.TrackSearchResult) {
-        if (track.trackUrlString == null) return
-        viewModelScope.launch {
-            playTrackWithMediaNotificationUseCase.invoke(
-                track,
-                onLoading = { _uiState.value = SearchScreenUiState.LOADING },
-                onFinishedLoading = { _uiState.value = SearchScreenUiState.IDLE }
-            )
         }
     }
 
