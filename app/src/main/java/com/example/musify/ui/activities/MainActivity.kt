@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.musify.ui.screens.MusifyNavigation
 import com.example.musify.ui.theme.MusifyTheme
+import com.example.musify.viewmodels.PlaybackViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,10 +32,26 @@ class MainActivity : ComponentActivity() {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background,
-                        content = { MusifyNavigation() }
+                        content = { MusifyApp() }
                     )
                 }
             }
         }
     }
 }
+
+@ExperimentalFoundationApi
+@ExperimentalComposeUiApi
+@ExperimentalMaterialApi
+@Composable
+private fun MusifyApp() {
+    val playbackViewModel = hiltViewModel<PlaybackViewModel>()
+    val playbackState by playbackViewModel.playbackState
+
+    MusifyNavigation(
+        currentlyPlayingTrack = playbackState.currentlyPlayingTrack,
+        isPaused = playbackState is PlaybackViewModel.PlaybackState.Paused,
+        playTrack = playbackViewModel::playTrack
+    )
+}
+
