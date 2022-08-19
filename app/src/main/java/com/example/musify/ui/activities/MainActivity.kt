@@ -49,9 +49,10 @@ private fun MusifyApp() {
     val playbackState by playbackViewModel.playbackState
 
     MusifyNavigation(
+        playTrack = playbackViewModel::playTrack,
         currentlyPlayingTrack = playbackState.currentlyPlayingTrack,
-        isPaused = playbackState is PlaybackViewModel.PlaybackState.Paused,
-        playTrack = playbackViewModel::playTrack
+        isPlaybackLoading = playbackState is PlaybackViewModel.PlaybackState.Loading,
+        isPlaybackPaused = playbackState is PlaybackViewModel.PlaybackState.Paused
     )
 }
 

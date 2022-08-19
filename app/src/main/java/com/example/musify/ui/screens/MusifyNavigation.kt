@@ -17,9 +17,10 @@ import com.example.musify.ui.navigation.searchScreen
 @ExperimentalFoundationApi
 @Composable
 fun MusifyNavigation(
-    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
-    isPaused:Boolean,
     playTrack: (SearchResult.TrackSearchResult) -> Unit,
+    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
+    isPlaybackLoading: Boolean,
+    isPlaybackPaused: Boolean
 ) {
     val navController = rememberNavController()
     NavHost(
