@@ -4,8 +4,6 @@ import com.example.musify.musicplayer.MusicPlayer
 import com.example.musify.musicplayer.MusifyBackgroundMusicPlayer
 import com.example.musify.usecases.downloadDrawableFromUrlUseCase.DownloadDrawableFromUrlUseCase
 import com.example.musify.usecases.downloadDrawableFromUrlUseCase.MusifyDownloadDrawableFromUrlUseCase
-import com.example.musify.usecases.playtrackusecase.MusifyPlayTrackWithMediaNotificationUseCase
-import com.example.musify.usecases.playtrackusecase.PlayTrackWithMediaNotificationUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,11 +23,6 @@ abstract class MusicPlayerModule {
     abstract fun bindMusicPlayer(
         musifyBackgroundMusicPlayer: MusifyBackgroundMusicPlayer
     ): MusicPlayer
-
-    @Binds
-    abstract fun bindPlayTrackWithMediaNotificationUseCase(
-        impl: MusifyPlayTrackWithMediaNotificationUseCase
-    ): PlayTrackWithMediaNotificationUseCase
 
     @Binds
     abstract fun bindDownloadDrawableFromUrlUseCase(
