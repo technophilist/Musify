@@ -24,10 +24,6 @@ import javax.inject.Inject
 sealed class ArtistDetailScreenUiState {
     object Idle : ArtistDetailScreenUiState()
     object Loading : ArtistDetailScreenUiState()
-    data class PlayingTrack(
-        val currentlyPlayingTrack: SearchResult.TrackSearchResult
-    ) : ArtistDetailScreenUiState()
-
     data class Error(private val message: String) : ArtistDetailScreenUiState()
 }
 
