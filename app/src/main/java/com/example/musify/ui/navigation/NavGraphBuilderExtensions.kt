@@ -56,7 +56,7 @@ fun NavGraphBuilder.searchScreen(
             searchScreenFilters = filters,
             onGenreItemClick = {},
             onSearchTextChanged = viewModel::search,
-            isSearchResultLoading = uiState == SearchScreenUiState.LOADING,
+            isLoading = uiState == SearchScreenUiState.LOADING,
             albumListForSearchQuery = albums,
             artistListForSearchQuery = artists,
             tracksListForSearchQuery = tracks,

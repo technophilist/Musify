@@ -54,7 +54,7 @@ fun SearchScreen(
     onSearchFilterChanged: (SearchFilter) -> Unit,
     onGenreItemClick: (Genre) -> Unit,
     onSearchTextChanged: (searchText: String) -> Unit,
-    isSearchResultLoading: Boolean,
+    isLoading: Boolean,
     isSearchErrorMessageVisible: Boolean,
     albumListForSearchQuery: LazyPagingItems<SearchResult.AlbumSearchResult>,
     artistListForSearchQuery: LazyPagingItems<SearchResult.ArtistSearchResult>,
@@ -214,7 +214,7 @@ fun SearchScreen(
                         isSearchItemLoadingPlaceholderVisibleMap[item] = false
                     },
                     onImageLoading = { isSearchItemLoadingPlaceholderVisibleMap[it] = true },
-                    isSearchResultsLoadingAnimationVisible = isSearchResultLoading,
+                    isSearchResultsLoadingAnimationVisible = isLoading,
                     lottieComposition = searchResultsLoadingAnimationComposition,
                     lazyListState = lazyListState,
                     currentlySelectedFilter = currentlySelectedFilter,
