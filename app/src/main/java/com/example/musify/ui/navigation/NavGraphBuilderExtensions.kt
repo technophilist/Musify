@@ -30,6 +30,9 @@ import java.nio.charset.StandardCharsets
 @ExperimentalMaterialApi
 fun NavGraphBuilder.searchScreen(
     route: String,
+    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
+    isPlaybackLoading:Boolean,
+    isPlaybackPaused: Boolean,
     onArtistSearchResultClicked: (SearchResult.ArtistSearchResult) -> Unit
 ) {
     composable(route = route) {
