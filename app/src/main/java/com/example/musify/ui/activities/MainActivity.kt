@@ -48,6 +48,8 @@ private fun MusifyApp() {
     val playbackViewModel = hiltViewModel<PlaybackViewModel>()
     val playbackState by playbackViewModel.playbackState
 
+    // the playbackState.currentlyPlayingTrack will automatically be set
+    // to null when the playback is stopped
     MusifyNavigation(
         playTrack = playbackViewModel::playTrack,
         currentlyPlayingTrack = playbackState.currentlyPlayingTrack,
