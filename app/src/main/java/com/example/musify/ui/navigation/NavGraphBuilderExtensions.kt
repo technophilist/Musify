@@ -79,7 +79,8 @@ fun NavGraphBuilder.searchScreen(
                 // which case, the keyboard will just be hidden.
                 if (isLoadingError) viewModel.search(it)
                 controller?.hide()
-            }
+            },
+            currentlyPlayingTrack = currentlyPlayingTrack
         )
     }
 }

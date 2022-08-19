@@ -13,6 +13,7 @@ import com.example.musify.ui.components.MusifyCompactTrackCard
 @ExperimentalMaterialApi
 fun LazyListScope.searchTrackListItems(
     tracksListForSearchQuery: LazyPagingItems<SearchResult.TrackSearchResult>,
+    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     onItemClick: (SearchResult) -> Unit,
     isLoadingPlaceholderVisible: (SearchResult.TrackSearchResult) -> Boolean,
     onImageLoading: (SearchResult) -> Unit,
@@ -28,7 +29,8 @@ fun LazyListScope.searchTrackListItems(
                 onClick = onItemClick,
                 isLoadingPlaceholderVisible = isLoadingPlaceholderVisible(it),
                 onImageLoading = onImageLoading,
-                onImageLoadingFinished = onImageLoadingFinished
+                onImageLoadingFinished = onImageLoadingFinished,
+                isCurrentlyPlaying = it == currentlyPlayingTrack
             )
         }
     }
