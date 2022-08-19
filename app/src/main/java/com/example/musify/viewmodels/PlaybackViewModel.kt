@@ -11,10 +11,11 @@ import com.example.musify.domain.toMusicPlayerTrack
 import com.example.musify.musicplayer.MusicPlayer
 import com.example.musify.musicplayer.utils.toTrackSearchResult
 import com.example.musify.usecases.downloadDrawableFromUrlUseCase.DownloadDrawableFromUrlUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
+@HiltViewModel
 class PlaybackViewModel @Inject constructor(
     application: Application,
     private val musicPlayer: MusicPlayer,
