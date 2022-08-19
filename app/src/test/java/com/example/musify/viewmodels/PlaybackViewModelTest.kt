@@ -79,4 +79,11 @@ class PlaybackViewModelTest {
         assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value is PlaybackViewModel.PlaybackState.Stopped)
     }
 
+    @Test
+    fun stoppedStateTest_whenUnderlyingMusicPlayerStopsPlayingTrack_currentlyPlayingTrackMustBeNull() {
+        musicPlayer.stopPlayingTrack()
+        assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value is PlaybackViewModel.PlaybackState.Stopped)
+        assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value.currentlyPlayingTrack == null)
+    }
+
 }
