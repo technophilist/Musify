@@ -32,7 +32,6 @@ fun NavGraphBuilder.searchScreen(
     route: String,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     isPlaybackLoading: Boolean,
-    isPlaybackPaused: Boolean,
     onPlayTrack: (SearchResult.TrackSearchResult) -> Unit,
     onArtistSearchResultClicked: (SearchResult.ArtistSearchResult) -> Unit
 ) {
@@ -92,7 +91,6 @@ fun NavGraphBuilder.artistDetailScreen(
     onPlayTrack: (SearchResult.TrackSearchResult) -> Unit,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     isPlaybackLoading: Boolean,
-    isPlaybackPaused: Boolean,
     onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit,
     arguments: List<NamedNavArgument> = emptyList()
 ) {
