@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.example.musify.R
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
+import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
 import com.example.musify.ui.components.MusifyCompactTrackCard
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
@@ -41,6 +42,7 @@ fun MusicDetailScreen(
     trackList: List<SearchResult.TrackSearchResult>,
     onTrackItemClick: (SearchResult.TrackSearchResult) -> Unit,
     onBackButtonClicked: () -> Unit,
+    isLoading: Boolean,
     currentlyPlayingTrack: SearchResult.TrackSearchResult
 ) {
     val metadataText = "${
@@ -49,39 +51,42 @@ fun MusicDetailScreen(
             MusicDetailScreenType.PLAYLIST -> "Playlist"
         }
     } • $metadata"
-    var isLoadingPlaceholderVisible by remember { mutableStateOf(false) }
-    LazyColumn(
-        modifier = Modifier
-            .statusBarsPadding()
-            .fillMaxSize()
-    ) {
-        item {
-            ArtWithHeader(
-                artUrl = artUrl,
-                title = title,
-                nameOfUploader = nameOfUploader,
-                metadata = metadataText,
-                isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
-                onAlbumArtLoading = { isLoadingPlaceholderVisible = true },
-                onAlbumArtLoaded = { isLoadingPlaceholderVisible = false },
-                onBackButtonClicked = onBackButtonClicked
-            )
+    var isLoadingPlaceholderForAlbumArtVisible by remember { mutableStateOf(false) }
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .statusBarsPadding()
+                .fillMaxSize()
+        ) {
+            item {
+                ArtWithHeader(
+                    artUrl = artUrl,
+                    title = title,
+                    nameOfUploader = nameOfUploader,
+                    metadata = metadataText,
+                    isLoadingPlaceholderVisible = isLoadingPlaceholderForAlbumArtVisible,
+                    onAlbumArtLoading = { isLoadingPlaceholderForAlbumArtVisible = true },
+                    onAlbumArtLoaded = { isLoadingPlaceholderForAlbumArtVisible = false },
+                    onBackButtonClicked = onBackButtonClicked
+                )
+            }
+            items(trackList) {
+                MusifyCompactTrackCard(
+                    track = it,
+                    onClick = onTrackItemClick,
+                    isLoadingPlaceholderVisible = false,
+                    isCurrentlyPlaying = it == currentlyPlayingTrack
+                )
+            }
+            item {
+                Spacer(
+                    modifier = Modifier
+                        .navigationBarsHeight()
+                        .padding(bottom = 16.dp)
+                )
+            }
         }
-        items(trackList) {
-            MusifyCompactTrackCard(
-                track = it,
-                onClick = onTrackItemClick,
-                isLoadingPlaceholderVisible = false,
-                isCurrentlyPlaying = it == currentlyPlayingTrack
-            )
-        }
-        item {
-            Spacer(
-                modifier = Modifier
-                    .navigationBarsHeight()
-                    .padding(bottom = 16.dp)
-            )
-        }
+        DefaultMusifyLoadingAnimation(isVisible = isLoading)
     }
 }
 
