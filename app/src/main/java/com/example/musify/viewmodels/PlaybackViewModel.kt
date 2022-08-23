@@ -12,6 +12,8 @@ import com.example.musify.musicplayer.MusicPlayer
 import com.example.musify.musicplayer.utils.toTrackSearchResult
 import com.example.musify.usecases.downloadDrawableFromUrlUseCase.DownloadDrawableFromUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,14 +34,21 @@ class PlaybackViewModel @Inject constructor(
     }
 
     sealed class Event {
-        data class PlaybackError(val errorMessage: String) : Event()
+        // a data class is not used because a 'Channel' will not send
+        // two items of the same type consecutively. Since a data class
+        // overrides equals & hashcode by default, if the same event
+        // occurs consecutively, the event will not be sent over the
+        // channel, resulting in missed events.
+        class PlaybackError(val errorMessage: String) : Event()
     }
 
     private val _playbackState = mutableStateOf<PlaybackState>(PlaybackState.Idle)
     val playbackState = _playbackState as State<PlaybackState>
 
-    private val playbackErrorMessage =
-        "An error occurred while playing track. Please check internet connection."
+    private val _eventChannel = Channel<Event?>()
+    val playbackEventsFlow = _eventChannel.receiveAsFlow()
+
+    private val playbackErrorMessage = "An error occurred. Please check internet connection."
 
     init {
         musicPlayer.addOnPlaybackStateChangedListener {
@@ -48,18 +57,22 @@ class PlaybackViewModel @Inject constructor(
                 is MusicPlayer.PlaybackState.Playing -> PlaybackState.Playing(it.currentlyPlayingTrack.toTrackSearchResult())
                 is MusicPlayer.PlaybackState.Paused -> PlaybackState.Paused
                 is MusicPlayer.PlaybackState.Stopped -> PlaybackState.Stopped
-                is MusicPlayer.PlaybackState.Error -> PlaybackState.Error(playbackErrorMessage)
+                is MusicPlayer.PlaybackState.Error -> {
+                    viewModelScope.launch {
+                        _eventChannel.send(Event.PlaybackError(playbackErrorMessage))
+                    }
+                    PlaybackState.Error(playbackErrorMessage)
+                }
             }
         }
     }
 
     fun playTrack(track: SearchResult.TrackSearchResult) {
-        if (track.trackUrlString == null) {
-            _playbackState.value =
-                PlaybackState.Error("This track is currently not available for playback.")
-            return
-        }
         viewModelScope.launch {
+            if (track.trackUrlString == null) {
+                _eventChannel.send(Event.PlaybackError("This track is currently unavailable for playback."))
+                return@launch
+            }
             _playbackState.value = PlaybackState.Loading
             val downloadAlbumArtResult = downloadDrawableFromUrlUseCase.invoke(
                 urlString = track.imageUrlString,
@@ -70,6 +83,7 @@ class PlaybackViewModel @Inject constructor(
                     track.toMusicPlayerTrack(downloadAlbumArtResult.getOrNull()!!.toBitmap())
                 musicPlayer.playTrack(musicPlayerTrack)
             } else {
+                _eventChannel.send(Event.PlaybackError(playbackErrorMessage))
                 _playbackState.value = PlaybackState.Error(playbackErrorMessage)
             }
         }
