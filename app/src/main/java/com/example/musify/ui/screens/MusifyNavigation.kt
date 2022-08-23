@@ -9,7 +9,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
-import com.example.musify.ui.navigation.albumDetailScreen
 import com.example.musify.ui.navigation.artistDetailScreen
 import com.example.musify.ui.navigation.searchScreen
 
@@ -31,10 +30,16 @@ fun MusifyNavigation(
             route = MusifyNavigationDestinations.SearchScreen.route,
             currentlyPlayingTrack = currentlyPlayingTrack,
             isPlaybackLoading = isPlaybackLoading,
-            onArtistSearchResultClicked = {
-                navController.navigate(MusifyNavigationDestinations.ArtistDetailScreen.buildRoute(it))
-            },
-            onPlayTrack = playTrack
+            onSearchResultClicked = {
+                when (it) {
+                    is SearchResult.AlbumSearchResult -> navController
+                        .navigate(MusifyNavigationDestinations.AlbumDetailScreen.buildRoute(it))
+                    is SearchResult.ArtistSearchResult -> navController
+                        .navigate(MusifyNavigationDestinations.ArtistDetailScreen.buildRoute(it))
+                    is SearchResult.PlaylistSearchResult -> {}
+                    is SearchResult.TrackSearchResult -> playTrack(it)
+                }
+            }
         )
         artistDetailScreen(
             route = MusifyNavigationDestinations.ArtistDetailScreen.route,
@@ -48,13 +53,6 @@ fun MusifyNavigation(
             onPlayTrack = playTrack,
             currentlyPlayingTrack = currentlyPlayingTrack,
             isPlaybackLoading = isPlaybackLoading,
-        )
-        albumDetailScreen(
-            route = MusifyNavigationDestinations.AlbumDetailScreen.route,
-            onBackButtonClicked = { navController.popBackStack() },
-            onPlayTrack = playTrack,
-            currentlyPlayingTrack = currentlyPlayingTrack,
-            isPlaybackLoading = isPlaybackLoading
         )
     }
 }
