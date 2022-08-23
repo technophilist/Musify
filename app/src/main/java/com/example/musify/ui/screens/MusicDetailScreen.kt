@@ -19,7 +19,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.musify.R
-import com.example.musify.domain.MusicSummary
+import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.components.MusifyCompactListItemCard
 import com.google.accompanist.insets.navigationBarsHeight
@@ -40,9 +40,9 @@ fun MusicDetailScreen(
     title: String,
     nameOfUploader: String,
     metadata: String,
-    trackList: List<MusicSummary.TrackSummary>,
-    onTrackItemClick: (MusicSummary.TrackSummary) -> Unit,
-    onTrackTrailingButtonClick: (MusicSummary.TrackSummary) -> Unit,
+    trackList: List<SearchResult.TrackSearchResult>,
+    onTrackItemClick: (SearchResult.TrackSearchResult) -> Unit,
+    onTrackTrailingButtonClick: (SearchResult.TrackSearchResult) -> Unit,
     onBackButtonClicked: () -> Unit
 ) {
     val metadataText = "${
@@ -72,7 +72,7 @@ fun MusicDetailScreen(
         items(trackList) {
             MusifyCompactListItemCard(
                 title = it.name,
-                subtitle = it.albumName,
+                subtitle = it.artistsString,
                 onClick = { onTrackItemClick(it) },
                 trailingButtonIcon = Icons.Filled.MoreVert,
                 onTrailingButtonIconClick = { onTrackTrailingButtonClick(it) },
