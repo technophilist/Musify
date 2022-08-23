@@ -42,7 +42,6 @@ fun MusicDetailScreen(
     metadata: String,
     trackList: List<SearchResult.TrackSearchResult>,
     onTrackItemClick: (SearchResult.TrackSearchResult) -> Unit,
-    onTrackTrailingButtonClick: (SearchResult.TrackSearchResult) -> Unit,
     onBackButtonClicked: () -> Unit
 ) {
     val metadataText = "${
@@ -75,7 +74,7 @@ fun MusicDetailScreen(
                 subtitle = it.artistsString,
                 onClick = { onTrackItemClick(it) },
                 trailingButtonIcon = Icons.Filled.MoreVert,
-                onTrailingButtonIconClick = { onTrackTrailingButtonClick(it) },
+                onTrailingButtonIconClick = { /* TODO */ },
                 subtitleTextStyle = MaterialTheme.typography
                     .caption
                     .copy(
