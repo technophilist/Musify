@@ -43,7 +43,7 @@ fun MusicDetailScreen(
     onTrackItemClick: (SearchResult.TrackSearchResult) -> Unit,
     onBackButtonClicked: () -> Unit,
     isLoading: Boolean,
-    currentlyPlayingTrack: SearchResult.TrackSearchResult
+    currentlyPlayingTrack: SearchResult.TrackSearchResult?
 ) {
     val metadataText = "${
         when (musicDetailScreenType) {
