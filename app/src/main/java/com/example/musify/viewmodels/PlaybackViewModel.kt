@@ -31,6 +31,10 @@ class PlaybackViewModel @Inject constructor(
         data class Playing(val track: SearchResult.TrackSearchResult) : PlaybackState(track)
     }
 
+    sealed class Event {
+        data class PlaybackError(val errorMessage: String) : Event()
+    }
+
     private val _playbackState = mutableStateOf<PlaybackState>(PlaybackState.Idle)
     val playbackState = _playbackState as State<PlaybackState>
 
