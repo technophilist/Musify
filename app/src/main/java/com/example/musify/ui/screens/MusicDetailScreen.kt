@@ -6,8 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.example.musify.R
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
-import com.example.musify.ui.components.MusifyCompactListItemCard
+import com.example.musify.ui.components.MusifyCompactTrackCard
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
 
@@ -42,7 +40,8 @@ fun MusicDetailScreen(
     metadata: String,
     trackList: List<SearchResult.TrackSearchResult>,
     onTrackItemClick: (SearchResult.TrackSearchResult) -> Unit,
-    onBackButtonClicked: () -> Unit
+    onBackButtonClicked: () -> Unit,
+    currentlyPlayingTrack: SearchResult.TrackSearchResult
 ) {
     val metadataText = "${
         when (musicDetailScreenType) {
@@ -69,19 +68,11 @@ fun MusicDetailScreen(
             )
         }
         items(trackList) {
-            MusifyCompactListItemCard(
-                title = it.name,
-                subtitle = it.artistsString,
-                onClick = { onTrackItemClick(it) },
-                trailingButtonIcon = Icons.Filled.MoreVert,
-                onTrailingButtonIconClick = { /* TODO */ },
-                subtitleTextStyle = MaterialTheme.typography
-                    .caption
-                    .copy(
-                        color = MaterialTheme.colors
-                            .onBackground
-                            .copy(ContentAlpha.disabled)
-                    )
+            MusifyCompactTrackCard(
+                track = it,
+                onClick = onTrackItemClick,
+                isLoadingPlaceholderVisible = false,
+                isCurrentlyPlaying = it == currentlyPlayingTrack
             )
         }
         item {
