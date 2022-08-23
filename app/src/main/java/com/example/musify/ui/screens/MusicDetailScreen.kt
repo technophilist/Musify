@@ -86,7 +86,10 @@ fun MusicDetailScreen(
                 )
             }
         }
-        DefaultMusifyLoadingAnimation(isVisible = isLoading)
+        DefaultMusifyLoadingAnimation(
+            modifier = Modifier.align(Alignment.Center),
+            isVisible = isLoading
+        )
     }
 }
 
