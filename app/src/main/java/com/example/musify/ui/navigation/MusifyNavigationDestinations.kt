@@ -26,4 +26,20 @@ sealed class MusifyNavigationDestinations(val route: String) {
         }
 
     }
+
+    object AlbumDetailScreen :
+        MusifyNavigationDestinations("MusifyNavigationDestinations.AlbumDetailScreen/{albumId}/{albumName}/{artistsString}/{encodedImageUrlString}") {
+        const val NAV_ARG_ALBUM_ID = "albumId"
+        const val NAV_ARG_ALBUM_NAME = "albumName"
+        const val NAV_ARG_ARTISTS_STRING = "artistsString"
+        const val NAV_ARG_ENCODED_IMAGE_URL_STRING = "encodedImageUrlString"
+
+        fun buildRoute(albumSearchResult: SearchResult.AlbumSearchResult): String {
+            val encodedImageUrlString = URLEncoder.encode(
+                albumSearchResult.albumArtUrlString,
+                StandardCharsets.UTF_8.toString()
+            )
+            return "MusifyNavigationDestinations.AlbumDetailScreen/${albumSearchResult.id}/${albumSearchResult.name}/${albumSearchResult.artistsString}/${encodedImageUrlString}"
+        }
+    }
 }
