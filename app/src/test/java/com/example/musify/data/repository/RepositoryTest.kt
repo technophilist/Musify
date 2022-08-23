@@ -168,4 +168,19 @@ class RepositoryTest {
         assert((result as FetchedResource.Success).data.isNotEmpty())
     }
 
+    @Test
+    fun fetchTracksForAlbumTest_validAlbumId_associatedTracksSuccessfullyFetched() {
+        val validGenreId = "1ftvBBcu7jYIvXyt3JWB8S" // "The Eminem Show"
+        val result = runBlocking {
+            repository.fetchTracksForAlbumWithId(
+                albumId = validGenreId,
+                countryCode = "IN",
+                imageSize = MapperImageSize.SMALL
+            )
+        }
+        assert(result is FetchedResource.Success)
+        assert((result as FetchedResource.Success).data.isNotEmpty())
+        println(result.data)
+    }
+
 }
