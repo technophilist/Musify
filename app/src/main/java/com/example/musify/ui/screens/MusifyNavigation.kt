@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
+import com.example.musify.ui.navigation.albumDetailScreen
 import com.example.musify.ui.navigation.artistDetailScreen
 import com.example.musify.ui.navigation.searchScreen
 
@@ -47,6 +48,13 @@ fun MusifyNavigation(
             onPlayTrack = playTrack,
             currentlyPlayingTrack = currentlyPlayingTrack,
             isPlaybackLoading = isPlaybackLoading,
+        )
+        albumDetailScreen(
+            route = MusifyNavigationDestinations.AlbumDetailScreen.route,
+            onBackButtonClicked = { navController.popBackStack() },
+            onPlayTrack = playTrack,
+            currentlyPlayingTrack = currentlyPlayingTrack,
+            isPlaybackLoading = isPlaybackLoading
         )
     }
 }
