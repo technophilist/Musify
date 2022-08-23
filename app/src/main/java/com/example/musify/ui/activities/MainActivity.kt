@@ -71,8 +71,7 @@ private fun MusifyApp() {
         MusifyNavigation(
             playTrack = playbackViewModel::playTrack,
             currentlyPlayingTrack = playbackState.currentlyPlayingTrack,
-            isPlaybackLoading = playbackState is PlaybackViewModel.PlaybackState.Loading,
-            isPlaybackPaused = playbackState is PlaybackViewModel.PlaybackState.Paused
+            isPlaybackLoading = playbackState is PlaybackViewModel.PlaybackState.Loading
         )
         SnackbarHost(
             modifier = Modifier.align(Alignment.BottomCenter),

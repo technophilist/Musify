@@ -19,8 +19,7 @@ import com.example.musify.ui.navigation.searchScreen
 fun MusifyNavigation(
     playTrack: (SearchResult.TrackSearchResult) -> Unit,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?,
-    isPlaybackLoading: Boolean,
-    isPlaybackPaused: Boolean
+    isPlaybackLoading: Boolean
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -31,7 +30,6 @@ fun MusifyNavigation(
             route = MusifyNavigationDestinations.SearchScreen.route,
             currentlyPlayingTrack = currentlyPlayingTrack,
             isPlaybackLoading = isPlaybackLoading,
-            isPlaybackPaused = isPlaybackPaused,
             onArtistSearchResultClicked = {
                 navController.navigate(MusifyNavigationDestinations.ArtistDetailScreen.buildRoute(it))
             },
@@ -49,7 +47,6 @@ fun MusifyNavigation(
             onPlayTrack = playTrack,
             currentlyPlayingTrack = currentlyPlayingTrack,
             isPlaybackLoading = isPlaybackLoading,
-            isPlaybackPaused = isPlaybackPaused
         )
     }
 }
