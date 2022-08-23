@@ -26,7 +26,7 @@ data class AlbumResponse(
      * A data class that contains the list of tracks associated with
      * a particular [AlbumResponse].
      */
-    data class TracksWithoutAlbumMetadataListResponse(@JsonProperty("items") val value: List<TrackDTOWithoutAlbumMetadataResponse>)
+    data class TracksWithoutAlbumMetadataListResponse(@JsonProperty("items") val value: List<TrackResponseWithoutAlbumMetadataResponse>)
 
     /**
      * A response object that contains information about a specific track
@@ -34,7 +34,7 @@ data class AlbumResponse(
      * [TrackResponseWithAlbumMetadata] contains both, information about
      * the track and the metadata about the associated album.
      */
-    data class TrackDTOWithoutAlbumMetadataResponse(
+    data class TrackResponseWithoutAlbumMetadataResponse(
         val id: String,
         val name: String,
         @JsonProperty("preview_url") val previewUrl: String?,
