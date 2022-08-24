@@ -78,6 +78,10 @@ fun MusicDetailScreen(
                     isLoadingPlaceholderVisible = false,
                     isCurrentlyPlaying = it == currentlyPlayingTrack,
                     isAlbumArtVisible = false,
+                    subtitleTextStyle = LocalTextStyle.current.copy(
+                        fontWeight = FontWeight.Thin,
+                        color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.disabled),
+                    )
                 )
             }
             item {
