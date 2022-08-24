@@ -69,6 +69,7 @@ fun MusicDetailScreen(
                     onAlbumArtLoaded = { isLoadingPlaceholderForAlbumArtVisible = false },
                     onBackButtonClicked = onBackButtonClicked
                 )
+                Spacer(modifier = Modifier.size(16.dp))
             }
             items(trackList) {
                 MusifyCompactTrackCard(
@@ -130,7 +131,8 @@ private fun ArtWithHeader(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .statusBarsPadding()
+                .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             AsyncImageWithPlaceholder(
@@ -145,6 +147,7 @@ private fun ArtWithHeader(
                 onImageLoadingFinished = onAlbumArtLoaded,
                 contentScale = ContentScale.Crop
             )
+            Spacer(modifier = Modifier.size(16.dp))
             Text(
                 text = title,
                 fontWeight = FontWeight.Bold,
