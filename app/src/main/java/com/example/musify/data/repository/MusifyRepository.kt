@@ -15,6 +15,7 @@ import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.*
 import kotlinx.coroutines.flow.Flow
 import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 /**
@@ -34,6 +35,8 @@ class MusifyRepository @Inject constructor(
             FetchedResource.Success(block(tokenRepository.getValidBearerToken()))
         } catch (httpException: HttpException) {
             FetchedResource.Failure(httpException.musifyErrorType)
+        } catch (ioException: IOException) {
+            FetchedResource.Failure(MusifyErrorType.NETWORK_CONNECTION_FAILURE)
         }
 
     override suspend fun fetchArtistSummaryForId(
