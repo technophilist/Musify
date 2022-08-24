@@ -72,10 +72,12 @@ fun MusicDetailScreen(
             }
             items(trackList) {
                 MusifyCompactTrackCard(
+                    modifier = Modifier.padding(bottom = 16.dp),
                     track = it,
                     onClick = onTrackItemClick,
                     isLoadingPlaceholderVisible = false,
-                    isCurrentlyPlaying = it == currentlyPlayingTrack
+                    isCurrentlyPlaying = it == currentlyPlayingTrack,
+                    isAlbumArtVisible = false,
                 )
             }
             item {
