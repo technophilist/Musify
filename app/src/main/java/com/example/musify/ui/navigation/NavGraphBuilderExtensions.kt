@@ -137,12 +137,14 @@ fun NavGraphBuilder.albumDetailScreen(
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_ALBUM_NAME)!!
         val artists =
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_ARTISTS_STRING)!!
+        val yearOfRelease =
+            arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_YEAR_OF_RELEASE_STRING)!!
         MusicDetailScreen(
             artUrl = albumArtUrl,
             musicDetailScreenType = MusicDetailScreenType.ALBUM,
             title = albumName,
             nameOfUploader = artists,
-            metadata = "", // TODO
+            metadata = yearOfRelease,
             trackList = viewModel.tracks.value,
             onTrackItemClick = onPlayTrack,
             onBackButtonClicked = onBackButtonClicked,
