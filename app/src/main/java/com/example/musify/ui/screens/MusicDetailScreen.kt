@@ -6,8 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,9 +17,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.musify.R
-import com.example.musify.domain.MusicSummary
+import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
-import com.example.musify.ui.components.MusifyCompactListItemCard
+import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
+import com.example.musify.ui.components.MusifyCompactTrackCard
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
 
@@ -40,10 +39,11 @@ fun MusicDetailScreen(
     title: String,
     nameOfUploader: String,
     metadata: String,
-    trackList: List<MusicSummary.TrackSummary>,
-    onTrackItemClick: (MusicSummary.TrackSummary) -> Unit,
-    onTrackTrailingButtonClick: (MusicSummary.TrackSummary) -> Unit,
-    onBackButtonClicked: () -> Unit
+    trackList: List<SearchResult.TrackSearchResult>,
+    onTrackItemClick: (SearchResult.TrackSearchResult) -> Unit,
+    onBackButtonClicked: () -> Unit,
+    isLoading: Boolean,
+    currentlyPlayingTrack: SearchResult.TrackSearchResult?
 ) {
     val metadataText = "${
         when (musicDetailScreenType) {
@@ -51,47 +51,51 @@ fun MusicDetailScreen(
             MusicDetailScreenType.PLAYLIST -> "Playlist"
         }
     } • $metadata"
-    var isLoadingPlaceholderVisible by remember { mutableStateOf(false) }
-    LazyColumn(
-        modifier = Modifier
-            .statusBarsPadding()
-            .fillMaxSize()
-    ) {
-        item {
-            ArtWithHeader(
-                artUrl = artUrl,
-                title = title,
-                nameOfUploader = nameOfUploader,
-                metadata = metadataText,
-                isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
-                onAlbumArtLoading = { isLoadingPlaceholderVisible = true },
-                onAlbumArtLoaded = { isLoadingPlaceholderVisible = false },
-                onBackButtonClicked = onBackButtonClicked
-            )
-        }
-        items(trackList) {
-            MusifyCompactListItemCard(
-                title = it.name,
-                subtitle = it.albumName,
-                onClick = { onTrackItemClick(it) },
-                trailingButtonIcon = Icons.Filled.MoreVert,
-                onTrailingButtonIconClick = { onTrackTrailingButtonClick(it) },
-                subtitleTextStyle = MaterialTheme.typography
-                    .caption
-                    .copy(
-                        color = MaterialTheme.colors
-                            .onBackground
-                            .copy(ContentAlpha.disabled)
+    var isLoadingPlaceholderForAlbumArtVisible by remember { mutableStateOf(false) }
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .statusBarsPadding()
+                .fillMaxSize()
+        ) {
+            item {
+                ArtWithHeader(
+                    artUrl = artUrl,
+                    title = title,
+                    nameOfUploader = nameOfUploader,
+                    metadata = metadataText,
+                    isLoadingPlaceholderVisible = isLoadingPlaceholderForAlbumArtVisible,
+                    onAlbumArtLoading = { isLoadingPlaceholderForAlbumArtVisible = true },
+                    onAlbumArtLoaded = { isLoadingPlaceholderForAlbumArtVisible = false },
+                    onBackButtonClicked = onBackButtonClicked
+                )
+            }
+            items(trackList) {
+                MusifyCompactTrackCard(
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    track = it,
+                    onClick = onTrackItemClick,
+                    isLoadingPlaceholderVisible = false,
+                    isCurrentlyPlaying = it == currentlyPlayingTrack,
+                    isAlbumArtVisible = false,
+                    subtitleTextStyle = LocalTextStyle.current.copy(
+                        fontWeight = FontWeight.Thin,
+                        color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.disabled),
                     )
-            )
+                )
+            }
+            item {
+                Spacer(
+                    modifier = Modifier
+                        .navigationBarsHeight()
+                        .padding(bottom = 16.dp)
+                )
+            }
         }
-        item {
-            Spacer(
-                modifier = Modifier
-                    .navigationBarsHeight()
-                    .padding(bottom = 16.dp)
-            )
-        }
+        DefaultMusifyLoadingAnimation(
+            modifier = Modifier.align(Alignment.Center),
+            isVisible = isLoading
+        )
     }
 }
 

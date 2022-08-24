@@ -60,12 +60,7 @@ private fun MusifyApp() {
             message = (playbackEvent as PlaybackViewModel.Event.PlaybackError).errorMessage,
         )
     }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding()
-            .padding(8.dp)
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         // the playbackState.currentlyPlayingTrack will automatically be set
         // to null when the playback is stopped
         MusifyNavigation(
@@ -74,7 +69,10 @@ private fun MusifyApp() {
             isPlaybackLoading = playbackState is PlaybackViewModel.PlaybackState.Loading
         )
         SnackbarHost(
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .navigationBarsPadding()
+                .padding(8.dp),
             hostState = snackbarHostState
         )
     }

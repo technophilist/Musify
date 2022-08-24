@@ -3,6 +3,7 @@ package com.example.musify.data.remote.response
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getImageResponseForImageSize
 import com.example.musify.domain.MusicSummary
+import com.example.musify.domain.SearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 
@@ -26,7 +27,7 @@ data class AlbumResponse(
      * A data class that contains the list of tracks associated with
      * a particular [AlbumResponse].
      */
-    data class TracksWithoutAlbumMetadataListResponse(@JsonProperty("items") val value: List<TrackDTOWithoutAlbumMetadataResponse>)
+    data class TracksWithoutAlbumMetadataListResponse(@JsonProperty("items") val value: List<TrackResponseWithoutAlbumMetadataResponse>)
 
     /**
      * A response object that contains information about a specific track
@@ -34,7 +35,7 @@ data class AlbumResponse(
      * [TrackResponseWithAlbumMetadata] contains both, information about
      * the track and the metadata about the associated album.
      */
-    data class TrackDTOWithoutAlbumMetadataResponse(
+    data class TrackResponseWithoutAlbumMetadataResponse(
         val id: String,
         val name: String,
         @JsonProperty("preview_url") val previewUrl: String?,
@@ -68,4 +69,31 @@ fun AlbumResponse.toAlbumSummary(imageSize: MapperImageSize) = MusicSummary.Albu
     nameOfArtist = artists.first().name, // TODO multiple artists
     albumArtUrl = URL(images.getImageResponseForImageSize(imageSize).url),
     yearOfReleaseString = releaseDate // TODO accommodate for release data precision
+)
+
+/**
+ * A utility function used to get a list of [SearchResult.TrackSearchResult]s
+ * associated with a [AlbumResponse].
+ */
+fun AlbumResponse.getTracks(imageSize: MapperImageSize): List<SearchResult.TrackSearchResult> =
+    tracks.value.map { trackResponse ->
+        trackResponse.toTrackSearchResult(
+            albumArtImageUrlString = images.getImageResponseForImageSize(imageSize).url,
+            albumArtistsString = artists.joinToString(",") { it.name }
+        )
+    }
+
+/**
+ * A mapper function used to map an instance of [AlbumResponse.TrackResponseWithoutAlbumMetadataResponse]
+ * to an instance of [SearchResult.TrackSearchResult].
+ */
+fun AlbumResponse.TrackResponseWithoutAlbumMetadataResponse.toTrackSearchResult(
+    albumArtImageUrlString: String,
+    albumArtistsString: String
+) = SearchResult.TrackSearchResult(
+    id = id,
+    name = name,
+    imageUrlString = albumArtImageUrlString,
+    artistsString = albumArtistsString,
+    trackUrlString = previewUrl
 )
