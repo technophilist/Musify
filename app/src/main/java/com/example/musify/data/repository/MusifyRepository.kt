@@ -34,7 +34,7 @@ class MusifyRepository @Inject constructor(
         try {
             FetchedResource.Success(block(tokenRepository.getValidBearerToken()))
         } catch (httpException: HttpException) {
-            FetchedResource.Failure(httpException.musifyErrorType)
+            FetchedResource.Failure(httpException.getAssociatedMusifyErrorType())
         } catch (ioException: IOException) {
             FetchedResource.Failure(MusifyErrorType.NETWORK_CONNECTION_FAILURE)
         }
