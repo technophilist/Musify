@@ -16,7 +16,11 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.musify.R
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.screens.ArtistDetailScreen
+import com.example.musify.ui.screens.MusicDetailScreen
+import com.example.musify.ui.screens.MusicDetailScreenType
 import com.example.musify.ui.screens.searchscreen.SearchScreen
+import com.example.musify.viewmodels.AlbumDetailUiState
+import com.example.musify.viewmodels.AlbumDetailViewModel
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailScreenUiState
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailViewModel
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
@@ -32,8 +36,7 @@ fun NavGraphBuilder.searchScreen(
     route: String,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     isPlaybackLoading: Boolean,
-    onPlayTrack: (SearchResult.TrackSearchResult) -> Unit,
-    onArtistSearchResultClicked: (SearchResult.ArtistSearchResult) -> Unit
+    onSearchResultClicked: (SearchResult) -> Unit
 ) {
     composable(route = route) {
         val viewModel = hiltViewModel<SearchViewModel>()
@@ -60,10 +63,7 @@ fun NavGraphBuilder.searchScreen(
             artistListForSearchQuery = artists,
             tracksListForSearchQuery = tracks,
             playlistListForSearchQuery = playlists,
-            onSearchQueryItemClicked = {
-                if (it is SearchResult.TrackSearchResult) onPlayTrack(it)
-                if (it is SearchResult.ArtistSearchResult) onArtistSearchResultClicked(it)
-            },
+            onSearchQueryItemClicked = onSearchResultClicked,
             currentlySelectedFilter = viewModel.currentlySelectedFilter.value,
             onSearchFilterChanged = viewModel::updateSearchFilter,
             isSearchErrorMessageVisible = isLoadingError,
@@ -116,6 +116,40 @@ fun NavGraphBuilder.artistDetailScreen(
             onAlbumClicked = onAlbumClicked,
             isLoading = uiState is ArtistDetailScreenUiState.Loading || isPlaybackLoading,
             fallbackImageRes = R.drawable.ic_outline_account_circle_24
+        )
+    }
+}
+
+@ExperimentalMaterialApi
+fun NavGraphBuilder.albumDetailScreen(
+    route: String,
+    onBackButtonClicked: () -> Unit,
+    onPlayTrack: (SearchResult.TrackSearchResult) -> Unit,
+    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
+    isPlaybackLoading: Boolean,
+) {
+    composable(route) { backStackEntry ->
+        val arguments = backStackEntry.arguments!!
+        val viewModel = hiltViewModel<AlbumDetailViewModel>()
+        val albumArtUrl =
+            arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_ENCODED_IMAGE_URL_STRING)!!
+        val albumName =
+            arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_ALBUM_NAME)!!
+        val artists =
+            arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_ARTISTS_STRING)!!
+        val yearOfRelease =
+            arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_YEAR_OF_RELEASE_STRING)!!
+        MusicDetailScreen(
+            artUrl = albumArtUrl,
+            musicDetailScreenType = MusicDetailScreenType.ALBUM,
+            title = albumName,
+            nameOfUploader = artists,
+            metadata = yearOfRelease,
+            trackList = viewModel.tracks.value,
+            onTrackItemClick = onPlayTrack,
+            onBackButtonClicked = onBackButtonClicked,
+            currentlyPlayingTrack = currentlyPlayingTrack,
+            isLoading = isPlaybackLoading || viewModel.uiState.value is AlbumDetailUiState.Loading
         )
     }
 }

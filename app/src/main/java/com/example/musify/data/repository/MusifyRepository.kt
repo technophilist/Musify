@@ -110,6 +110,14 @@ class MusifyRepository @Inject constructor(
         }
     }
 
+    override suspend fun fetchTracksForAlbumWithId(
+        albumId: String,
+        countryCode: String,
+        imageSize: MapperImageSize
+    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyHttpErrorType> = withToken {
+        spotifyService.getAlbumWithId(albumId, countryCode, it).getTracks(imageSize)
+    }
+
     override fun getPaginatedSearchStreamForType(
         paginatedStreamType: Repository.PaginatedStreamType,
         searchQuery: String,

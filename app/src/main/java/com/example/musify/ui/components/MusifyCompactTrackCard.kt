@@ -26,12 +26,14 @@ import com.example.musify.domain.SearchResult
  * placeholder is visible for the thumbnail image.
  * @param modifier [Modifier] to be applied to the card.
  * @param isCurrentlyPlaying indicates whether the [track] is the currently
- * playing track, based on which, the style of the card will b....
+ * playing track, based on which, the style of the card will be set.
+ * @param isAlbumArtVisible indicates whether the album art is visible
+ * or not.
  * @param onImageLoading the callback to execute when the image associated
  * with [SearchResult.TrackSearchResult.imageUrlString] is loading.
  * image is loading.
  * @param onImageLoadingFinished the lambda to execute when the image
- * associatedwith [SearchResult.TrackSearchResult.imageUrlString] is
+ * associated with [SearchResult.TrackSearchResult.imageUrlString] is
  * is done loading. A nullable parameter of type [Throwable] is provided
  * to the lambda, that indicates whether the image loading process was
  * @param titleTextStyle The style configuration for the title of the
@@ -47,6 +49,7 @@ fun MusifyCompactTrackCard(
     isLoadingPlaceholderVisible: Boolean,
     modifier: Modifier = Modifier,
     isCurrentlyPlaying: Boolean = false,
+    isAlbumArtVisible: Boolean = true,
     onImageLoading: ((SearchResult.TrackSearchResult) -> Unit)? = null,
     onImageLoadingFinished: ((SearchResult.TrackSearchResult, Throwable?) -> Unit)? = null,
     titleTextStyle: TextStyle = LocalTextStyle.current,
@@ -62,7 +65,7 @@ fun MusifyCompactTrackCard(
         MusifyCompactListItemCard(
             modifier = modifier,
             cardType = ListItemCardType.TRACK,
-            thumbnailImageUrlString = track.imageUrlString,
+            thumbnailImageUrlString = if (isAlbumArtVisible) track.imageUrlString else null,
             title = track.name,
             subtitle = track.artistsString,
             onClick = { onClick(track) },

@@ -55,6 +55,12 @@ interface Repository {
         countryCode: String
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyHttpErrorType>
 
+    suspend fun fetchTracksForAlbumWithId(
+        albumId: String,
+        countryCode: String,
+        imageSize: MapperImageSize
+    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyHttpErrorType>
+
     fun getPaginatedSearchStreamForType(
         paginatedStreamType: PaginatedStreamType,
         searchQuery: String,
@@ -66,5 +72,5 @@ interface Repository {
         artistId: String,
         countryCode: String,
         imageSize: MapperImageSize
-    ):Flow<PagingData<SearchResult.AlbumSearchResult>>
+    ): Flow<PagingData<SearchResult.AlbumSearchResult>>
 }
