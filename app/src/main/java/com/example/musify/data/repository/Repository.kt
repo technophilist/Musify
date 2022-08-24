@@ -16,36 +16,36 @@ interface Repository {
     suspend fun fetchArtistSummaryForId(
         artistId: String,
         imageSize: MapperImageSize
-    ): FetchedResource<MusicSummary.ArtistSummary, MusifyHttpErrorType>
+    ): FetchedResource<MusicSummary.ArtistSummary, MusifyErrorType>
 
     suspend fun fetchAlbumsOfArtistWithId(
         artistId: String,
         imageSize: MapperImageSize,
         countryCode: String
-    ): FetchedResource<List<MusicSummary.AlbumSummary>, MusifyHttpErrorType>
+    ): FetchedResource<List<MusicSummary.AlbumSummary>, MusifyErrorType>
 
     suspend fun fetchTopTenTracksForArtistWithId(
         artistId: String,
         imageSize: MapperImageSize,
         countryCode: String
-    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyHttpErrorType>
+    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType>
 
     suspend fun fetchAlbumWithId(
         albumId: String,
         imageSize: MapperImageSize,
         countryCode: String
-    ): FetchedResource<MusicSummary.AlbumSummary, MusifyHttpErrorType>
+    ): FetchedResource<MusicSummary.AlbumSummary, MusifyErrorType>
 
     suspend fun fetchPlaylistWithId(
         playlistId: String,
         countryCode: String
-    ): FetchedResource<MusicSummary.PlaylistSummary, MusifyHttpErrorType>
+    ): FetchedResource<MusicSummary.PlaylistSummary, MusifyErrorType>
 
     suspend fun fetchSearchResultsForQuery(
         searchQuery: String,
         imageSize: MapperImageSize,
         countryCode: String
-    ): FetchedResource<SearchResults, MusifyHttpErrorType>
+    ): FetchedResource<SearchResults, MusifyErrorType>
 
     fun fetchAvailableGenres(): List<Genre>
 
@@ -53,13 +53,13 @@ interface Repository {
         genre: Genre,
         imageSize: MapperImageSize,
         countryCode: String
-    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyHttpErrorType>
+    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType>
 
     suspend fun fetchTracksForAlbumWithId(
         albumId: String,
         countryCode: String,
         imageSize: MapperImageSize
-    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyHttpErrorType>
+    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType>
 
     fun getPaginatedSearchStreamForType(
         paginatedStreamType: PaginatedStreamType,

@@ -7,7 +7,7 @@ import com.example.musify.data.repository.tokenrepository.SpotifyTokenRepository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.Genre
-import com.example.musify.domain.MusifyHttpErrorType
+import com.example.musify.domain.MusifyErrorType
 import com.example.musify.utils.defaultMusifyJacksonConverterFactory
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -60,7 +60,7 @@ class RepositoryTest {
         // the return type must be of type FetchedResource.Failure
         assert(resource is FetchedResource.Failure)
         // the error type must be MusifyHttpErrorType.INVALID_REQUEST
-        assert((resource as FetchedResource.Failure).cause == MusifyHttpErrorType.INVALID_REQUEST)
+        assert((resource as FetchedResource.Failure).cause == MusifyErrorType.INVALID_REQUEST)
     }
 
     @Test
@@ -90,7 +90,7 @@ class RepositoryTest {
         }
         // the return type must be of type FetchedResource.Failure
         assert(result is FetchedResource.Failure)
-        assert((result as FetchedResource.Failure).cause == MusifyHttpErrorType.INVALID_REQUEST)
+        assert((result as FetchedResource.Failure).cause == MusifyErrorType.INVALID_REQUEST)
     }
 
     @Test

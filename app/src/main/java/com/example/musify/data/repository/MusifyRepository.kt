@@ -29,17 +29,17 @@ class MusifyRepository @Inject constructor(
         initialLoadSize = SpotifyPagingSource.DEFAULT_PAGE_SIZE
     )
 
-    private suspend fun <R> withToken(block: suspend (BearerToken) -> R): FetchedResource<R, MusifyHttpErrorType> =
+    private suspend fun <R> withToken(block: suspend (BearerToken) -> R): FetchedResource<R, MusifyErrorType> =
         try {
             FetchedResource.Success(block(tokenRepository.getValidBearerToken()))
         } catch (httpException: HttpException) {
-            FetchedResource.Failure(httpException.musifyHttpErrorType)
+            FetchedResource.Failure(httpException.musifyErrorType)
         }
 
     override suspend fun fetchArtistSummaryForId(
         artistId: String,
         imageSize: MapperImageSize
-    ): FetchedResource<MusicSummary.ArtistSummary, MusifyHttpErrorType> = withToken {
+    ): FetchedResource<MusicSummary.ArtistSummary, MusifyErrorType> = withToken {
         spotifyService.getArtistInfoWithId(artistId, it).toArtistSummary(imageSize)
     }
 
@@ -47,7 +47,7 @@ class MusifyRepository @Inject constructor(
         artistId: String,
         imageSize: MapperImageSize,
         countryCode: String, //ISO 3166-1 alpha-2 country code
-    ): FetchedResource<List<MusicSummary.AlbumSummary>, MusifyHttpErrorType> = withToken {
+    ): FetchedResource<List<MusicSummary.AlbumSummary>, MusifyErrorType> = withToken {
         spotifyService.getAlbumsOfArtistWithId(
             artistId,
             countryCode,
@@ -59,7 +59,7 @@ class MusifyRepository @Inject constructor(
         artistId: String,
         imageSize: MapperImageSize,
         countryCode: String
-    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyHttpErrorType> = withToken {
+    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> = withToken {
         spotifyService.getTopTenTracksForArtistWithId(
             artistId = artistId,
             market = countryCode,
@@ -73,14 +73,14 @@ class MusifyRepository @Inject constructor(
         albumId: String,
         imageSize: MapperImageSize,
         countryCode: String
-    ): FetchedResource<MusicSummary.AlbumSummary, MusifyHttpErrorType> = withToken {
+    ): FetchedResource<MusicSummary.AlbumSummary, MusifyErrorType> = withToken {
         spotifyService.getAlbumWithId(albumId, countryCode, it).toAlbumSummary(imageSize)
     }
 
     override suspend fun fetchPlaylistWithId(
         playlistId: String,
         countryCode: String
-    ): FetchedResource<MusicSummary.PlaylistSummary, MusifyHttpErrorType> = withToken {
+    ): FetchedResource<MusicSummary.PlaylistSummary, MusifyErrorType> = withToken {
         spotifyService.getPlaylistWithId(playlistId, countryCode, it).toPlayListSummary()
     }
 
@@ -88,7 +88,7 @@ class MusifyRepository @Inject constructor(
         searchQuery: String,
         imageSize: MapperImageSize,
         countryCode: String
-    ): FetchedResource<SearchResults, MusifyHttpErrorType> = withToken {
+    ): FetchedResource<SearchResults, MusifyErrorType> = withToken {
         spotifyService.search(searchQuery, countryCode, it).toSearchResults(imageSize)
     }
 
@@ -100,7 +100,7 @@ class MusifyRepository @Inject constructor(
         genre: Genre,
         imageSize: MapperImageSize,
         countryCode: String
-    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyHttpErrorType> = withToken {
+    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> = withToken {
         spotifyService.getTracksForGenre(
             genre = genre.genreType.toSupportedSpotifyGenreType(),
             market = countryCode,
@@ -114,7 +114,7 @@ class MusifyRepository @Inject constructor(
         albumId: String,
         countryCode: String,
         imageSize: MapperImageSize
-    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyHttpErrorType> = withToken {
+    ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> = withToken {
         spotifyService.getAlbumWithId(albumId, countryCode, it).getTracks(imageSize)
     }
 
