@@ -182,9 +182,9 @@ fun MusifyCompactListItemCard(
 @Composable
 fun MusifyCompactListItemCard(
     cardType: ListItemCardType,
-    thumbnailImageUrlString: String,
     title: String,
     subtitle: String,
+    thumbnailImageUrlString: String?,
     onClick: () -> Unit,
     onTrailingButtonIconClick: () -> Unit,
     modifier: Modifier = Modifier,
