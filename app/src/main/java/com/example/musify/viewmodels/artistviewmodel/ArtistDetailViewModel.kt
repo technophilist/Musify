@@ -10,9 +10,9 @@ import androidx.paging.cachedIn
 import com.example.musify.data.repository.MusifyRepository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
-import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
+import com.example.musify.viewmodels.getCountryCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -54,13 +54,6 @@ class ArtistDetailViewModel @Inject constructor(
     init {
         viewModelScope.launch { fetchAndAssignPopularTracks() }
     }
-
-    // TODO test locale
-    private fun getCountryCode(): String = getApplication<MusifyApplication>()
-        .resources
-        .configuration
-        .locale
-        .country
 
     private suspend fun fetchAndAssignPopularTracks() {
         _uiState.value = ArtistDetailScreenUiState.Loading

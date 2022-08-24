@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.musify.data.repository.Repository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
-import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,12 +41,6 @@ class AlbumDetailViewModel @Inject constructor(
     init {
         fetchAndAssignTrackList()
     }
-
-    private fun getCountryCode(): String = getApplication<MusifyApplication>()
-        .resources
-        .configuration
-        .locale
-        .country
 
     private fun fetchAndAssignTrackList() {
         viewModelScope.launch {
