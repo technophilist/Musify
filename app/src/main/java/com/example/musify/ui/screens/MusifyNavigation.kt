@@ -5,6 +5,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.musify.domain.SearchResult
@@ -23,6 +24,13 @@ fun MusifyNavigation(
     isPlaybackLoading: Boolean
 ) {
     val navController = rememberNavController()
+    val currentBackStack = navController.currentBackStackEntryAsState()
+    val onBackButtonClicked = {
+        if (currentBackStack.value?.destination?.route != MusifyNavigationDestinations.SearchScreen.route) {
+            navController.popBackStack()
+        }
+        // don't pop backstack after reaching the search screen
+    }
     NavHost(
         navController = navController,
         startDestination = MusifyNavigationDestinations.SearchScreen.route
@@ -53,7 +61,7 @@ fun MusifyNavigation(
                     nullable = true
                 }
             ),
-            onBackButtonClicked = { navController.popBackStack() },
+            onBackButtonClicked = onBackButtonClicked,
             onAlbumClicked = {
                 navController.navigate(MusifyNavigationDestinations.AlbumDetailScreen.buildRoute(it)) {
                     launchSingleTop = true
@@ -65,7 +73,7 @@ fun MusifyNavigation(
         )
         albumDetailScreen(
             route = MusifyNavigationDestinations.AlbumDetailScreen.route,
-            onBackButtonClicked = { navController.popBackStack() },
+            onBackButtonClicked = onBackButtonClicked,
             onPlayTrack = playTrack,
             currentlyPlayingTrack = currentlyPlayingTrack,
             isPlaybackLoading = isPlaybackLoading
