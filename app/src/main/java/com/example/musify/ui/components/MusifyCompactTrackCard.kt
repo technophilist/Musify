@@ -1,5 +1,6 @@
 package com.example.musify.ui.components
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalTextStyle
@@ -8,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 import com.example.musify.domain.SearchResult
 
 /**
@@ -53,7 +55,13 @@ fun MusifyCompactTrackCard(
     onImageLoading: ((SearchResult.TrackSearchResult) -> Unit)? = null,
     onImageLoadingFinished: ((SearchResult.TrackSearchResult, Throwable?) -> Unit)? = null,
     titleTextStyle: TextStyle = LocalTextStyle.current,
-    subtitleTextStyle: TextStyle = LocalTextStyle.current
+    subtitleTextStyle: TextStyle = LocalTextStyle.current,
+    contentPadding: PaddingValues = PaddingValues(
+        start = 16.dp,
+        end = 16.dp,
+        top = 0.dp,
+        bottom = 16.dp
+    )
 ) {
     val trackPlayingTextStyle = LocalTextStyle.current.copy(
         color = MaterialTheme.colors.primary
@@ -77,6 +85,7 @@ fun MusifyCompactTrackCard(
             },
             titleTextStyle = if (isCurrentlyPlaying) trackPlayingTextStyle else titleTextStyle,
             subtitleTextStyle = subtitleTextStyle,
+            contentPadding = contentPadding
         )
     }
 }
