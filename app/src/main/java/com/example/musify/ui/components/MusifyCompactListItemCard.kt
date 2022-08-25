@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -65,6 +66,8 @@ enum class ListItemCardType { ALBUM, ARTIST, TRACK, PLAYLIST }
  * @param errorPainter A [Painter] that is displayed when the image request is unsuccessful.
  * @param isLoadingPlaceHolderVisible indicates whether the loading
  * placeholder is visible for the thumbnail image.
+ * @param contentPadding the [PaddingValues] to be applied to the content
+ * of the card.
  */
 @ExperimentalMaterialApi
 @Composable
@@ -84,6 +87,7 @@ fun MusifyCompactListItemCard(
     onThumbnailImageLoadingFinished: ((Throwable?) -> Unit)? = null,
     errorPainter: Painter? = null,
     placeholderHighlight: PlaceholderHighlight = PlaceholderHighlight.shimmer(),
+    contentPadding: PaddingValues = PaddingValues(all = 8.dp)
 ) {
     Card(
         modifier = Modifier
@@ -92,57 +96,69 @@ fun MusifyCompactListItemCard(
         elevation = 0.dp,
         onClick = onClick
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            thumbnailImageUrlString?.let {
-                AsyncImageWithPlaceholder(
+        Column {
+            Spacer(modifier = Modifier.size(contentPadding.calculateTopPadding()))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Spacer(
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .aspectRatio(1f, true)
-                        .conditional(thumbnailShape != null) { clip(thumbnailShape!!) },
-                    model = it,
-                    contentScale = ContentScale.Crop,
-                    isLoadingPlaceholderVisible = isLoadingPlaceHolderVisible,
-                    onImageLoading = { onThumbnailLoading?.invoke() },
-                    onImageLoadingFinished = { onThumbnailImageLoadingFinished?.invoke(it) },
-                    placeholderHighlight = placeholderHighlight,
-                    errorPainter = errorPainter,
-                    alpha = LocalContentAlpha.current,
-                    contentDescription = null
+                        .size(contentPadding.calculateStartPadding(LocalLayoutDirection.current))
+                )
+                thumbnailImageUrlString?.let {
+                    AsyncImageWithPlaceholder(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .aspectRatio(1f, true)
+                            .conditional(thumbnailShape != null) { clip(thumbnailShape!!) },
+                        model = it,
+                        contentScale = ContentScale.Crop,
+                        isLoadingPlaceholderVisible = isLoadingPlaceHolderVisible,
+                        onImageLoading = { onThumbnailLoading?.invoke() },
+                        onImageLoadingFinished = { onThumbnailImageLoadingFinished?.invoke(it) },
+                        placeholderHighlight = placeholderHighlight,
+                        errorPainter = errorPainter,
+                        alpha = LocalContentAlpha.current,
+                        contentDescription = null
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = title,
+                        fontWeight = FontWeight.Bold,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = titleTextStyle
+                    )
+                    Text(
+                        text = subtitle,
+                        fontWeight = FontWeight.SemiBold,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = subtitleTextStyle
+                    )
+                }
+                IconButton(
+                    onClick = onTrailingButtonIconClick
+                ) {
+                    Icon(
+                        imageVector = trailingButtonIcon,
+                        contentDescription = null
+                    )
+                }
+                Spacer(
+                    modifier = Modifier
+                        .size(contentPadding.calculateEndPadding(LocalLayoutDirection.current))
                 )
             }
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Text(
-                    text = title,
-                    fontWeight = FontWeight.Bold,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    style = titleTextStyle
-                )
-                Text(
-                    text = subtitle,
-                    fontWeight = FontWeight.SemiBold,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    style = subtitleTextStyle
-                )
-            }
-            IconButton(
-                onClick = onTrailingButtonIconClick
-            ) {
-                Icon(
-                    imageVector = trailingButtonIcon,
-                    contentDescription = null
-                )
-            }
+            Spacer(modifier = Modifier.size(contentPadding.calculateBottomPadding()))
         }
     }
 }
@@ -177,6 +193,8 @@ fun MusifyCompactListItemCard(
  * @param errorPainter A [Painter] that is displayed when the image request is unsuccessful.
  * @param isLoadingPlaceHolderVisible indicates whether the loading
  * placeholder is visible for the thumbnail image.
+ * @param contentPadding the [PaddingValues] to be applied to the content
+ * of the card.
  */
 @ExperimentalMaterialApi
 @Composable
@@ -194,7 +212,8 @@ fun MusifyCompactListItemCard(
     onThumbnailLoading: (() -> Unit)? = null,
     onThumbnailImageLoadingFinished: ((Throwable?) -> Unit)? = null,
     errorPainter: Painter? = null,
-    placeholderHighlight: PlaceholderHighlight = PlaceholderHighlight.shimmer()
+    placeholderHighlight: PlaceholderHighlight = PlaceholderHighlight.shimmer(),
+    contentPadding: PaddingValues = PaddingValues(8.dp)
 ) {
     MusifyCompactListItemCard(
         modifier = modifier,
@@ -214,6 +233,7 @@ fun MusifyCompactListItemCard(
         onThumbnailLoading = onThumbnailLoading,
         onThumbnailImageLoadingFinished = onThumbnailImageLoadingFinished,
         placeholderHighlight = placeholderHighlight,
-        errorPainter = errorPainter
+        errorPainter = errorPainter,
+        contentPadding = contentPadding
     )
 }
