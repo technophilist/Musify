@@ -54,7 +54,11 @@ fun MusifyNavigation(
                 }
             ),
             onBackButtonClicked = { navController.popBackStack() },
-            onAlbumClicked = {},
+            onAlbumClicked = {
+                navController.navigate(MusifyNavigationDestinations.AlbumDetailScreen.buildRoute(it)) {
+                    launchSingleTop = true
+                }
+            },
             onPlayTrack = playTrack,
             currentlyPlayingTrack = currentlyPlayingTrack,
             isPlaybackLoading = isPlaybackLoading,
