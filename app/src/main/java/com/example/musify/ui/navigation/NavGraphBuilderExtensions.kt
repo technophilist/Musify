@@ -149,7 +149,8 @@ fun NavGraphBuilder.albumDetailScreen(
             onTrackItemClick = onPlayTrack,
             onBackButtonClicked = onBackButtonClicked,
             currentlyPlayingTrack = currentlyPlayingTrack,
-            isLoading = isPlaybackLoading || viewModel.uiState.value is AlbumDetailUiState.Loading
+            isLoading = isPlaybackLoading || viewModel.uiState.value is AlbumDetailUiState.Loading,
+            isErrorMessageVisible = viewModel.uiState.value is AlbumDetailUiState.Error
         )
     }
 }
