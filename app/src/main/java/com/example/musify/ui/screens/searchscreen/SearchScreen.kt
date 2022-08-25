@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 fun SearchScreen(
     genreList: List<Genre>,
     searchScreenFilters: List<SearchFilter>,
-    currentlyPlayingTrack:SearchResult.TrackSearchResult?,
+    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     currentlySelectedFilter: SearchFilter,
     onSearchFilterChanged: (SearchFilter) -> Unit,
     onGenreItemClick: (Genre) -> Unit,
@@ -271,7 +271,6 @@ private fun SearchQueryList(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colors.background),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
                 state = lazyListState,
             ) {
                 when (currentlySelectedFilter) {
