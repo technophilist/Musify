@@ -15,9 +15,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.musify.R
 import com.example.musify.domain.SearchResult
+import com.example.musify.ui.screens.AlbumDetailScreen
 import com.example.musify.ui.screens.ArtistDetailScreen
-import com.example.musify.ui.screens.MusicDetailScreen
-import com.example.musify.ui.screens.MusicDetailScreenType
 import com.example.musify.ui.screens.searchscreen.SearchScreen
 import com.example.musify.viewmodels.AlbumDetailUiState
 import com.example.musify.viewmodels.AlbumDetailViewModel
@@ -140,18 +139,17 @@ fun NavGraphBuilder.albumDetailScreen(
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_ARTISTS_STRING)!!
         val yearOfRelease =
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_YEAR_OF_RELEASE_STRING)!!
-        MusicDetailScreen(
-            artUrl = albumArtUrl,
-            musicDetailScreenType = MusicDetailScreenType.ALBUM,
-            title = albumName,
-            nameOfUploader = artists,
-            metadata = yearOfRelease,
+        AlbumDetailScreen(
+            albumName = albumName,
+            artistsString = artists,
+            yearOfRelease = yearOfRelease,
+            albumArtUrlString = albumArtUrl,
             trackList = viewModel.tracks.value,
             onTrackItemClick = onPlayTrack,
             onBackButtonClicked = onBackButtonClicked,
-            currentlyPlayingTrack = currentlyPlayingTrack,
             isLoading = isPlaybackLoading || viewModel.uiState.value is AlbumDetailUiState.Loading,
-            isErrorMessageVisible = viewModel.uiState.value is AlbumDetailUiState.Error
+            isErrorMessageVisible = viewModel.uiState.value is AlbumDetailUiState.Error,
+            currentlyPlayingTrack = currentlyPlayingTrack
         )
     }
 }
