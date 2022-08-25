@@ -34,9 +34,13 @@ fun MusifyNavigation(
             onSearchResultClicked = {
                 when (it) {
                     is SearchResult.AlbumSearchResult -> navController
-                        .navigate(MusifyNavigationDestinations.AlbumDetailScreen.buildRoute(it))
+                        .navigate(MusifyNavigationDestinations.AlbumDetailScreen.buildRoute(it)) {
+                            launchSingleTop = true
+                        }
                     is SearchResult.ArtistSearchResult -> navController
-                        .navigate(MusifyNavigationDestinations.ArtistDetailScreen.buildRoute(it))
+                        .navigate(MusifyNavigationDestinations.ArtistDetailScreen.buildRoute(it)) {
+                            launchSingleTop = true
+                        }
                     is SearchResult.PlaylistSearchResult -> {}
                     is SearchResult.TrackSearchResult -> playTrack(it)
                 }
