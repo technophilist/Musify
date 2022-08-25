@@ -115,7 +115,8 @@ fun NavGraphBuilder.artistDetailScreen(
             onTrackClicked = onPlayTrack,
             onAlbumClicked = onAlbumClicked,
             isLoading = uiState is ArtistDetailScreenUiState.Loading || isPlaybackLoading,
-            fallbackImageRes = R.drawable.ic_outline_account_circle_24
+            fallbackImageRes = R.drawable.ic_outline_account_circle_24,
+            isErrorMessageVisible = uiState is ArtistDetailScreenUiState.Error
         )
     }
 }
