@@ -54,7 +54,8 @@ fun ArtistDetailScreen(
     onTrackClicked: (SearchResult.TrackSearchResult) -> Unit,
     onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit,
     isLoading: Boolean,
-    @DrawableRes fallbackImageRes: Int
+    @DrawableRes fallbackImageRes: Int,
+    isErrorMessageVisible: Boolean
 ) {
     val subtitleTextColorWithAlpha = MaterialTheme.colors.onBackground.copy(
         alpha = ContentAlpha.disabled
@@ -144,6 +145,26 @@ fun ArtistDetailScreen(
             }
             item {
                 Spacer(modifier = Modifier.navigationBarsHeight())
+            }
+            if (isErrorMessageVisible) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Oops! Something doesn't look right",
+                            style = MaterialTheme.typography.h6,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = "Please check the internet connection",
+                            style = MaterialTheme.typography.subtitle2
+                        )
+                    }
+                }
             }
         }
         DefaultMusifyLoadingAnimation(
