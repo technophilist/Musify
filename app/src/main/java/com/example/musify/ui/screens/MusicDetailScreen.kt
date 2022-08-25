@@ -43,6 +43,7 @@ fun MusicDetailScreen(
     onTrackItemClick: (SearchResult.TrackSearchResult) -> Unit,
     onBackButtonClicked: () -> Unit,
     isLoading: Boolean,
+    isErrorMessageVisible: Boolean,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?
 ) {
     val metadataText = "${
@@ -71,20 +72,42 @@ fun MusicDetailScreen(
                 )
                 Spacer(modifier = Modifier.size(16.dp))
             }
-            items(trackList) {
-                MusifyCompactTrackCard(
-                    modifier = Modifier.padding(bottom = 16.dp),
-                    track = it,
-                    onClick = onTrackItemClick,
-                    isLoadingPlaceholderVisible = false,
-                    isCurrentlyPlaying = it == currentlyPlayingTrack,
-                    isAlbumArtVisible = false,
-                    subtitleTextStyle = LocalTextStyle.current.copy(
-                        fontWeight = FontWeight.Thin,
-                        color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.disabled),
+            if (isErrorMessageVisible) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Oops! Something doesn't look right",
+                            style = MaterialTheme.typography.h6,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = "Please check the internet connection",
+                            style = MaterialTheme.typography.subtitle2
+                        )
+                    }
+                }
+            } else {
+                items(trackList) {
+                    MusifyCompactTrackCard(
+                        modifier = Modifier.padding(bottom = 16.dp),
+                        track = it,
+                        onClick = onTrackItemClick,
+                        isLoadingPlaceholderVisible = false,
+                        isCurrentlyPlaying = it == currentlyPlayingTrack,
+                        isAlbumArtVisible = false,
+                        subtitleTextStyle = LocalTextStyle.current.copy(
+                            fontWeight = FontWeight.Thin,
+                            color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.disabled),
+                        )
                     )
-                )
+                }
             }
+
             item {
                 Spacer(
                     modifier = Modifier
