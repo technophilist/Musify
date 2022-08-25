@@ -65,6 +65,9 @@ fun ArtistDetailScreen(
     val coroutineScope = rememberCoroutineScope()
     val fallbackImagePainter =
         rememberVectorPainter(ImageVector.vectorResource(id = fallbackImageRes))
+    val shouldShowScrollUpButton by remember(lazyListState.firstVisibleItemIndex) {
+        derivedStateOf { lazyListState.firstVisibleItemIndex > 3 }
+    }
     Box {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -176,7 +179,7 @@ fun ArtistDetailScreen(
                 .align(Alignment.BottomEnd)
                 .navigationBarsPadding()
                 .padding(bottom = 16.dp, end = 16.dp),
-            visible = lazyListState.firstVisibleItemIndex > 10,
+            visible = shouldShowScrollUpButton,
             enter = fadeIn(),
             exit = fadeOut()
         ) {
