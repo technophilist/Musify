@@ -85,7 +85,7 @@ fun ArtistDetailScreen(
             )
             item {
                 SubtitleText(
-                    modifier = Modifier.padding(start = 16.dp),
+                    modifier = Modifier.padding(all = 16.dp),
                     text = "Popular tracks"
                 )
             }
