@@ -86,8 +86,9 @@ fun SearchScreen(
     }
     val isFilterChipGroupVisible by remember { derivedStateOf { isSearchListVisible } }
     // Using separate horizontal padding modifier because the filter
-    // group should be edge to edge. Adding a padding to the parent
-    // composable will not allow the filter group to span to the edges.
+    // group & lazy list should be edge to edge. Adding a padding to
+    // the parent composable will not allow the filter group & lazy
+    // list to span to the edges.
     val horizontalPaddingModifier = Modifier.padding(horizontal = 16.dp)
     BackHandler(isSearchListVisible) {
         // remove focus on the search text field
@@ -165,11 +166,12 @@ fun SearchScreen(
             )
         }
 
-        Box(modifier = horizontalPaddingModifier) {
+        Box {
             LazyVerticalGrid(
                 cells = GridCells.Adaptive(170.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
                 item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {
                     Text(
