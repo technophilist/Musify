@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -96,72 +95,63 @@ fun MusifyCompactListItemCard(
         elevation = 0.dp,
         onClick = onClick
     ) {
-        Column {
-            Spacer(modifier = Modifier.size(contentPadding.calculateTopPadding()))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Spacer(
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(contentPadding),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            thumbnailImageUrlString?.let {
+                AsyncImageWithPlaceholder(
                     modifier = Modifier
-                        .size(contentPadding.calculateStartPadding(LocalLayoutDirection.current))
-                )
-                thumbnailImageUrlString?.let {
-                    AsyncImageWithPlaceholder(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .aspectRatio(1f, true)
-                            .conditional(thumbnailShape != null) { clip(thumbnailShape!!) },
-                        model = it,
-                        contentScale = ContentScale.Crop,
-                        isLoadingPlaceholderVisible = isLoadingPlaceHolderVisible,
-                        onImageLoading = { onThumbnailLoading?.invoke() },
-                        onImageLoadingFinished = { onThumbnailImageLoadingFinished?.invoke(it) },
-                        placeholderHighlight = placeholderHighlight,
-                        errorPainter = errorPainter,
-                        alpha = LocalContentAlpha.current,
-                        contentDescription = null
-                    )
-                }
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Text(
-                        text = title,
-                        fontWeight = FontWeight.Bold,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                        style = titleTextStyle
-                    )
-                    Text(
-                        text = subtitle,
-                        fontWeight = FontWeight.SemiBold,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                        style = subtitleTextStyle
-                    )
-                }
-                IconButton(
-                    onClick = onTrailingButtonIconClick
-                ) {
-                    Icon(
-                        imageVector = trailingButtonIcon,
-                        contentDescription = null
-                    )
-                }
-                Spacer(
-                    modifier = Modifier
-                        .size(contentPadding.calculateEndPadding(LocalLayoutDirection.current))
+                        .fillMaxHeight()
+                        .aspectRatio(1f, true)
+                        .conditional(thumbnailShape != null) { clip(thumbnailShape!!) },
+                    model = it,
+                    contentScale = ContentScale.Crop,
+                    isLoadingPlaceholderVisible = isLoadingPlaceHolderVisible,
+                    onImageLoading = { onThumbnailLoading?.invoke() },
+                    onImageLoadingFinished = { onThumbnailImageLoadingFinished?.invoke(it) },
+                    placeholderHighlight = placeholderHighlight,
+                    errorPainter = errorPainter,
+                    alpha = LocalContentAlpha.current,
+                    contentDescription = null
                 )
             }
-            Spacer(modifier = Modifier.size(contentPadding.calculateBottomPadding()))
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                    style = titleTextStyle
+                )
+                Text(
+                    text = subtitle,
+                    fontWeight = FontWeight.SemiBold,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                    style = subtitleTextStyle
+                )
+            }
+            IconButton(
+                onClick = onTrailingButtonIconClick
+            ) {
+                Icon(
+                    imageVector = trailingButtonIcon,
+                    contentDescription = null
+                )
+            }
         }
     }
 }
+
 
 /**
  * A composable that represents a compact list item. This overload will
