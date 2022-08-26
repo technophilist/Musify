@@ -56,12 +56,7 @@ fun MusifyCompactTrackCard(
     onImageLoadingFinished: ((SearchResult.TrackSearchResult, Throwable?) -> Unit)? = null,
     titleTextStyle: TextStyle = LocalTextStyle.current,
     subtitleTextStyle: TextStyle = LocalTextStyle.current,
-    contentPadding: PaddingValues = PaddingValues(
-        start = 16.dp,
-        end = 16.dp,
-        top = 0.dp,
-        bottom = 16.dp
-    )
+    contentPadding: PaddingValues = MusifyCompactTrackCardDefaults.defaultContentPadding
 ) {
     val trackPlayingTextStyle = LocalTextStyle.current.copy(
         color = MaterialTheme.colors.primary
@@ -88,4 +83,14 @@ fun MusifyCompactTrackCard(
             contentPadding = contentPadding
         )
     }
+}
+
+/**
+ * Contains default values used by [MusifyCompactTrackCard].
+ */
+object MusifyCompactTrackCardDefaults {
+    val defaultContentPadding = PaddingValues(
+        horizontal = 16.dp,
+        vertical = 8.dp
+    )
 }
