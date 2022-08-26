@@ -71,7 +71,6 @@ fun ArtistDetailScreen(
     Box {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
             state = lazyListState
         ) {
             artistCoverArtHeaderItem(
