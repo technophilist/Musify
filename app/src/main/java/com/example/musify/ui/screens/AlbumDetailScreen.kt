@@ -81,7 +81,8 @@ fun AlbumDetailScreen(
                         subtitleTextStyle = LocalTextStyle.current.copy(
                             fontWeight = FontWeight.Thin,
                             color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.disabled),
-                        )
+                        ),
+                        contentPadding = PaddingValues(16.dp)
                     )
                 }
             }
