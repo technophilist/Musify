@@ -72,7 +72,6 @@ fun AlbumDetailScreen(
             } else {
                 items(trackList) {
                     MusifyCompactTrackCard(
-                        modifier = Modifier.padding(bottom = 16.dp),
                         track = it,
                         onClick = onTrackItemClick,
                         isLoadingPlaceholderVisible = false,
