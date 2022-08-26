@@ -9,6 +9,7 @@ import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.ListItemCardType
 import com.example.musify.ui.components.MusifyCompactListItemCard
 import com.example.musify.ui.components.MusifyCompactTrackCard
+import com.example.musify.ui.components.MusifyCompactTrackCardDefaults
 
 @ExperimentalMaterialApi
 fun LazyListScope.searchTrackListItems(
@@ -61,7 +62,8 @@ fun LazyListScope.searchAlbumListItems(
                 onThumbnailImageLoadingFinished = { throwable ->
                     onImageLoadingFinished(it, throwable)
                 },
-                onThumbnailLoading = { onImageLoading(it) }
+                onThumbnailLoading = { onImageLoading(it) },
+                contentPadding = MusifyCompactTrackCardDefaults.defaultContentPadding
             )
         }
     }
@@ -93,7 +95,8 @@ fun LazyListScope.searchArtistListItems(
                     onImageLoadingFinished(it, throwable)
                 },
                 onThumbnailLoading = { onImageLoading(it) },
-                errorPainter = artistImageErrorPainter
+                errorPainter = artistImageErrorPainter,
+                contentPadding = MusifyCompactTrackCardDefaults.defaultContentPadding
             )
         }
     }
@@ -125,7 +128,8 @@ fun LazyListScope.searchPlaylistListItems(
                     onImageLoadingFinished(it, throwable)
                 },
                 onThumbnailLoading = { onImageLoading(it) },
-                errorPainter = playlistImageErrorPainter
+                errorPainter = playlistImageErrorPainter,
+                contentPadding = MusifyCompactTrackCardDefaults.defaultContentPadding
             )
         }
     }
