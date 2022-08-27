@@ -11,8 +11,9 @@ import com.example.musify.domain.Genre
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.toSupportedSpotifyGenreType
+import javax.inject.Inject
 
-class MusifyTracksRepository(
+class MusifyTracksRepository @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val spotifyService: SpotifyService
 ) : TracksRepository {

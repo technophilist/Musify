@@ -7,8 +7,9 @@ import com.example.musify.data.repository.tokenrepository.runCatchingWithToken
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.SearchResult
+import javax.inject.Inject
 
-class MusifyPlaylistsRepository(
+class MusifyPlaylistsRepository @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val spotifyService: SpotifyService
 ) : PlaylistsRepository {
