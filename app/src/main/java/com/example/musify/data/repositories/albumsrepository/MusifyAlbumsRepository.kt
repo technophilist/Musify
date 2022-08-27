@@ -7,8 +7,8 @@ import com.example.musify.data.paging.AlbumsOfArtistPagingSource
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.response.toAlbumSearchResult
 import com.example.musify.data.remote.response.toAlbumSearchResultList
-import com.example.musify.data.repository.tokenrepository.TokenRepository
-import com.example.musify.data.repository.tokenrepository.runCatchingWithToken
+import com.example.musify.data.repositories.tokenrepository.TokenRepository
+import com.example.musify.data.repositories.tokenrepository.runCatchingWithToken
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusifyErrorType
