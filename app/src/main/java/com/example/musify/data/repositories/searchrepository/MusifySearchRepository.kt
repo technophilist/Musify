@@ -17,8 +17,9 @@ import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.SearchResults
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class MusifySearchRepository(
+class MusifySearchRepository @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val spotifyService: SpotifyService,
     private val pagingConfig: PagingConfig

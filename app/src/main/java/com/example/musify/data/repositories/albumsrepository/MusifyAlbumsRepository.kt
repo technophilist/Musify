@@ -14,13 +14,14 @@ import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.SearchResult
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class MusifyAlbumsRepository(
+class MusifyAlbumsRepository @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val spotifyService: SpotifyService,
     private val pagingConfig: PagingConfig
 ) : AlbumsRepository {
-    
+
     override suspend fun fetchAlbumsOfArtistWithId(
         artistId: String,
         imageSize: MapperImageSize,

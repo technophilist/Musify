@@ -8,8 +8,9 @@ import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.SearchResult
+import javax.inject.Inject
 
-class MusifyArtistsRepository(
+class MusifyArtistsRepository @Inject constructor(
     private val spotifyService: SpotifyService,
     private val tokenRepository: TokenRepository
 ) : ArtistsRepository {
