@@ -72,6 +72,20 @@ fun AlbumResponse.toAlbumSummary(imageSize: MapperImageSize) = MusicSummary.Albu
 )
 
 /**
+ * A mapper function used to map an instance of [AlbumResponse] to
+ * an instance of [MusicSummary.AlbumSummary]. The [imageSize]
+ * parameter describes the size of image to be used for the
+ * [MusicSummary.AlbumSummary] instance.
+ */
+fun AlbumResponse.toAlbumSearchResult(imageSize: MapperImageSize) = SearchResult.AlbumSearchResult(
+    id = id,
+    name = name,
+    artistsString = artists.joinToString(",") { it.name },
+    yearOfReleaseString = releaseDate,
+    albumArtUrlString = images.getImageResponseForImageSize(imageSize).url
+)
+
+/**
  * A utility function used to get a list of [SearchResult.TrackSearchResult]s
  * associated with a [AlbumResponse].
  */
