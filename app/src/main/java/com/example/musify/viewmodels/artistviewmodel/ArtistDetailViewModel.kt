@@ -7,7 +7,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.example.musify.data.repository.MusifyRepository
+import com.example.musify.data.repositories.albumsrepository.AlbumsRepository
+import com.example.musify.data.repositories.tracksrepository.TracksRepository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
@@ -31,7 +32,8 @@ sealed class ArtistDetailScreenUiState {
 class ArtistDetailViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
-    private val repository: MusifyRepository,
+    albumsRepository: AlbumsRepository,
+    private val tracksRepository: TracksRepository,
 ) : AndroidViewModel(application) {
 
     private val _popularTracks = mutableStateOf<List<SearchResult.TrackSearchResult>>(emptyList())
@@ -45,7 +47,7 @@ class ArtistDetailViewModel @Inject constructor(
         savedStateHandle.get<String>(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ARTIST_ID)!!
 
 
-    val albumsOfArtistFlow = repository.getPaginatedStreamForAlbumsOfArtist(
+    val albumsOfArtistFlow = albumsRepository.getPaginatedStreamForAlbumsOfArtist(
         artistId = artistId,
         countryCode = getCountryCode(),
         imageSize = defaultMapperImageSize
@@ -57,7 +59,7 @@ class ArtistDetailViewModel @Inject constructor(
 
     private suspend fun fetchAndAssignPopularTracks() {
         _uiState.value = ArtistDetailScreenUiState.Loading
-        val fetchResult = repository.fetchTopTenTracksForArtistWithId(
+        val fetchResult = tracksRepository.fetchTopTenTracksForArtistWithId(
             artistId = artistId,
             imageSize = defaultMapperImageSize,
             countryCode = getCountryCode()
