@@ -49,8 +49,8 @@ class SpotifyTokenRepositoryTest {
             // the expired token when getBearerToken() is called.
 
             // when getBearerToken() is called
-            // the token must not not be expired.
-            assert(tokenRepository.getValidBearerToken().isExpired)
+            // the token must not be expired.
+            assert(!tokenRepository.getValidBearerToken().isExpired)
         }
 
 
