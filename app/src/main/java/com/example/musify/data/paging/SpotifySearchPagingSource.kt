@@ -3,7 +3,7 @@ package com.example.musify.data.paging
 import com.example.musify.data.remote.musicservice.SearchQueryType
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.response.SearchResultsResponse
-import com.example.musify.data.repository.tokenrepository.TokenRepository
+import com.example.musify.data.repositories.tokenrepository.TokenRepository
 import com.example.musify.domain.SearchResult
 import retrofit2.HttpException
 import java.io.IOException

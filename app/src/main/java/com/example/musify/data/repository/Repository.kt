@@ -6,10 +6,12 @@ import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.*
 import kotlinx.coroutines.flow.Flow
 
+
 /**
  * An interface the consists of all the methods that are a requisite for
  * an instance of [Repository].
  */
+@Deprecated(message = "Use individual repositories defined in /data/repositories package based on requirement.")
 interface Repository {
     enum class PaginatedStreamType { ALBUMS, ARTISTS, TRACKS, PLAYLISTS }
 

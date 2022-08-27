@@ -6,7 +6,7 @@ import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.musicservice.SupportedSpotifyGenres
 import com.example.musify.data.remote.response.*
 import com.example.musify.data.remote.token.BearerToken
-import com.example.musify.data.repository.tokenrepository.TokenRepositoryStub
+import com.example.musify.data.repositories.tokenrepository.TokenRepositoryStub
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
 import kotlinx.coroutines.runBlocking
