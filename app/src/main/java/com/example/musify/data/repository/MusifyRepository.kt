@@ -9,7 +9,7 @@ import com.example.musify.data.remote.musicservice.SupportedSpotifyGenres
 import com.example.musify.data.remote.musicservice.toGenre
 import com.example.musify.data.remote.response.*
 import com.example.musify.data.remote.token.BearerToken
-import com.example.musify.data.repository.tokenrepository.TokenRepository
+import com.example.musify.data.repositories.tokenrepository.TokenRepository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.*

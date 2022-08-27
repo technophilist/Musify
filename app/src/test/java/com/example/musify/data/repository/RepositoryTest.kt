@@ -3,7 +3,7 @@ package com.example.musify.data.repository
 import com.example.musify.data.encoder.TestBase64Encoder
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
-import com.example.musify.data.repository.tokenrepository.SpotifyTokenRepository
+import com.example.musify.data.repositories.tokenrepository.SpotifyTokenRepository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.Genre

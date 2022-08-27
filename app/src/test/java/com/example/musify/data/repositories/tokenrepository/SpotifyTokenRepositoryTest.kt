@@ -1,4 +1,4 @@
-package com.example.musify.data.repository.tokenrepository
+package com.example.musify.data.repositories.tokenrepository
 
 import com.example.musify.data.encoder.TestBase64Encoder
 import com.example.musify.data.remote.token.AccessTokenResponse
@@ -49,8 +49,8 @@ class SpotifyTokenRepositoryTest {
             // the expired token when getBearerToken() is called.
 
             // when getBearerToken() is called
-            // the token must not not be expired.
-            assert(tokenRepository.getValidBearerToken().isExpired)
+            // the token must not be expired.
+            assert(!tokenRepository.getValidBearerToken().isExpired)
         }
 
 

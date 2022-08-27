@@ -5,7 +5,7 @@ import com.example.musify.data.remote.response.TracksWithAlbumMetadataListRespon
 import com.example.musify.data.encoder.TestBase64Encoder
 import com.example.musify.data.remote.token.BearerToken
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
-import com.example.musify.data.repository.tokenrepository.SpotifyTokenRepository
+import com.example.musify.data.repositories.tokenrepository.SpotifyTokenRepository
 import com.example.musify.utils.defaultMusifyJacksonConverterFactory
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
