@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.example.musify.data.repository.Repository
+import com.example.musify.data.repositories.tracksrepository.TracksRepository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
@@ -25,7 +25,7 @@ sealed class AlbumDetailUiState {
 class AlbumDetailViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
-    private val repository: Repository,
+    private val tracksRepository: TracksRepository,
 ) : AndroidViewModel(application) {
 
     private val _tracks = mutableStateOf<List<SearchResult.TrackSearchResult>>(emptyList())
@@ -45,7 +45,7 @@ class AlbumDetailViewModel @Inject constructor(
     private fun fetchAndAssignTrackList() {
         viewModelScope.launch {
             _uiState.value = AlbumDetailUiState.Loading
-            val result = repository.fetchTracksForAlbumWithId(
+            val result = tracksRepository.fetchTracksForAlbumWithId(
                 albumId = albumId,
                 countryCode = getCountryCode(),
                 imageSize = defaultMapperImageSize
