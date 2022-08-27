@@ -2,6 +2,7 @@ package com.example.musify.data.remote.response
 
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusicSummary
+import com.example.musify.domain.SearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
@@ -26,3 +27,15 @@ data class AlbumsMetadataResponse(
 fun AlbumsMetadataResponse.toAlbumSummaryList(imageSize: MapperImageSize) = items.map {
     it.toAlbumSummary(imageSize)
 }
+
+/**
+ * A mapper function used to map an instance of [AlbumsMetadataResponse] to
+ * a list of [SearchResult.AlbumSearchResult]. The [imageSize] parameter
+ * describes the size of image to be used for each [SearchResult.AlbumSearchResult]
+ * instance.
+ */
+fun AlbumsMetadataResponse.toAlbumSearchResultList(imageSize: MapperImageSize) = items.map {
+    it.toAlbumSearchResult(imageSize)
+}
+
+
