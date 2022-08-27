@@ -2,8 +2,8 @@ package com.example.musify.data.repositories.artistsrepository
 
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.response.toArtistSearchResult
-import com.example.musify.data.repository.tokenrepository.TokenRepository
-import com.example.musify.data.repository.tokenrepository.runCatchingWithToken
+import com.example.musify.data.repositories.tokenrepository.TokenRepository
+import com.example.musify.data.repositories.tokenrepository.runCatchingWithToken
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusifyErrorType

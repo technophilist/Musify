@@ -4,8 +4,8 @@ import com.example.musify.data.encoder.AndroidBase64Encoder
 import com.example.musify.data.encoder.Base64Encoder
 import com.example.musify.data.repository.MusifyRepository
 import com.example.musify.data.repository.Repository
-import com.example.musify.data.repository.tokenrepository.SpotifyTokenRepository
-import com.example.musify.data.repository.tokenrepository.TokenRepository
+import com.example.musify.data.repositories.tokenrepository.SpotifyTokenRepository
+import com.example.musify.data.repositories.tokenrepository.TokenRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -1,4 +1,4 @@
-package com.example.musify.data.repository.tokenrepository
+package com.example.musify.data.repositories.tokenrepository
 
 import com.example.musify.data.encoder.TestBase64Encoder
 import com.example.musify.data.remote.token.AccessTokenResponse
