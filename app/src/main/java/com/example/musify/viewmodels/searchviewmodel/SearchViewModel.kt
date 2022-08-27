@@ -7,7 +7,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.musify.data.repository.Repository
+import com.example.musify.data.repositories.genresrepository.GenresRepository
+import com.example.musify.data.repositories.searchrepository.SearchRepository
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.IODispatcher
 import com.example.musify.domain.SearchResult
@@ -28,7 +29,8 @@ enum class SearchScreenUiState { LOADING, SUCCESS, IDLE }
 class SearchViewModel @Inject constructor(
     application: Application,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val repository: Repository,
+    private val genresRepository: GenresRepository,
+    private val searchRepository: SearchRepository
 ) : AndroidViewModel(application) {
 
     private var searchJob: Job? = null
@@ -63,42 +65,37 @@ class SearchViewModel @Inject constructor(
         searchQuery: String,
         imageSize: MapperImageSize
     ) {
-        repository.getPaginatedSearchStreamForType(
-            paginatedStreamType = Repository.PaginatedStreamType.ALBUMS,
+        searchRepository.getPaginatedSearchStreamForAlbums(
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
         ).cachedIn(viewModelScope)
             .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.ALBUMS) {
-                _albumListForSearchQuery.value = it as PagingData<SearchResult.AlbumSearchResult>
+                _albumListForSearchQuery.value = it
             }
-        repository.getPaginatedSearchStreamForType(
-            paginatedStreamType = Repository.PaginatedStreamType.ARTISTS,
+        searchRepository.getPaginatedSearchStreamForArtists(
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
         ).cachedIn(viewModelScope)
             .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.ARTISTS) {
-                _artistListForSearchQuery.value = it as PagingData<SearchResult.ArtistSearchResult>
+                _artistListForSearchQuery.value = it
             }
-        repository.getPaginatedSearchStreamForType(
-            paginatedStreamType = Repository.PaginatedStreamType.TRACKS,
+        searchRepository.getPaginatedSearchStreamForTracks(
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
         ).cachedIn(viewModelScope)
             .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.TRACKS) {
-                _trackListForSearchQuery.value = it as PagingData<SearchResult.TrackSearchResult>
+                _trackListForSearchQuery.value = it
             }
-        repository.getPaginatedSearchStreamForType(
-            paginatedStreamType = Repository.PaginatedStreamType.PLAYLISTS,
+        searchRepository.getPaginatedSearchStreamForPlaylists(
             searchQuery = searchQuery,
             countryCode = getCountryCode(),
             imageSize = imageSize
         ).cachedIn(viewModelScope)
             .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.PLAYLISTS) {
-                _playlistListForSearchQuery.value =
-                    it as PagingData<SearchResult.PlaylistSearchResult>
+                _playlistListForSearchQuery.value = it
             }
     }
 
@@ -166,7 +163,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun getAvailableGenres() = repository.fetchAvailableGenres()
+    fun getAvailableGenres() = genresRepository.fetchAvailableGenres()
 
     fun updateSearchFilter(newSearchFilter: SearchFilter) {
         _currentlySelectedFilter.value = newSearchFilter
