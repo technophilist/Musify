@@ -62,14 +62,14 @@ class MusifyTracksRepository @Inject constructor(
             spotifyService.getAlbumWithId(albumId, countryCode, it).getTracks(imageSize)
         }
 
-    override suspend fun getPaginatedStreamForPlaylistTracks(
+    override fun getPaginatedStreamForPlaylistTracks(
         playlistId: String,
         countryCode: String,
         imageSize: MapperImageSize
-    ): Flow<PagingData<SearchResult.TrackSearchResult>>  = Pager(pagingConfig){
+    ): Flow<PagingData<SearchResult.TrackSearchResult>> = Pager(pagingConfig) {
         PlaylistTracksPagingSource(
             playlistId = playlistId,
-            countryCode =  countryCode,
+            countryCode = countryCode,
             imageSize = imageSize,
             tokenRepository = tokenRepository,
             spotifyService = spotifyService
