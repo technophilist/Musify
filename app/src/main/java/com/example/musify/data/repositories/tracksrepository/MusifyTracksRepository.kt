@@ -1,5 +1,6 @@
 package com.example.musify.data.repositories.tracksrepository
 
+import androidx.paging.PagingConfig
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.response.getTracks
 import com.example.musify.data.remote.response.toTrackSearchResult
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 class MusifyTracksRepository @Inject constructor(
     private val tokenRepository: TokenRepository,
-    private val spotifyService: SpotifyService
+    private val spotifyService: SpotifyService,
+    private val pagingConfig: PagingConfig
 ) : TracksRepository {
     override suspend fun fetchTopTenTracksForArtistWithId(
         artistId: String,
