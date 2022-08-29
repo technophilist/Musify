@@ -17,9 +17,11 @@ import com.example.musify.R
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.screens.AlbumDetailScreen
 import com.example.musify.ui.screens.ArtistDetailScreen
+import com.example.musify.ui.screens.PlaylistDetailScreen
 import com.example.musify.ui.screens.searchscreen.SearchScreen
 import com.example.musify.viewmodels.AlbumDetailUiState
 import com.example.musify.viewmodels.AlbumDetailViewModel
+import com.example.musify.viewmodels.PlaylistDetailViewModel
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailScreenUiState
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailViewModel
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
@@ -150,6 +152,37 @@ fun NavGraphBuilder.albumDetailScreen(
             isLoading = isPlaybackLoading || viewModel.uiState.value is AlbumDetailUiState.Loading,
             isErrorMessageVisible = viewModel.uiState.value is AlbumDetailUiState.Error,
             currentlyPlayingTrack = currentlyPlayingTrack
+        )
+    }
+}
+
+@ExperimentalMaterialApi
+fun NavGraphBuilder.playlistDetailScreen(
+    route: String,
+    onBackButtonClicked: () -> Unit,
+    onPlayTrack: (SearchResult.TrackSearchResult) -> Unit,
+    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
+    isPlaybackLoading: Boolean,
+    navigationArguments: List<NamedNavArgument> = emptyList()
+) {
+    composable(route = route, arguments = navigationArguments) {
+        val arguments = it.arguments!!
+        val viewModel = hiltViewModel<PlaylistDetailViewModel>()
+        val tracks = viewModel.tracks.collectAsLazyPagingItems()
+        val playlistName =
+            arguments.getString(MusifyNavigationDestinations.PlaylistDetailScreen.NAV_ARG_PLAYLIST_NAME)!!
+        val imageUrlString =
+            arguments.getString(MusifyNavigationDestinations.PlaylistDetailScreen.NAV_ARG_ENCODED_IMAGE_URL_STRING)!!
+        PlaylistDetailScreen(
+            playlistName = playlistName,
+            playlistImageUrlString = imageUrlString,
+            imageResToUseWhenImageUrlStringIsNull = R.drawable.ic_outline_account_circle_24, // TODO
+            tracks = tracks,
+            currentlyPlayingTrack = currentlyPlayingTrack,
+            onBackButtonClicked = onBackButtonClicked,
+            onTrackClicked = onPlayTrack,
+            isLoading = tracks.loadState.refresh is LoadState.Loading || isPlaybackLoading,
+            isErrorMessageVisible = false // TODO
         )
     }
 }
