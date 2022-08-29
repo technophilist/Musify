@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
+import com.example.musify.ui.components.HeaderImageSource
 import com.example.musify.ui.components.ImageHeaderWithMetadata
 import com.example.musify.ui.components.MusifyCompactTrackCard
 import com.google.accompanist.insets.navigationBarsHeight
@@ -40,7 +41,7 @@ fun AlbumDetailScreen(
             item {
                 ImageHeaderWithMetadata(
                     title = albumName,
-                    imageUrl = albumArtUrlString,
+                    headerImageSource = HeaderImageSource.ImageFromUrlString(albumArtUrlString),
                     subtitle = artistsString,
                     onBackButtonClicked = onBackButtonClicked,
                     isLoadingPlaceholderVisible = isLoadingPlaceholderForAlbumArtVisible,
