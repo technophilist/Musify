@@ -1,8 +1,8 @@
 package com.example.musify.data.remote.musicservice
 
+import com.example.musify.data.encoder.TestBase64Encoder
 import com.example.musify.data.remote.response.AlbumMetadataResponse
 import com.example.musify.data.remote.response.TracksWithAlbumMetadataListResponse
-import com.example.musify.data.encoder.TestBase64Encoder
 import com.example.musify.data.remote.token.BearerToken
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
 import com.example.musify.data.repositories.tokenrepository.SpotifyTokenRepository
@@ -305,5 +305,21 @@ class SpotifyServiceTest {
         }
         // each genre must contain at least one track
         assert(results.awaitAll().all { it.value.isNotEmpty() })
+    }
+
+
+    @Test
+    fun fetchPlaylistTracksTest_validPlaylistId_returnsTrackListWithoutThrowingException() {
+        // Warning, this playlist is a real, user generated playlist, which
+        // could be removed/modified/made private in the future, which would
+        // cause the test to fail.
+        val playlistId = "33PhwTyxEl2c7sn3NE2j2y"
+        runBlockingWithToken {
+            musicService.getTracksForPlaylist(
+                playlistId = playlistId,
+                market = "IN",
+                token = it,
+            )
+        }
     }
 }
