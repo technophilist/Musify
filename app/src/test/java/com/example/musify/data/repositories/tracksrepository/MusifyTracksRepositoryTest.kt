@@ -6,6 +6,7 @@ import com.example.musify.data.remote.token.tokenmanager.TokenManager
 import com.example.musify.data.repositories.tokenrepository.SpotifyTokenRepository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
+import com.example.musify.di.PagingConfigModule
 import com.example.musify.domain.Genre
 import com.example.musify.utils.defaultMusifyJacksonConverterFactory
 import kotlinx.coroutines.runBlocking
@@ -35,6 +36,7 @@ class MusifyTracksRepositoryTest {
                 TestBase64Encoder()
             ),
             spotifyService = spotifyService,
+            pagingConfig = PagingConfigModule.provideDefaultPagingConfig()
         )
     }
 
