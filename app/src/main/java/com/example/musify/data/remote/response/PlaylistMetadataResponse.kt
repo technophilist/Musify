@@ -48,5 +48,6 @@ fun PlaylistMetadataResponse.toPlaylistSearchResult() = PlaylistSearchResult(
     id = id,
     name = name,
     ownerName = ownerName.value,
-    imageUrlString = images.firstOrNull()?.url
+    imageUrlString = images.firstOrNull()?.url,
+    totalNumberOfTracks = totalNumberOfTracks.value.toString()
 )
