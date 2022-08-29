@@ -1,5 +1,6 @@
 package com.example.musify.ui.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
@@ -18,6 +19,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.musify.R
 import com.google.accompanist.insets.statusBarsPadding
+
+/**
+ * A sealed class hierarchy that contains the different header image
+ * types.
+ */
+sealed class HeaderImageSource {
+    data class ImageFromUrlString(val urlString: String) : HeaderImageSource()
+    data class ImageFromDrawableResource(@DrawableRes val resourceId: Int) : HeaderImageSource()
+}
 
 /**
  * A composable that is used to display an image together with it's
@@ -42,7 +52,7 @@ import com.google.accompanist.insets.statusBarsPadding
 @Composable
 fun ImageHeaderWithMetadata(
     title: String,
-    imageUrl: String,
+    imageUrl: String?,
     subtitle: String,
     onBackButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
