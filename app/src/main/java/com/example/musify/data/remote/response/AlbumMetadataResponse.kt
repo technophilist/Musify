@@ -2,10 +2,8 @@ package com.example.musify.data.remote.response
 
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getImageResponseForImageSize
-import com.example.musify.domain.MusicSummary
 import com.example.musify.domain.SearchResult.AlbumSearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.net.URL
 
 /**
  * A response object that contains metadata about a specific album.
@@ -33,20 +31,6 @@ data class AlbumMetadataResponse(
         val name: String
     )
 }
-
-/**
- * A mapper function used to map an instance of [AlbumMetadataResponse] to
- * an instance of [MusicSummary.AlbumSummary]. The [imageSize]
- * parameter describes the size of image to be used for the
- * [MusicSummary.AlbumSummary] instance.
- */
-fun AlbumMetadataResponse.toAlbumSummary(imageSize: MapperImageSize) = MusicSummary.AlbumSummary(
-    id = id,
-    name = name,
-    nameOfArtist = artists.first().name,  // TODO
-    albumArtUrl = URL(images.getImageResponseForImageSize(imageSize).url),
-    yearOfReleaseString = releaseDate // TODO
-)
 
 /**
  * A mapper function used to map an instance of [AlbumMetadataResponse] to
