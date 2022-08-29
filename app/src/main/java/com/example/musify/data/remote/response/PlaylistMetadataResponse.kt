@@ -43,5 +43,6 @@ fun PlaylistMetadataResponse.toPlaylistSummary() = MusicSummary.PlaylistSummary(
 fun PlaylistMetadataResponse.toPlaylistSearchResult() = PlaylistSearchResult(
     id = id,
     name = name,
+    ownerName = ownerName.value,
     imageUrlString = images.firstOrNull()?.url
 )
