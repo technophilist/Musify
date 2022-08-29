@@ -9,10 +9,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.musify.domain.SearchResult
-import com.example.musify.ui.navigation.MusifyNavigationDestinations
-import com.example.musify.ui.navigation.albumDetailScreen
-import com.example.musify.ui.navigation.artistDetailScreen
-import com.example.musify.ui.navigation.searchScreen
+import com.example.musify.ui.navigation.*
 
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
@@ -49,7 +46,10 @@ fun MusifyNavigation(
                         .navigate(MusifyNavigationDestinations.ArtistDetailScreen.buildRoute(it)) {
                             launchSingleTop = true
                         }
-                    is SearchResult.PlaylistSearchResult -> {}
+                    is SearchResult.PlaylistSearchResult -> navController
+                        .navigate(MusifyNavigationDestinations.PlaylistDetailScreen.buildRoute(it)) {
+                            launchSingleTop = true
+                        }
                     is SearchResult.TrackSearchResult -> playTrack(it)
                 }
             }
@@ -73,6 +73,14 @@ fun MusifyNavigation(
         )
         albumDetailScreen(
             route = MusifyNavigationDestinations.AlbumDetailScreen.route,
+            onBackButtonClicked = onBackButtonClicked,
+            onPlayTrack = playTrack,
+            currentlyPlayingTrack = currentlyPlayingTrack,
+            isPlaybackLoading = isPlaybackLoading
+        )
+
+        playlistDetailScreen(
+            route = MusifyNavigationDestinations.PlaylistDetailScreen.route,
             onBackButtonClicked = onBackButtonClicked,
             onPlayTrack = playTrack,
             currentlyPlayingTrack = currentlyPlayingTrack,
