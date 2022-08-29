@@ -11,7 +11,8 @@ enum class MusifyErrorType {
     INVALID_REQUEST,
     RATE_LIMIT_EXCEEDED,
     UNKNOWN_ERROR,
-    NETWORK_CONNECTION_FAILURE
+    NETWORK_CONNECTION_FAILURE,
+    RESOURCE_NOT_FOUND
 }
 
 /**
@@ -24,5 +25,6 @@ fun HttpException.getAssociatedMusifyErrorType(): MusifyErrorType =
         401 -> MusifyErrorType.BAD_OR_EXPIRED_TOKEN
         403 -> MusifyErrorType.BAD_OAUTH_REQUEST
         429 -> MusifyErrorType.RATE_LIMIT_EXCEEDED
+        404 -> MusifyErrorType.RESOURCE_NOT_FOUND
         else -> MusifyErrorType.UNKNOWN_ERROR
     }
