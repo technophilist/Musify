@@ -107,15 +107,7 @@ interface SpotifyService {
         @Query("market") market: String,
         @Header("Authorization") token: BearerToken
     ): AlbumResponse
-
-    @GET(SpotifyEndPoints.SPECIFIC_PLAYLIST_ENDPOINT)
-    suspend fun getPlaylistWithId(
-        @Path("playlist_id") playlistId: String,
-        @Query("market") market: String,
-        @Header("Authorization") token: BearerToken,
-        @Query("fields") fields: String = SpotifyEndPoints.Defaults.defaultPlaylistFields
-    ): PlaylistResponse
-
+    
     @GET(SpotifyEndPoints.SEARCH_ENDPOINT)
     suspend fun search(
         @Query("q") searchQuery: String,
