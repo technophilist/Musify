@@ -1,6 +1,9 @@
 package com.example.musify.data.repositories.tracksrepository
 
+import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.example.musify.data.paging.PlaylistTracksPagingSource
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.response.getTracks
 import com.example.musify.data.remote.response.toTrackSearchResult
@@ -12,6 +15,7 @@ import com.example.musify.domain.Genre
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.toSupportedSpotifyGenreType
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class MusifyTracksRepository @Inject constructor(
@@ -57,4 +61,18 @@ class MusifyTracksRepository @Inject constructor(
         tokenRepository.runCatchingWithToken {
             spotifyService.getAlbumWithId(albumId, countryCode, it).getTracks(imageSize)
         }
+
+    override suspend fun getPaginatedStreamForPlaylistTracks(
+        playlistId: String,
+        countryCode: String,
+        imageSize: MapperImageSize
+    ): Flow<PagingData<SearchResult.TrackSearchResult>>  = Pager(pagingConfig){
+        PlaylistTracksPagingSource(
+            playlistId = playlistId,
+            countryCode =  countryCode,
+            imageSize = imageSize,
+            tokenRepository = tokenRepository,
+            spotifyService = spotifyService
+        )
+    }.flow
 }
