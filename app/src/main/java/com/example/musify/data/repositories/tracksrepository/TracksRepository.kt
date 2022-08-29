@@ -1,10 +1,12 @@
 package com.example.musify.data.repositories.tracksrepository
 
+import androidx.paging.PagingData
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.Genre
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.SearchResult
+import kotlinx.coroutines.flow.Flow
 
 interface TracksRepository {
     suspend fun fetchTopTenTracksForArtistWithId(
@@ -24,4 +26,10 @@ interface TracksRepository {
         countryCode: String,
         imageSize: MapperImageSize
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType>
+
+    suspend fun getPaginatedStreamForPlaylistTracks(
+        playlistId: String,
+        countryCode: String,
+        imageSize: MapperImageSize
+    ): Flow<PagingData<SearchResult.TrackSearchResult>>
 }
