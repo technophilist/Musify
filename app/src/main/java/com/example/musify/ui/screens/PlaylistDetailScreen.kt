@@ -25,6 +25,8 @@ import com.google.accompanist.insets.statusBarsPadding
 fun PlaylistDetailScreen(
     playlistName: String,
     playlistImageUrlString: String?,
+    nameOfPlaylistOwner: String,
+    totalNumberOfTracks: String,
     @DrawableRes imageResToUseWhenImageUrlStringIsNull: Int,
     tracks: LazyPagingItems<SearchResult.TrackSearchResult>,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?,
@@ -48,12 +50,12 @@ fun PlaylistDetailScreen(
                             resourceId = imageResToUseWhenImageUrlStringIsNull
                         )
                     else HeaderImageSource.ImageFromUrlString(playlistImageUrlString),
-                    subtitle = "TODO",
+                    subtitle = "Playlist owner : $nameOfPlaylistOwner",
                     onBackButtonClicked = onBackButtonClicked,
                     isLoadingPlaceholderVisible = isLoadingPlaceholderForAlbumArtVisible,
                     onImageLoading = { isLoadingPlaceholderForAlbumArtVisible = true },
                     onImageLoaded = { isLoadingPlaceholderForAlbumArtVisible = false },
-                    additionalMetadataContent = { /*TODO*/ }
+                    additionalMetadataContent = { Text(text = "$totalNumberOfTracks tracks") }
                 )
                 Spacer(modifier = Modifier.size(16.dp))
             }
