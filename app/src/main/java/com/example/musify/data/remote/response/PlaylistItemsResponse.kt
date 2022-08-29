@@ -1,5 +1,8 @@
 package com.example.musify.data.remote.response
 
+import com.example.musify.data.utils.MapperImageSize
+import com.example.musify.data.utils.getImageResponseForImageSize
+import com.example.musify.domain.SearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
@@ -12,4 +15,12 @@ data class PlaylistItemsResponse(
     data class TrackResponseWithAlbumMetadataWrapper(@JsonProperty("track") val track: TrackResponseWithAlbumMetadata)
 }
 
+fun PlaylistResponse.TrackResponseWithAlbumMetadataWrapper.toTrackSearchResult(imageSize: MapperImageSize) =
+    SearchResult.TrackSearchResult(
+        id = track.id,
+        name = track.name,
+        imageUrlString = track.albumMetadata.images.getImageResponseForImageSize(imageSize).url,
+        artistsString = track.albumMetadata.artists.joinToString(",") { it.name },
+        trackUrlString = track.previewUrl
+    )
 
