@@ -15,8 +15,12 @@ data class PlaylistMetadataResponse(
     val id: String,
     val name: String,
     val images: List<ImageResponse>,
-    @JsonProperty("owner") val ownerName: PlaylistResponse.OwnerNameWrapper
-)
+    @JsonProperty("owner") val ownerName: PlaylistResponse.OwnerNameWrapper,
+    @JsonProperty("tracks") val totalNumberOfTracks: TotalNumberOfTracksWrapper
+) {
+    data class TotalNumberOfTracksWrapper(@JsonProperty("total") val value: Int)
+}
+
 
 /**
  * A mapper function used to map an instance of [PlaylistMetadataResponse] to
