@@ -27,7 +27,7 @@ interface TracksRepository {
         imageSize: MapperImageSize
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType>
 
-    suspend fun getPaginatedStreamForPlaylistTracks(
+    fun getPaginatedStreamForPlaylistTracks(
         playlistId: String,
         countryCode: String,
         imageSize: MapperImageSize
