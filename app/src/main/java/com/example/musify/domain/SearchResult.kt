@@ -35,7 +35,8 @@ sealed class SearchResult {
     data class PlaylistSearchResult(
         val id: String,
         val name: String,
-        val ownerName:String,
+        val ownerName: String,
+        val totalNumberOfTracks: String,
         val imageUrlString: String?
     ) : SearchResult()
 

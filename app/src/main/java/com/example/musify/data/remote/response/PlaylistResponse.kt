@@ -60,5 +60,6 @@ fun PlaylistResponse.toPlaylistSearchResult() = SearchResult.PlaylistSearchResul
     id = id,
     name = name,
     ownerName = ownerName.value,
-    imageUrlString = images.first().url
+    imageUrlString = images.first().url,
+    totalNumberOfTracks = (-1).toString() // TODO
 )
