@@ -133,4 +133,13 @@ interface SpotifyService {
         @Header("Authorization") token: BearerToken,
         @Query("limit") limit: Int = 20
     ): TracksWithAlbumMetadataListResponse
+
+    @GET(SpotifyEndPoints.PLAYLIST_TRACKS_ENDPOINT)
+    suspend fun getTracksForPlaylist(
+        @Path("playlist_id") playlistId: String,
+        @Query("market") market: String,
+        @Header("Authorization") token: BearerToken,
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0
+    ): PlaylistItemsResponse
 }
