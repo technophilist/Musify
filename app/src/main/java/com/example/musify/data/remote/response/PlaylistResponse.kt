@@ -59,5 +59,6 @@ fun PlaylistResponse.toPlayListSummary() = MusicSummary.PlaylistSummary(
 fun PlaylistResponse.toPlaylistSearchResult() = SearchResult.PlaylistSearchResult(
     id = id,
     name = name,
+    ownerName = ownerName.value,
     imageUrlString = images.first().url
 )
