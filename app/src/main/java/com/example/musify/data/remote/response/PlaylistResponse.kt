@@ -15,7 +15,6 @@ data class PlaylistResponse(
     val images: List<ImageResponse>,
     @JsonProperty("owner") val ownerName: OwnerNameWrapper,
     @JsonProperty("followers") val numberOfFollowers: NumberOfFollowersWrapper,
-    val tracks: Tracks
 ) {
     /**
      * A class that wraps a string that contains the name of the owner
@@ -28,11 +27,6 @@ data class PlaylistResponse(
      * of a particular playlist.
      */
     data class NumberOfFollowersWrapper(@JsonProperty("total") val value: String)
-
-    /**
-     * A class that contains a list of [items] of type [TrackResponseWithAlbumMetadataWrapper].
-     */
-    data class Tracks(val items: List<TrackResponseWithAlbumMetadataWrapper>)
 
     /**
      * A wrapper class that wraps an instance of [TrackResponseWithAlbumMetadata]
@@ -63,7 +57,7 @@ fun PlaylistResponse.toPlayListSummary() = MusicSummary.PlaylistSummary(
  * is mapped to [SearchResult.PlaylistSearchResult.imageUrlString].
  */
 fun PlaylistResponse.toPlaylistSearchResult() = SearchResult.PlaylistSearchResult(
-    id =  id,
+    id = id,
     name = name,
     imageUrlString = images.first().url
 )
