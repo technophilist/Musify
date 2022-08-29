@@ -15,10 +15,11 @@ data class PlaylistMetadataResponse(
     val id: String,
     val name: String,
     val images: List<ImageResponse>,
-    @JsonProperty("owner") val ownerName: PlaylistResponse.OwnerNameWrapper,
+    @JsonProperty("owner") val ownerName: OwnerNameWrapper,
     @JsonProperty("tracks") val totalNumberOfTracks: TotalNumberOfTracksWrapper
 ) {
     data class TotalNumberOfTracksWrapper(@JsonProperty("total") val value: Int)
+    data class OwnerNameWrapper(@JsonProperty("display_name") val value: String)
 }
 
 
