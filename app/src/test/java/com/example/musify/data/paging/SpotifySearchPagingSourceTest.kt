@@ -106,6 +106,17 @@ class SpotifySearchPagingSourceTest {
 }
 
 private class SpotifyServiceSearchStub : SpotifyService {
+    override suspend fun getTracksForPlaylist(
+        playlistId: String,
+        market: String,
+        token: BearerToken,
+        limit: Int,
+        offset: Int
+    ): PlaylistItemsResponse {
+        TODO("Not yet implemented")
+    }
+
+
     override suspend fun getArtistInfoWithId(
         artistId: String,
         token: BearerToken
@@ -163,4 +174,5 @@ private class SpotifyServiceSearchStub : SpotifyService {
         token: BearerToken,
         limit: Int
     ): TracksWithAlbumMetadataListResponse = TODO()
+
 }
