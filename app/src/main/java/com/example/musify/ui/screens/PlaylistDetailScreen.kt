@@ -50,12 +50,12 @@ fun PlaylistDetailScreen(
                             resourceId = imageResToUseWhenImageUrlStringIsNull
                         )
                     else HeaderImageSource.ImageFromUrlString(playlistImageUrlString),
-                    subtitle = "Playlist owner : $nameOfPlaylistOwner",
+                    subtitle = "by $nameOfPlaylistOwner • $totalNumberOfTracks tracks",
                     onBackButtonClicked = onBackButtonClicked,
                     isLoadingPlaceholderVisible = isLoadingPlaceholderForAlbumArtVisible,
                     onImageLoading = { isLoadingPlaceholderForAlbumArtVisible = true },
                     onImageLoaded = { isLoadingPlaceholderForAlbumArtVisible = false },
-                    additionalMetadataContent = { Text(text = "$totalNumberOfTracks tracks") }
+                    additionalMetadataContent = { }
                 )
                 Spacer(modifier = Modifier.size(16.dp))
             }
