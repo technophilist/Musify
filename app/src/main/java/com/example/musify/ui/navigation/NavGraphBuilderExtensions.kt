@@ -173,9 +173,15 @@ fun NavGraphBuilder.playlistDetailScreen(
             arguments.getString(MusifyNavigationDestinations.PlaylistDetailScreen.NAV_ARG_PLAYLIST_NAME)!!
         val imageUrlString =
             arguments.getString(MusifyNavigationDestinations.PlaylistDetailScreen.NAV_ARG_ENCODED_IMAGE_URL_STRING)!!
+        val ownerName =
+            arguments.getString(MusifyNavigationDestinations.PlaylistDetailScreen.NAV_ARG_OWNER_NAME)!!
+        val totalNumberOfTracks =
+            arguments.getString(MusifyNavigationDestinations.PlaylistDetailScreen.NAV_ARG_NUMBER_OF_TRACKS)!!
         PlaylistDetailScreen(
             playlistName = playlistName,
             playlistImageUrlString = imageUrlString,
+            nameOfPlaylistOwner = ownerName,
+            totalNumberOfTracks = totalNumberOfTracks,
             imageResToUseWhenImageUrlStringIsNull = R.drawable.ic_outline_account_circle_24, // TODO
             tracks = tracks,
             currentlyPlayingTrack = currentlyPlayingTrack,
