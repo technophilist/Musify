@@ -50,15 +50,25 @@ sealed class MusifyNavigationDestinations(val route: String) {
     }
 
     object PlaylistDetailScreen :
-        MusifyNavigationDestinations("MusifyNavigationDestinations.AlbumDetailScreen/{playlistId}/{playlistName}?encodedImageUrlString={encodedImageUrlString}") {
+        MusifyNavigationDestinations(
+            route = "MusifyNavigationDestinations.AlbumDetailScreen" +
+                "/{playlistId}" +
+                "/{playlistName}" +
+                "/{ownerName}" +
+                "/{numberOfTracks}" +
+                "?encodedImageUrlString={encodedImageUrlString}"
+        ) {
         const val NAV_ARG_PLAYLIST_ID = "playlistId"
         const val NAV_ARG_PLAYLIST_NAME = "playlistName"
         const val NAV_ARG_ENCODED_IMAGE_URL_STRING = "encodedImageUrlString"
-        
+        const val NAV_ARG_OWNER_NAME = "ownerName"
+        const val NAV_ARG_NUMBER_OF_TRACKS = "numberOfTracks"
         fun buildRoute(playlistSearchResult: SearchResult.PlaylistSearchResult): String {
             val routeWithoutUrl = "MusifyNavigationDestinations.AlbumDetailScreen" +
                     "/${playlistSearchResult.id}" +
-                    "/${playlistSearchResult.name}"
+                    "/${playlistSearchResult.name}" +
+                    "/${playlistSearchResult.ownerName}" +
+                    "/${playlistSearchResult.totalNumberOfTracks}"
             if (playlistSearchResult.imageUrlString == null) return routeWithoutUrl
             val encodedImageUrl = URLEncoder.encode(
                 playlistSearchResult.imageUrlString,
