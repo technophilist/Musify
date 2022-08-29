@@ -48,4 +48,23 @@ sealed class MusifyNavigationDestinations(val route: String) {
                     "/${encodedImageUrlString}"
         }
     }
+
+    object PlaylistDetailScreen :
+        MusifyNavigationDestinations("MusifyNavigationDestinations.AlbumDetailScreen/{playlistId}/{playlistName}?encodedImageUrlString={encodedImageUrlString}") {
+        const val NAV_ARG_PLAYLIST_ID = "playlistId"
+        const val NAV_ARG_PLAYLIST_NAME = "playlistName"
+        const val NAV_ARG_ENCODED_IMAGE_URL_STRING = "encodedImageUrlString"
+        
+        fun buildRoute(playlistSearchResult: SearchResult.PlaylistSearchResult): String {
+            val routeWithoutUrl = "MusifyNavigationDestinations.AlbumDetailScreen" +
+                    "/${playlistSearchResult.id}" +
+                    "/${playlistSearchResult.name}"
+            if (playlistSearchResult.imageUrlString == null) return routeWithoutUrl
+            val encodedImageUrl = URLEncoder.encode(
+                playlistSearchResult.imageUrlString,
+                StandardCharsets.UTF_8.toString()
+            )
+            return "$routeWithoutUrl?encodedImageUrlString=$encodedImageUrl"
+        }
+    }
 }
