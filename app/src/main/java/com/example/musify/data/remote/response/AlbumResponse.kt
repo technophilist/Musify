@@ -2,10 +2,8 @@ package com.example.musify.data.remote.response
 
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getImageResponseForImageSize
-import com.example.musify.domain.MusicSummary
 import com.example.musify.domain.SearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.net.URL
 
 /**
  * A response object that represents an album. It also contains additional
@@ -59,23 +57,9 @@ data class AlbumResponse(
 
 /**
  * A mapper function used to map an instance of [AlbumResponse] to
- * an instance of [MusicSummary.AlbumSummary]. The [imageSize]
+ * an instance of [SearchResult.AlbumSearchResult]. The [imageSize]
  * parameter describes the size of image to be used for the
- * [MusicSummary.AlbumSummary] instance.
- */
-fun AlbumResponse.toAlbumSummary(imageSize: MapperImageSize) = MusicSummary.AlbumSummary(
-    id = id,
-    name = name,
-    nameOfArtist = artists.first().name, // TODO multiple artists
-    albumArtUrl = URL(images.getImageResponseForImageSize(imageSize).url),
-    yearOfReleaseString = releaseDate // TODO accommodate for release data precision
-)
-
-/**
- * A mapper function used to map an instance of [AlbumResponse] to
- * an instance of [MusicSummary.AlbumSummary]. The [imageSize]
- * parameter describes the size of image to be used for the
- * [MusicSummary.AlbumSummary] instance.
+ * [SearchResult.AlbumSearchResult] instance.
  */
 fun AlbumResponse.toAlbumSearchResult(imageSize: MapperImageSize) = SearchResult.AlbumSearchResult(
     id = id,

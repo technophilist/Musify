@@ -2,10 +2,8 @@ package com.example.musify.data.remote.response
 
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getImageResponseForImageSize
-import com.example.musify.domain.MusicSummary
 import com.example.musify.domain.SearchResult.TrackSearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.net.URL
 
 /**
  * A response object that contains information about a specific track
@@ -23,29 +21,15 @@ data class TrackResponseWithAlbumMetadata(
 
 /**
  * A mapper function used to map an instance of [TrackResponseWithAlbumMetadata] to
- * an instance of [MusicSummary.TrackSummary]. The [imageSize]
- * parameter describes the size of image to be used for the
- * [MusicSummary.TrackSummary] instance.
- */
-fun TrackResponseWithAlbumMetadata.toTrackSummary(imageSize: MapperImageSize) =
-    MusicSummary.TrackSummary(
-        id = id,
-        name = name,
-        associatedImageUrl = URL(albumMetadata.images.getImageResponseForImageSize(imageSize).url),
-        albumName = albumMetadata.name,
-        trackUrl = previewUrl?.let(::URL)
-    )
-
-/**
- * A mapper function used to map an instance of [TrackResponseWithAlbumMetadata] to
  * an instance of [TrackSearchResult]. The [imageSize]
  * parameter describes the size of image to be used for the
  * [TrackSearchResult] instance.
  */
-fun TrackResponseWithAlbumMetadata.toTrackSearchResult(imageSize: MapperImageSize) = TrackSearchResult(
-    id = id,
-    name = name,
-    imageUrlString = albumMetadata.images.getImageResponseForImageSize(imageSize).url,
-    artistsString = albumMetadata.artists.joinToString(",") { it.name },
-    trackUrlString = previewUrl
-)
+fun TrackResponseWithAlbumMetadata.toTrackSearchResult(imageSize: MapperImageSize) =
+    TrackSearchResult(
+        id = id,
+        name = name,
+        imageUrlString = albumMetadata.images.getImageResponseForImageSize(imageSize).url,
+        artistsString = albumMetadata.artists.joinToString(",") { it.name },
+        trackUrlString = previewUrl
+    )

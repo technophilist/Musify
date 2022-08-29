@@ -2,9 +2,7 @@ package com.example.musify.data.remote.response
 
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getImageResponseForImageSize
-import com.example.musify.domain.MusicSummary
 import com.example.musify.domain.SearchResult.ArtistSearchResult
-import java.net.URL
 
 
 /**
@@ -22,18 +20,6 @@ data class ArtistResponse(
      */
     data class Followers(val total: String)
 }
-
-/**
- * A mapper function used to map an instance of [ArtistResponse] to
- * an instance of [MusicSummary.ArtistSummary]. The [imageSize]
- * parameter describes the size of image to be used for the
- * [MusicSummary.ArtistSummary] instance.
- */
-fun ArtistResponse.toArtistSummary(imageSize: MapperImageSize) = MusicSummary.ArtistSummary(
-    id = id,
-    name = name,
-    associatedImageUrl = URL(images.getImageResponseForImageSize(imageSize).url)
-)
 
 /**
  * A mapper function used to map an instance of [ArtistResponse] to

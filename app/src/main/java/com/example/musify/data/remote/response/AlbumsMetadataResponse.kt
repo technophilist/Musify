@@ -1,7 +1,6 @@
 package com.example.musify.data.remote.response
 
 import com.example.musify.data.utils.MapperImageSize
-import com.example.musify.domain.MusicSummary
 import com.example.musify.domain.SearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -17,16 +16,6 @@ data class AlbumsMetadataResponse(
     @JsonProperty("previous") val previousPageUrlString: String?,
     @JsonProperty("total") val totalNumberOfItemsAvailable: Int
 )
-
-/**
- * A mapper function used to map an instance of [AlbumsMetadataResponse] to
- * a list of [MusicSummary.AlbumSummary]. The [imageSize]
- * parameter describes the size of image to be used for each
- * [MusicSummary.AlbumSummary] instance.
- */
-fun AlbumsMetadataResponse.toAlbumSummaryList(imageSize: MapperImageSize) = items.map {
-    it.toAlbumSummary(imageSize)
-}
 
 /**
  * A mapper function used to map an instance of [AlbumsMetadataResponse] to
