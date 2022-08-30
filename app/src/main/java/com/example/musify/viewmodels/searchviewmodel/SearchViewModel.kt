@@ -23,7 +23,7 @@ import javax.inject.Inject
  * An enum class that contains the different ui states associated with
  * the [SearchViewModel].
  */
-enum class SearchScreenUiState { LOADING, SUCCESS, IDLE }
+enum class SearchScreenUiState { LOADING, IDLE }
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -137,7 +137,7 @@ class SearchViewModel @Inject constructor(
                 collect {
                     collectBlock(it)
                     if (_uiState.value == SearchScreenUiState.LOADING && updateUiStatePredicate)
-                        _uiState.value = SearchScreenUiState.SUCCESS
+                        _uiState.value = SearchScreenUiState.IDLE
                 }
             }
         }
