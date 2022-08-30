@@ -1,26 +1,17 @@
 package com.example.musify.ui.screens.searchscreen
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.example.musify.domain.SearchResult
-import com.example.musify.ui.components.ListItemCardType
-import com.example.musify.ui.components.MusifyCompactListItemCard
-import com.example.musify.ui.components.MusifyCompactTrackCard
-import com.example.musify.ui.components.MusifyCompactTrackCardDefaults
+import com.example.musify.ui.components.*
 import com.google.accompanist.insets.imePadding
 
 @ExperimentalMaterialApi
@@ -147,34 +138,13 @@ fun LazyListScope.searchPlaylistListItems(
     }
 }
 
-@Composable
-private fun DefaultEmptyListContent(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Couldn't find anything matching the search query",
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.h6,
-            textAlign = TextAlign.Center
-        )
-        Text(
-            text = "Try searching again using a different spelling or keyword.",
-            style = LocalTextStyle.current.copy(
-                color = Color.White.copy(alpha = ContentAlpha.disabled)
-            ),
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
 private fun <T : Any> LazyListScope.itemsIndexedWithEmptyListContent(
     items: LazyPagingItems<T>,
     key: ((index: Int, item: T) -> Any)? = null,
     emptyListContent: @Composable LazyItemScope.() -> Unit = {
-        DefaultEmptyListContent(
+        DefaultMusifyErrorMessage(
+            title = "Couldn't find anything matching the search query.",
+            subtitle= "Try searching again using a different spelling or keyword.",
             modifier = Modifier
                 .fillParentMaxSize()
                 .padding(horizontal = 16.dp)
