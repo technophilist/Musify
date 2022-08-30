@@ -8,6 +8,9 @@ import com.example.musify.domain.SearchResult
 import com.example.musify.domain.SearchResults
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * A repository that contains all methods related to searching.
+ */
 interface SearchRepository {
     suspend fun fetchSearchResultsForQuery(
         searchQuery: String,
