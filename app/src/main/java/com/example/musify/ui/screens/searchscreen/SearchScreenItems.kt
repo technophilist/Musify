@@ -183,8 +183,7 @@ private fun <T : Any> LazyListScope.itemsIndexedWithEmptyListContent(
     },
     itemContent: @Composable LazyItemScope.(index: Int, value: T?) -> Unit
 ) {
-    // items.loadState.append.endOfPaginationReached && items.itemCount == 0
-    if (true) {
+    if (items.loadState.append.endOfPaginationReached && items.itemCount == 0) {
         item { emptyListContent.invoke(this) }
     } else {
         itemsIndexed(items, key, itemContent)
