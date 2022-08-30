@@ -29,12 +29,13 @@ import androidx.paging.compose.LazyPagingItems
 import com.example.musify.R
 import com.example.musify.domain.Genre
 import com.example.musify.domain.SearchResult
+import com.example.musify.ui.components.DefaultMusifyErrorMessage
 import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
 import com.example.musify.ui.components.FilterChip
 import com.example.musify.ui.components.GenreCard
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
+import com.google.accompanist.insets.imePadding
 import com.google.accompanist.insets.navigationBarsHeight
-import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
@@ -250,24 +251,13 @@ private fun SearchQueryList(
             .background(MaterialTheme.colors.background)
     ) {
         if (isSearchErrorMessageVisible) {
-            Column(
+            DefaultMusifyErrorMessage(
+                title = "Oops! Something doesn't look right",
+                subtitle = "Please check the internet connection",
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .navigationBarsWithImePadding()
-                    .padding(bottom = 56.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Oops! Something doesn't look right",
-                    style = MaterialTheme.typography.h6,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Text(
-                    text = "Please check the internet connection",
-                    style = MaterialTheme.typography.subtitle2
-                )
-            }
-
+                    .imePadding()
+            )
         } else {
             LazyColumn(
                 modifier = Modifier
