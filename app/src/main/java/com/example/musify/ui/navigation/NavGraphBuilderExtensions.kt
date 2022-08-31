@@ -177,6 +177,14 @@ fun NavGraphBuilder.playlistDetailScreen(
             arguments.getString(MusifyNavigationDestinations.PlaylistDetailScreen.NAV_ARG_OWNER_NAME)!!
         val totalNumberOfTracks =
             arguments.getString(MusifyNavigationDestinations.PlaylistDetailScreen.NAV_ARG_NUMBER_OF_TRACKS)!!
+        val isErrorMessageVisible by remember {
+            derivedStateOf {
+                tracks.loadState.refresh is LoadState.Error ||
+                        tracks.loadState.append is LoadState.Error ||
+                        tracks.loadState.prepend is LoadState.Error
+
+            }
+        }
         PlaylistDetailScreen(
             playlistName = playlistName,
             playlistImageUrlString = imageUrlString,
@@ -188,7 +196,7 @@ fun NavGraphBuilder.playlistDetailScreen(
             onBackButtonClicked = onBackButtonClicked,
             onTrackClicked = onPlayTrack,
             isLoading = tracks.loadState.refresh is LoadState.Loading || isPlaybackLoading,
-            isErrorMessageVisible = false // TODO
+            isErrorMessageVisible = isErrorMessageVisible
         )
     }
 }
