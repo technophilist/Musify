@@ -80,7 +80,7 @@ class PlaybackViewModel @Inject constructor(
             _playbackState.value = PlaybackState.Loading
             val downloadAlbumArtResult = downloadDrawableFromUrlUseCase.invoke(
                 urlString = track.imageUrlString,
-                application = getApplication()
+                context = getApplication()
             )
             if (downloadAlbumArtResult.isSuccess) {
                 val bitmap = downloadAlbumArtResult.getOrNull()!!.toBitmap()
