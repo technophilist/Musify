@@ -22,6 +22,7 @@ class MusifyDownloadDrawableFromUrlUseCase @Inject constructor(
     ): Result<Drawable> = withContext(ioDispatcher) {
         val imageRequest = ImageRequest.Builder(application)
             .data(urlString)
+            .allowHardware(false)
             .diskCachePolicy(CachePolicy.DISABLED)
             .build()
         when (val imageResult = ImageLoader(application).execute(imageRequest)) {
