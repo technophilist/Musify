@@ -19,6 +19,8 @@ import com.example.musify.ui.screens.AlbumDetailScreen
 import com.example.musify.ui.screens.ArtistDetailScreen
 import com.example.musify.ui.screens.PlaylistDetailScreen
 import com.example.musify.ui.screens.searchscreen.SearchScreen
+import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
+import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 import com.example.musify.viewmodels.AlbumDetailUiState
 import com.example.musify.viewmodels.AlbumDetailViewModel
 import com.example.musify.viewmodels.PlaylistDetailViewModel
@@ -141,18 +143,22 @@ fun NavGraphBuilder.albumDetailScreen(
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_ARTISTS_STRING)!!
         val yearOfRelease =
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_YEAR_OF_RELEASE_STRING)!!
-        AlbumDetailScreen(
-            albumName = albumName,
-            artistsString = artists,
-            yearOfRelease = yearOfRelease,
-            albumArtUrlString = albumArtUrl,
-            trackList = viewModel.tracks.value,
-            onTrackItemClick = onPlayTrack,
-            onBackButtonClicked = onBackButtonClicked,
-            isLoading = isPlaybackLoading || viewModel.uiState.value is AlbumDetailUiState.Loading,
-            isErrorMessageVisible = viewModel.uiState.value is AlbumDetailUiState.Error,
-            currentlyPlayingTrack = currentlyPlayingTrack
-        )
+        DynamicallyThemedSurface(
+            dynamicThemResource = DynamicThemeResource.FromImageUrl(albumArtUrl)
+        ) {
+            AlbumDetailScreen(
+                albumName = albumName,
+                artistsString = artists,
+                yearOfRelease = yearOfRelease,
+                albumArtUrlString = albumArtUrl,
+                trackList = viewModel.tracks.value,
+                onTrackItemClick = onPlayTrack,
+                onBackButtonClicked = onBackButtonClicked,
+                isLoading = isPlaybackLoading || viewModel.uiState.value is AlbumDetailUiState.Loading,
+                isErrorMessageVisible = viewModel.uiState.value is AlbumDetailUiState.Error,
+                currentlyPlayingTrack = currentlyPlayingTrack
+            )
+        }
     }
 }
 
@@ -185,18 +191,22 @@ fun NavGraphBuilder.playlistDetailScreen(
 
             }
         }
-        PlaylistDetailScreen(
-            playlistName = playlistName,
-            playlistImageUrlString = imageUrlString,
-            nameOfPlaylistOwner = ownerName,
-            totalNumberOfTracks = totalNumberOfTracks,
-            imageResToUseWhenImageUrlStringIsNull = R.drawable.ic_outline_account_circle_24, // TODO
-            tracks = tracks,
-            currentlyPlayingTrack = currentlyPlayingTrack,
-            onBackButtonClicked = onBackButtonClicked,
-            onTrackClicked = onPlayTrack,
-            isLoading = tracks.loadState.refresh is LoadState.Loading || isPlaybackLoading,
-            isErrorMessageVisible = isErrorMessageVisible
-        )
+        DynamicallyThemedSurface(
+            dynamicThemResource = DynamicThemeResource.FromImageUrl(imageUrlString)
+        ) {
+            PlaylistDetailScreen(
+                playlistName = playlistName,
+                playlistImageUrlString = imageUrlString,
+                nameOfPlaylistOwner = ownerName,
+                totalNumberOfTracks = totalNumberOfTracks,
+                imageResToUseWhenImageUrlStringIsNull = R.drawable.ic_outline_account_circle_24, // TODO
+                tracks = tracks,
+                currentlyPlayingTrack = currentlyPlayingTrack,
+                onBackButtonClicked = onBackButtonClicked,
+                onTrackClicked = onPlayTrack,
+                isLoading = tracks.loadState.refresh is LoadState.Loading || isPlaybackLoading,
+                isErrorMessageVisible = isErrorMessageVisible
+            )
+        }
     }
 }
