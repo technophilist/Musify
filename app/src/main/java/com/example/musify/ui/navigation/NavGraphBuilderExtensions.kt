@@ -58,34 +58,40 @@ fun NavGraphBuilder.searchScreen(
         val controller = LocalSoftwareKeyboardController.current
         val genres = remember { viewModel.getAvailableGenres() }
         val filters = remember { SearchFilter.values().toList() }
-        SearchScreen(
-            genreList = genres,
-            searchScreenFilters = filters,
-            onGenreItemClick = {},
-            onSearchTextChanged = viewModel::search,
-            isLoading = uiState == SearchScreenUiState.LOADING || isPlaybackLoading,
-            albumListForSearchQuery = albums,
-            artistListForSearchQuery = artists,
-            tracksListForSearchQuery = tracks,
-            playlistListForSearchQuery = playlists,
-            onSearchQueryItemClicked = onSearchResultClicked,
-            currentlySelectedFilter = viewModel.currentlySelectedFilter.value,
-            onSearchFilterChanged = viewModel::updateSearchFilter,
-            isSearchErrorMessageVisible = isLoadingError,
-            onImeDoneButtonClicked = {
-                // Search only if there was an error while loading.
-                // A manual call to search() is not required
-                // when there is no error because, search()
-                // will be called automatically, everytime the
-                // search text changes. This prevents duplicate
-                // calls when the user manually clicks the done
-                // button after typing the search text, in
-                // which case, the keyboard will just be hidden.
-                if (isLoadingError) viewModel.search(it)
-                controller?.hide()
-            },
-            currentlyPlayingTrack = currentlyPlayingTrack
-        )
+        val dynamicThemeResource = remember(currentlyPlayingTrack) {
+            if (currentlyPlayingTrack == null) DynamicThemeResource.Empty
+            else DynamicThemeResource.FromImageUrl(currentlyPlayingTrack.imageUrlString)
+        }
+        DynamicallyThemedSurface(dynamicThemResource = dynamicThemeResource) {
+            SearchScreen(
+                genreList = genres,
+                searchScreenFilters = filters,
+                onGenreItemClick = {},
+                onSearchTextChanged = viewModel::search,
+                isLoading = uiState == SearchScreenUiState.LOADING || isPlaybackLoading,
+                albumListForSearchQuery = albums,
+                artistListForSearchQuery = artists,
+                tracksListForSearchQuery = tracks,
+                playlistListForSearchQuery = playlists,
+                onSearchQueryItemClicked = onSearchResultClicked,
+                currentlySelectedFilter = viewModel.currentlySelectedFilter.value,
+                onSearchFilterChanged = viewModel::updateSearchFilter,
+                isSearchErrorMessageVisible = isLoadingError,
+                onImeDoneButtonClicked = {
+                    // Search only if there was an error while loading.
+                    // A manual call to search() is not required
+                    // when there is no error because, search()
+                    // will be called automatically, everytime the
+                    // search text changes. This prevents duplicate
+                    // calls when the user manually clicks the done
+                    // button after typing the search text, in
+                    // which case, the keyboard will just be hidden.
+                    if (isLoadingError) viewModel.search(it)
+                    controller?.hide()
+                },
+                currentlyPlayingTrack = currentlyPlayingTrack
+            )
+        }
     }
 }
 
