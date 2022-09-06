@@ -144,7 +144,9 @@ fun SearchScreen(
                 )
 
                 false -> LazyVerticalGrid(
-                    modifier = Modifier.background(MaterialTheme.colors.background),
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .background(MaterialTheme.colors.background),
                     cells = GridCells.Adaptive(170.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
