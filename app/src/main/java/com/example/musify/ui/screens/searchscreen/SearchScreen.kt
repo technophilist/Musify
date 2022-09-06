@@ -119,7 +119,10 @@ fun SearchScreen(
                 coroutineScope.launch { lazyListState.animateScrollToItem(0) }
             },
         )
-        AnimatedContent(targetState = isSearchListVisible) { targetState ->
+        AnimatedContent(
+            targetState = isSearchListVisible,
+            transitionSpec = { fadeIn() with fadeOut() }
+        ) { targetState ->
             when (targetState) {
                 true -> SearchQueryList(
                     albumListForSearchQuery = albumListForSearchQuery,
