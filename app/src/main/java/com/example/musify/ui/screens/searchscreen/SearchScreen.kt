@@ -2,9 +2,12 @@ package com.example.musify.ui.screens.searchscreen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
@@ -41,6 +44,7 @@ import kotlinx.coroutines.launch
 
 // FIXME launching the app takes a while because of loading thumbnails of genres
 // fix lazy list scrolling to top after config change
+@ExperimentalAnimationApi
 @OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
@@ -166,40 +170,9 @@ fun SearchScreen(
                 }
             )
         }
-
-        Box {
-            LazyVerticalGrid(
-                cells = GridCells.Adaptive(170.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp)
-            ) {
-                item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {
-                    Text(
-                        text = "Genres",
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.subtitle1
-                    )
-                }
-                items(items = genreList) {
-                    GenreCard(
-                        genre = it,
-                        modifier = Modifier.height(120.dp),
-                        onClick = { onGenreItemClick(it) },
-                        imageResourceId = it.genreType.getAssociatedImageResource(),
-                        backgroundColor = it.genreType.getAssociatedBackgroundColor()
-                    )
-                }
-                item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {
-                    Spacer(modifier = Modifier.navigationBarsHeight())
-                }
-            }
-            androidx.compose.animation.AnimatedVisibility(
-                visible = isSearchListVisible,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                SearchQueryList(
+        AnimatedContent(targetState = isSearchListVisible) { targetState ->
+            when (targetState) {
+                true -> SearchQueryList(
                     albumListForSearchQuery = albumListForSearchQuery,
                     artistListForSearchQuery = artistListForSearchQuery,
                     tracksListForSearchQuery = tracksListForSearchQuery,
@@ -211,13 +184,42 @@ fun SearchScreen(
                     onImageLoadingFinished = { item, _ ->
                         isSearchItemLoadingPlaceholderVisibleMap[item] = false
                     },
-                    onImageLoading = { isSearchItemLoadingPlaceholderVisibleMap[it] = true },
+                    onImageLoading = {
+                        isSearchItemLoadingPlaceholderVisibleMap[it] = true
+                    },
                     isSearchResultsLoadingAnimationVisible = isLoading,
                     currentlyPlayingTrack = currentlyPlayingTrack,
                     lazyListState = lazyListState,
                     currentlySelectedFilter = currentlySelectedFilter,
                     isSearchErrorMessageVisible = isSearchErrorMessageVisible
                 )
+
+                false -> LazyVerticalGrid(
+                    cells = GridCells.Adaptive(170.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                    item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {
+                        Text(
+                            text = "Genres",
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.subtitle1
+                        )
+                    }
+                    items(items = genreList) {
+                        GenreCard(
+                            genre = it,
+                            modifier = Modifier.height(120.dp),
+                            onClick = { onGenreItemClick(it) },
+                            imageResourceId = it.genreType.getAssociatedImageResource(),
+                            backgroundColor = it.genreType.getAssociatedBackgroundColor()
+                        )
+                    }
+                    item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {
+                        Spacer(modifier = Modifier.navigationBarsHeight())
+                    }
+                }
             }
         }
     }
@@ -245,11 +247,7 @@ private fun SearchQueryList(
     val playlistImageErrorPainter =
         rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.ic_outline_music_note_24))
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.background)
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         if (isSearchErrorMessageVisible) {
             DefaultMusifyErrorMessage(
                 title = "Oops! Something doesn't look right",
@@ -260,9 +258,7 @@ private fun SearchQueryList(
             )
         } else {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colors.background),
+                modifier = Modifier.fillMaxSize(),
                 state = lazyListState,
             ) {
                 when (currentlySelectedFilter) {

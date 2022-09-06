@@ -1,5 +1,6 @@
 package com.example.musify.ui.navigation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.derivedStateOf
@@ -32,6 +33,7 @@ import com.example.musify.viewmodels.searchviewmodel.SearchViewModel
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
+@ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
