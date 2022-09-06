@@ -2,6 +2,7 @@ package com.example.musify.ui.screens.searchscreen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -82,10 +83,14 @@ fun SearchScreen(
         isSearchListVisible = false
     }
     val lazyListState = rememberLazyListState()
+    val searchBarBackgroundAlpha by remember(isSearchListVisible) {
+        mutableStateOf(if (isSearchListVisible) 0.8f else 1f)
+    }
+    val searchBarAlpha by animateFloatAsState(targetValue = searchBarBackgroundAlpha)
     Column(modifier = Modifier.fillMaxWidth()) {
         SearchBarWithFilterChips(
             modifier = Modifier
-                .background(MaterialTheme.colors.background.copy(alpha = 0.8f))
+                .background(MaterialTheme.colors.background.copy(alpha = searchBarAlpha))
                 .statusBarsPadding()
                 .padding(top = 16.dp),
             isFilterChipGroupVisible = isFilterChipGroupVisible,
@@ -139,6 +144,7 @@ fun SearchScreen(
                 )
 
                 false -> LazyVerticalGrid(
+                    modifier = Modifier.background(MaterialTheme.colors.background),
                     cells = GridCells.Adaptive(170.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
