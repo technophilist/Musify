@@ -32,6 +32,8 @@ sealed class DynamicThemeResource {
 /**
  * A surface that sets a background gradient based on the provided [dynamicThemResource].
  * @param modifier the modifier to be applied to the surface.
+ * @param fraction The fraction of the maximum size to use, between `0.0` and
+ * `1.0`, inclusive.
  * @param content the content behind which the gradient background is to
  * be applied.
  */
@@ -39,6 +41,7 @@ sealed class DynamicThemeResource {
 fun DynamicallyThemedSurface(
     dynamicThemResource: DynamicThemeResource,
     modifier: Modifier = Modifier,
+    fraction: Float = 1f,
     content: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
@@ -73,7 +76,7 @@ fun DynamicallyThemedSurface(
                 drawRect(
                     brush = Brush.verticalGradient(
                         colors = backgroundGradientColors,
-                        endY = size.height * 0.55f
+                        endY = size.height * fraction
                     ),
                     size = size
                 )
