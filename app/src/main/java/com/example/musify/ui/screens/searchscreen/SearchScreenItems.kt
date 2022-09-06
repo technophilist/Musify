@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
@@ -13,6 +15,17 @@ import androidx.paging.compose.itemsIndexed
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.*
 import com.google.accompanist.insets.imePadding
+
+/**
+ * A color that is meant to be applied to all types of search items.
+ * An alpha of 0.7 is specified to allow the color behind the card to be
+ * translucent. The cards in this file are meant to be used only for
+ * the [SearchScreen]. Since the search screen's background uses a
+ * dynamic color based on the currently playing track, the alpha allows
+ * the background color to be partially visible.
+ */
+private val CardBackgroundColor @Composable get() = MaterialTheme.colors.background.copy(alpha = 0.7f)
+private val CardShape = RectangleShape
 
 @ExperimentalMaterialApi
 fun LazyListScope.searchTrackListItems(
@@ -29,6 +42,8 @@ fun LazyListScope.searchTrackListItems(
     ) { _, track ->
         track?.let {
             MusifyCompactTrackCard(
+                backgroundColor = CardBackgroundColor,
+                shape = CardShape,
                 track = it,
                 onClick = onItemClick,
                 isLoadingPlaceholderVisible = isLoadingPlaceholderVisible(it),
@@ -55,6 +70,8 @@ fun LazyListScope.searchAlbumListItems(
     ) { _, album ->
         album?.let {
             MusifyCompactListItemCard(
+                backgroundColor = CardBackgroundColor,
+                shape = CardShape,
                 cardType = ListItemCardType.ALBUM,
                 thumbnailImageUrlString = it.albumArtUrlString,
                 title = it.name,
@@ -87,6 +104,8 @@ fun LazyListScope.searchArtistListItems(
     ) { _, artist ->
         artist?.let {
             MusifyCompactListItemCard(
+                backgroundColor = CardBackgroundColor,
+                shape = CardShape,
                 cardType = ListItemCardType.ARTIST,
                 thumbnailImageUrlString = it.imageUrlString ?: "",
                 title = it.name,
@@ -120,6 +139,8 @@ fun LazyListScope.searchPlaylistListItems(
     ) { _, playlist ->
         playlist?.let {
             MusifyCompactListItemCard(
+                backgroundColor = CardBackgroundColor,
+                shape = CardShape,
                 cardType = ListItemCardType.PLAYLIST,
                 thumbnailImageUrlString = it.imageUrlString ?: "",
                 title = it.name,
@@ -144,7 +165,7 @@ private fun <T : Any> LazyListScope.itemsIndexedWithEmptyListContent(
     emptyListContent: @Composable LazyItemScope.() -> Unit = {
         DefaultMusifyErrorMessage(
             title = "Couldn't find anything matching the search query.",
-            subtitle= "Try searching again using a different spelling or keyword.",
+            subtitle = "Try searching again using a different spelling or keyword.",
             modifier = Modifier
                 .fillParentMaxSize()
                 .padding(horizontal = 16.dp)
