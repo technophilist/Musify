@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
@@ -18,13 +18,13 @@ import com.google.accompanist.insets.imePadding
 
 /**
  * A color that is meant to be applied to all types of search items.
- * An alpha of 0.7 is specified to allow the color behind the card to be
- * translucent. The cards in this file are meant to be used only for
- * the [SearchScreen]. Since the search screen's background uses a
- * dynamic color based on the currently playing track, the alpha allows
- * the background color to be partially visible.
+ * [Color.Transparent] is specified as the background color for the
+ * cards. Since the search screen's background uses a dynamic color based
+ * on the currently playing track, the background color of the cards
+ * needs to be transparent in order for the dynamic color to be
+ * visible.
  */
-private val CardBackgroundColor @Composable get() = MaterialTheme.colors.background.copy(alpha = 0.7f)
+private val CardBackgroundColor @Composable get() = Color.Transparent
 private val CardShape = RectangleShape
 
 @ExperimentalMaterialApi
