@@ -58,9 +58,18 @@ fun NavGraphBuilder.searchScreen(
         val controller = LocalSoftwareKeyboardController.current
         val genres = remember { viewModel.getAvailableGenres() }
         val filters = remember { SearchFilter.values().toList() }
-        val dynamicThemeResource = remember(currentlyPlayingTrack) {
-            if (currentlyPlayingTrack == null) DynamicThemeResource.Empty
-            else DynamicThemeResource.FromImageUrl(currentlyPlayingTrack.imageUrlString)
+        val currentlySelectedFilter by viewModel.currentlySelectedFilter
+        val dynamicThemeResource by remember {
+            derivedStateOf {
+                val imageUrl = when (currentlySelectedFilter) {
+                    SearchFilter.ALBUMS -> albums.itemSnapshotList.firstOrNull()?.albumArtUrlString
+                    SearchFilter.TRACKS -> tracks.itemSnapshotList.firstOrNull()?.imageUrlString
+                    SearchFilter.ARTISTS -> artists.itemSnapshotList.firstOrNull()?.imageUrlString
+                    SearchFilter.PLAYLISTS -> playlists.itemSnapshotList.firstOrNull()?.imageUrlString
+                }
+                if (imageUrl == null) DynamicThemeResource.Empty
+                else DynamicThemeResource.FromImageUrl(imageUrl)
+            }
         }
         DynamicallyThemedSurface(dynamicThemResource = dynamicThemeResource) {
             SearchScreen(
