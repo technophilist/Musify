@@ -213,7 +213,9 @@ private fun SearchQueryList(
             )
         } else {
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .background(MaterialTheme.colors.background.copy(alpha = 0.7f))
+                    .fillMaxSize(),
                 state = lazyListState,
             ) {
                 when (currentlySelectedFilter) {
