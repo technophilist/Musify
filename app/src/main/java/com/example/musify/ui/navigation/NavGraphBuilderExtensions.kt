@@ -71,7 +71,7 @@ fun NavGraphBuilder.searchScreen(
                 else DynamicThemeResource.FromImageUrl(imageUrl)
             }
         }
-        DynamicallyThemedSurface(dynamicThemResource = dynamicThemeResource) {
+        DynamicallyThemedSurface(dynamicThemeResource = dynamicThemeResource) {
             SearchScreen(
                 genreList = genres,
                 searchScreenFilters = filters,
@@ -161,7 +161,7 @@ fun NavGraphBuilder.albumDetailScreen(
         val yearOfRelease =
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_YEAR_OF_RELEASE_STRING)!!
         DynamicallyThemedSurface(
-            dynamicThemResource = DynamicThemeResource.FromImageUrl(albumArtUrl),
+            dynamicThemeResource = DynamicThemeResource.FromImageUrl(albumArtUrl),
             fraction = 0.5f
         ) {
             AlbumDetailScreen(
@@ -210,7 +210,7 @@ fun NavGraphBuilder.playlistDetailScreen(
             }
         }
         DynamicallyThemedSurface(
-            dynamicThemResource = DynamicThemeResource.FromImageUrl(imageUrlString),
+            dynamicThemeResource = DynamicThemeResource.FromImageUrl(imageUrlString),
             fraction = 0.5f
         ) {
             PlaylistDetailScreen(

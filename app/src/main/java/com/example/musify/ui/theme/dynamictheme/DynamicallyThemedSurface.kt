@@ -30,7 +30,7 @@ sealed class DynamicThemeResource {
 }
 
 /**
- * A surface that sets a background gradient based on the provided [dynamicThemResource].
+ * A surface that sets a background gradient based on the provided [dynamicThemeResource].
  * @param modifier the modifier to be applied to the surface.
  * @param fraction The fraction of the maximum size to use, between `0.0` and
  * `1.0`, inclusive.
@@ -39,7 +39,7 @@ sealed class DynamicThemeResource {
  */
 @Composable
 fun DynamicallyThemedSurface(
-    dynamicThemResource: DynamicThemeResource,
+    dynamicThemeResource: DynamicThemeResource,
     modifier: Modifier = Modifier,
     fraction: Float = 1f,
     content: @Composable () -> Unit,
@@ -55,10 +55,10 @@ fun DynamicallyThemedSurface(
             Color(0xFF121212),
         )
     }
-    LaunchedEffect(dynamicThemResource) {
-        if (dynamicThemResource !is DynamicThemeResource.FromImageUrl) return@LaunchedEffect
+    LaunchedEffect(dynamicThemeResource) {
+        if (dynamicThemeResource !is DynamicThemeResource.FromImageUrl) return@LaunchedEffect
         val newBackgroundColor = themeManager
-            .getBackgroundColorForImageFromUrl(dynamicThemResource.url, context)
+            .getBackgroundColorForImageFromUrl(dynamicThemeResource.url, context)
             ?: return@LaunchedEffect
         backgroundColor = newBackgroundColor
     }
