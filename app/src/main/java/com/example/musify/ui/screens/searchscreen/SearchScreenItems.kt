@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -38,6 +39,7 @@ fun LazyListScope.searchTrackListItems(
 ) {
     itemsIndexedWithEmptyListContent(
         items = tracksListForSearchQuery,
+        cardType = ListItemCardType.TRACK,
         key = { index, track -> "$index${track.id}" }
     ) { _, track ->
         track?.let {
@@ -66,6 +68,7 @@ fun LazyListScope.searchAlbumListItems(
 
     itemsIndexedWithEmptyListContent(
         items = albumListForSearchQuery,
+        cardType = ListItemCardType.ALBUM,
         key = { index, album -> "$index${album.id}" }
     ) { _, album ->
         album?.let {
@@ -100,6 +103,7 @@ fun LazyListScope.searchArtistListItems(
 ) {
     itemsIndexedWithEmptyListContent(
         items = artistListForSearchQuery,
+        cardType = ListItemCardType.PLAYLIST,
         key = { index, artist -> "$index${artist.id}" }
     ) { _, artist ->
         artist?.let {
@@ -135,6 +139,7 @@ fun LazyListScope.searchPlaylistListItems(
 ) {
     itemsIndexedWithEmptyListContent(
         items = playlistListForSearchQuery,
+        cardType = ListItemCardType.PLAYLIST,
         key = { index, playlist -> "$index${playlist.id}" }
     ) { _, playlist ->
         playlist?.let {
@@ -161,10 +166,23 @@ fun LazyListScope.searchPlaylistListItems(
 
 private fun <T : Any> LazyListScope.itemsIndexedWithEmptyListContent(
     items: LazyPagingItems<T>,
+    cardType: ListItemCardType? = null,
     key: ((index: Int, item: T) -> Any)? = null,
     emptyListContent: @Composable LazyItemScope.() -> Unit = {
+        val title = remember(cardType) {
+            "Couldn't find " +
+                    "${
+                        when (cardType) {
+                            ListItemCardType.ALBUM -> "any albums"
+                            ListItemCardType.ARTIST -> "any artists"
+                            ListItemCardType.TRACK -> "any tracks"
+                            ListItemCardType.PLAYLIST -> "any playlists"
+                            null -> "anything"
+                        }
+                    } matching the search query."
+        }
         DefaultMusifyErrorMessage(
-            title = "Couldn't find anything matching the search query.",
+            title = title,
             subtitle = "Try searching again using a different spelling or keyword.",
             modifier = Modifier
                 .fillParentMaxSize()
