@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -50,6 +51,9 @@ enum class ListItemCardType { ALBUM, ARTIST, TRACK, PLAYLIST }
  * as the trailing icon.
  * @param onTrailingButtonIconClick the callback to execute when the
  * [trailingButtonIcon] is clicked.
+ * @param modifier the modifier to be applied to the card.
+ * @param backgroundColor used to specify the background color of the card.
+ * @param shape used to specify the shape of the card.
  * @param thumbnailShape the shape of the thumbnail image. If it is
  * not set, a square shape will be used.
  * @param titleTextStyle the style configuration for the [title] such as
@@ -67,6 +71,8 @@ enum class ListItemCardType { ALBUM, ARTIST, TRACK, PLAYLIST }
  * placeholder is visible for the thumbnail image.
  * @param contentPadding the [PaddingValues] to be applied to the content
  * of the card.
+ * @param placeholderHighlight the [PlaceholderHighlight] to apply to the
+ * placeholder that is displayed when the thumbnail image is loading.
  */
 @ExperimentalMaterialApi
 @Composable
@@ -77,6 +83,8 @@ fun MusifyCompactListItemCard(
     trailingButtonIcon: ImageVector,
     onTrailingButtonIconClick: () -> Unit,
     modifier: Modifier = Modifier,
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    shape: Shape = MaterialTheme.shapes.medium,
     thumbnailImageUrlString: String? = null,
     thumbnailShape: Shape? = null,
     titleTextStyle: TextStyle = LocalTextStyle.current,
@@ -92,6 +100,8 @@ fun MusifyCompactListItemCard(
         modifier = Modifier
             .sizeIn(minHeight = 56.dp, minWidth = 250.dp, maxHeight = 80.dp)
             .then(modifier),
+        shape = shape,
+        backgroundColor = backgroundColor,
         elevation = 0.dp,
         onClick = onClick
     ) {
@@ -167,9 +177,12 @@ fun MusifyCompactListItemCard(
  * thumbnail.
  * @param title the title of the card.
  * @param subtitle the subtitle of the card.
- * @param onClick the callback to execute when the card is clicked
+ * @param onClick the callback to execute when the card is clicked.
  * @param onTrailingButtonIconClick the callback to execute when the trailingButtonIcon
  * is clicked.
+ * @param modifier the modifier to be applied to the card.
+ * @param backgroundColor used to specify the background color of the card.
+ * @param shape used to specify the shape of the card.
  * @param titleTextStyle The style configuration for the [title] such as
  * color, font, line height etc.
  * @param subtitleTextStyle The style configuration for the [subtitle] such
@@ -185,6 +198,8 @@ fun MusifyCompactListItemCard(
  * placeholder is visible for the thumbnail image.
  * @param contentPadding the [PaddingValues] to be applied to the content
  * of the card.
+ * @param placeholderHighlight the [PlaceholderHighlight] to apply to the
+ * placeholder that is displayed when the thumbnail image is loading.
  */
 @ExperimentalMaterialApi
 @Composable
@@ -196,6 +211,8 @@ fun MusifyCompactListItemCard(
     onClick: () -> Unit,
     onTrailingButtonIconClick: () -> Unit,
     modifier: Modifier = Modifier,
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    shape: Shape = MaterialTheme.shapes.medium,
     titleTextStyle: TextStyle = LocalTextStyle.current,
     subtitleTextStyle: TextStyle = LocalTextStyle.current,
     isLoadingPlaceHolderVisible: Boolean = false,
@@ -207,6 +224,8 @@ fun MusifyCompactListItemCard(
 ) {
     MusifyCompactListItemCard(
         modifier = modifier,
+        backgroundColor = backgroundColor,
+        shape = shape,
         thumbnailImageUrlString = thumbnailImageUrlString,
         title = title,
         subtitle = subtitle,

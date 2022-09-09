@@ -1,6 +1,6 @@
 package com.example.musify.usecases.downloadDrawableFromUrlUseCase
 
-import android.app.Application
+import android.content.Context
 import android.graphics.drawable.Drawable
 import coil.ImageLoader
 import coil.request.CachePolicy
@@ -18,13 +18,14 @@ class MusifyDownloadDrawableFromUrlUseCase @Inject constructor(
 
     override suspend fun invoke(
         urlString: String,
-        application: Application
+        context: Context
     ): Result<Drawable> = withContext(ioDispatcher) {
-        val imageRequest = ImageRequest.Builder(application)
+        val imageRequest = ImageRequest.Builder(context)
             .data(urlString)
+            .allowHardware(false)
             .diskCachePolicy(CachePolicy.DISABLED)
             .build()
-        when (val imageResult = ImageLoader(application).execute(imageRequest)) {
+        when (val imageResult = ImageLoader(context).execute(imageRequest)) {
             is SuccessResult -> Result.success(imageResult.drawable)
             is ErrorResult -> Result.failure(imageResult.throwable)
         }

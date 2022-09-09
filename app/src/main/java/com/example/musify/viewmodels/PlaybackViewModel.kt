@@ -1,6 +1,7 @@
 package com.example.musify.viewmodels
 
 import android.app.Application
+import android.graphics.Bitmap
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.graphics.drawable.toBitmap
@@ -67,7 +68,10 @@ class PlaybackViewModel @Inject constructor(
         }
     }
 
-    fun playTrack(track: SearchResult.TrackSearchResult) {
+    fun playTrack(
+        track: SearchResult.TrackSearchResult,
+        onSuccess: ((SearchResult.TrackSearchResult, Bitmap) -> Unit)? = null
+    ) {
         viewModelScope.launch {
             if (track.trackUrlString == null) {
                 _eventChannel.send(Event.PlaybackError("This track is currently unavailable for playback."))
@@ -76,11 +80,12 @@ class PlaybackViewModel @Inject constructor(
             _playbackState.value = PlaybackState.Loading
             val downloadAlbumArtResult = downloadDrawableFromUrlUseCase.invoke(
                 urlString = track.imageUrlString,
-                application = getApplication()
+                context = getApplication()
             )
             if (downloadAlbumArtResult.isSuccess) {
-                val musicPlayerTrack =
-                    track.toMusicPlayerTrack(downloadAlbumArtResult.getOrNull()!!.toBitmap())
+                val bitmap = downloadAlbumArtResult.getOrNull()!!.toBitmap()
+                val musicPlayerTrack = track.toMusicPlayerTrack(bitmap)
+                onSuccess?.invoke(track, bitmap)
                 musicPlayer.playTrack(musicPlayerTrack)
             } else {
                 _eventChannel.send(Event.PlaybackError(playbackErrorMessage))

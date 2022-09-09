@@ -2,6 +2,7 @@ package com.example.musify.ui.screens.searchscreen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -16,6 +17,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -39,8 +41,8 @@ import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
-// FIXME launching the app takes a while because of loading thumbnails of genres
 // fix lazy list scrolling to top after config change
+@ExperimentalAnimationApi
 @OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
@@ -64,33 +66,12 @@ fun SearchScreen(
 ) {
     var searchText by rememberSaveable { mutableStateOf("") }
     var isSearchListVisible by rememberSaveable { mutableStateOf(false) }
-    val isClearSearchTextButtonVisible by remember { derivedStateOf { isSearchListVisible && searchText.isNotEmpty() } }
     val focusManager = LocalFocusManager.current
-    val textFieldTrailingIcon = @Composable {
-        AnimatedVisibility(
-            visible = isClearSearchTextButtonVisible,
-            enter = fadeIn() + slideInHorizontally { it },
-            exit = slideOutHorizontally { it } + fadeOut()
-        ) {
-            IconButton(
-                onClick = {
-                    searchText = ""
-                    // notify the caller that the search text is empty
-                    onSearchTextChanged("")
-                },
-                content = { Icon(imageVector = Icons.Filled.Close, contentDescription = null) }
-            )
-        }
-    }
     val isSearchItemLoadingPlaceholderVisibleMap = remember {
         mutableStateMapOf<SearchResult, Boolean>()
     }
     val isFilterChipGroupVisible by remember { derivedStateOf { isSearchListVisible } }
-    // Using separate horizontal padding modifier because the filter
-    // group & lazy list should be edge to edge. Adding a padding to
-    // the parent composable will not allow the filter group & lazy
-    // list to span to the edges.
-    val horizontalPaddingModifier = Modifier.padding(horizontal = 16.dp)
+    val coroutineScope = rememberCoroutineScope()
     BackHandler(isSearchListVisible) {
         // remove focus on the search text field
         focusManager.clearFocus()
@@ -102,104 +83,48 @@ fun SearchScreen(
         isSearchListVisible = false
     }
     val lazyListState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-    val filterChipGroupScrollState = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .statusBarsPadding()
-            .padding(top = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text(
-            modifier = horizontalPaddingModifier,
-            text = "Search",
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.h5
-        )
-        OutlinedTextField(
+    val searchBarBackgroundAlpha by remember(isSearchListVisible) {
+        mutableStateOf(if (isSearchListVisible) 0.8f else 1f)
+    }
+    val searchBarAlpha by animateFloatAsState(targetValue = searchBarBackgroundAlpha)
+    Column(modifier = Modifier.fillMaxWidth()) {
+        SearchBarWithFilterChips(
             modifier = Modifier
-                .fillMaxWidth()
-                .then(horizontalPaddingModifier)
-                .onFocusChanged {
-                    if (it.isFocused) {
-                        isSearchListVisible = true
-                    }
-                },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = null
+                .background(MaterialTheme.colors.background.copy(alpha = searchBarAlpha))
+                .statusBarsPadding()
+                .padding(top = 16.dp),
+            isFilterChipGroupVisible = isFilterChipGroupVisible,
+            isSearchListVisible = isSearchListVisible,
+            searchText = searchText,
+            filters = searchScreenFilters,
+            currentlySelectedFilter = currentlySelectedFilter,
+            onCloseTextFieldButtonClicked = {
+                searchText = ""
+                // notify the caller that the search text is empty
+                onSearchTextChanged("")
+            },
+            onImeDoneButtonClicked = {
+                onImeDoneButtonClicked(
+                    this,
+                    searchText
                 )
             },
-            trailingIcon = textFieldTrailingIcon,
-            placeholder = {
-                Text(
-                    text = "Artists, songs, or podcasts",
-                    fontWeight = FontWeight.SemiBold
-                )
-            },
-            singleLine = true,
-            value = searchText,
-            onValueChange = {
+            onTextFieldFocusChanged = { if (it.isFocused) isSearchListVisible = true },
+            onSearchTextChanged = {
                 searchText = it
                 onSearchTextChanged(it)
             },
-            textStyle = LocalTextStyle.current.copy(fontWeight = FontWeight.SemiBold),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.White,
-                leadingIconColor = Color.Black,
-                trailingIconColor = Color.Black,
-                placeholderColor = Color.Black,
-                textColor = Color.Black
-            ),
-            keyboardActions = KeyboardActions(onDone = { onImeDoneButtonClicked(this, searchText) })
+            onFilterClicked = {
+                onSearchFilterChanged(it)
+                coroutineScope.launch { lazyListState.animateScrollToItem(0) }
+            },
         )
-        AnimatedVisibility(visible = isFilterChipGroupVisible) {
-            FilterChipGroup(
-                scrollState = filterChipGroupScrollState,
-                filters = searchScreenFilters,
-                currentlySelectedFilter = currentlySelectedFilter,
-                onFilterClicked = {
-                    onSearchFilterChanged(it)
-                    coroutineScope.launch { lazyListState.animateScrollToItem(0) }
-                }
-            )
-        }
-
-        Box {
-            LazyVerticalGrid(
-                cells = GridCells.Adaptive(170.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp)
-            ) {
-                item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {
-                    Text(
-                        text = "Genres",
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.subtitle1
-                    )
-                }
-                items(items = genreList) {
-                    GenreCard(
-                        genre = it,
-                        modifier = Modifier.height(120.dp),
-                        onClick = { onGenreItemClick(it) },
-                        imageResourceId = it.genreType.getAssociatedImageResource(),
-                        backgroundColor = it.genreType.getAssociatedBackgroundColor()
-                    )
-                }
-                item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {
-                    Spacer(modifier = Modifier.navigationBarsHeight())
-                }
-            }
-            androidx.compose.animation.AnimatedVisibility(
-                visible = isSearchListVisible,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                SearchQueryList(
+        AnimatedContent(
+            targetState = isSearchListVisible,
+            transitionSpec = { fadeIn() with fadeOut() }
+        ) { targetState ->
+            when (targetState) {
+                true -> SearchQueryList(
                     albumListForSearchQuery = albumListForSearchQuery,
                     artistListForSearchQuery = artistListForSearchQuery,
                     tracksListForSearchQuery = tracksListForSearchQuery,
@@ -211,13 +136,45 @@ fun SearchScreen(
                     onImageLoadingFinished = { item, _ ->
                         isSearchItemLoadingPlaceholderVisibleMap[item] = false
                     },
-                    onImageLoading = { isSearchItemLoadingPlaceholderVisibleMap[it] = true },
+                    onImageLoading = {
+                        isSearchItemLoadingPlaceholderVisibleMap[it] = true
+                    },
                     isSearchResultsLoadingAnimationVisible = isLoading,
                     currentlyPlayingTrack = currentlyPlayingTrack,
                     lazyListState = lazyListState,
                     currentlySelectedFilter = currentlySelectedFilter,
                     isSearchErrorMessageVisible = isSearchErrorMessageVisible
                 )
+
+                false -> LazyVerticalGrid(
+                    modifier = Modifier
+                        .background(MaterialTheme.colors.background)
+                        .padding(top = 16.dp),
+                    cells = GridCells.Adaptive(170.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                    item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {
+                        Text(
+                            text = "Genres",
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.subtitle1
+                        )
+                    }
+                    items(items = genreList) {
+                        GenreCard(
+                            genre = it,
+                            modifier = Modifier.height(120.dp),
+                            onClick = { onGenreItemClick(it) },
+                            imageResourceId = it.genreType.getAssociatedImageResource(),
+                            backgroundColor = it.genreType.getAssociatedBackgroundColor()
+                        )
+                    }
+                    item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {
+                        Spacer(modifier = Modifier.navigationBarsHeight())
+                    }
+                }
             }
         }
     }
@@ -245,11 +202,7 @@ private fun SearchQueryList(
     val playlistImageErrorPainter =
         rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.ic_outline_music_note_24))
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.background)
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         if (isSearchErrorMessageVisible) {
             DefaultMusifyErrorMessage(
                 title = "Oops! Something doesn't look right",
@@ -261,8 +214,8 @@ private fun SearchQueryList(
         } else {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colors.background),
+                    .background(MaterialTheme.colors.background.copy(alpha = 0.7f))
+                    .fillMaxSize(),
                 state = lazyListState,
             ) {
                 when (currentlySelectedFilter) {
@@ -339,5 +292,87 @@ private fun FilterChipGroup(
             )
         }
         Spacer(modifier = Modifier.width(endPadding))
+    }
+}
+
+@Composable
+private fun SearchBarWithFilterChips(
+    searchText: String,
+    isSearchListVisible: Boolean,
+    isFilterChipGroupVisible: Boolean,
+    filters: List<SearchFilter>,
+    currentlySelectedFilter: SearchFilter,
+    onSearchTextChanged: (String) -> Unit,
+    onCloseTextFieldButtonClicked: () -> Unit,
+    onTextFieldFocusChanged: (FocusState) -> Unit,
+    onFilterClicked: (SearchFilter) -> Unit,
+    onImeDoneButtonClicked: KeyboardActionScope.() -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val isClearSearchTextButtonVisible by remember(isSearchListVisible, searchText) {
+        mutableStateOf(isSearchListVisible && searchText.isNotEmpty())
+    }
+    val textFieldTrailingIcon = @Composable {
+        AnimatedVisibility(
+            visible = isClearSearchTextButtonVisible,
+            enter = fadeIn() + slideInHorizontally { it },
+            exit = slideOutHorizontally { it } + fadeOut()
+        ) {
+            IconButton(
+                onClick = onCloseTextFieldButtonClicked,
+                content = { Icon(imageVector = Icons.Filled.Close, contentDescription = null) }
+            )
+        }
+    }
+    val filterChipGroupScrollState = rememberScrollState()
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = "Search",
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.h5
+        )
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .onFocusChanged(onTextFieldFocusChanged),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = null
+                )
+            },
+            trailingIcon = textFieldTrailingIcon,
+            placeholder = {
+                Text(
+                    text = "Artists, songs, or podcasts",
+                    fontWeight = FontWeight.SemiBold
+                )
+            },
+            singleLine = true,
+            value = searchText,
+            onValueChange = onSearchTextChanged,
+            textStyle = LocalTextStyle.current.copy(fontWeight = FontWeight.SemiBold),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.White,
+                leadingIconColor = Color.Black,
+                trailingIconColor = Color.Black,
+                placeholderColor = Color.Black,
+                textColor = Color.Black
+            ),
+            keyboardActions = KeyboardActions(onDone = onImeDoneButtonClicked)
+        )
+        AnimatedVisibility(visible = isFilterChipGroupVisible) {
+            FilterChipGroup(
+                scrollState = filterChipGroupScrollState,
+                filters = filters,
+                currentlySelectedFilter = currentlySelectedFilter,
+                onFilterClicked = onFilterClicked
+            )
+        }
     }
 }

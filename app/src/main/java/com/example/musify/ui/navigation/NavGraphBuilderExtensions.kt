@@ -1,5 +1,6 @@
 package com.example.musify.ui.navigation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.derivedStateOf
@@ -19,6 +20,8 @@ import com.example.musify.ui.screens.AlbumDetailScreen
 import com.example.musify.ui.screens.ArtistDetailScreen
 import com.example.musify.ui.screens.PlaylistDetailScreen
 import com.example.musify.ui.screens.searchscreen.SearchScreen
+import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
+import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 import com.example.musify.viewmodels.AlbumDetailUiState
 import com.example.musify.viewmodels.AlbumDetailViewModel
 import com.example.musify.viewmodels.PlaylistDetailViewModel
@@ -30,6 +33,7 @@ import com.example.musify.viewmodels.searchviewmodel.SearchViewModel
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
+@ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
@@ -54,34 +58,49 @@ fun NavGraphBuilder.searchScreen(
         val controller = LocalSoftwareKeyboardController.current
         val genres = remember { viewModel.getAvailableGenres() }
         val filters = remember { SearchFilter.values().toList() }
-        SearchScreen(
-            genreList = genres,
-            searchScreenFilters = filters,
-            onGenreItemClick = {},
-            onSearchTextChanged = viewModel::search,
-            isLoading = uiState == SearchScreenUiState.LOADING || isPlaybackLoading,
-            albumListForSearchQuery = albums,
-            artistListForSearchQuery = artists,
-            tracksListForSearchQuery = tracks,
-            playlistListForSearchQuery = playlists,
-            onSearchQueryItemClicked = onSearchResultClicked,
-            currentlySelectedFilter = viewModel.currentlySelectedFilter.value,
-            onSearchFilterChanged = viewModel::updateSearchFilter,
-            isSearchErrorMessageVisible = isLoadingError,
-            onImeDoneButtonClicked = {
-                // Search only if there was an error while loading.
-                // A manual call to search() is not required
-                // when there is no error because, search()
-                // will be called automatically, everytime the
-                // search text changes. This prevents duplicate
-                // calls when the user manually clicks the done
-                // button after typing the search text, in
-                // which case, the keyboard will just be hidden.
-                if (isLoadingError) viewModel.search(it)
-                controller?.hide()
-            },
-            currentlyPlayingTrack = currentlyPlayingTrack
-        )
+        val currentlySelectedFilter by viewModel.currentlySelectedFilter
+        val dynamicThemeResource by remember {
+            derivedStateOf {
+                val imageUrl = when (currentlySelectedFilter) {
+                    SearchFilter.ALBUMS -> albums.itemSnapshotList.firstOrNull()?.albumArtUrlString
+                    SearchFilter.TRACKS -> tracks.itemSnapshotList.firstOrNull()?.imageUrlString
+                    SearchFilter.ARTISTS -> artists.itemSnapshotList.firstOrNull()?.imageUrlString
+                    SearchFilter.PLAYLISTS -> playlists.itemSnapshotList.firstOrNull()?.imageUrlString
+                }
+                if (imageUrl == null) DynamicThemeResource.Empty
+                else DynamicThemeResource.FromImageUrl(imageUrl)
+            }
+        }
+        DynamicallyThemedSurface(dynamicThemeResource = dynamicThemeResource) {
+            SearchScreen(
+                genreList = genres,
+                searchScreenFilters = filters,
+                onGenreItemClick = {},
+                onSearchTextChanged = viewModel::search,
+                isLoading = uiState == SearchScreenUiState.LOADING || isPlaybackLoading,
+                albumListForSearchQuery = albums,
+                artistListForSearchQuery = artists,
+                tracksListForSearchQuery = tracks,
+                playlistListForSearchQuery = playlists,
+                onSearchQueryItemClicked = onSearchResultClicked,
+                currentlySelectedFilter = viewModel.currentlySelectedFilter.value,
+                onSearchFilterChanged = viewModel::updateSearchFilter,
+                isSearchErrorMessageVisible = isLoadingError,
+                onImeDoneButtonClicked = {
+                    // Search only if there was an error while loading.
+                    // A manual call to search() is not required
+                    // when there is no error because, search()
+                    // will be called automatically, everytime the
+                    // search text changes. This prevents duplicate
+                    // calls when the user manually clicks the done
+                    // button after typing the search text, in
+                    // which case, the keyboard will just be hidden.
+                    if (isLoadingError) viewModel.search(it)
+                    controller?.hide()
+                },
+                currentlyPlayingTrack = currentlyPlayingTrack
+            )
+        }
     }
 }
 
@@ -141,18 +160,23 @@ fun NavGraphBuilder.albumDetailScreen(
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_ARTISTS_STRING)!!
         val yearOfRelease =
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_YEAR_OF_RELEASE_STRING)!!
-        AlbumDetailScreen(
-            albumName = albumName,
-            artistsString = artists,
-            yearOfRelease = yearOfRelease,
-            albumArtUrlString = albumArtUrl,
-            trackList = viewModel.tracks.value,
-            onTrackItemClick = onPlayTrack,
-            onBackButtonClicked = onBackButtonClicked,
-            isLoading = isPlaybackLoading || viewModel.uiState.value is AlbumDetailUiState.Loading,
-            isErrorMessageVisible = viewModel.uiState.value is AlbumDetailUiState.Error,
-            currentlyPlayingTrack = currentlyPlayingTrack
-        )
+        DynamicallyThemedSurface(
+            dynamicThemeResource = DynamicThemeResource.FromImageUrl(albumArtUrl),
+            fraction = 0.5f
+        ) {
+            AlbumDetailScreen(
+                albumName = albumName,
+                artistsString = artists,
+                yearOfRelease = yearOfRelease,
+                albumArtUrlString = albumArtUrl,
+                trackList = viewModel.tracks.value,
+                onTrackItemClick = onPlayTrack,
+                onBackButtonClicked = onBackButtonClicked,
+                isLoading = isPlaybackLoading || viewModel.uiState.value is AlbumDetailUiState.Loading,
+                isErrorMessageVisible = viewModel.uiState.value is AlbumDetailUiState.Error,
+                currentlyPlayingTrack = currentlyPlayingTrack
+            )
+        }
     }
 }
 
@@ -185,18 +209,23 @@ fun NavGraphBuilder.playlistDetailScreen(
 
             }
         }
-        PlaylistDetailScreen(
-            playlistName = playlistName,
-            playlistImageUrlString = imageUrlString,
-            nameOfPlaylistOwner = ownerName,
-            totalNumberOfTracks = totalNumberOfTracks,
-            imageResToUseWhenImageUrlStringIsNull = R.drawable.ic_outline_account_circle_24, // TODO
-            tracks = tracks,
-            currentlyPlayingTrack = currentlyPlayingTrack,
-            onBackButtonClicked = onBackButtonClicked,
-            onTrackClicked = onPlayTrack,
-            isLoading = tracks.loadState.refresh is LoadState.Loading || isPlaybackLoading,
-            isErrorMessageVisible = isErrorMessageVisible
-        )
+        DynamicallyThemedSurface(
+            dynamicThemeResource = DynamicThemeResource.FromImageUrl(imageUrlString),
+            fraction = 0.5f
+        ) {
+            PlaylistDetailScreen(
+                playlistName = playlistName,
+                playlistImageUrlString = imageUrlString,
+                nameOfPlaylistOwner = ownerName,
+                totalNumberOfTracks = totalNumberOfTracks,
+                imageResToUseWhenImageUrlStringIsNull = R.drawable.ic_outline_account_circle_24, // TODO
+                tracks = tracks,
+                currentlyPlayingTrack = currentlyPlayingTrack,
+                onBackButtonClicked = onBackButtonClicked,
+                onTrackClicked = onPlayTrack,
+                isLoading = tracks.loadState.refresh is LoadState.Loading || isPlaybackLoading,
+                isErrorMessageVisible = isErrorMessageVisible
+            )
+        }
     }
 }

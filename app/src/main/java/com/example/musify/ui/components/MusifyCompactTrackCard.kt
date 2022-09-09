@@ -8,6 +8,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.example.musify.domain.SearchResult
@@ -50,6 +53,8 @@ fun MusifyCompactTrackCard(
     onClick: (SearchResult.TrackSearchResult) -> Unit,
     isLoadingPlaceholderVisible: Boolean,
     modifier: Modifier = Modifier,
+    shape: Shape = RectangleShape,
+    backgroundColor: Color = MaterialTheme.colors.surface,
     isCurrentlyPlaying: Boolean = false,
     isAlbumArtVisible: Boolean = true,
     onImageLoading: ((SearchResult.TrackSearchResult) -> Unit)? = null,
@@ -67,6 +72,8 @@ fun MusifyCompactTrackCard(
     ) {
         MusifyCompactListItemCard(
             modifier = modifier,
+            backgroundColor = backgroundColor,
+            shape = shape,
             cardType = ListItemCardType.TRACK,
             thumbnailImageUrlString = if (isAlbumArtVisible) track.imageUrlString else null,
             title = track.name,
