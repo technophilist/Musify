@@ -77,7 +77,7 @@ fun LazyListScope.searchAlbumListItems(
                 title = it.name,
                 subtitle = it.artistsString,
                 onClick = { onItemClick(it) },
-                onTrailingButtonIconClick = { /**/ },
+                onTrailingButtonIconClick = { onItemClick(it) },
                 isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
                 onThumbnailImageLoadingFinished = { throwable ->
                     onImageLoadingFinished(it, throwable)
@@ -111,7 +111,7 @@ fun LazyListScope.searchArtistListItems(
                 title = it.name,
                 subtitle = "Artist",
                 onClick = { onItemClick(it) },
-                onTrailingButtonIconClick = { /*TODO*/ },
+                onTrailingButtonIconClick = { onItemClick(it) },
                 isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
                 onThumbnailImageLoadingFinished = { throwable ->
                     onImageLoadingFinished(it, throwable)
@@ -146,7 +146,7 @@ fun LazyListScope.searchPlaylistListItems(
                 title = it.name,
                 subtitle = "Playlist",
                 onClick = { onItemClick(it) },
-                onTrailingButtonIconClick = { /* TODO*/ },
+                onTrailingButtonIconClick = { onItemClick(it) },
                 isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible(it),
                 onThumbnailImageLoadingFinished = { throwable ->
                     onImageLoadingFinished(it, throwable)
