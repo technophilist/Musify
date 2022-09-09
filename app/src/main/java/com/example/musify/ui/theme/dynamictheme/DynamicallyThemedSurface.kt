@@ -55,11 +55,13 @@ fun DynamicallyThemedSurface(
             Color(0xFF121212),
         )
     }
-    LaunchedEffect(dynamicThemeResource) {
-        if (dynamicThemeResource !is DynamicThemeResource.FromImageUrl) return@LaunchedEffect
-        val newBackgroundColor = themeManager
-            .getBackgroundColorForImageFromUrl(dynamicThemeResource.url, context)
-            ?: return@LaunchedEffect
+    LaunchedEffect(dynamicThemeResource, defaultBackgroundColor) {
+        val newBackgroundColor = when (dynamicThemeResource) {
+            DynamicThemeResource.Empty -> defaultBackgroundColor
+            is DynamicThemeResource.FromImageUrl -> themeManager
+                .getBackgroundColorForImageFromUrl(dynamicThemeResource.url, context)
+                ?: return@LaunchedEffect
+        }
         backgroundColor = newBackgroundColor
     }
 
