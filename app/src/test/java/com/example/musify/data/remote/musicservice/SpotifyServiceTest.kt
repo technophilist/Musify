@@ -117,16 +117,6 @@ class SpotifyServiceTest {
     }
 
     @Test
-    fun getPlaylistTest_validPlaylistId_returnsPlaylistDTO() {
-        // given an valid playlistId
-        val albumId = "7sZbq8QGyMnhKPcLJvCUFD"
-        runBlockingWithToken {
-            // the playlist must be fetched successfully
-            musicService.getPlaylistWithId(playlistId = albumId, market = "IN", token = it)
-        }
-    }
-
-    @Test
     fun buildSearchQueryTest_listOfSearchQueryEnum_buildsValidSearchQuery() {
         // given a valid list of search query types
         val searchQueryTypes = arrayOf(SearchQueryType.PLAYLIST, SearchQueryType.ARTIST)
