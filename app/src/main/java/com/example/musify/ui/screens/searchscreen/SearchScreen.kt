@@ -259,7 +259,7 @@ private fun SearchQueryList(
         DefaultMusifyLoadingAnimation(
             modifier = Modifier
                 .align(Alignment.Center)
-                .offset(y = (-100).dp),
+                .imePadding(),
             isVisible = isSearchResultsLoadingAnimationVisible
         )
     }
