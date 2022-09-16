@@ -61,13 +61,12 @@ fun MusifyMiniPlayer(
             .then(modifier)
             .clip(RoundedCornerShape(8.dp)),
         dynamicThemeResource = dynamicThemeResource,
-        dynamicBackgroundType = DynamicBackgroundType.Filled()
+        dynamicBackgroundType = DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(0.6f))
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             AsyncImageWithPlaceholder(
                 modifier = Modifier
                     .padding(8.dp)
