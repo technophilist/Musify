@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -16,6 +17,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.musify.ui.components.MusifyMiniPlayer
 import com.example.musify.ui.screens.MusifyNavigation
 import com.example.musify.ui.theme.MusifyTheme
 import com.example.musify.viewmodels.PlaybackViewModel
@@ -80,6 +82,26 @@ private fun MusifyApp() {
                 .padding(8.dp),
             hostState = snackbarHostState
         )
+        AnimatedVisibility(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(horizontal = 8.dp)
+                .padding(bottom = 8.dp),
+            visible = playbackState.currentlyPlayingTrack != null,
+            enter = fadeIn() + slideInVertically { it },
+            exit = fadeOut() + slideOutVertically { -it },
+        ) {
+            playbackState.currentlyPlayingTrack?.let {
+                MusifyMiniPlayer(
+                    currentlyPlayingTrack = it,
+                    onLikedButtonClicked = {},
+                    onPlayButtonClicked = {},
+                    onPauseButtonClicked = {}
+                )
+            }
+        }
     }
 }
 
