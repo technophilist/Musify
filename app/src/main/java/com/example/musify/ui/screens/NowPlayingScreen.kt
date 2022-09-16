@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.example.musify.R
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
+import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 import com.google.accompanist.insets.statusBarsPadding
@@ -40,7 +41,10 @@ fun NowPlayingScreen(
         DynamicThemeResource.FromImageUrl(currentlyPlayingTrack.imageUrlString)
     }
     var isPlayingIconVisible by remember { mutableStateOf(true) }
-    DynamicallyThemedSurface(dynamicThemeResource) {
+    DynamicallyThemedSurface(
+        dynamicThemeResource = dynamicThemeResource,
+        dynamicBackgroundType = DynamicBackgroundType.Filled()
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()

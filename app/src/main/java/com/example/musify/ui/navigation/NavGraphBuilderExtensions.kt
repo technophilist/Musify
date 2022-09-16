@@ -20,6 +20,7 @@ import com.example.musify.ui.screens.AlbumDetailScreen
 import com.example.musify.ui.screens.ArtistDetailScreen
 import com.example.musify.ui.screens.PlaylistDetailScreen
 import com.example.musify.ui.screens.searchscreen.SearchScreen
+import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 import com.example.musify.viewmodels.AlbumDetailUiState
@@ -71,7 +72,10 @@ fun NavGraphBuilder.searchScreen(
                 else DynamicThemeResource.FromImageUrl(imageUrl)
             }
         }
-        DynamicallyThemedSurface(dynamicThemeResource = dynamicThemeResource) {
+        DynamicallyThemedSurface(
+            dynamicThemeResource = dynamicThemeResource,
+            dynamicBackgroundType = DynamicBackgroundType.Gradient()
+        ) {
             SearchScreen(
                 genreList = genres,
                 searchScreenFilters = filters,
@@ -162,7 +166,7 @@ fun NavGraphBuilder.albumDetailScreen(
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_YEAR_OF_RELEASE_STRING)!!
         DynamicallyThemedSurface(
             dynamicThemeResource = DynamicThemeResource.FromImageUrl(albumArtUrl),
-            fraction = 0.5f
+            dynamicBackgroundType = DynamicBackgroundType.Gradient(fraction = 0.5f)
         ) {
             AlbumDetailScreen(
                 albumName = albumName,
@@ -211,7 +215,7 @@ fun NavGraphBuilder.playlistDetailScreen(
         }
         DynamicallyThemedSurface(
             dynamicThemeResource = DynamicThemeResource.FromImageUrl(imageUrlString),
-            fraction = 0.5f
+            dynamicBackgroundType = DynamicBackgroundType.Gradient(fraction = 0.5f)
         ) {
             PlaylistDetailScreen(
                 playlistName = playlistName,

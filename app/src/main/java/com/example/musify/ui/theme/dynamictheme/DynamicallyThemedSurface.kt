@@ -31,16 +31,30 @@ sealed class DynamicThemeResource {
 }
 
 /**
- * An enum that contains the different background types associated with
- * the [DynamicallyThemedSurface] composable.
+ * A sealed class hierarchy that contains the different background types
+ * associated with the [DynamicallyThemedSurface] composable.
  */
-enum class DynamicBackgroundType { GRADIENT, FILLED }
+sealed class DynamicBackgroundType {
+    /**
+     * A gradient that fills the specified [fraction] of the maximum size of the screen,
+     * between 0.0 and 1.0, inclusive.
+     */
+    data class Gradient(val fraction: Float = 1f) : DynamicBackgroundType()
+
+    /**
+     * Fills the background based on the color extracted from [DynamicThemeResource] passed
+     * to the [DynamicallyThemedSurface].
+     * A scrim can also be applied using the [scrimColor] param. The alpha of the scrim
+     * can be specified using the [Color.copy] method.
+     */
+    data class Filled(val scrimColor: Color? = null) : DynamicBackgroundType()
+}
 
 /**
- * A surface that sets a background gradient based on the provided [dynamicThemeResource].
+ * A surface that sets background based on the provided [dynamicThemeResource].
+ * The type of background can be specified by using the [dynamicBackgroundType]
+ * param.
  * @param modifier the modifier to be applied to the surface.
- * @param fraction The fraction of the maximum size to use, between `0.0` and
- * `1.0`, inclusive.
  * @param content the content behind which the gradient background is to
  * be applied.
  */
@@ -48,8 +62,7 @@ enum class DynamicBackgroundType { GRADIENT, FILLED }
 fun DynamicallyThemedSurface(
     dynamicThemeResource: DynamicThemeResource,
     modifier: Modifier = Modifier,
-    fraction: Float = 1f,
-    dynamicBackgroundType: DynamicBackgroundType = DynamicBackgroundType.GRADIENT,
+    dynamicBackgroundType: DynamicBackgroundType = DynamicBackgroundType.Filled(),
     content: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
@@ -84,10 +97,16 @@ fun DynamicallyThemedSurface(
                 // skip composition, measurement and layout phase
                 // and just change the color in the drawing phase.
                 when (dynamicBackgroundType) {
-                    DynamicBackgroundType.GRADIENT -> {
-                        drawRectWithGradient(backgroundGradientColors, fraction)
+                    is DynamicBackgroundType.Gradient -> {
+                        drawRectWithGradient(
+                            backgroundGradientColors,
+                            dynamicBackgroundType.fraction
+                        )
                     }
-                    DynamicBackgroundType.FILLED -> drawRectFilledWithColor(animatedBackgroundColor)
+                    is DynamicBackgroundType.Filled -> drawRectFilledWithColor(
+                        color = animatedBackgroundColor,
+                        scrimColor = dynamicBackgroundType.scrimColor
+                    )
                 }
             },
             content = { content() }
@@ -95,11 +114,20 @@ fun DynamicallyThemedSurface(
     }
 }
 
-private fun DrawScope.drawRectFilledWithColor(color: Color) {
+private fun DrawScope.drawRectFilledWithColor(
+    color: Color,
+    scrimColor: Color? = null
+) {
     drawRect(
         color = color,
         size = size
     )
+    if (scrimColor != null) {
+        drawRect(
+            color = scrimColor,
+            size = size
+        )
+    }
 }
 
 private fun DrawScope.drawRectWithGradient(backgroundGradientColors: List<Color>, fraction: Float) {
