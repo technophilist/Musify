@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalContext
 import com.example.musify.ui.theme.spotifyGreen
 
@@ -30,6 +31,12 @@ sealed class DynamicThemeResource {
 }
 
 /**
+ * An enum that contains the different background types associated with
+ * the [DynamicallyThemedSurface] composable.
+ */
+enum class DynamicBackgroundType { GRADIENT, FILLED }
+
+/**
  * A surface that sets a background gradient based on the provided [dynamicThemeResource].
  * @param modifier the modifier to be applied to the surface.
  * @param fraction The fraction of the maximum size to use, between `0.0` and
@@ -42,6 +49,7 @@ fun DynamicallyThemedSurface(
     dynamicThemeResource: DynamicThemeResource,
     modifier: Modifier = Modifier,
     fraction: Float = 1f,
+    dynamicBackgroundType: DynamicBackgroundType = DynamicBackgroundType.GRADIENT,
     content: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
@@ -75,15 +83,31 @@ fun DynamicallyThemedSurface(
             modifier = modifier.drawBehind {
                 // skip composition, measurement and layout phase
                 // and just change the color in the drawing phase.
-                drawRect(
-                    brush = Brush.verticalGradient(
-                        colors = backgroundGradientColors,
-                        endY = size.height * fraction
-                    ),
-                    size = size
-                )
+                when (dynamicBackgroundType) {
+                    DynamicBackgroundType.GRADIENT -> {
+                        drawRectWithGradient(backgroundGradientColors, fraction)
+                    }
+                    DynamicBackgroundType.FILLED -> drawRectFilledWithColor(animatedBackgroundColor)
+                }
             },
             content = { content() }
         )
     }
+}
+
+private fun DrawScope.drawRectFilledWithColor(color: Color) {
+    drawRect(
+        color = color,
+        size = size
+    )
+}
+
+private fun DrawScope.drawRectWithGradient(backgroundGradientColors: List<Color>, fraction: Float) {
+    drawRect(
+        brush = Brush.verticalGradient(
+            colors = backgroundGradientColors,
+            endY = size.height * fraction
+        ),
+        size = size
+    )
 }
