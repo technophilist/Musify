@@ -57,7 +57,6 @@ class PlaybackViewModel @Inject constructor(
                 is MusicPlayer.PlaybackState.Idle -> PlaybackState.Idle
                 is MusicPlayer.PlaybackState.Playing -> PlaybackState.Playing(it.currentlyPlayingTrack.toTrackSearchResult())
                 is MusicPlayer.PlaybackState.Paused -> PlaybackState.Paused
-                is MusicPlayer.PlaybackState.Stopped -> PlaybackState.Stopped
                 is MusicPlayer.PlaybackState.Error -> {
                     viewModelScope.launch {
                         _eventChannel.send(Event.PlaybackError(playbackErrorMessage))

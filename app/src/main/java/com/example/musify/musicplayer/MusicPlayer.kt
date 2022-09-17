@@ -6,7 +6,6 @@ interface MusicPlayer {
     sealed class PlaybackState {
         data class Playing(val currentlyPlayingTrack: Track) : PlaybackState()
         object Paused : PlaybackState()
-        object Stopped : PlaybackState()
         object Error : PlaybackState()
         object Idle : PlaybackState()
     }
