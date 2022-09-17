@@ -13,6 +13,7 @@ interface MusicPlayer {
     fun pauseCurrentlyPlayingTrack()
     fun stopPlayingTrack()
     fun playTrack(track: Track)
+    fun tryResume():Boolean
     fun addOnPlaybackStateChangedListener(onPlaybackStateChanged: (PlaybackState) -> Unit)
     fun removeListenersIfAny()
 

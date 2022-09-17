@@ -82,6 +82,14 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
         listener?.let(exoPlayer::removeListener)
     }
 
+    override fun tryResume(): Boolean {
+        if (exoPlayer.isPlaying) return false
+        return currentlyPlayingTrack?.let {
+            exoPlayer.playWhenReady = true
+            true
+        } ?: false
+    }
+
     companion object {
         private const val NOTIFICATION_CHANNEL_ID =
             "com.example.musify.musicplayer.MusicPlayerService.NOTIFICATION_CHANNEL_ID"
