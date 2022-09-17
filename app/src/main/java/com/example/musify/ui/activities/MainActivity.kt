@@ -95,10 +95,11 @@ private fun MusifyApp() {
         ) {
             playbackState.currentlyPlayingTrack?.let {
                 MusifyMiniPlayer(
+                    isPlaybackPaused = playbackState is PlaybackViewModel.PlaybackState.Paused,
                     currentlyPlayingTrack = it,
                     onLikedButtonClicked = {},
                     onPlayButtonClicked = {},
-                    onPauseButtonClicked = {}
+                    onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack
                 )
             }
         }

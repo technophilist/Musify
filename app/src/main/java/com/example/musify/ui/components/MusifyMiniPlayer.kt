@@ -31,6 +31,10 @@ import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
  * Note: The size of this composable is **fixed to 60dp**.
  *
  * @param currentlyPlayingTrack the currently playing track.
+ * @param isPlaybackPaused indicates whether the playback is paused.
+ * Based on this, either [onPlayButtonClicked] or [onPauseButtonClicked]
+ * will be invoked. Also, the play and pause icons will also be displayed
+ * based on this parameter.
  * @param modifier the modifier to be applied to this composable.
  * @param onLikedButtonClicked the lambda to execute when the like
  * button is clicked. It is provided with a boolean that indicates
@@ -41,16 +45,17 @@ import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
  * is clicked.
  */
 // TODO Make text scrollable if it overflows
+// TODO debug recompositions
 @Composable
 fun MusifyMiniPlayer(
     currentlyPlayingTrack: SearchResult.TrackSearchResult,
+    isPlaybackPaused: Boolean,
     modifier: Modifier = Modifier,
     onLikedButtonClicked: (Boolean) -> Unit,
     onPlayButtonClicked: () -> Unit,
     onPauseButtonClicked: () -> Unit
 ) {
     var isThumbnailImageLoading by remember { mutableStateOf(false) }
-    var isPlayIconVisible by remember { mutableStateOf(false) }
     val dynamicThemeResource = remember(currentlyPlayingTrack) {
         DynamicThemeResource.FromImageUrl(currentlyPlayingTrack.imageUrlString)
     }
@@ -64,8 +69,7 @@ fun MusifyMiniPlayer(
         dynamicBackgroundType = DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(0.6f))
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImageWithPlaceholder(
                 modifier = Modifier
@@ -79,8 +83,7 @@ fun MusifyMiniPlayer(
                 onImageLoading = { isThumbnailImageLoading = true },
             )
             Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Center
             ) {
                 Text(
 
@@ -93,13 +96,9 @@ fun MusifyMiniPlayer(
                 Text(
                     text = currentlyPlayingTrack.artistsString,
                     fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography
-                        .caption
-                        .copy(
-                            color = MaterialTheme.colors
-                                .onBackground
-                                .copy(alpha = 0.6f)
-                        ),
+                    style = MaterialTheme.typography.caption.copy(
+                        color = MaterialTheme.colors.onBackground.copy(alpha = 0.6f)
+                    ),
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
@@ -110,12 +109,10 @@ fun MusifyMiniPlayer(
                     contentDescription = null
                 )
             }
-            IconButton(
-                onClick = {
-                    isLiked = !isLiked
-                    onLikedButtonClicked(isLiked)
-                }
-            ) {
+            IconButton(onClick = {
+                isLiked = !isLiked
+                onLikedButtonClicked(isLiked)
+            }) {
                 Icon(
                     imageVector = if (isLiked) Icons.Filled.Favorite
                     else Icons.Filled.FavoriteBorder,
@@ -123,22 +120,26 @@ fun MusifyMiniPlayer(
 
                     )
             }
-            IconButton(
-                onClick = {
-                    if (isPlayIconVisible) {
-                        isPlayIconVisible = false
-                        onPlayButtonClicked()
-                    } else {
-                        isPlayIconVisible = true
-                        onPauseButtonClicked()
-                    }
+            IconButton(onClick = {
+                if (isPlaybackPaused) {
+                    // if the playback is paused, then the play button
+                    // would be visible. Hence, invoke the lambda that
+                    // is required to be executed when the play button
+                    // is visible.
+                    onPlayButtonClicked()
+                } else {
+                    // Similarly, if the track is being played, then the pause
+                    // button would be visible. Hence, invoke the lambda that
+                    // is required to be executed when the pause button
+                    // is visible.
+                    onPauseButtonClicked()
                 }
-            ) {
+            }) {
                 Icon(
                     modifier = Modifier
                         .size(32.dp)
                         .aspectRatio(1f),
-                    painter = if (isPlayIconVisible) painterResource(R.drawable.ic_play_arrow_24)
+                    painter = if (isPlaybackPaused) painterResource(R.drawable.ic_play_arrow_24)
                     else painterResource(R.drawable.ic_pause_24),
                     contentDescription = null
                 )
