@@ -98,7 +98,7 @@ private fun MusifyApp() {
                     isPlaybackPaused = playbackState is PlaybackViewModel.PlaybackState.Paused,
                     currentlyPlayingTrack = it,
                     onLikedButtonClicked = {},
-                    onPlayButtonClicked = {},
+                    onPlayButtonClicked = playbackViewModel::resumePlaybackIfPaused,
                     onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack
                 )
             }
