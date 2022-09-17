@@ -58,7 +58,12 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
                     Player.STATE_BUFFERING -> {}
                     Player.STATE_ENDED -> {}
                     Player.STATE_READY -> {
-                        if (!exoPlayer.playWhenReady) onPlaybackStateChanged(MusicPlayer.PlaybackState.Paused)
+                        if (exoPlayer.playWhenReady) return // playing state will be set in the onIsPlayingChanged callback
+                        // if playWhenReady is false and the state is STATE_READY the playback is
+                        // paused
+                        val pausedState =
+                            currentlyPlayingTrack?.let(MusicPlayer.PlaybackState::Paused) ?: return
+                        onPlaybackStateChanged(pausedState)
                     }
                 }
             }
