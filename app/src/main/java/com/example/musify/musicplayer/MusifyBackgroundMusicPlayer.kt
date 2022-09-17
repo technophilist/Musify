@@ -5,7 +5,6 @@ import com.example.musify.R
 import com.example.musify.musicplayer.utils.MediaDescriptionAdapter
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil
@@ -30,6 +29,13 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
     }
     private var listener: Player.Listener? = null
 
+    private fun createEventsListener(onEvents: (Player, Player.Events) -> Unit) =
+        object : Player.Listener {
+            override fun onEvents(player: Player, events: Player.Events) {
+                onEvents(player, events)
+            }
+        }
+
     override fun playTrack(track: MusicPlayer.Track) {
         with(exoPlayer) {
             if (isPlaying) exoPlayer.stop()
@@ -50,32 +56,23 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
     }
 
     override fun addOnPlaybackStateChangedListener(onPlaybackStateChanged: (MusicPlayer.PlaybackState) -> Unit) {
-        listener = object : Player.Listener {
-            override fun onPlaybackStateChanged(playbackState: Int) {
-                super.onPlaybackStateChanged(playbackState)
-                when (playbackState) {
-                    Player.STATE_IDLE -> onPlaybackStateChanged(MusicPlayer.PlaybackState.Idle)
-                    Player.STATE_BUFFERING -> {}
-                    Player.STATE_ENDED -> {}
-                    Player.STATE_READY -> {
-                        if (exoPlayer.playWhenReady) return // playing state will be set in the onIsPlayingChanged callback
-                        // if playWhenReady is false and the state is STATE_READY the playback is
-                        // paused
-                        val pausedState =
-                            currentlyPlayingTrack?.let(MusicPlayer.PlaybackState::Paused) ?: return
-                        onPlaybackStateChanged(pausedState)
-                    }
-                }
+        listener = createEventsListener { player, events ->
+            if (events.contains(Player.EVENT_PLAYBACK_STATE_CHANGED) && player.playbackState == Player.STATE_IDLE) {
+                onPlaybackStateChanged(MusicPlayer.PlaybackState.Idle)
+                return@createEventsListener
             }
-
-            override fun onPlayerError(error: PlaybackException) {
+            if (events.contains(Player.EVENT_PLAYER_ERROR)) {
                 onPlaybackStateChanged(MusicPlayer.PlaybackState.Error)
+                return@createEventsListener
             }
-
-            override fun onIsPlayingChanged(isPlaying: Boolean) {
-                if (!isPlaying) return
-                val state = currentlyPlayingTrack?.let(MusicPlayer.PlaybackState::Playing) ?: return
-                onPlaybackStateChanged(state)
+            if (!events.contains(Player.EVENT_IS_PLAYING_CHANGED) && player.playbackState != Player.STATE_READY) return@createEventsListener
+            currentlyPlayingTrack?.let {
+                if (player.playWhenReady) onPlaybackStateChanged(
+                    MusicPlayer
+                        .PlaybackState
+                        .Playing(it)
+                )
+                else onPlaybackStateChanged(MusicPlayer.PlaybackState.Paused(it))
             }
         }
         exoPlayer.addListener(listener!!)
