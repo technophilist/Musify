@@ -97,6 +97,10 @@ class PlaybackViewModel @Inject constructor(
         musicPlayer.pauseCurrentlyPlayingTrack()
     }
 
+    fun resumePlaybackIfPaused(){
+        musicPlayer.tryResume()
+    }
+
     override fun onCleared() {
         super.onCleared()
         musicPlayer.removeListenersIfAny()
