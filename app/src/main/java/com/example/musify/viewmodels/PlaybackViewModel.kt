@@ -27,10 +27,10 @@ class PlaybackViewModel @Inject constructor(
 
     sealed class PlaybackState(val currentlyPlayingTrack: SearchResult.TrackSearchResult? = null) {
         object Idle : PlaybackState()
-        object Paused : PlaybackState()
         object Stopped : PlaybackState()
         object Loading : PlaybackState()
         data class Error(val errorMessage: String) : PlaybackState()
+        data class Paused(val track: SearchResult.TrackSearchResult) : PlaybackState(track)
         data class Playing(val track: SearchResult.TrackSearchResult) : PlaybackState(track)
     }
 
@@ -56,7 +56,7 @@ class PlaybackViewModel @Inject constructor(
             _playbackState.value = when (it) {
                 is MusicPlayer.PlaybackState.Idle -> PlaybackState.Idle
                 is MusicPlayer.PlaybackState.Playing -> PlaybackState.Playing(it.currentlyPlayingTrack.toTrackSearchResult())
-                is MusicPlayer.PlaybackState.Paused -> PlaybackState.Paused
+                is MusicPlayer.PlaybackState.Paused -> PlaybackState.Paused(it.currentlyPlayingTrack.toTrackSearchResult())
                 is MusicPlayer.PlaybackState.Error -> {
                     viewModelScope.launch {
                         _eventChannel.send(Event.PlaybackError(playbackErrorMessage))
@@ -91,6 +91,10 @@ class PlaybackViewModel @Inject constructor(
                 _playbackState.value = PlaybackState.Error(playbackErrorMessage)
             }
         }
+    }
+
+    fun pauseCurrentlyPlayingTrack() {
+        musicPlayer.pauseCurrentlyPlayingTrack()
     }
 
     override fun onCleared() {
