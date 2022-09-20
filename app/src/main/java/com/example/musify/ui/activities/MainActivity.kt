@@ -37,11 +37,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             MusifyTheme {
                 ProvideWindowInsets {
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
+                    Surface(modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background,
-                        content = { MusifyApp() }
-                    )
+                        content = { MusifyApp() })
                 }
             }
         }
@@ -54,12 +52,15 @@ class MainActivity : ComponentActivity() {
 @ExperimentalMaterialApi
 @Composable
 private fun MusifyApp() {
+    // STOPSHIP miniplayer goes down and up for  every  track selection
+    // if a  track is playing, just  change the text of the miniplayer
+    // to the contents of the new song
     val playbackViewModel = hiltViewModel<PlaybackViewModel>()
     val playbackState by playbackViewModel.playbackState
     val snackbarHostState = remember { SnackbarHostState() }
-    val playbackEvent: PlaybackViewModel.Event? by playbackViewModel
-        .playbackEventsFlow
-        .collectAsState(initial = null)
+    val playbackEvent: PlaybackViewModel.Event? by playbackViewModel.playbackEventsFlow.collectAsState(
+        initial = null
+    )
     LaunchedEffect(key1 = playbackEvent) {
         if (playbackEvent !is PlaybackViewModel.Event.PlaybackError) return@LaunchedEffect
         snackbarHostState.currentSnackbarData?.dismiss()
@@ -95,7 +96,7 @@ private fun MusifyApp() {
         ) {
             playbackState.currentlyPlayingTrack?.let {
                 MusifyMiniPlayer(
-                    isPlaybackPaused = playbackState is PlaybackViewModel.PlaybackState.Paused,
+                    isPlaybackPaused = playbackState is PlaybackViewModel.PlaybackState.Paused || playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded,
                     currentlyPlayingTrack = it,
                     onLikedButtonClicked = {},
                     onPlayButtonClicked = playbackViewModel::resumePlaybackIfPaused,
