@@ -38,11 +38,15 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
 
     override fun playTrack(track: MusicPlayer.Track) {
         with(exoPlayer) {
+            if (currentlyPlayingTrack == track) {
+                seekTo(0)
+                return@with
+            }
             if (isPlaying) exoPlayer.stop()
             currentlyPlayingTrack = track
             setMediaItem(MediaItem.fromUri(track.trackUrlString))
             prepare()
-            notificationManagerBuilder.build().apply { setPlayer(exoPlayer) }
+            notificationManagerBuilder.build().setPlayer(exoPlayer)
             play()
         }
     }
