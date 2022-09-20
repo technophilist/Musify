@@ -32,6 +32,7 @@ class PlaybackViewModel @Inject constructor(
         data class Error(val errorMessage: String) : PlaybackState()
         data class Paused(val track: SearchResult.TrackSearchResult) : PlaybackState(track)
         data class Playing(val track: SearchResult.TrackSearchResult) : PlaybackState(track)
+        data class PlaybackEnded(val track: SearchResult.TrackSearchResult) : PlaybackState(track)
     }
 
     sealed class Event {
@@ -63,6 +64,7 @@ class PlaybackViewModel @Inject constructor(
                     }
                     PlaybackState.Error(playbackErrorMessage)
                 }
+                is MusicPlayer.PlaybackState.Ended -> PlaybackState.PlaybackEnded(it.track.toTrackSearchResult())
             }
         }
     }
@@ -97,7 +99,7 @@ class PlaybackViewModel @Inject constructor(
         musicPlayer.pauseCurrentlyPlayingTrack()
     }
 
-    fun resumePlaybackIfPaused(){
+    fun resumePlaybackIfPaused() {
         musicPlayer.tryResume()
     }
 
