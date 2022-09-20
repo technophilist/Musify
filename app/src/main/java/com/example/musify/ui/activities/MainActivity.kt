@@ -99,7 +99,16 @@ private fun MusifyApp() {
                     isPlaybackPaused = playbackState is PlaybackViewModel.PlaybackState.Paused || playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded,
                     currentlyPlayingTrack = it,
                     onLikedButtonClicked = {},
-                    onPlayButtonClicked = playbackViewModel::resumePlaybackIfPaused,
+                    onPlayButtonClicked = {
+                        if (playbackState is PlaybackViewModel.PlaybackState.Paused) {
+                            playbackViewModel.resumePlaybackIfPaused()
+                            return@MusifyMiniPlayer
+                        }
+                        if (playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded) {
+                            // play the same track again
+                            playbackViewModel.playTrack(it)
+                        }
+                    },
                     onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack
                 )
             }
