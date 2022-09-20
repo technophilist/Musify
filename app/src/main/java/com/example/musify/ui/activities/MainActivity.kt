@@ -52,15 +52,15 @@ class MainActivity : ComponentActivity() {
 @ExperimentalMaterialApi
 @Composable
 private fun MusifyApp() {
-    // STOPSHIP miniplayer goes down and up for  every  track selection
-    // if a  track is playing, just  change the text of the miniplayer
-    // to the contents of the new song
     val playbackViewModel = hiltViewModel<PlaybackViewModel>()
     val playbackState by playbackViewModel.playbackState
     val snackbarHostState = remember { SnackbarHostState() }
     val playbackEvent: PlaybackViewModel.Event? by playbackViewModel.playbackEventsFlow.collectAsState(
         initial = null
     )
+    val miniPlayerTrack = remember(playbackState) {
+        playbackState.currentlyPlayingTrack ?: playbackState.previouslyPlayingTrack
+    }
     LaunchedEffect(key1 = playbackEvent) {
         if (playbackEvent !is PlaybackViewModel.Event.PlaybackError) return@LaunchedEffect
         snackbarHostState.currentSnackbarData?.dismiss()
@@ -90,11 +90,11 @@ private fun MusifyApp() {
                 .navigationBarsPadding()
                 .padding(horizontal = 8.dp)
                 .padding(bottom = 8.dp),
-            visible = playbackState.currentlyPlayingTrack != null,
+            visible = playbackState.currentlyPlayingTrack != null || playbackState.previouslyPlayingTrack != null,
             enter = fadeIn() + slideInVertically { it },
             exit = fadeOut() + slideOutVertically { -it },
         ) {
-            playbackState.currentlyPlayingTrack?.let {
+            miniPlayerTrack?.let {
                 MusifyMiniPlayer(
                     isPlaybackPaused = playbackState is PlaybackViewModel.PlaybackState.Paused || playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded,
                     currentlyPlayingTrack = it,
