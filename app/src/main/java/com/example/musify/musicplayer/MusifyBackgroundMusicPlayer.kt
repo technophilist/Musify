@@ -57,10 +57,19 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
 
     override fun addOnPlaybackStateChangedListener(onPlaybackStateChanged: (MusicPlayer.PlaybackState) -> Unit) {
         listener = createEventsListener { player, events ->
-            if (events.contains(Player.EVENT_PLAYBACK_STATE_CHANGED) && player.playbackState == Player.STATE_IDLE) {
-                onPlaybackStateChanged(MusicPlayer.PlaybackState.Idle)
-                return@createEventsListener
+            if (events.contains(Player.EVENT_PLAYBACK_STATE_CHANGED)) {
+                if (player.playbackState == Player.STATE_IDLE) {
+                    onPlaybackStateChanged(MusicPlayer.PlaybackState.Idle)
+                    return@createEventsListener
+                }
+                if (player.playbackState == Player.STATE_ENDED) {
+                    currentlyPlayingTrack?.let {
+                        onPlaybackStateChanged(MusicPlayer.PlaybackState.Ended(it))
+                    }
+                    return@createEventsListener
+                }
             }
+
             if (events.contains(Player.EVENT_PLAYER_ERROR)) {
                 onPlaybackStateChanged(MusicPlayer.PlaybackState.Error)
                 return@createEventsListener
@@ -68,9 +77,7 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
             if (!events.contains(Player.EVENT_IS_PLAYING_CHANGED) && player.playbackState != Player.STATE_READY) return@createEventsListener
             currentlyPlayingTrack?.let {
                 if (player.playWhenReady) onPlaybackStateChanged(
-                    MusicPlayer
-                        .PlaybackState
-                        .Playing(it)
+                    MusicPlayer.PlaybackState.Playing(it)
                 )
                 else onPlaybackStateChanged(MusicPlayer.PlaybackState.Paused(it))
             }

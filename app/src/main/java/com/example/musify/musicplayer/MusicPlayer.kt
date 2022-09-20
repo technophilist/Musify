@@ -6,6 +6,7 @@ interface MusicPlayer {
     sealed class PlaybackState {
         data class Playing(val currentlyPlayingTrack: Track) : PlaybackState()
         data class Paused(val currentlyPlayingTrack: Track) : PlaybackState()
+        data class Ended(val track: Track) : PlaybackState()
         object Error : PlaybackState()
         object Idle : PlaybackState()
     }
@@ -13,7 +14,7 @@ interface MusicPlayer {
     fun pauseCurrentlyPlayingTrack()
     fun stopPlayingTrack()
     fun playTrack(track: Track)
-    fun tryResume():Boolean
+    fun tryResume(): Boolean
     fun addOnPlaybackStateChangedListener(onPlaybackStateChanged: (PlaybackState) -> Unit)
     fun removeListenersIfAny()
 
