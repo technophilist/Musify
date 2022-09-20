@@ -25,14 +25,21 @@ class PlaybackViewModel @Inject constructor(
     private val downloadDrawableFromUrlUseCase: DownloadDrawableFromUrlUseCase
 ) : AndroidViewModel(application) {
 
-    sealed class PlaybackState(val currentlyPlayingTrack: SearchResult.TrackSearchResult? = null) {
+    sealed class PlaybackState(
+        val currentlyPlayingTrack: SearchResult.TrackSearchResult? = null,
+        val previouslyPlayingTrack: SearchResult.TrackSearchResult? = null
+    ) {
         object Idle : PlaybackState()
         object Stopped : PlaybackState()
-        object Loading : PlaybackState()
         data class Error(val errorMessage: String) : PlaybackState()
         data class Paused(val track: SearchResult.TrackSearchResult) : PlaybackState(track)
         data class Playing(val track: SearchResult.TrackSearchResult) : PlaybackState(track)
         data class PlaybackEnded(val track: SearchResult.TrackSearchResult) : PlaybackState(track)
+        data class Loading(
+            // track instance that indicates the track that was playing before
+            // the state was changed to loading
+            val previousTrack: SearchResult.TrackSearchResult?
+        ) : PlaybackState(previouslyPlayingTrack = previousTrack)
     }
 
     sealed class Event {
@@ -78,10 +85,10 @@ class PlaybackViewModel @Inject constructor(
                 _eventChannel.send(Event.PlaybackError("This track is currently unavailable for playback."))
                 return@launch
             }
-            _playbackState.value = PlaybackState.Loading
+            _playbackState.value =
+                PlaybackState.Loading(previousTrack = _playbackState.value.currentlyPlayingTrack)
             val downloadAlbumArtResult = downloadDrawableFromUrlUseCase.invoke(
-                urlString = track.imageUrlString,
-                context = getApplication()
+                urlString = track.imageUrlString, context = getApplication()
             )
             if (downloadAlbumArtResult.isSuccess) {
                 val bitmap = downloadAlbumArtResult.getOrNull()!!.toBitmap()
