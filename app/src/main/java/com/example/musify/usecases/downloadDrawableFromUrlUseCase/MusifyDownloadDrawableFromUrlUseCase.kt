@@ -22,7 +22,8 @@ class MusifyDownloadDrawableFromUrlUseCase @Inject constructor(
         val imageRequest = ImageRequest.Builder(context)
             .data(urlString)
             .allowHardware(false)
-            .diskCachePolicy(CachePolicy.DISABLED)
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .memoryCachePolicy(CachePolicy.ENABLED)
             .build()
         // Each ImageLoader instance has its own memory & disk cache. Therefore,
         // use a singleton instead of creating an instance of ImageLoader
