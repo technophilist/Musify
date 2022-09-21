@@ -177,7 +177,7 @@ fun SearchScreen(
                             backgroundColor = it.genreType.getAssociatedBackgroundColor()
                         )
                     }
-                    item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {
+                    item(span = { GridItemSpan(this.maxLineSpan) }) {
                         Spacer(modifier = Modifier.navigationBarsHeight())
                     }
                 }
