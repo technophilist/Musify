@@ -40,9 +40,12 @@ fun NowPlayingScreen(
     val dynamicThemeResource = remember(currentlyPlayingTrack) {
         DynamicThemeResource.FromImageUrl(currentlyPlayingTrack.imageUrlString)
     }
+    val dynamicBackgroundType = remember {
+        DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(0.6f))
+    }
     DynamicallyThemedSurface(
         dynamicThemeResource = dynamicThemeResource,
-        dynamicBackgroundType = DynamicBackgroundType.Filled()
+        dynamicBackgroundType = dynamicBackgroundType
     ) {
         Column(
             modifier = Modifier
@@ -123,21 +126,17 @@ private fun Header(
     ) {
         val expandMoreIcon = painterResource(R.drawable.ic_expand_more_24)
         val moreHorizIcon = painterResource(id = R.drawable.ic_more_horiz_24)
-        IconButton(
-            modifier = Modifier.offset(x = (-16).dp), // accommodate for increased size of icon because of touch target sizing
+        IconButton(modifier = Modifier.offset(x = (-16).dp), // accommodate for increased size of icon because of touch target sizing
             onClick = onCloseButtonClicked,
-            content = { Icon(painter = expandMoreIcon, contentDescription = null) }
-        )
+            content = { Icon(painter = expandMoreIcon, contentDescription = null) })
         Text(
             text = "Now playing",
             style = MaterialTheme.typography.subtitle1,
             fontWeight = FontWeight.SemiBold
         )
-        IconButton(
-            modifier = Modifier.offset(x = (16).dp), // accommodate for increased size of icon because of touch target sizing
+        IconButton(modifier = Modifier.offset(x = (16).dp), // accommodate for increased size of icon because of touch target sizing
             onClick = onTrailingButtonClick,
-            content = { Icon(painter = moreHorizIcon, contentDescription = null) }
-        )
+            content = { Icon(painter = moreHorizIcon, contentDescription = null) })
     }
 }
 
