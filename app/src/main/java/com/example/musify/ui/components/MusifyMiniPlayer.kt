@@ -62,14 +62,15 @@ fun MusifyMiniPlayer(
     var isLiked by remember { mutableStateOf(false) }
     DynamicallyThemedSurface(
         modifier = Modifier
-            .heightIn(60.dp, 60.dp) // the height of this composable is fixed
             .then(modifier)
+            .heightIn(60.dp, 60.dp) // the height of this composable is fixed
             .clip(RoundedCornerShape(8.dp)),
         dynamicThemeResource = dynamicThemeResource,
         dynamicBackgroundType = DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(0.6f))
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImageWithPlaceholder(
                 modifier = Modifier
@@ -109,7 +110,8 @@ fun MusifyMiniPlayer(
                     contentDescription = null
                 )
             }
-            IconButton(onClick = {
+            IconButton(
+                onClick = {
                 isLiked = !isLiked
                 onLikedButtonClicked(isLiked)
             }) {
