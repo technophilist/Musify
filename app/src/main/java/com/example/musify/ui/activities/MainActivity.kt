@@ -19,6 +19,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.MusifyMiniPlayer
 import com.example.musify.ui.screens.MusifyNavigation
 import com.example.musify.ui.screens.NowPlayingScreen
@@ -72,6 +73,21 @@ private fun MusifyApp() {
             message = (playbackEvent as PlaybackViewModel.Event.PlaybackError).errorMessage,
         )
     }
+    val isPlaybackPaused = remember(playbackState) {
+        playbackState is PlaybackViewModel.PlaybackState.Paused || playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded
+    }
+    val onPlayButtonClicked = { track: SearchResult.TrackSearchResult ->
+        if (playbackState is PlaybackViewModel.PlaybackState.Paused) {
+            playbackViewModel.resumePlaybackIfPaused()
+        } else if (playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded) {
+            // play the same track again
+            playbackViewModel.playTrack(track)
+        }
+    }
+//    BackHandler(isNowPlayingScreenVisible) { // fixme
+//        isNowPlayingScreenVisible = false
+//    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         // the playbackState.currentlyPlayingTrack will automatically be set
         // to null when the playback is stopped
@@ -98,14 +114,16 @@ private fun MusifyApp() {
         ) {
             miniPlayerTrack?.let {
                 if (isNowPlayingScreenVisible) {
-                    NowPlayingScreen(currentlyPlayingTrack = it,
+                    NowPlayingScreen(
+                        currentlyPlayingTrack = it,
+                        isPlaybackPaused = isPlaybackPaused,
                         playbackDurationRange = 0f..1f, // TODO
                         playbackProgressProvider = { 0.5f },
                         onCloseButtonClicked = { isNowPlayingScreenVisible = false },
                         onShuffleButtonClicked = { /*TODO*/ },
                         onSkipPreviousButtonClicked = { /*TODO*/ },
-                        onPlayButtonClicked = { /*TODO*/ },
-                        onPauseButtonClicked = { /*TODO*/ },
+                        onPlayButtonClicked = { onPlayButtonClicked(it) },
+                        onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack,
                         onSkipNextButtonClicked = { /*TODO*/ }) {}
                 } else {
                     MusifyMiniPlayer(
@@ -114,19 +132,10 @@ private fun MusifyApp() {
                             .padding(horizontal = 8.dp)
                             .padding(bottom = 8.dp)
                             .clickable { isNowPlayingScreenVisible = true },
-                        isPlaybackPaused = playbackState is PlaybackViewModel.PlaybackState.Paused || playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded,
+                        isPlaybackPaused = isPlaybackPaused,
                         currentlyPlayingTrack = it,
                         onLikedButtonClicked = {},
-                        onPlayButtonClicked = {
-                            if (playbackState is PlaybackViewModel.PlaybackState.Paused) {
-                                playbackViewModel.resumePlaybackIfPaused()
-                                return@MusifyMiniPlayer
-                            }
-                            if (playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded) {
-                                // play the same track again
-                                playbackViewModel.playTrack(it)
-                            }
-                        },
+                        onPlayButtonClicked = { onPlayButtonClicked(it) },
                         onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack
                     )
                 }
