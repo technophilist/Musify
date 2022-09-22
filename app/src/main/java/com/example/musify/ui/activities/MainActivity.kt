@@ -105,39 +105,47 @@ private fun MusifyApp() {
         )
         AnimatedVisibility(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .animateContentSize(animationSpec = tween()),
+                .align(Alignment.BottomCenter),
             visible = playbackState.currentlyPlayingTrack != null || playbackState.previouslyPlayingTrack != null,
             enter = fadeIn() + slideInVertically { it },
             exit = fadeOut() + slideOutVertically { -it },
         ) {
-            miniPlayerTrack?.let {
-                if (isNowPlayingScreenVisible) {
-                    NowPlayingScreen(
-                        currentlyPlayingTrack = it,
-                        isPlaybackPaused = isPlaybackPaused,
-                        playbackDurationRange = 0f..1f, // TODO
-                        playbackProgressProvider = { 0.5f },
-                        onCloseButtonClicked = { isNowPlayingScreenVisible = false },
-                        onShuffleButtonClicked = { /*TODO*/ },
-                        onSkipPreviousButtonClicked = { /*TODO*/ },
-                        onPlayButtonClicked = { onPlayButtonClicked(it) },
-                        onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack,
-                        onSkipNextButtonClicked = { /*TODO*/ }) {}
-                } else {
-                    MusifyMiniPlayer(
-                        modifier = Modifier
-                            .navigationBarsPadding()
-                            .padding(horizontal = 8.dp)
-                            .padding(bottom = 8.dp)
-                            .clickable { isNowPlayingScreenVisible = true },
-                        isPlaybackPaused = isPlaybackPaused,
-                        currentlyPlayingTrack = it,
-                        onLikedButtonClicked = {},
-                        onPlayButtonClicked = { onPlayButtonClicked(it) },
-                        onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack
-                    )
+            AnimatedContent(modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter),
+                targetState = isNowPlayingScreenVisible,
+                transitionSpec = {
+                    slideInVertically(animationSpec = tween()) with shrinkOut(animationSpec = tween())
+                }
+            ) { isFullScreenVisible ->
+                miniPlayerTrack?.let {
+                    if (isFullScreenVisible) {
+                        NowPlayingScreen(currentlyPlayingTrack = it,
+                            isPlaybackPaused = isPlaybackPaused,
+                            playbackDurationRange = 0f..1f, // TODO
+                            playbackProgressProvider = { 0.5f },
+                            onCloseButtonClicked = { isNowPlayingScreenVisible = false },
+                            onShuffleButtonClicked = { /*TODO*/ },
+                            onSkipPreviousButtonClicked = { /*TODO*/ },
+                            onPlayButtonClicked = { onPlayButtonClicked(miniPlayerTrack) },
+                            onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack,
+                            onSkipNextButtonClicked = { /*TODO*/ }) {}
+                    } else {
+                        MusifyMiniPlayer(
+                            modifier = Modifier
+                                .navigationBarsPadding()
+                                .padding(horizontal = 8.dp)
+                                .padding(bottom = 8.dp)
+                                .clickable { isNowPlayingScreenVisible = true },
+                            isPlaybackPaused = isPlaybackPaused,
+                            currentlyPlayingTrack = it,
+                            onLikedButtonClicked = {},
+                            onPlayButtonClicked = { onPlayButtonClicked(miniPlayerTrack) },
+                            onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack
+                        )
+                    }
+
                 }
             }
         }
