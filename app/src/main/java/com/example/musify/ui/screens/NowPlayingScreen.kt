@@ -18,7 +18,6 @@ import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
-import com.google.accompanist.insets.statusBarsPadding
 
 // TODO make artist and album name scrollable if they overflow
 @Composable
@@ -51,11 +50,13 @@ fun NowPlayingScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
-                .padding(16.dp)
+                .padding(start = 16.dp, end = 16.dp)
         ) {
-            Header(modifier = Modifier.fillMaxWidth(),
+            Header(
+                modifier = Modifier.fillMaxWidth(),
                 onCloseButtonClicked = onCloseButtonClicked,
-                onTrailingButtonClick = {/*TODO*/ })
+                onTrailingButtonClick = {/*TODO*/ }
+            )
             AsyncImageWithPlaceholder(modifier = Modifier
                 .size(500.dp)
                 .aspectRatio(1f),
@@ -63,7 +64,8 @@ fun NowPlayingScreen(
                 contentDescription = null,
                 onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
                 isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
-                onImageLoading = { isImageLoadingPlaceholderVisible = true })
+                onImageLoading = { isImageLoadingPlaceholderVisible = true }
+            )
             Text(
                 text = currentlyPlayingTrack.name,
                 fontWeight = FontWeight.Bold,
@@ -80,7 +82,7 @@ fun NowPlayingScreen(
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
-            Spacer(modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.size(8.dp))
             Box(modifier = Modifier.fillMaxWidth()) {
                 // The box acts as a recomposition scope.
                 // Instead of recomposing the entire screen when the
@@ -106,9 +108,13 @@ fun NowPlayingScreen(
                 onRepeatButtonClicked = onRepeatButtonClicked,
                 onShuffleButtonClicked = onShuffleButtonClicked
             )
-            Footer(modifier = Modifier.fillMaxWidth(),
+            Footer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding(),
                 onAvailableDevicesButtonClicked = { /*TODO*/ },
-                onShareButtonClicked = { /*TODO*/ })
+                onShareButtonClicked = { /*TODO*/ }
+            )
         }
     }
 }
@@ -148,7 +154,8 @@ private fun Footer(
 ) {
 
     Row(
-        modifier = modifier, horizontalArrangement = Arrangement.SpaceBetween
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         val availableDevicesIcon = painterResource(id = R.drawable.ic_available_devices)
         IconButton(onClick = onAvailableDevicesButtonClicked,
@@ -176,7 +183,8 @@ private fun PlaybackControls(
     ) {
         IconButton(onClick = onShuffleButtonClicked) {
             Icon(
-                painter = painterResource(R.drawable.ic_round_shuffle_24), contentDescription = null
+                painter = painterResource(R.drawable.ic_round_shuffle_24),
+                contentDescription = null
             )
         }
         IconButton(onClick = onSkipPreviousButtonClicked) {
@@ -203,7 +211,8 @@ private fun PlaybackControls(
         }
         IconButton(onClick = onRepeatButtonClicked) {
             Icon(
-                painter = painterResource(R.drawable.ic_round_repeat_24), contentDescription = null
+                painter = painterResource(R.drawable.ic_round_repeat_24),
+                contentDescription = null
             )
         }
     }
