@@ -1,6 +1,5 @@
 package com.example.musify.ui.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -51,21 +50,17 @@ fun NowPlayingScreen(
                 .statusBarsPadding()
                 .padding(16.dp)
         ) {
-            Header(
-                modifier = Modifier.fillMaxWidth(),
+            Header(modifier = Modifier.fillMaxWidth(),
                 onCloseButtonClicked = onCloseButtonClicked,
-                onTrailingButtonClick = {/*TODO*/ }
-            )
-            AsyncImageWithPlaceholder(
-                modifier = Modifier
-                    .size(500.dp)
-                    .aspectRatio(1f),
+                onTrailingButtonClick = {/*TODO*/ })
+            AsyncImageWithPlaceholder(modifier = Modifier
+                .size(500.dp)
+                .aspectRatio(1f),
                 model = currentlyPlayingTrack.imageUrlString,
                 contentDescription = null,
                 onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
                 isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
-                onImageLoading = { isImageLoadingPlaceholderVisible = true }
-            )
+                onImageLoading = { isImageLoadingPlaceholderVisible = true })
             Text(
                 text = currentlyPlayingTrack.name,
                 fontWeight = FontWeight.Bold,
@@ -76,13 +71,9 @@ fun NowPlayingScreen(
             Text(
                 text = currentlyPlayingTrack.artistsString,
                 fontWeight = FontWeight.SemiBold,
-                style = MaterialTheme.typography
-                    .subtitle1
-                    .copy(
-                        color = MaterialTheme.colors
-                            .onBackground
-                            .copy(alpha = ContentAlpha.medium)
-                    ),
+                style = MaterialTheme.typography.subtitle1.copy(
+                    color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)
+                ),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
@@ -93,16 +84,13 @@ fun NowPlayingScreen(
                 // playback progress changes, only the box recomposes
                 // because the progress state is only read within the
                 // scope of the box.
-                Slider(
-                    modifier = Modifier.fillMaxWidth(),
+                Slider(modifier = Modifier.fillMaxWidth(),
                     value = playbackProgressProvider(),
                     valueRange = playbackDurationRange,
                     colors = SliderDefaults.colors(
-                        thumbColor = Color.White,
-                        activeTrackColor = Color.White
+                        thumbColor = Color.White, activeTrackColor = Color.White
                     ),
-                    onValueChange = {}
-                )
+                    onValueChange = {})
             }
 
             PlaybackControls(
@@ -115,11 +103,9 @@ fun NowPlayingScreen(
                 onRepeatButtonClicked = onRepeatButtonClicked,
                 onShuffleButtonClicked = onShuffleButtonClicked
             )
-            Footer(
-                modifier = Modifier.fillMaxWidth(),
+            Footer(modifier = Modifier.fillMaxWidth(),
                 onAvailableDevicesButtonClicked = { /*TODO*/ },
-                onShareButtonClicked = { /*TODO*/ }
-            )
+                onShareButtonClicked = { /*TODO*/ })
         }
     }
 }
@@ -135,22 +121,23 @@ private fun Header(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            modifier = Modifier.clickable { onCloseButtonClicked() },
-            painter = painterResource(R.drawable.ic_expand_more_24),
-            contentDescription = null
+        val expandMoreIcon = painterResource(R.drawable.ic_expand_more_24)
+        val moreHorizIcon = painterResource(id = R.drawable.ic_more_horiz_24)
+        IconButton(
+            modifier = Modifier.offset(x = (-16).dp), // accommodate for increased size of icon because of touch target sizing
+            onClick = onCloseButtonClicked,
+            content = { Icon(painter = expandMoreIcon, contentDescription = null) }
         )
         Text(
             text = "Now playing",
             style = MaterialTheme.typography.subtitle1,
             fontWeight = FontWeight.SemiBold
         )
-        Icon(
-            modifier = Modifier.clickable { onTrailingButtonClick() },
-            painter = painterResource(id = R.drawable.ic_more_horiz_24),
-            contentDescription = null
+        IconButton(
+            modifier = Modifier.offset(x = (16).dp), // accommodate for increased size of icon because of touch target sizing
+            onClick = onTrailingButtonClick,
+            content = { Icon(painter = moreHorizIcon, contentDescription = null) }
         )
-
     }
 }
 
@@ -162,21 +149,13 @@ private fun Footer(
 ) {
 
     Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier = modifier, horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        IconButton(onClick = onAvailableDevicesButtonClicked) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_available_devices),
-                contentDescription = null
-            )
-        }
-        IconButton(onClick = onShareButtonClicked) {
-            Icon(
-                imageVector = Icons.Filled.Share,
-                contentDescription = null
-            )
-        }
+        val availableDevicesIcon = painterResource(id = R.drawable.ic_available_devices)
+        IconButton(onClick = onAvailableDevicesButtonClicked,
+            content = { Icon(painter = availableDevicesIcon, contentDescription = null) })
+        IconButton(onClick = onShareButtonClicked,
+            content = { Icon(imageVector = Icons.Filled.Share, contentDescription = null) })
     }
 }
 
@@ -198,8 +177,7 @@ private fun PlaybackControls(
     ) {
         IconButton(onClick = onShuffleButtonClicked) {
             Icon(
-                painter = painterResource(R.drawable.ic_round_shuffle_24),
-                contentDescription = null
+                painter = painterResource(R.drawable.ic_round_shuffle_24), contentDescription = null
             )
         }
         IconButton(onClick = onSkipPreviousButtonClicked) {
@@ -226,8 +204,7 @@ private fun PlaybackControls(
         }
         IconButton(onClick = onRepeatButtonClicked) {
             Icon(
-                painter = painterResource(R.drawable.ic_round_repeat_24),
-                contentDescription = null
+                painter = painterResource(R.drawable.ic_round_repeat_24), contentDescription = null
             )
         }
     }
