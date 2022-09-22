@@ -25,6 +25,7 @@ import com.google.accompanist.insets.statusBarsPadding
 @Composable
 fun NowPlayingScreen(
     currentlyPlayingTrack: SearchResult.TrackSearchResult,
+    isPlaybackPaused: Boolean,
     playbackDurationRange: ClosedFloatingPointRange<Float>,
     playbackProgressProvider: () -> Float,
     onCloseButtonClicked: () -> Unit,
@@ -40,7 +41,6 @@ fun NowPlayingScreen(
     val dynamicThemeResource = remember(currentlyPlayingTrack) {
         DynamicThemeResource.FromImageUrl(currentlyPlayingTrack.imageUrlString)
     }
-    var isPlayingIconVisible by remember { mutableStateOf(true) }
     DynamicallyThemedSurface(
         dynamicThemeResource = dynamicThemeResource,
         dynamicBackgroundType = DynamicBackgroundType.Filled()
@@ -107,18 +107,10 @@ fun NowPlayingScreen(
 
             PlaybackControls(
                 modifier = Modifier.fillMaxWidth(),
-                isPlayIconVisible = isPlayingIconVisible,
+                isPlayIconVisible = isPlaybackPaused,
                 onSkipPreviousButtonClicked = onSkipPreviousButtonClicked,
-                onPlayButtonClicked = {
-                    onPlayButtonClicked()
-                    // display pause button after play button is clicked
-                    isPlayingIconVisible = false
-                },
-                onPauseButtonClicked = {
-                    onPauseButtonClicked()
-                    // display play button after pause button is clicked
-                    isPlayingIconVisible = true
-                },
+                onPlayButtonClicked = onPlayButtonClicked,
+                onPauseButtonClicked = onPauseButtonClicked,
                 onSkipNextButtonClicked = onSkipNextButtonClicked,
                 onRepeatButtonClicked = onRepeatButtonClicked,
                 onShuffleButtonClicked = onShuffleButtonClicked
