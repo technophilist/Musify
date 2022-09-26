@@ -9,6 +9,8 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 
@@ -35,6 +37,18 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
                 onEvents(player, events)
             }
         }
+
+    private fun buildPlayingState(
+        track: MusicPlayer.Track,
+        player: Player,
+    ) = MusicPlayer.PlaybackState.Playing(currentlyPlayingTrack = track,
+        totalDuration = player.duration,
+        currentPlaybackPositionInMillisFlow = flow {
+            while (player.currentPosition != player.duration) {
+                emit(player.currentPosition)
+                delay(1_000)
+            }
+        })
 
     override fun playTrack(track: MusicPlayer.Track) {
         with(exoPlayer) {
@@ -80,9 +94,7 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
             }
             if (!events.contains(Player.EVENT_IS_PLAYING_CHANGED) && player.playbackState != Player.STATE_READY) return@createEventsListener
             currentlyPlayingTrack?.let {
-                if (player.playWhenReady) onPlaybackStateChanged(
-                    MusicPlayer.PlaybackState.Playing(it)
-                )
+                if (player.playWhenReady) onPlaybackStateChanged(buildPlayingState(it, player))
                 else onPlaybackStateChanged(MusicPlayer.PlaybackState.Paused(it))
             }
         }

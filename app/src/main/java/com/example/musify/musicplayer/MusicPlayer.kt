@@ -1,10 +1,16 @@
 package com.example.musify.musicplayer
 
 import android.graphics.Bitmap
+import kotlinx.coroutines.flow.Flow
 
 interface MusicPlayer {
     sealed class PlaybackState {
-        data class Playing(val currentlyPlayingTrack: Track) : PlaybackState()
+        data class Playing(
+            val currentlyPlayingTrack: Track,
+            val totalDuration: Long,
+            val currentPlaybackPositionInMillisFlow: Flow<Long>
+        ) : PlaybackState()
+
         data class Paused(val currentlyPlayingTrack: Track) : PlaybackState()
         data class Ended(val track: Track) : PlaybackState()
         object Error : PlaybackState()
