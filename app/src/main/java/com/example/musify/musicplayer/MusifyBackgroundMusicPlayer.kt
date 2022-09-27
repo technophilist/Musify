@@ -30,6 +30,7 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
             .setChannelDescriptionResourceId(R.string.notification_channel_description)
     }
     private var listener: Player.Listener? = null
+    private var currentPlaybackState: MusicPlayer.PlaybackState? = null
 
     private fun createEventsListener(onEvents: (Player, Player.Events) -> Unit) =
         object : Player.Listener {
@@ -75,28 +76,34 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
 
     override fun addOnPlaybackStateChangedListener(onPlaybackStateChanged: (MusicPlayer.PlaybackState) -> Unit) {
         listener = createEventsListener { player, events ->
-            if (events.contains(Player.EVENT_PLAYBACK_STATE_CHANGED)) {
-                if (player.playbackState == Player.STATE_IDLE) {
-                    onPlaybackStateChanged(MusicPlayer.PlaybackState.Idle)
-                    return@createEventsListener
-                }
-                if (player.playbackState == Player.STATE_ENDED) {
-                    currentlyPlayingTrack?.let {
-                        onPlaybackStateChanged(MusicPlayer.PlaybackState.Ended(it))
-                    }
-                    return@createEventsListener
-                }
-            }
-
-            if (events.contains(Player.EVENT_PLAYER_ERROR)) {
-                onPlaybackStateChanged(MusicPlayer.PlaybackState.Error)
-                return@createEventsListener
-            }
-            if (!events.contains(Player.EVENT_IS_PLAYING_CHANGED) && player.playbackState != Player.STATE_READY) return@createEventsListener
-            currentlyPlayingTrack?.let {
-                if (player.playWhenReady) onPlaybackStateChanged(buildPlayingState(it, player))
-                else onPlaybackStateChanged(MusicPlayer.PlaybackState.Paused(it))
-            }
+            if (!events.containsAny(
+                    Player.EVENT_PLAYBACK_STATE_CHANGED,
+                    Player.EVENT_PLAYER_ERROR,
+                    Player.EVENT_IS_PLAYING_CHANGED
+                )
+            ) return@createEventsListener
+            val isPlaying =
+                events.contains(Player.EVENT_IS_PLAYING_CHANGED) && player.playbackState == Player.STATE_READY && player.playWhenReady
+            val isPaused =
+                events.contains(Player.EVENT_IS_PLAYING_CHANGED) && player.playbackState == Player.STATE_READY && !player.playWhenReady
+            val newPlaybackState = when {
+                events.contains(Player.EVENT_PLAYER_ERROR) -> MusicPlayer.PlaybackState.Error
+                isPlaying -> currentlyPlayingTrack?.let { buildPlayingState(it, player) }
+                isPaused -> currentlyPlayingTrack?.let(MusicPlayer.PlaybackState::Paused)
+                player.playbackState == Player.STATE_IDLE -> MusicPlayer.PlaybackState.Idle
+                player.playbackState == Player.STATE_ENDED -> currentlyPlayingTrack?.let(MusicPlayer.PlaybackState::Ended)
+                else -> null
+            } ?: return@createEventsListener
+            // This callback can be called multiple times on events that may
+            // not be of relevance. This may lead to the generation of a new
+            // state that is equivalent to old state. To prevent invocation of
+            // the user defined onPlaybackStateChanged callback with the same state
+            // more than once, compare it to the previous state the callback was
+            // invoked with. Invoke the user defined callback if and only if the
+            // previous  state is not the same as the newly generated state.
+            if (currentPlaybackState == newPlaybackState) return@createEventsListener
+            currentPlaybackState = newPlaybackState
+            onPlaybackStateChanged(newPlaybackState)
         }
         exoPlayer.addListener(listener!!)
     }
