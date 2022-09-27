@@ -45,7 +45,7 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
     ) = MusicPlayer.PlaybackState.Playing(currentlyPlayingTrack = track,
         totalDuration = player.duration,
         currentPlaybackPositionInMillisFlow = flow {
-            while (player.currentPosition != player.duration) {
+            while (player.currentPosition <= player.duration) {
                 emit(player.currentPosition)
                 delay(1_000)
             }
