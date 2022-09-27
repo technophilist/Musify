@@ -20,12 +20,15 @@ import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 
 // TODO make artist and album name scrollable if they overflow
+// Check if composable recomposes on progress change
 @Composable
 fun NowPlayingScreen(
     currentlyPlayingTrack: SearchResult.TrackSearchResult,
     isPlaybackPaused: Boolean,
     playbackDurationRange: ClosedFloatingPointRange<Float>,
     playbackProgressProvider: () -> Float,
+    currentTimeElapsed: String,
+    totalDurationOfTrackTimeString: String,
     onCloseButtonClicked: () -> Unit,
     onShuffleButtonClicked: () -> Unit,
     onSkipPreviousButtonClicked: () -> Unit,
@@ -43,20 +46,18 @@ fun NowPlayingScreen(
         DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(0.6f))
     }
     DynamicallyThemedSurface(
-        dynamicThemeResource = dynamicThemeResource,
-        dynamicBackgroundType = dynamicBackgroundType
+        dynamicThemeResource = dynamicThemeResource, dynamicBackgroundType = dynamicBackgroundType
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
+                .padding(bottom = 8.dp)
                 .padding(start = 16.dp, end = 16.dp)
         ) {
-            Header(
-                modifier = Modifier.fillMaxWidth(),
+            Header(modifier = Modifier.fillMaxWidth(),
                 onCloseButtonClicked = onCloseButtonClicked,
-                onTrailingButtonClick = {/*TODO*/ }
-            )
+                onTrailingButtonClick = {/*TODO*/ })
             AsyncImageWithPlaceholder(modifier = Modifier
                 .size(500.dp)
                 .aspectRatio(1f),
@@ -64,8 +65,7 @@ fun NowPlayingScreen(
                 contentDescription = null,
                 onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
                 isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
-                onImageLoading = { isImageLoadingPlaceholderVisible = true }
-            )
+                onImageLoading = { isImageLoadingPlaceholderVisible = true })
             Text(
                 text = currentlyPlayingTrack.name,
                 fontWeight = FontWeight.Bold,
@@ -83,21 +83,15 @@ fun NowPlayingScreen(
                 maxLines = 1
             )
             Spacer(modifier = Modifier.size(8.dp))
-            Box(modifier = Modifier.fillMaxWidth()) {
-                // The box acts as a recomposition scope.
-                // Instead of recomposing the entire screen when the
-                // playback progress changes, only the box recomposes
-                // because the progress state is only read within the
-                // scope of the box.
-                Slider(modifier = Modifier.fillMaxWidth(),
-                    value = playbackProgressProvider(),
-                    valueRange = playbackDurationRange,
-                    colors = SliderDefaults.colors(
-                        thumbColor = Color.White, activeTrackColor = Color.White
-                    ),
-                    onValueChange = {})
+            Box {
+                // TODO debug recomposition
+                ProgressSliderWithTimeText(modifier = Modifier.fillMaxWidth(),
+                    currentTimeElapsed = currentTimeElapsed,
+                    totalDurationOfTrack = totalDurationOfTrackTimeString,
+                    playbackProgressProvider = playbackProgressProvider,
+                    playbackDurationRange = playbackDurationRange,
+                    onSliderValueChange = {})
             }
-
             PlaybackControls(
                 modifier = Modifier.fillMaxWidth(),
                 isPlayIconVisible = isPlaybackPaused,
@@ -108,13 +102,11 @@ fun NowPlayingScreen(
                 onRepeatButtonClicked = onRepeatButtonClicked,
                 onShuffleButtonClicked = onShuffleButtonClicked
             )
-            Footer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .navigationBarsPadding(),
+            Footer(modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding(),
                 onAvailableDevicesButtonClicked = { /*TODO*/ },
-                onShareButtonClicked = { /*TODO*/ }
-            )
+                onShareButtonClicked = { /*TODO*/ })
         }
     }
 }
@@ -154,8 +146,7 @@ private fun Footer(
 ) {
 
     Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier = modifier, horizontalArrangement = Arrangement.SpaceBetween
     ) {
         val availableDevicesIcon = painterResource(id = R.drawable.ic_available_devices)
         IconButton(onClick = onAvailableDevicesButtonClicked,
@@ -183,8 +174,7 @@ private fun PlaybackControls(
     ) {
         IconButton(onClick = onShuffleButtonClicked) {
             Icon(
-                painter = painterResource(R.drawable.ic_round_shuffle_24),
-                contentDescription = null
+                painter = painterResource(R.drawable.ic_round_shuffle_24), contentDescription = null
             )
         }
         IconButton(onClick = onSkipPreviousButtonClicked) {
@@ -211,8 +201,41 @@ private fun PlaybackControls(
         }
         IconButton(onClick = onRepeatButtonClicked) {
             Icon(
-                painter = painterResource(R.drawable.ic_round_repeat_24),
-                contentDescription = null
+                painter = painterResource(R.drawable.ic_round_repeat_24), contentDescription = null
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProgressSliderWithTimeText(
+    modifier: Modifier = Modifier,
+    currentTimeElapsed: String,
+    totalDurationOfTrack: String,
+    playbackProgressProvider: () -> Float,
+    playbackDurationRange: ClosedFloatingPointRange<Float>,
+    onSliderValueChange: (Float) -> Unit
+) {
+    Column(modifier = modifier) {
+        Slider(
+            modifier = Modifier.fillMaxWidth(),
+            value = playbackProgressProvider(),
+            valueRange = playbackDurationRange,
+            colors = SliderDefaults.colors(
+                thumbColor = Color.White, activeTrackColor = Color.White
+            ),
+            onValueChange = onSliderValueChange
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = currentTimeElapsed, style = MaterialTheme.typography.caption
+            )
+            Text(
+                text = totalDurationOfTrack, style = MaterialTheme.typography.caption
             )
         }
     }
