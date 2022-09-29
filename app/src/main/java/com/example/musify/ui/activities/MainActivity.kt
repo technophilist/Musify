@@ -84,6 +84,8 @@ private fun MusifyApp() {
             playbackViewModel.playTrack(track)
         }
     }
+    val playbackProgressText by playbackViewModel.currentPlaybackProgressTimeText
+    val totalDurationOfCurrentTrackText by playbackViewModel.totalDurationOfCurrentTrackTimeText
 //    BackHandler(isNowPlayingScreenVisible) { // fixme
 //        isNowPlayingScreenVisible = false
 //    }
@@ -121,16 +123,21 @@ private fun MusifyApp() {
             ) { isFullScreenVisible ->
                 miniPlayerTrack?.let {
                     if (isFullScreenVisible) {
-                        NowPlayingScreen(currentlyPlayingTrack = it,
+                        NowPlayingScreen(
+                            currentlyPlayingTrack = it,
                             isPlaybackPaused = isPlaybackPaused,
-                            playbackDurationRange = 0f..1f, // TODO
-                            playbackProgressProvider = { 0.5f },
+                            currentTimeElapsedProvider = { playbackProgressText },
+                            totalDurationOfCurrentTrackProvider = { totalDurationOfCurrentTrackText },
+                            playbackDurationRange = PlaybackViewModel.PLAYBACK_PROGRESS_RANGE,
+                            playbackProgressProvider = { playbackViewModel.currentPlaybackProgress.value },
                             onCloseButtonClicked = { isNowPlayingScreenVisible = false },
                             onShuffleButtonClicked = { /*TODO*/ },
                             onSkipPreviousButtonClicked = { /*TODO*/ },
                             onPlayButtonClicked = { onPlayButtonClicked(miniPlayerTrack) },
                             onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack,
-                            onSkipNextButtonClicked = { /*TODO*/ }) {}
+                            onSkipNextButtonClicked = { /*TODO*/ },
+                            onRepeatButtonClicked = {}
+                        )
                     } else {
                         MusifyMiniPlayer(
                             modifier = Modifier
