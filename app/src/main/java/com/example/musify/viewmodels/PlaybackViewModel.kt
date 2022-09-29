@@ -14,8 +14,9 @@ import com.example.musify.musicplayer.utils.toTrackSearchResult
 import com.example.musify.usecases.downloadDrawableFromUrlUseCase.DownloadDrawableFromUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -27,11 +28,6 @@ class PlaybackViewModel @Inject constructor(
     private val musicPlayer: MusicPlayer,
     private val downloadDrawableFromUrlUseCase: DownloadDrawableFromUrlUseCase
 ) : AndroidViewModel(application) {
-
-    // 0f to 100f
-    private val _currentPlaybackProgress = mutableStateOf(0f)
-    val currentPlaybackProgress = _currentPlaybackProgress as State<Float>
-
     private val _currentPlaybackProgressTimeText = mutableStateOf("00:00")
     val currentPlaybackProgressTimeText = _currentPlaybackProgressTimeText as State<String>
 
@@ -44,6 +40,10 @@ class PlaybackViewModel @Inject constructor(
     private val _eventChannel = Channel<Event?>()
     val playbackEventsFlow = _eventChannel.receiveAsFlow()
 
+    // 0f to 100f
+    val flowOfProgressOfCurrentTrack = mutableStateOf<Flow<Float>>(emptyFlow())
+    val flowOfProgressTextOfCurrentTrack = mutableStateOf<Flow<String>>(emptyFlow())
+
     private val playbackErrorMessage = "An error occurred. Please check internet connection."
 
     init {
@@ -53,9 +53,10 @@ class PlaybackViewModel @Inject constructor(
                 is MusicPlayer.PlaybackState.Playing -> {
                     _totalDurationOfCurrentTrackTimeText.value =
                         convertTimestampMillisToString(it.totalDuration)
-                    it.currentPlaybackPositionInMillisFlow
-                        .onEach { progress -> updateProgressForMillis(progress, it.totalDuration) }
-                        .launchIn(viewModelScope)
+                    flowOfProgressOfCurrentTrack.value = it.currentPlaybackPositionInMillisFlow
+                        .map { progress -> (progress.toFloat() / it.totalDuration) * 100f }
+                    flowOfProgressTextOfCurrentTrack.value =
+                        it.currentPlaybackPositionInMillisFlow.map(::convertTimestampMillisToString)
                     PlaybackState.Playing(it.currentlyPlayingTrack.toTrackSearchResult())
                 }
                 is MusicPlayer.PlaybackState.Paused -> PlaybackState.Paused(it.currentlyPlayingTrack.toTrackSearchResult())
@@ -116,13 +117,6 @@ class PlaybackViewModel @Inject constructor(
             toMinutes(millis),
             toSeconds(millis)
         )
-    }
-
-    private fun updateProgressForMillis(progressMillis: Long, totalDurationMillis: Long) {
-        _currentPlaybackProgress.value =
-            (progressMillis.toFloat() / totalDurationMillis.toFloat()) * 100f
-        _currentPlaybackProgressTimeText.value =
-            convertTimestampMillisToString(progressMillis)
     }
 
     override fun onCleared() {
