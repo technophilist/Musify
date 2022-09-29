@@ -27,8 +27,8 @@ fun NowPlayingScreen(
     isPlaybackPaused: Boolean,
     playbackDurationRange: ClosedFloatingPointRange<Float>,
     playbackProgressProvider: () -> Float,
-    currentTimeElapsed: String,
-    totalDurationOfTrackTimeString: String,
+    currentTimeElapsedProvider: () -> String,
+    totalDurationOfCurrentTrackProvider: () -> String,
     onCloseButtonClicked: () -> Unit,
     onShuffleButtonClicked: () -> Unit,
     onSkipPreviousButtonClicked: () -> Unit,
@@ -86,8 +86,8 @@ fun NowPlayingScreen(
             Box {
                 // TODO debug recomposition
                 ProgressSliderWithTimeText(modifier = Modifier.fillMaxWidth(),
-                    currentTimeElapsed = currentTimeElapsed,
-                    totalDurationOfTrack = totalDurationOfTrackTimeString,
+                    currentTimeElapsed = currentTimeElapsedProvider(),
+                    totalDurationOfTrack = totalDurationOfCurrentTrackProvider(),
                     playbackProgressProvider = playbackProgressProvider,
                     playbackDurationRange = playbackDurationRange,
                     onSliderValueChange = {})
