@@ -18,16 +18,17 @@ import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
+import kotlinx.coroutines.flow.Flow
 
 // TODO make artist and album name scrollable if they overflow
 // Check if composable recomposes on progress change
 @Composable
 fun NowPlayingScreen(
     currentlyPlayingTrack: SearchResult.TrackSearchResult,
-    isPlaybackPaused: Boolean,
+    playbackProgressFlow: Flow<Float>, // collecting the flow within the composable scopes the collector to the composable
+    timeElapsedStringFlow: Flow<String>, // collecting the flow within the composable scopes the collector to the composable
     playbackDurationRange: ClosedFloatingPointRange<Float>,
-    playbackProgressProvider: () -> Float,
-    currentTimeElapsedProvider: () -> String,
+    isPlaybackPaused: Boolean,
     totalDurationOfCurrentTrackProvider: () -> String,
     onCloseButtonClicked: () -> Unit,
     onShuffleButtonClicked: () -> Unit,
@@ -45,6 +46,8 @@ fun NowPlayingScreen(
     val dynamicBackgroundType = remember {
         DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(0.6f))
     }
+    val currentProgress by playbackProgressFlow.collectAsState(initial = 0f)
+    val timeElapsedString by timeElapsedStringFlow.collectAsState(initial = "00:00")
     DynamicallyThemedSurface(
         dynamicThemeResource = dynamicThemeResource, dynamicBackgroundType = dynamicBackgroundType
     ) {
@@ -86,9 +89,9 @@ fun NowPlayingScreen(
             Box {
                 // TODO debug recomposition
                 ProgressSliderWithTimeText(modifier = Modifier.fillMaxWidth(),
-                    currentTimeElapsed = currentTimeElapsedProvider(),
+                    currentTimeElapsed = timeElapsedString,
                     totalDurationOfTrack = totalDurationOfCurrentTrackProvider(),
-                    playbackProgressProvider = playbackProgressProvider,
+                    playbackProgressProvider = { currentProgress },
                     playbackDurationRange = playbackDurationRange,
                     onSliderValueChange = {})
             }
