@@ -126,10 +126,10 @@ private fun MusifyApp() {
                         NowPlayingScreen(
                             currentlyPlayingTrack = it,
                             isPlaybackPaused = isPlaybackPaused,
-                            currentTimeElapsedProvider = { playbackProgressText },
+                            timeElapsedStringFlow = playbackViewModel.flowOfProgressTextOfCurrentTrack.value,
                             totalDurationOfCurrentTrackProvider = { totalDurationOfCurrentTrackText },
                             playbackDurationRange = PlaybackViewModel.PLAYBACK_PROGRESS_RANGE,
-                            playbackProgressProvider = { playbackViewModel.currentPlaybackProgress.value },
+                            playbackProgressFlow = playbackViewModel.flowOfProgressOfCurrentTrack.value,
                             onCloseButtonClicked = { isNowPlayingScreenVisible = false },
                             onShuffleButtonClicked = { /*TODO*/ },
                             onSkipPreviousButtonClicked = { /*TODO*/ },
