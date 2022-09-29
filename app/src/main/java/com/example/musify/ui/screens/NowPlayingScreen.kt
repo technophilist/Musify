@@ -21,12 +21,14 @@ import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 import kotlinx.coroutines.flow.Flow
 
 // TODO make artist and album name scrollable if they overflow
-// Check if composable recomposes on progress change
+// collecting the flow within the composable scopes the collector to the composable.
+// This ensures that the collection of flow is stopped as soon this composable
+// is removed from composition.
 @Composable
 fun NowPlayingScreen(
     currentlyPlayingTrack: SearchResult.TrackSearchResult,
-    playbackProgressFlow: Flow<Float>, // collecting the flow within the composable scopes the collector to the composable
-    timeElapsedStringFlow: Flow<String>, // collecting the flow within the composable scopes the collector to the composable
+    playbackProgressFlow: Flow<Float>,
+    timeElapsedStringFlow: Flow<String>,
     playbackDurationRange: ClosedFloatingPointRange<Float>,
     isPlaybackPaused: Boolean,
     totalDurationOfCurrentTrackProvider: () -> String,
@@ -46,8 +48,6 @@ fun NowPlayingScreen(
     val dynamicBackgroundType = remember {
         DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(0.6f))
     }
-    val currentProgress by playbackProgressFlow.collectAsState(initial = 0f)
-    val timeElapsedString by timeElapsedStringFlow.collectAsState(initial = "00:00")
     DynamicallyThemedSurface(
         dynamicThemeResource = dynamicThemeResource, dynamicBackgroundType = dynamicBackgroundType
     ) {
@@ -87,11 +87,10 @@ fun NowPlayingScreen(
             )
             Spacer(modifier = Modifier.size(8.dp))
             Box {
-                // TODO debug recomposition
                 ProgressSliderWithTimeText(modifier = Modifier.fillMaxWidth(),
-                    currentTimeElapsed = timeElapsedString,
+                    currentTimeElapsedStringFlow = timeElapsedStringFlow,
                     totalDurationOfTrack = totalDurationOfCurrentTrackProvider(),
-                    playbackProgressProvider = { currentProgress },
+                    currentPlaybackProgressFlow = playbackProgressFlow,
                     playbackDurationRange = playbackDurationRange,
                     onSliderValueChange = {})
             }
@@ -213,16 +212,18 @@ private fun PlaybackControls(
 @Composable
 private fun ProgressSliderWithTimeText(
     modifier: Modifier = Modifier,
-    currentTimeElapsed: String,
+    currentTimeElapsedStringFlow: Flow<String>,
+    currentPlaybackProgressFlow: Flow<Float>,
     totalDurationOfTrack: String,
-    playbackProgressProvider: () -> Float,
     playbackDurationRange: ClosedFloatingPointRange<Float>,
     onSliderValueChange: (Float) -> Unit
 ) {
+    val currentProgress by currentPlaybackProgressFlow.collectAsState(initial = 0f)
+    val timeElapsedString by currentTimeElapsedStringFlow.collectAsState(initial = "00:00")
     Column(modifier = modifier) {
         Slider(
             modifier = Modifier.fillMaxWidth(),
-            value = playbackProgressProvider(),
+            value = currentProgress,
             valueRange = playbackDurationRange,
             colors = SliderDefaults.colors(
                 thumbColor = Color.White, activeTrackColor = Color.White
@@ -235,7 +236,7 @@ private fun ProgressSliderWithTimeText(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = currentTimeElapsed, style = MaterialTheme.typography.caption
+                text = timeElapsedString, style = MaterialTheme.typography.caption
             )
             Text(
                 text = totalDurationOfTrack, style = MaterialTheme.typography.caption
