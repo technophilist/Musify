@@ -51,6 +51,7 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
                 emit(player.currentPosition)
                 delay(1_000)
             }
+            emit(player.currentPosition)
             // when paused, the same value will be emitted, to prevent the
             // emission of the same value, use distinctUntilChanged
         }.distinctUntilChanged()
