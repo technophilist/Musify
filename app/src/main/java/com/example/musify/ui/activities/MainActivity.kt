@@ -84,12 +84,7 @@ private fun MusifyApp() {
             playbackViewModel.playTrack(track)
         }
     }
-    val playbackProgressText by playbackViewModel.currentPlaybackProgressTimeText
     val totalDurationOfCurrentTrackText by playbackViewModel.totalDurationOfCurrentTrackTimeText
-//    BackHandler(isNowPlayingScreenVisible) { // fixme
-//        isNowPlayingScreenVisible = false
-//    }
-
     Box(modifier = Modifier.fillMaxSize()) {
         // the playbackState.currentlyPlayingTrack will automatically be set
         // to null when the playback is stopped

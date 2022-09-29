@@ -28,8 +28,6 @@ class PlaybackViewModel @Inject constructor(
     private val musicPlayer: MusicPlayer,
     private val downloadDrawableFromUrlUseCase: DownloadDrawableFromUrlUseCase
 ) : AndroidViewModel(application) {
-    private val _currentPlaybackProgressTimeText = mutableStateOf("00:00")
-    val currentPlaybackProgressTimeText = _currentPlaybackProgressTimeText as State<String>
 
     private val _totalDurationOfCurrentTrackTimeText = mutableStateOf("00:00")
     val totalDurationOfCurrentTrackTimeText = _totalDurationOfCurrentTrackTimeText as State<String>
@@ -53,8 +51,8 @@ class PlaybackViewModel @Inject constructor(
                 is MusicPlayer.PlaybackState.Playing -> {
                     _totalDurationOfCurrentTrackTimeText.value =
                         convertTimestampMillisToString(it.totalDuration)
-                    flowOfProgressOfCurrentTrack.value = it.currentPlaybackPositionInMillisFlow
-                        .map { progress -> (progress.toFloat() / it.totalDuration) * 100f }
+                    flowOfProgressOfCurrentTrack.value =
+                        it.currentPlaybackPositionInMillisFlow.map { progress -> (progress.toFloat() / it.totalDuration) * 100f }
                     flowOfProgressTextOfCurrentTrack.value =
                         it.currentPlaybackPositionInMillisFlow.map(::convertTimestampMillisToString)
                     PlaybackState.Playing(it.currentlyPlayingTrack.toTrackSearchResult())
@@ -109,13 +107,10 @@ class PlaybackViewModel @Inject constructor(
         // don't display the hour information if the track's duration is
         // less than an hour
         if (toHours(millis) == 0L) "%02d:%02d".format(
-            toMinutes(millis),
-            toSeconds(millis)
+            toMinutes(millis), toSeconds(millis)
         )
         else "%02d%02d:%02d".format(
-            toHours(millis),
-            toMinutes(millis),
-            toSeconds(millis)
+            toHours(millis), toMinutes(millis), toSeconds(millis)
         )
     }
 
