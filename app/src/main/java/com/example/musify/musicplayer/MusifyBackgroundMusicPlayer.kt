@@ -10,6 +10,7 @@ import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -42,14 +43,18 @@ class MusifyBackgroundMusicPlayer @Inject constructor(
     private fun buildPlayingState(
         track: MusicPlayer.Track,
         player: Player,
-    ) = MusicPlayer.PlaybackState.Playing(currentlyPlayingTrack = track,
+    ) = MusicPlayer.PlaybackState.Playing(
+        currentlyPlayingTrack = track,
         totalDuration = player.duration,
         currentPlaybackPositionInMillisFlow = flow {
             while (player.currentPosition <= player.duration) {
                 emit(player.currentPosition)
                 delay(1_000)
             }
-        })
+            // when paused, the same value will be emitted, to prevent the
+            // emission of the same value, use distinctUntilChanged
+        }.distinctUntilChanged()
+    )
 
     override fun playTrack(track: MusicPlayer.Track) {
         with(exoPlayer) {
