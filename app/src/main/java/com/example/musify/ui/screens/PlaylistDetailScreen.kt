@@ -16,8 +16,6 @@ import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
 import com.example.musify.ui.components.HeaderImageSource
 import com.example.musify.ui.components.ImageHeaderWithMetadata
 import com.example.musify.ui.components.MusifyCompactTrackCard
-import com.google.accompanist.insets.navigationBarsHeight
-import com.google.accompanist.insets.statusBarsPadding
 
 
 @ExperimentalMaterialApi
@@ -99,7 +97,7 @@ fun PlaylistDetailScreen(
             item {
                 Spacer(
                     modifier = Modifier
-                        .navigationBarsHeight()
+                        .windowInsetsBottomHeight(WindowInsets.navigationBars)
                         .padding(bottom = 16.dp)
                 )
             }

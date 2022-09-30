@@ -1,6 +1,9 @@
 package com.example.musify.ui.screens.searchscreen
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.ExperimentalMaterialApi
@@ -15,7 +18,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.*
-import com.google.accompanist.insets.imePadding
 
 /**
  * A color that is meant to be applied to all types of search items.
@@ -187,7 +189,7 @@ private fun <T : Any> LazyListScope.itemsIndexedWithEmptyListContent(
             modifier = Modifier
                 .fillParentMaxSize()
                 .padding(horizontal = 16.dp)
-                .imePadding()
+                .windowInsetsPadding(WindowInsets.ime)
         )
     },
     itemContent: @Composable LazyItemScope.(index: Int, value: T?) -> Unit

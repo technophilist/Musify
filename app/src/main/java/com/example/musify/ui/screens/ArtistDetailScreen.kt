@@ -34,9 +34,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.*
-import com.google.accompanist.insets.navigationBarsHeight
-import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
 // TODO remove temporarily used item{} for artist image header
@@ -146,7 +143,7 @@ fun ArtistDetailScreen(
                 }
             }
             item {
-                Spacer(modifier = Modifier.navigationBarsHeight())
+                Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
             }
             if (isErrorMessageVisible) {
                 item {

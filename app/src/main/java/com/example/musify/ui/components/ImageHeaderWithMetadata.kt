@@ -20,7 +20,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.musify.R
-import com.google.accompanist.insets.statusBarsPadding
 
 /**
  * A sealed class hierarchy that contains the different header image

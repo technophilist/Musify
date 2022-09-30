@@ -42,9 +42,6 @@ import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
 import com.example.musify.ui.components.FilterChip
 import com.example.musify.ui.components.GenreCard
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
-import com.google.accompanist.insets.imePadding
-import com.google.accompanist.insets.navigationBarsHeight
-import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
 // fix lazy list scrolling to top after config change
@@ -186,7 +183,7 @@ fun SearchScreen(
                         )
                     }
                     item(span = { GridItemSpan(this.maxLineSpan) }) {
-                        Spacer(modifier = Modifier.navigationBarsHeight())
+                        Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                     }
                 }
             }
@@ -266,7 +263,7 @@ private fun SearchQueryList(
                     )
                 }
                 item {
-                    Spacer(modifier = Modifier.navigationBarsHeight())
+                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }
         }
