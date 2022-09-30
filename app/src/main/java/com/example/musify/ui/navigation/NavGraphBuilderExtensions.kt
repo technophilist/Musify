@@ -42,7 +42,8 @@ fun NavGraphBuilder.searchScreen(
     route: String,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     isPlaybackLoading: Boolean,
-    onSearchResultClicked: (SearchResult) -> Unit
+    onSearchResultClicked: (SearchResult) -> Unit,
+    isFullScreenNowPlayingScreenOverlayVisible: Boolean,
 ) {
     composable(route = route) {
         val viewModel = hiltViewModel<SearchViewModel>()
@@ -102,7 +103,8 @@ fun NavGraphBuilder.searchScreen(
                     if (isLoadingError) viewModel.search(it)
                     controller?.hide()
                 },
-                currentlyPlayingTrack = currentlyPlayingTrack
+                currentlyPlayingTrack = currentlyPlayingTrack,
+                isFullScreenNowPlayingOverlayScreenVisible = isFullScreenNowPlayingScreenOverlayVisible
             )
         }
     }

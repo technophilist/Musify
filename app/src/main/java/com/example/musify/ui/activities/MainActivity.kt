@@ -3,6 +3,7 @@ package com.example.musify.ui.activities
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -85,13 +86,17 @@ private fun MusifyApp() {
         }
     }
     val totalDurationOfCurrentTrackText by playbackViewModel.totalDurationOfCurrentTrackTimeText
+    BackHandler(isNowPlayingScreenVisible) {
+        isNowPlayingScreenVisible = false
+    }
     Box(modifier = Modifier.fillMaxSize()) {
         // the playbackState.currentlyPlayingTrack will automatically be set
         // to null when the playback is stopped
         MusifyNavigation(
             playTrack = playbackViewModel::playTrack,
             currentlyPlayingTrack = playbackState.currentlyPlayingTrack,
-            isPlaybackLoading = playbackState is PlaybackViewModel.PlaybackState.Loading
+            isPlaybackLoading = playbackState is PlaybackViewModel.PlaybackState.Loading,
+            isFullScreenNowPlayingOverlayScreenVisible = isNowPlayingScreenVisible
         )
         SnackbarHost(
             modifier = Modifier

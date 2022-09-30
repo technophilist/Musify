@@ -69,6 +69,7 @@ fun SearchScreen(
     playlistListForSearchQuery: LazyPagingItems<SearchResult.PlaylistSearchResult>,
     onSearchQueryItemClicked: (SearchResult) -> Unit,
     onImeDoneButtonClicked: KeyboardActionScope.(searchText: String) -> Unit,
+    isFullScreenNowPlayingOverlayScreenVisible: Boolean
 ) {
     var searchText by rememberSaveable { mutableStateOf("") }
     var isSearchListVisible by rememberSaveable { mutableStateOf(false) }
@@ -78,7 +79,14 @@ fun SearchScreen(
     }
     val isFilterChipGroupVisible by remember { derivedStateOf { isSearchListVisible } }
     val coroutineScope = rememberCoroutineScope()
-    BackHandler(isSearchListVisible) {
+    // If there are nested back handlers and both of them are enabled, then the
+    // handler that is at the root of the nested hierarchy will consume the
+    // back handler event. Hence, any back handlers declared at a higher level
+    // will not be executed.
+    // if the full screen player is visible, then don't enable this back handler
+    // this will allow the caller to set a back handler that will close the player
+    // before this back handler is executed.
+    BackHandler(isSearchListVisible && !isFullScreenNowPlayingOverlayScreenVisible) {
         // remove focus on the search text field
         focusManager.clearFocus()
         if (searchText.isNotEmpty()) {

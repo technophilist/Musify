@@ -20,7 +20,8 @@ import com.example.musify.ui.navigation.*
 fun MusifyNavigation(
     playTrack: (SearchResult.TrackSearchResult) -> Unit,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?,
-    isPlaybackLoading: Boolean
+    isPlaybackLoading: Boolean,
+    isFullScreenNowPlayingOverlayScreenVisible:Boolean,
 ) {
     val navController = rememberNavController()
     val currentBackStack = navController.currentBackStackEntryAsState()
@@ -54,7 +55,8 @@ fun MusifyNavigation(
                         }
                     is SearchResult.TrackSearchResult -> playTrack(it)
                 }
-            }
+            },
+            isFullScreenNowPlayingScreenOverlayVisible = isFullScreenNowPlayingOverlayScreenVisible
         )
         artistDetailScreen(
             route = MusifyNavigationDestinations.ArtistDetailScreen.route,
