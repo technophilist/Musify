@@ -188,4 +188,16 @@ private class SpotifyServiceSearchStub : SpotifyService {
     ): FeaturedPlaylistsResponse {
         TODO("Not yet implemented")
     }
+
+    override suspend fun getPlaylistsForCategory(
+        token: BearerToken,
+        categoryId: String,
+        market: String,
+        locale: String,
+        timestamp: String,
+        limit: Int,
+        offset: Int
+    ): PlaylistsForSpecificCategoryResponse {
+        TODO("Not yet implemented")
+    }
 }
