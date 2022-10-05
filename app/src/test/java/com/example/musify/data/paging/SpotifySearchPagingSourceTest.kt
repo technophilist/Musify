@@ -178,4 +178,14 @@ private class SpotifyServiceSearchStub : SpotifyService {
         limit: Int
     ): TracksWithAlbumMetadataListResponse = TODO()
 
+    override suspend fun getFeaturedPlaylists(
+        token: BearerToken,
+        market: String,
+        locale: String,
+        timestamp: String,
+        limit: Int,
+        offset: Int
+    ): FeaturedPlaylistsResponse {
+        TODO("Not yet implemented")
+    }
 }
