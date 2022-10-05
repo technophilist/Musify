@@ -16,6 +16,7 @@ object SpotifyEndPoints {
     const val PLAYLIST_TRACKS_ENDPOINT = "v1/playlists/{playlist_id}/tracks"
     const val NEW_RELEASES_ENDPOINT = "v1/browse/new-releases"
     const val FEATURED_PLAYLISTS = "v1/browse/featured-playlists"
+    const val PLAYLISTS_FOR_BESPOKE_CATEGORY = "v1/browse/categories/{category_id}/playlists"
 
     object Defaults {
         const val defaultPlaylistFields =
