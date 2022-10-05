@@ -365,4 +365,16 @@ class SpotifyServiceTest {
             assert(playlistsForSpecificCategoryResponse.playlists.items.isNotEmpty())
         }
     }
+
+    @Test
+    fun getBrowseCategoriesTest_valid_market_and_locale_returnsNonEmptyListOfCategories() {
+        runBlockingWithToken {
+            val browseCategoriesResponse = musicService.getBrowseCategories(
+                token = it,
+                market = "US",
+                locale = "en_US"
+            )
+            assert(browseCategoriesResponse.categories.items.isNotEmpty())
+        }
+    }
 }
