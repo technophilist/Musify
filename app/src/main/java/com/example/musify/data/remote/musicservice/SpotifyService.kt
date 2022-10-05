@@ -107,7 +107,7 @@ interface SpotifyService {
         @Query("market") market: String,
         @Header("Authorization") token: BearerToken
     ): AlbumResponse
-    
+
     @GET(SpotifyEndPoints.SEARCH_ENDPOINT)
     suspend fun search(
         @Query("q") searchQuery: String,
@@ -134,4 +134,12 @@ interface SpotifyService {
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0
     ): PlaylistItemsResponse
+
+    @GET(SpotifyEndPoints.NEW_RELEASES_ENDPOINT)
+    suspend fun getNewReleases(
+        @Header("Authorization") token: BearerToken,
+        @Query("country") market: String,
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0
+    ): NewReleasesResponse
 }

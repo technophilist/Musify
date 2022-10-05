@@ -116,6 +116,15 @@ private class SpotifyServiceSearchStub : SpotifyService {
         TODO("Not yet implemented")
     }
 
+    override suspend fun getNewReleases(
+        token:BearerToken,
+        market: String,
+        limit: Int,
+        offset: Int
+    ): NewReleasesResponse {
+        TODO("Not yet implemented")
+    }
+
 
     override suspend fun getArtistInfoWithId(
         artistId: String,
@@ -146,12 +155,6 @@ private class SpotifyServiceSearchStub : SpotifyService {
         token: BearerToken
     ): AlbumResponse = TODO("Not yet implemented")
 
-    override suspend fun getPlaylistWithId(
-        playlistId: String,
-        market: String,
-        token: BearerToken,
-        fields: String
-    ): PlaylistResponse = TODO("Not yet implemented")
 
     override suspend fun search(
         searchQuery: String,
