@@ -12,6 +12,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.*
 import org.junit.Before
 import org.junit.Test
+import retrofit2.HttpException
 import retrofit2.Retrofit
 
 class SpotifyServiceTest {
@@ -310,6 +311,31 @@ class SpotifyServiceTest {
                 market = "IN",
                 token = it,
             )
+        }
+    }
+
+    @Test
+    fun getNewReleasesTest_valid_market_returnsNotEmptyAlbumListSuccessfully() {
+        runBlockingWithToken {
+            val newlyReleasedAlbums = musicService.getNewReleases(
+                token = it,
+                market = "IN"
+            ).albums
+            assert(newlyReleasedAlbums.items.isNotEmpty())
+        }
+    }
+
+    @Test
+    fun getNewReleasesTest_invalid_market_throws_httpException() {
+        runBlockingWithToken {
+            try {
+                musicService.getNewReleases(
+                    token = it,
+                    market = "xyz"
+                ).albums
+            } catch (exception: Exception) {
+                assert(exception is HttpException)
+            }
         }
     }
 }
