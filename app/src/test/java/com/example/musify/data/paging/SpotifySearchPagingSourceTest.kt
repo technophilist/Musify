@@ -200,4 +200,14 @@ private class SpotifyServiceSearchStub : SpotifyService {
     ): PlaylistsForSpecificCategoryResponse {
         TODO("Not yet implemented")
     }
+
+    override suspend fun getBrowseCategories(
+        token: BearerToken,
+        market: String,
+        locale: String,
+        limit: Int,
+        offset: Int
+    ): BrowseCategoriesResponse {
+        TODO("Not yet implemented")
+    }
 }
