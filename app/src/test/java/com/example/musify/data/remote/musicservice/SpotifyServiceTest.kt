@@ -338,4 +338,17 @@ class SpotifyServiceTest {
             }
         }
     }
+
+    @Test
+    fun getFeaturedPlaylistsTest_valid_market_locale_and_timestamp_returnsNonEmptyPlaylistList() {
+        runBlockingWithToken {
+            val featuredPlaylistsResponse = musicService.getFeaturedPlaylists(
+                token = it,
+                market = "IN",
+                locale = "en_IN",
+                timestamp = "2022-08-05T09:00:00"
+            )
+            assert(featuredPlaylistsResponse.playlists.items.isNotEmpty())
+        }
+    }
 }
