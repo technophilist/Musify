@@ -351,4 +351,18 @@ class SpotifyServiceTest {
             assert(featuredPlaylistsResponse.playlists.items.isNotEmpty())
         }
     }
+
+    @Test
+    fun getPlaylistsForCategory_valid_categoryId_returnsNonEmptyPlaylistList() {
+        runBlockingWithToken {
+            val playlistsForSpecificCategoryResponse = musicService.getPlaylistsForCategory(
+                token = it,
+                categoryId = "hiphop",
+                market = "US",
+                locale = "en_US",
+                timestamp = "2022-08-05T09:00:00"
+            )
+            assert(playlistsForSpecificCategoryResponse.playlists.items.isNotEmpty())
+        }
+    }
 }
