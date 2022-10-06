@@ -1,5 +1,6 @@
 package com.example.musify.data.remote.response
 
+import com.example.musify.domain.FeaturedPlaylists
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
@@ -17,3 +18,13 @@ data class FeaturedPlaylistsResponse(
      */
     data class FeaturedPlaylistItemsResponse(val items: List<PlaylistMetadataResponse>)
 }
+
+/**
+ * A mapper method used to map an instance of [FeaturedPlaylistsResponse] to an
+ * instance of [FeaturedPlaylists].
+ */
+fun FeaturedPlaylistsResponse.toFeaturedPlaylists(): FeaturedPlaylists = FeaturedPlaylists(
+    playlistsDescription = playlistsDescription,
+    playlists = this.playlists.items.map { it.toPlaylistSearchResult() }
+)
+
