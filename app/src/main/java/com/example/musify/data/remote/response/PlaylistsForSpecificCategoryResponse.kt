@@ -1,6 +1,7 @@
 package com.example.musify.data.remote.response
 
 import com.example.musify.data.remote.response.PlaylistMetadataResponse.OwnerNameWrapper
+import com.example.musify.domain.SearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
@@ -32,3 +33,17 @@ data class PlaylistsForSpecificCategoryResponse(val playlists: PlaylistsForSpeci
     data class ImageUrlResponse(val url: String)
 }
 
+/**
+ * A mapper method used to map an instance of [PlaylistsForSpecificCategoryResponse] to
+ * a list of [SearchResult.PlaylistSearchResult].
+ */
+fun PlaylistsForSpecificCategoryResponse.toPlaylistSearchResultList(): List<SearchResult.PlaylistSearchResult> =
+    this.playlists.items.map {
+        SearchResult.PlaylistSearchResult(
+            id = it.id,
+            name = it.name,
+            ownerName = it.ownerName.value,
+            totalNumberOfTracks = it.totalNumberOfTracks.value.toString(),
+            imageUrlString = it.imageUrlList.firstOrNull()?.url
+        )
+    }
