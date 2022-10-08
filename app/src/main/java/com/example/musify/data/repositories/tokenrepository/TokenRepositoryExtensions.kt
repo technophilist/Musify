@@ -4,6 +4,7 @@ import com.example.musify.data.remote.token.BearerToken
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.getAssociatedMusifyErrorType
+import com.fasterxml.jackson.core.JacksonException
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -22,5 +23,8 @@ suspend fun <R> TokenRepository.runCatchingWithToken(block: suspend (BearerToken
     } catch (httpException: HttpException) {
         FetchedResource.Failure(httpException.getAssociatedMusifyErrorType())
     } catch (ioException: IOException) {
-        FetchedResource.Failure(MusifyErrorType.NETWORK_CONNECTION_FAILURE)
+        FetchedResource.Failure(
+            if (ioException is JacksonException) MusifyErrorType.DESERIALIZATION_ERROR
+            else MusifyErrorType.NETWORK_CONNECTION_FAILURE
+        )
     }
