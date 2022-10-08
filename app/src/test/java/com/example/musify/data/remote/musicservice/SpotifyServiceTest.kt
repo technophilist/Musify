@@ -358,9 +358,7 @@ class SpotifyServiceTest {
             val playlistsForSpecificCategoryResponse = musicService.getPlaylistsForCategory(
                 token = it,
                 categoryId = "hiphop",
-                market = "US",
-                locale = "en_US",
-                timestamp = "2022-08-05T09:00:00"
+                market = "US"
             )
             assert(playlistsForSpecificCategoryResponse.playlists.items.isNotEmpty())
         }

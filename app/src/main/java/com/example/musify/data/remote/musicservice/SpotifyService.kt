@@ -167,8 +167,6 @@ interface SpotifyService {
         @Header("Authorization") token: BearerToken,
         @Path("category_id") categoryId: String,
         @Query("country") market: String,
-        @Query("locale") locale: String = "", // ISO 639-1 language code and an uppercase ISO 3166-1 alpha-2 country code, joined by an underscore.
-        @Query("timestamp") timestamp: String = "", // A timestamp in ISO 8601 format: yyyy-MM-ddTHH:mm:ss
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0
     ): PlaylistsForSpecificCategoryResponse
