@@ -21,7 +21,7 @@ fun MusifyNavigation(
     playTrack: (SearchResult.TrackSearchResult) -> Unit,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     isPlaybackLoading: Boolean,
-    isFullScreenNowPlayingOverlayScreenVisible:Boolean,
+    isFullScreenNowPlayingOverlayScreenVisible: Boolean,
 ) {
     val navController = rememberNavController()
     val currentBackStack = navController.currentBackStackEntryAsState()
@@ -33,8 +33,9 @@ fun MusifyNavigation(
     }
     NavHost(
         navController = navController,
-        startDestination = MusifyNavigationDestinations.SearchScreen.route
+        startDestination = MusifyNavigationDestinations.HomeScreen.route
     ) {
+        homeScreen(MusifyNavigationDestinations.HomeScreen.route)
         searchScreen(
             route = MusifyNavigationDestinations.SearchScreen.route,
             currentlyPlayingTrack = currentlyPlayingTrack,
