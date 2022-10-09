@@ -6,6 +6,8 @@ import com.example.musify.data.repositories.artistsrepository.ArtistsRepository
 import com.example.musify.data.repositories.artistsrepository.MusifyArtistsRepository
 import com.example.musify.data.repositories.genresrepository.GenresRepository
 import com.example.musify.data.repositories.genresrepository.MusifyGenresRepository
+import com.example.musify.data.repositories.homefeedrepository.HomeFeedRepository
+import com.example.musify.data.repositories.homefeedrepository.MusifyHomeFeedRepository
 import com.example.musify.data.repositories.searchrepository.MusifySearchRepository
 import com.example.musify.data.repositories.searchrepository.SearchRepository
 import com.example.musify.data.repositories.tracksrepository.MusifyTracksRepository
@@ -32,4 +34,7 @@ abstract class MusicRepositoriesModule {
 
     @Binds
     abstract fun bindSearchRepository(impl: MusifySearchRepository): SearchRepository
+
+    @Binds
+    abstract fun bindHomeFeedRepository(impl: MusifyHomeFeedRepository): HomeFeedRepository
 }
