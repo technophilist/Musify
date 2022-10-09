@@ -17,10 +17,13 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.MusifyBottomNavigation
 import com.example.musify.ui.components.MusifyMiniPlayer
 import com.example.musify.ui.navigation.MusifyBottomNavigationDestinations
+import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.ui.screens.MusifyNavigation
 import com.example.musify.ui.screens.NowPlayingScreen
 import com.example.musify.ui.theme.MusifyTheme
@@ -94,12 +97,14 @@ private fun MusifyApp() {
         )
     }
     var currentlySelectedBottomNavigationItem by remember {
-        mutableStateOf<MusifyBottomNavigationDestinations>(MusifyBottomNavigationDestinations.Search)
+        mutableStateOf<MusifyBottomNavigationDestinations>(MusifyBottomNavigationDestinations.Home)
     }
+    val navController = rememberNavController()
     Box(modifier = Modifier.fillMaxSize()) {
         // the playbackState.currentlyPlayingTrack will automatically be set
         // to null when the playback is stopped
         MusifyNavigation(
+            navController = navController,
             playTrack = playbackViewModel::playTrack,
             currentlyPlayingTrack = playbackState.currentlyPlayingTrack,
             isPlaybackLoading = playbackState is PlaybackViewModel.PlaybackState.Loading,
@@ -162,9 +167,29 @@ private fun MusifyApp() {
                 modifier = Modifier.navigationBarsPadding(),
                 navigationItems = bottomNavigationItems,
                 currentlySelectedItem = currentlySelectedBottomNavigationItem,
-                onItemClick = { currentlySelectedBottomNavigationItem = it }
+                onItemClick = {
+                    currentlySelectedBottomNavigationItem = it
+                    navigateBasedOnBottomNavigationDestination(navController, it)
+                }
             )
         }
+    }
+}
+
+private fun navigateBasedOnBottomNavigationDestination(
+    navController: NavHostController,
+    destination: MusifyBottomNavigationDestinations
+) {
+    when (destination) {
+        MusifyBottomNavigationDestinations.Home -> navController
+            .navigate(MusifyNavigationDestinations.HomeScreen.route) {
+                launchSingleTop = true
+            }
+        MusifyBottomNavigationDestinations.Premium -> {}
+        MusifyBottomNavigationDestinations.Search -> navController
+            .navigate(MusifyNavigationDestinations.SearchScreen.route) {
+                launchSingleTop = true
+            }
     }
 }
 
