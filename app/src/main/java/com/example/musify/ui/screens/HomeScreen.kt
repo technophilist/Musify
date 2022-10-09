@@ -31,6 +31,7 @@ import com.example.musify.ui.components.HomeFeedCard
 @ExperimentalMaterialApi
 @Composable
 fun HomeScreen(
+    timeBasedGreeting: String,
     homeFeedFilters: List<HomeFeedFilters>,
     currentlySelectedHomeFeedFilter: HomeFeedFilters,
     onHomeFeedFilterClick: (HomeFeedFilters) -> Unit,
@@ -47,6 +48,7 @@ fun HomeScreen(
     ) {
         item {
             HeaderRow(
+                timeBasedGreeting = timeBasedGreeting,
                 modifier = Modifier
                     .fillMaxWidth()
                     .statusBarsPadding()
@@ -128,14 +130,14 @@ private fun CarouselLazyRow(
 }
 
 @Composable
-private fun HeaderRow(modifier: Modifier = Modifier) {
+private fun HeaderRow(modifier: Modifier = Modifier, timeBasedGreeting: String) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "Good afternoon",
+            text = timeBasedGreeting,
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.h5
         )
