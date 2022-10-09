@@ -5,9 +5,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.*
@@ -18,12 +18,12 @@ import com.example.musify.ui.navigation.*
 @ExperimentalFoundationApi
 @Composable
 fun MusifyNavigation(
+    navController: NavHostController,
     playTrack: (SearchResult.TrackSearchResult) -> Unit,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     isPlaybackLoading: Boolean,
     isFullScreenNowPlayingOverlayScreenVisible: Boolean,
 ) {
-    val navController = rememberNavController()
     val currentBackStack = navController.currentBackStackEntryAsState()
     val onBackButtonClicked = {
         if (currentBackStack.value?.destination?.route != MusifyNavigationDestinations.SearchScreen.route) {
