@@ -12,3 +12,22 @@ data class PlaylistsForCategory(
     val nameOfCategory: String,
     val associatedPlaylists: List<SearchResult.PlaylistSearchResult>
 )
+
+/**
+ * A mapper method used to map an instance of [PlaylistsForCategory] to
+ * an instance of [HomeFeedCarousel].
+ */
+fun PlaylistsForCategory.toHomeFeedCarousel(): HomeFeedCarousel = associatedPlaylists.map {
+    HomeFeedCarouselCardInfo(
+        id = it.id,
+        imageUrlString = it.imageUrlString ?: "",
+        caption = it.name
+    )
+}.let {
+    HomeFeedCarousel(
+        id = categoryId,
+        title = nameOfCategory,
+        associatedCards = it
+    )
+}
+
