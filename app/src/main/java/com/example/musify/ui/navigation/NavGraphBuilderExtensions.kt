@@ -15,9 +15,11 @@ import androidx.navigation.compose.composable
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.musify.R
+import com.example.musify.domain.HomeFeedFilters
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.screens.AlbumDetailScreen
 import com.example.musify.ui.screens.ArtistDetailScreen
+import com.example.musify.ui.screens.HomeScreen
 import com.example.musify.ui.screens.PlaylistDetailScreen
 import com.example.musify.ui.screens.searchscreen.SearchScreen
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
@@ -28,6 +30,7 @@ import com.example.musify.viewmodels.AlbumDetailViewModel
 import com.example.musify.viewmodels.PlaylistDetailViewModel
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailScreenUiState
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailViewModel
+import com.example.musify.viewmodels.homefeedviewmodel.HomeFeedViewModel
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
 import com.example.musify.viewmodels.searchviewmodel.SearchScreenUiState
 import com.example.musify.viewmodels.searchviewmodel.SearchViewModel
@@ -233,5 +236,21 @@ fun NavGraphBuilder.playlistDetailScreen(
                 isErrorMessageVisible = isErrorMessageVisible
             )
         }
+    }
+}
+
+@ExperimentalMaterialApi
+@ExperimentalFoundationApi
+fun NavGraphBuilder.homeScreen(route: String) {
+    composable(route) {
+        val homeFeedViewModel = hiltViewModel<HomeFeedViewModel>()
+        HomeScreen(
+            timeBasedGreeting = homeFeedViewModel.greetingPhrase,
+            homeFeedFilters = HomeFeedFilters.values().toList(),
+            currentlySelectedHomeFeedFilter = HomeFeedFilters.MUSIC, // TODO
+            onHomeFeedFilterClick = {},
+            carousels = homeFeedViewModel.homeFeedCarousels.value,
+            onHomeFeedCarouselCardClick = {}
+        )
     }
 }
