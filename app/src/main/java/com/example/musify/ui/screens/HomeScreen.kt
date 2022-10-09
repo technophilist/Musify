@@ -92,6 +92,13 @@ fun HomeScreen(
                 onHomeFeedCardClick = { onHomeFeedCarouselCardClick(it) }
             )
         }
+        item {
+            Spacer(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .padding(bottom = 16.dp)
+            )
+        }
     }
 }
 
