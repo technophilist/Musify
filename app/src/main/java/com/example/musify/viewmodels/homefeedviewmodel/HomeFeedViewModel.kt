@@ -9,6 +9,7 @@ import com.example.musify.data.repositories.homefeedrepository.HomeFeedRepositor
 import com.example.musify.data.repositories.homefeedrepository.ISO6391LanguageCode
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
+import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.*
 import com.example.musify.viewmodels.getCountryCode
 import com.example.musify.viewmodels.homefeedviewmodel.greetingphrasegenerator.GreetingPhraseGenerator
@@ -36,6 +37,13 @@ class HomeFeedViewModel @Inject constructor(
     private fun fetchAndAssignHomeFeedCarousels() {
         viewModelScope.launch {
             val carousels = mutableListOf<HomeFeedCarousel>()
+            val languageCode = getApplication<MusifyApplication>()
+                .resources
+                .configuration
+                .locale
+                .language
+                .let(::ISO6391LanguageCode) // TODO test
+
             val newAlbums = async {
                 homeFeedRepository.fetchNewlyReleasedAlbums(getCountryCode(), MapperImageSize.LARGE)
             }
@@ -43,13 +51,13 @@ class HomeFeedViewModel @Inject constructor(
                 homeFeedRepository.fetchFeaturedPlaylistsForCurrentTimeStamp(
                     timestampMillis = System.currentTimeMillis(),
                     countryCode = getCountryCode(),
-                    languageCode = ISO6391LanguageCode("en")// TODO
+                    languageCode = languageCode
                 )
             }
             val categoricalPlaylists = async {
                 homeFeedRepository.fetchPlaylistsBasedOnCategoriesAvailableForCountry(
                     countryCode = getCountryCode(),
-                    languageCode = ISO6391LanguageCode("en") // TODO
+                    languageCode = languageCode
                 )
             }
             newAlbums.awaitFetchedResource {
