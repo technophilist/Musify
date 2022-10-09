@@ -52,11 +52,11 @@ sealed class MusifyNavigationDestinations(val route: String) {
     object PlaylistDetailScreen :
         MusifyNavigationDestinations(
             route = "MusifyNavigationDestinations.AlbumDetailScreen" +
-                "/{playlistId}" +
-                "/{playlistName}" +
-                "/{ownerName}" +
-                "/{numberOfTracks}" +
-                "?encodedImageUrlString={encodedImageUrlString}"
+                    "/{playlistId}" +
+                    "/{playlistName}" +
+                    "/{ownerName}" +
+                    "/{numberOfTracks}" +
+                    "?encodedImageUrlString={encodedImageUrlString}"
         ) {
         const val NAV_ARG_PLAYLIST_ID = "playlistId"
         const val NAV_ARG_PLAYLIST_NAME = "playlistName"
@@ -77,4 +77,6 @@ sealed class MusifyNavigationDestinations(val route: String) {
             return "$routeWithoutUrl?encodedImageUrlString=$encodedImageUrl"
         }
     }
+
+    object HomeScreen : MusifyNavigationDestinations("MusifyNavigationDestinations.HomeScreen")
 }
