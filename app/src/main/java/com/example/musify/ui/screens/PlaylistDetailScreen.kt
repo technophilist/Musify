@@ -12,10 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import com.example.musify.domain.SearchResult
-import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
-import com.example.musify.ui.components.HeaderImageSource
-import com.example.musify.ui.components.ImageHeaderWithMetadata
-import com.example.musify.ui.components.MusifyCompactTrackCard
+import com.example.musify.ui.components.*
 
 
 @ExperimentalMaterialApi
@@ -38,7 +35,10 @@ fun PlaylistDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .statusBarsPadding()
-                .fillMaxSize()
+                .fillMaxSize(),
+            contentPadding = PaddingValues(
+                bottom = MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight
+            )
         ) {
             item {
                 ImageHeaderWithMetadata(

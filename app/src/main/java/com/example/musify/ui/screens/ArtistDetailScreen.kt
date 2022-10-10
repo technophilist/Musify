@@ -68,7 +68,10 @@ fun ArtistDetailScreen(
     Box {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            state = lazyListState
+            state = lazyListState,
+            contentPadding = PaddingValues(
+                bottom = MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight
+            )
         ) {
             artistCoverArtHeaderItem(
                 artistName = artistName,

@@ -10,10 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.musify.domain.SearchResult
-import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
-import com.example.musify.ui.components.HeaderImageSource
-import com.example.musify.ui.components.ImageHeaderWithMetadata
-import com.example.musify.ui.components.MusifyCompactTrackCard
+import com.example.musify.ui.components.*
 
 @ExperimentalMaterialApi
 @Composable
@@ -34,7 +31,10 @@ fun AlbumDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .statusBarsPadding()
-                .fillMaxSize()
+                .fillMaxSize(),
+            contentPadding = PaddingValues(
+                bottom = MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight
+            )
         ) {
             item {
                 ImageHeaderWithMetadata(
