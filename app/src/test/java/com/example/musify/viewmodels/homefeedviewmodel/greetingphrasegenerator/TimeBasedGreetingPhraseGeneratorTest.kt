@@ -12,7 +12,7 @@ class TimeBasedGreetingPhraseGeneratorTest {
             assert(
                 phrase == when (hour) {
                     in 0..11 -> "Good morning"
-                    in 12..15 -> "Good afternoon"
+                    in 12..17 -> "Good afternoon"
                     else -> "Good evening"
                 }
             )
