@@ -25,6 +25,14 @@ import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 
 /**
+ * An object that contains constants related to the [MusifyMiniPlayer]
+ * composable.
+ */
+object MusifyMiniPlayerConstants {
+    val miniPlayerHeight = 60.dp
+}
+
+/**
  * A mini player composable that contains information of the [currentlyPlayingTrack].
  * It also contains 3 icons - Available Devices, Favorite and Play/Pause.
  *
@@ -63,7 +71,10 @@ fun MusifyMiniPlayer(
     DynamicallyThemedSurface(
         modifier = Modifier
             .then(modifier)
-            .heightIn(60.dp, 60.dp) // the height of this composable is fixed
+            .heightIn(
+                MusifyMiniPlayerConstants.miniPlayerHeight,
+                MusifyMiniPlayerConstants.miniPlayerHeight
+            ) // the height of this composable is fixed
             .clip(RoundedCornerShape(8.dp)),
         dynamicThemeResource = dynamicThemeResource,
         dynamicBackgroundType = DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(0.6f))
@@ -112,9 +123,9 @@ fun MusifyMiniPlayer(
             }
             IconButton(
                 onClick = {
-                isLiked = !isLiked
-                onLikedButtonClicked(isLiked)
-            }) {
+                    isLiked = !isLiked
+                    onLikedButtonClicked(isLiked)
+                }) {
                 Icon(
                     imageVector = if (isLiked) Icons.Filled.Favorite
                     else Icons.Filled.FavoriteBorder,
