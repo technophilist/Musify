@@ -244,10 +244,16 @@ fun NavGraphBuilder.playlistDetailScreen(
 fun NavGraphBuilder.homeScreen(route: String) {
     composable(route) {
         val homeFeedViewModel = hiltViewModel<HomeFeedViewModel>()
+        val filters = remember {
+            listOf(
+                HomeFeedFilters.Music,
+                HomeFeedFilters.PodcastsAndShows
+            )
+        }
         HomeScreen(
             timeBasedGreeting = homeFeedViewModel.greetingPhrase,
-            homeFeedFilters = HomeFeedFilters.values().toList(),
-            currentlySelectedHomeFeedFilter = HomeFeedFilters.MUSIC, // TODO
+            homeFeedFilters = filters,
+            currentlySelectedHomeFeedFilter = HomeFeedFilters.None,
             onHomeFeedFilterClick = {},
             carousels = homeFeedViewModel.homeFeedCarousels.value,
             onHomeFeedCarouselCardClick = {}

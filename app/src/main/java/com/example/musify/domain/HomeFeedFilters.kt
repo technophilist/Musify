@@ -1,12 +1,12 @@
 package com.example.musify.domain
 
 /**
- * An enum that contains the different filters that can be applied to
- * the home screen.
- * @param title the title of the filter.
+ * A sealed class hierarchy that contains different filters that can be
+ * applied to make the home screen display different items.
  */
-enum class HomeFeedFilters(val title:String) {
-    MUSIC("Music"),
-    PODCASTS_AND_SHOWS("Podcasts & Shows")
+sealed class HomeFeedFilters(val title: String? = null) {
+    object Music : HomeFeedFilters("Music")
+    object PodcastsAndShows : HomeFeedFilters("Podcasts & Shows")
+    object None : HomeFeedFilters()
 }
 

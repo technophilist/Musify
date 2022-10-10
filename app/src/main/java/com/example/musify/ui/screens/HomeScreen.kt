@@ -77,11 +77,11 @@ fun HomeScreen(
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                homeFeedFilters.forEach {
+                for (homeFeedFilter in homeFeedFilters) {
                     FilterChip(
-                        text = it.title,
-                        onClick = { onHomeFeedFilterClick(it) },
-                        isSelected = it == currentlySelectedHomeFeedFilter
+                        text = homeFeedFilter.title ?: continue,
+                        onClick = { onHomeFeedFilterClick(homeFeedFilter) },
+                        isSelected = homeFeedFilter == currentlySelectedHomeFeedFilter
                     )
                 }
             }
