@@ -21,6 +21,14 @@ import androidx.compose.ui.unit.dp
 import com.example.musify.ui.navigation.MusifyBottomNavigationDestinations
 
 /**
+ * An object that contains constants related to the [MusifyBottomNavigation]
+ * composable.
+ */
+object MusifyBottomNavigationConstants {
+    val navigationHeight = 80.dp
+}
+
+/**
  * A bottom navigation bar composable with a background gradient.
  * Note: The bottom navigation bar has a fixed height of 80dp.
  *
@@ -63,7 +71,10 @@ fun MusifyBottomNavigation(
     Surface(
         modifier = Modifier
             .background(gradientBrush)
-            .heightIn(min = 80.dp, max = 80.dp)
+            .heightIn(
+                min = MusifyBottomNavigationConstants.navigationHeight,
+                max = MusifyBottomNavigationConstants.navigationHeight
+            )
             .then(modifier),
         color = Color.Transparent,
         elevation = 0.dp
