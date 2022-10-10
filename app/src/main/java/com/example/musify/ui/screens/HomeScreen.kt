@@ -26,6 +26,8 @@ import com.example.musify.domain.HomeFeedCarouselCardInfo
 import com.example.musify.domain.HomeFeedFilters
 import com.example.musify.ui.components.FilterChip
 import com.example.musify.ui.components.HomeFeedCard
+import com.example.musify.ui.components.MusifyBottomNavigationConstants
+import com.example.musify.ui.components.MusifyMiniPlayerConstants
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
@@ -42,9 +44,13 @@ fun HomeScreen(
     val isStatusbarSpacerVisible = remember {
         derivedStateOf { lazyColumState.firstVisibleItemIndex > 1 }
     }
+    val lazyColumBottomPaddingValues = remember {
+        MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight
+    }
     LazyColumn(
         state = lazyColumState,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(bottom = lazyColumBottomPaddingValues)
     ) {
         item {
             HeaderRow(
@@ -92,13 +98,6 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth(),
                 carousel = carousel,
                 onHomeFeedCardClick = { onHomeFeedCarouselCardClick(it) }
-            )
-        }
-        item {
-            Spacer(
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .padding(bottom = 16.dp)
             )
         }
     }
