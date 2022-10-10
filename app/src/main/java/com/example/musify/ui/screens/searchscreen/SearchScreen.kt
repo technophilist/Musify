@@ -37,10 +37,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.example.musify.R
 import com.example.musify.domain.Genre
 import com.example.musify.domain.SearchResult
-import com.example.musify.ui.components.DefaultMusifyErrorMessage
-import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
-import com.example.musify.ui.components.FilterChip
-import com.example.musify.ui.components.GenreCard
+import com.example.musify.ui.components.*
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
 import kotlinx.coroutines.launch
 
@@ -228,6 +225,9 @@ private fun SearchQueryList(
                     .background(MaterialTheme.colors.background.copy(alpha = 0.7f))
                     .fillMaxSize(),
                 state = lazyListState,
+                contentPadding = PaddingValues(
+                    bottom = MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight
+                ),
             ) {
                 when (currentlySelectedFilter) {
                     SearchFilter.ALBUMS -> searchAlbumListItems(
