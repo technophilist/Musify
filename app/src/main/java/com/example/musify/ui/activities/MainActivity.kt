@@ -213,11 +213,13 @@ private fun navigateBasedOnBottomNavigationDestination(
     when (destination) {
         MusifyBottomNavigationDestinations.Home -> navController
             .navigate(MusifyNavigationDestinations.HomeScreen.route) {
+                popUpTo(navController.graph.startDestinationId)
                 launchSingleTop = true
             }
         MusifyBottomNavigationDestinations.Premium -> {}
         MusifyBottomNavigationDestinations.Search -> navController
             .navigate(MusifyNavigationDestinations.SearchScreen.route) {
+                popUpTo(navController.graph.startDestinationId)
                 launchSingleTop = true
             }
     }
