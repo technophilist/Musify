@@ -57,7 +57,6 @@ class MainActivity : ComponentActivity() {
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @Composable
-//Todo fix navigation
 private fun MusifyApp() {
     val playbackViewModel = hiltViewModel<PlaybackViewModel>()
     val playbackState by playbackViewModel.playbackState
@@ -213,13 +212,16 @@ private fun navigateBasedOnBottomNavigationDestination(
     when (destination) {
         MusifyBottomNavigationDestinations.Home -> navController
             .navigate(MusifyNavigationDestinations.HomeScreen.route) {
-                popUpTo(navController.graph.startDestinationId)
+                popUpTo(navController.graph.startDestinationId) {
+                    saveState = true
+                }
                 launchSingleTop = true
             }
         MusifyBottomNavigationDestinations.Premium -> {}
         MusifyBottomNavigationDestinations.Search -> navController
             .navigate(MusifyNavigationDestinations.SearchScreen.route) {
                 popUpTo(navController.graph.startDestinationId)
+                restoreState = true
                 launchSingleTop = true
             }
     }
