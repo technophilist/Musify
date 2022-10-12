@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.navArgument
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.*
 
@@ -24,70 +24,54 @@ fun MusifyNavigation(
     isPlaybackLoading: Boolean,
     isFullScreenNowPlayingOverlayScreenVisible: Boolean,
 ) {
-    val currentBackStack = navController.currentBackStackEntryAsState()
-    val onBackButtonClicked = {
-        if (currentBackStack.value?.destination?.route != MusifyNavigationDestinations.SearchScreen.route) {
-            navController.popBackStack()
-        }
-        // don't pop backstack after reaching the search screen
-    }
     NavHost(
         navController = navController,
-        startDestination = MusifyNavigationDestinations.HomeScreen.route
+        startDestination = MusifyBottomNavigationDestinations.Home.route
     ) {
-        homeScreen(
-            route = MusifyNavigationDestinations.HomeScreen.route,
-            onCarouselCardClicked = {
-                navController.navigateBasedOnSearchResult(
-                    searchResult = it.associatedSearchResult,
-                    blockForTrackSearchResult = { track -> playTrack(track) }
+        composable(MusifyBottomNavigationDestinations.Home.route) {
+            val homeScreenNavController = rememberNavController()
+            NavHostWithDetailScreens(
+                navController = homeScreenNavController,
+                startDestination = MusifyNavigationDestinations.HomeScreen.route,
+                playTrack = playTrack,
+                currentlyPlayingTrack = currentlyPlayingTrack,
+                isPlaybackLoading = isPlaybackLoading
+            ) {
+                homeScreen(
+                    route = MusifyNavigationDestinations.HomeScreen.route,
+                    onCarouselCardClicked = {
+                        homeScreenNavController.navigateBasedOnSearchResult(
+                            searchResult = it.associatedSearchResult,
+                            blockForTrackSearchResult = { track -> playTrack(track) }
+                        )
+                    }
                 )
             }
-        )
-        searchScreen(
-            route = MusifyNavigationDestinations.SearchScreen.route,
-            currentlyPlayingTrack = currentlyPlayingTrack,
-            isPlaybackLoading = isPlaybackLoading,
-            onSearchResultClicked = {
-                navController.navigateBasedOnSearchResult(
-                    searchResult = it,
-                    blockForTrackSearchResult = { track -> playTrack(track) }
-                )
-            },
-            isFullScreenNowPlayingScreenOverlayVisible = isFullScreenNowPlayingOverlayScreenVisible
-        )
-        artistDetailScreen(
-            route = MusifyNavigationDestinations.ArtistDetailScreen.route,
-            arguments = listOf(
-                navArgument(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ENCODED_IMAGE_URL_STRING) {
-                    nullable = true
-                }
-            ),
-            onBackButtonClicked = onBackButtonClicked,
-            onAlbumClicked = {
-                navController.navigate(MusifyNavigationDestinations.AlbumDetailScreen.buildRoute(it)) {
-                    launchSingleTop = true
-                }
-            },
-            onPlayTrack = playTrack,
-            currentlyPlayingTrack = currentlyPlayingTrack,
-            isPlaybackLoading = isPlaybackLoading,
-        )
-        albumDetailScreen(
-            route = MusifyNavigationDestinations.AlbumDetailScreen.route,
-            onBackButtonClicked = onBackButtonClicked,
-            onPlayTrack = playTrack,
-            currentlyPlayingTrack = currentlyPlayingTrack,
-            isPlaybackLoading = isPlaybackLoading
-        )
+        }
 
-        playlistDetailScreen(
-            route = MusifyNavigationDestinations.PlaylistDetailScreen.route,
-            onBackButtonClicked = onBackButtonClicked,
-            onPlayTrack = playTrack,
-            currentlyPlayingTrack = currentlyPlayingTrack,
-            isPlaybackLoading = isPlaybackLoading
-        )
+        composable(MusifyBottomNavigationDestinations.Search.route) {
+            val searchScreenNavController = rememberNavController()
+            NavHostWithDetailScreens(
+                navController = searchScreenNavController,
+                startDestination = MusifyNavigationDestinations.SearchScreen.route,
+                playTrack = playTrack,
+                currentlyPlayingTrack = currentlyPlayingTrack,
+                isPlaybackLoading = isPlaybackLoading
+            ) {
+                searchScreen(
+                    route = MusifyNavigationDestinations.SearchScreen.route,
+                    currentlyPlayingTrack = currentlyPlayingTrack,
+                    isPlaybackLoading = isPlaybackLoading,
+                    onSearchResultClicked = {
+                        searchScreenNavController.navigateBasedOnSearchResult(
+                            searchResult = it,
+                            blockForTrackSearchResult = { track -> playTrack(track) }
+                        )
+                    },
+                    isFullScreenNowPlayingScreenOverlayVisible = isFullScreenNowPlayingOverlayScreenVisible
+                )
+            }
+        }
     }
 }
 
@@ -97,26 +81,23 @@ private fun NavHostController.navigateBasedOnSearchResult(
 ) {
     when (searchResult) {
         is SearchResult.AlbumSearchResult -> navigate(
-            MusifyNavigationDestinations.AlbumDetailScreen.buildRoute(
-                searchResult
-            )
-        ) {
-            launchSingleTop = true
-        }
+            MusifyNavigationDestinations
+                .AlbumDetailScreen
+                .buildRoute(searchResult)
+        ) { launchSingleTop = true }
+
         is SearchResult.ArtistSearchResult -> navigate(
-            MusifyNavigationDestinations.ArtistDetailScreen.buildRoute(
-                searchResult
-            )
-        ) {
-            launchSingleTop = true
-        }
+            MusifyNavigationDestinations
+                .ArtistDetailScreen
+                .buildRoute(searchResult)
+        ) { launchSingleTop = true }
+
         is SearchResult.PlaylistSearchResult -> navigate(
-            MusifyNavigationDestinations.PlaylistDetailScreen.buildRoute(
-                searchResult
-            )
-        ) {
-            launchSingleTop = true
-        }
+            MusifyNavigationDestinations
+                .PlaylistDetailScreen
+                .buildRoute(searchResult)
+        ) { launchSingleTop = true }
+
         is SearchResult.TrackSearchResult -> {
             blockForTrackSearchResult(searchResult)
         }
