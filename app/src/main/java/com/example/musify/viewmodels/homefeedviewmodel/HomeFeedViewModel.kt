@@ -19,6 +19,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+// TODO: UI states
 @HiltViewModel
 class HomeFeedViewModel @Inject constructor(
     application: Application,
@@ -116,14 +117,16 @@ class HomeFeedViewModel @Inject constructor(
                 HomeFeedCarouselCardInfo(
                     id = searchResult.id,
                     imageUrlString = searchResult.albumArtUrlString,
-                    caption = searchResult.name
+                    caption = searchResult.name,
+                    associatedSearchResult = searchResult
                 )
             }
             is SearchResult.PlaylistSearchResult -> {
                 HomeFeedCarouselCardInfo(
                     id = searchResult.id,
                     imageUrlString = searchResult.imageUrlString ?: "",
-                    caption = searchResult.name
+                    caption = searchResult.name,
+                    associatedSearchResult = searchResult
                 )
             }
             else -> throw java.lang.IllegalArgumentException("The method supports only the mapping of AlbumSearchResult and PlaylistSearchResult subclasses")

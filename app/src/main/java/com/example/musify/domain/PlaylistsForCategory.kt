@@ -21,7 +21,8 @@ fun PlaylistsForCategory.toHomeFeedCarousel(): HomeFeedCarousel = associatedPlay
     HomeFeedCarouselCardInfo(
         id = it.id,
         imageUrlString = it.imageUrlString ?: "",
-        caption = it.name
+        caption = it.name,
+        associatedSearchResult = it
     )
 }.let {
     HomeFeedCarousel(

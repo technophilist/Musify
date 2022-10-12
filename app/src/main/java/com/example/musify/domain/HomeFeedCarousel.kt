@@ -3,11 +3,14 @@ package com.example.musify.domain
 /**
  * A domain class the represents a single card in a home feed
  * carousel with the specified [id],[imageUrlString] and [caption].
+ * It also contains the [associatedSearchResult] object for this specific
+ * carousel card.
  */
 data class HomeFeedCarouselCardInfo(
     val id: String,
     val imageUrlString: String,
-    val caption: String
+    val caption: String,
+    val associatedSearchResult: SearchResult
 )
 
 /**
