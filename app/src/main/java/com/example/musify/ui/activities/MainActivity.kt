@@ -24,7 +24,6 @@ import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.MusifyBottomNavigation
 import com.example.musify.ui.components.MusifyMiniPlayer
 import com.example.musify.ui.navigation.MusifyBottomNavigationDestinations
-import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.ui.screens.MusifyNavigation
 import com.example.musify.ui.screens.NowPlayingScreen
 import com.example.musify.ui.theme.MusifyTheme
@@ -165,8 +164,20 @@ private fun MusifyApp() {
                 navController = navController,
                 modifier = Modifier.navigationBarsPadding(),
                 navigationItems = bottomNavigationItems,
-                onItemClick = {
-                    navigateBasedOnBottomNavigationDestination(navController, it)
+                onItemClick = { bottomNavigationDestination ->
+                    navController.navigate(bottomNavigationDestination.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            // Save backstack state. This will ensure restoration of
+                            // nested navigation screen when the user comes back to
+                            // the destination.
+                            saveState = true
+                        }
+                        // prevent duplicate destinations when the navigation is
+                        // clicked multiple times
+                        launchSingleTop = true
+                        // restore state if previously saved
+                        restoreState = true
+                    }
                 }
             )
         }
@@ -192,8 +203,8 @@ private fun MusifyBottomNavigationConnectedWithBackStack(
         ?.route
         ?.let {
             when (it) {
-                MusifyNavigationDestinations.HomeScreen.route -> MusifyBottomNavigationDestinations.Home
-                MusifyNavigationDestinations.SearchScreen.route -> MusifyBottomNavigationDestinations.Search
+                MusifyBottomNavigationDestinations.Home.route -> MusifyBottomNavigationDestinations.Home
+                MusifyBottomNavigationDestinations.Search.route -> MusifyBottomNavigationDestinations.Search
                 else -> MusifyBottomNavigationDestinations.Premium
             }
         } ?: MusifyBottomNavigationDestinations.Home
@@ -204,42 +215,4 @@ private fun MusifyBottomNavigationConnectedWithBackStack(
         onItemClick = onItemClick
     )
 }
-
-private fun navigateBasedOnBottomNavigationDestination(
-    navController: NavHostController,
-    destination: MusifyBottomNavigationDestinations
-) {
-    when (destination) {
-        MusifyBottomNavigationDestinations.Home -> navController
-            .navigate(MusifyNavigationDestinations.HomeScreen.route) {
-                popUpTo(navController.graph.startDestinationId) {
-                    // Save backstack state. This will ensure restoration of
-                    // nested navigation screen when the user comes back to
-                    // the destination.
-                    saveState = true
-                }
-                // prevent duplicate destinations when the navigation is
-                // clicked multiple times
-                launchSingleTop = true
-                // restore state if previously saved
-                restoreState = true
-            }
-        MusifyBottomNavigationDestinations.Premium -> {}
-        MusifyBottomNavigationDestinations.Search -> navController
-            .navigate(MusifyNavigationDestinations.SearchScreen.route) {
-                popUpTo(navController.graph.startDestinationId) {
-                    // Save backstack state. This will ensure restoration of
-                    // nested navigation screen when the user comes back to
-                    // the destination.
-                    saveState = true
-                }
-                // prevent duplicate destinations when the navigation is
-                // clicked multiple times
-                launchSingleTop = true
-                // restore state if previously saved
-                restoreState = true
-            }
-    }
-}
-
 
