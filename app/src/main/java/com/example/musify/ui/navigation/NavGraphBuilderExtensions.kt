@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.musify.R
+import com.example.musify.domain.HomeFeedCarouselCardInfo
 import com.example.musify.domain.HomeFeedFilters
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.screens.AlbumDetailScreen
@@ -241,7 +242,10 @@ fun NavGraphBuilder.playlistDetailScreen(
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
-fun NavGraphBuilder.homeScreen(route: String) {
+fun NavGraphBuilder.homeScreen(
+    route: String,
+    onCarouselCardClicked:(HomeFeedCarouselCardInfo)->Unit
+) {
     composable(route) {
         val homeFeedViewModel = hiltViewModel<HomeFeedViewModel>()
         val filters = remember {
@@ -256,7 +260,7 @@ fun NavGraphBuilder.homeScreen(route: String) {
             currentlySelectedHomeFeedFilter = HomeFeedFilters.None,
             onHomeFeedFilterClick = {},
             carousels = homeFeedViewModel.homeFeedCarousels.value,
-            onHomeFeedCarouselCardClick = {}
+            onHomeFeedCarouselCardClick = onCarouselCardClicked
         )
     }
 }

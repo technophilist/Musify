@@ -35,7 +35,10 @@ fun MusifyNavigation(
         navController = navController,
         startDestination = MusifyNavigationDestinations.HomeScreen.route
     ) {
-        homeScreen(MusifyNavigationDestinations.HomeScreen.route)
+        homeScreen(
+            route = MusifyNavigationDestinations.HomeScreen.route,
+            onCarouselCardClicked = {}
+        )
         searchScreen(
             route = MusifyNavigationDestinations.SearchScreen.route,
             currentlyPlayingTrack = currentlyPlayingTrack,
