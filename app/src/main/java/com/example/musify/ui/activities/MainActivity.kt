@@ -213,16 +213,31 @@ private fun navigateBasedOnBottomNavigationDestination(
         MusifyBottomNavigationDestinations.Home -> navController
             .navigate(MusifyNavigationDestinations.HomeScreen.route) {
                 popUpTo(navController.graph.startDestinationId) {
+                    // Save backstack state. This will ensure restoration of
+                    // nested navigation screen when the user comes back to
+                    // the destination.
                     saveState = true
                 }
+                // prevent duplicate destinations when the navigation is
+                // clicked multiple times
                 launchSingleTop = true
+                // restore state if previously saved
+                restoreState = true
             }
         MusifyBottomNavigationDestinations.Premium -> {}
         MusifyBottomNavigationDestinations.Search -> navController
             .navigate(MusifyNavigationDestinations.SearchScreen.route) {
-                popUpTo(navController.graph.startDestinationId)
-                restoreState = true
+                popUpTo(navController.graph.startDestinationId) {
+                    // Save backstack state. This will ensure restoration of
+                    // nested navigation screen when the user comes back to
+                    // the destination.
+                    saveState = true
+                }
+                // prevent duplicate destinations when the navigation is
+                // clicked multiple times
                 launchSingleTop = true
+                // restore state if previously saved
+                restoreState = true
             }
     }
 }
