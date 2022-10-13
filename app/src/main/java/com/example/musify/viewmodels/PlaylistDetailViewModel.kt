@@ -3,6 +3,8 @@ package com.example.musify.viewmodels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.example.musify.data.repositories.tracksrepository.TracksRepository
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
@@ -21,6 +23,6 @@ class PlaylistDetailViewModel @Inject constructor(
         playlistId = playlistId,
         countryCode = getCountryCode(),
         imageSize = MapperImageSize.MEDIUM
-    )
+    ).cachedIn(viewModelScope)
 
 }
