@@ -61,19 +61,6 @@ class HomeFeedViewModel @Inject constructor(
                     languageCode = languageCode
                 )
             }
-            newAlbums.awaitFetchedResource {
-                it.map<SearchResult, HomeFeedCarouselCardInfo>(::toHomeFeedCarouselCardInfo)
-                    .let { homeFeedCarouselCardInfoList ->
-                        carousels.add(
-                            HomeFeedCarousel(
-                                id = "Newly Released Albums",
-                                title = "Newly Released Albums",
-                                associatedCards = homeFeedCarouselCardInfoList
-                            )
-                        )
-                    }
-            }
-
             featuredPlaylists.awaitFetchedResource {
                 it.playlists
                     .map<SearchResult, HomeFeedCarouselCardInfo>(::toHomeFeedCarouselCardInfo)
@@ -82,6 +69,18 @@ class HomeFeedViewModel @Inject constructor(
                             HomeFeedCarousel(
                                 id = "Featured Playlists",
                                 title = "Featured Playlists",
+                                associatedCards = homeFeedCarouselCardInfoList
+                            )
+                        )
+                    }
+            }
+            newAlbums.awaitFetchedResource {
+                it.map<SearchResult, HomeFeedCarouselCardInfo>(::toHomeFeedCarouselCardInfo)
+                    .let { homeFeedCarouselCardInfoList ->
+                        carousels.add(
+                            HomeFeedCarousel(
+                                id = "Newly Released Albums",
+                                title = "Newly Released Albums",
                                 associatedCards = homeFeedCarouselCardInfoList
                             )
                         )
