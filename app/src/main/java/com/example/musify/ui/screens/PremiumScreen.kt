@@ -36,7 +36,7 @@ fun GetPremiumScreen(
             top = 8.dp,
             bottom = MusifyMiniPlayerConstants.miniPlayerHeight + MusifyBottomNavigationConstants.navigationHeight
         ),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         item {
             Spacer(modifier = Modifier.statusBarsPadding())
