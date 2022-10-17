@@ -92,6 +92,10 @@ fun MusifyNavigation(
                 )
             }
         }
+
+        composable(MusifyBottomNavigationDestinations.Premium.route){
+            GetPremiumScreen()
+        }
     }
 }
 
