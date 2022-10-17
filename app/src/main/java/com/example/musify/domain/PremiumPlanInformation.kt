@@ -5,7 +5,7 @@ import com.example.musify.domain.PremiumPlanInformation.PricingInformation
 
 /**
  * A class that models a premium plan that is available for purchase.
- * The [leadingGradientColor] & [trailingGradientColor] properties will be used for generating
+ * The [colorInformation] property will be used for generating
  * a gradient.
  *
  * @param id the id of the plan.
@@ -14,8 +14,6 @@ import com.example.musify.domain.PremiumPlanInformation.PricingInformation
  * @param termsAndConditions the terms and conditions of the plan.
  * @param pricingInformation an instance of [PricingInformation] that is
  * related to the plan.
- * @param leadingGradientColor the dark color that is to be used in the gradient.
- * @param trailingGradientColor the light color that is to be used in the gradient.
  */
 data class PremiumPlanInformation(
     val id: String,
@@ -23,8 +21,7 @@ data class PremiumPlanInformation(
     val highlights: List<String>,
     val termsAndConditions: String,
     val pricingInformation: PricingInformation,
-    val leadingGradientColor: Color,
-    val trailingGradientColor: Color
+    val colorInformation: ColorInformation
 ) {
     /**
      * A class that contains pricing information related to an instance of
@@ -38,6 +35,15 @@ data class PremiumPlanInformation(
         val associatedCardId: String,
         val cost: String,
         val term: String
+    )
+
+    /**
+     * A data class that contains the [leadingGradientColor] and [trailingGradientColor]
+     * that are associated with a particular [PremiumPlanInformation] instance.
+     */
+    data class ColorInformation(
+        val leadingGradientColor: Color,
+        val trailingGradientColor: Color
     )
 }
 
@@ -60,8 +66,10 @@ val defaultPremiumPlans = listOf(
             cost = "From $7",
             term = "For 1 day"
         ),
-        leadingGradientColor = Color(0xFF2F4ABC),
-        trailingGradientColor = Color(0xFF4F99F4)
+        colorInformation = PremiumPlanInformation.ColorInformation(
+            leadingGradientColor = Color(0xFF2F4ABC),
+            trailingGradientColor = Color(0xFF4F99F4)
+        )
     ),
     PremiumPlanInformation(
         id = "premium_individual",
@@ -77,8 +85,10 @@ val defaultPremiumPlans = listOf(
             cost = "Free",
             term = "For 1 month"
         ),
-        leadingGradientColor = Color(0xFF16A96A),
-        trailingGradientColor = Color(0xFF045746),
+        colorInformation = PremiumPlanInformation.ColorInformation(
+            leadingGradientColor = Color(0xFF16A96A),
+            trailingGradientColor = Color(0xFF045746)
+        )
     ),
     PremiumPlanInformation(
         id = "premium_duo",
@@ -97,8 +107,10 @@ val defaultPremiumPlans = listOf(
             cost = "Free",
             term = "For 1 month"
         ),
-        leadingGradientColor = Color(0xff3F3F76),
-        trailingGradientColor = Color(0xff5992C2),
+        colorInformation = PremiumPlanInformation.ColorInformation(
+            leadingGradientColor = Color(0xff3F3F76),
+            trailingGradientColor = Color(0xff5992C2)
+        )
     ),
     PremiumPlanInformation(
         id = "premium_family",
@@ -115,8 +127,10 @@ val defaultPremiumPlans = listOf(
             cost = "Free",
             term = "For 1 month"
         ),
-        leadingGradientColor = Color(0xFF972A8E),
-        trailingGradientColor = Color(0xFF213265)
+        colorInformation = PremiumPlanInformation.ColorInformation(
+            leadingGradientColor = Color(0xFF972A8E),
+            trailingGradientColor = Color(0xFF213265)
+        )
     ),
     PremiumPlanInformation(
         id = "premium_student",
@@ -131,7 +145,9 @@ val defaultPremiumPlans = listOf(
             cost = "Free",
             term = "For 1 month"
         ),
-        leadingGradientColor = Color(0xFFB27049),
-        trailingGradientColor = Color(0xFFF49A24)
+        colorInformation = PremiumPlanInformation.ColorInformation(
+            leadingGradientColor = Color(0xFFB27049),
+            trailingGradientColor = Color(0xFFF49A24)
+        )
     )
 )
