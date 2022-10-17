@@ -41,6 +41,13 @@ fun GetPremiumScreen(
         item {
             Spacer(modifier = Modifier.statusBarsPadding())
         }
+        item {
+            Text(
+                text = "Pick your Premium",
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.h6
+            )
+        }
         items(availablePlans) {
             PlanInformationCard(
                 card = it,
