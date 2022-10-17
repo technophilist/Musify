@@ -63,8 +63,8 @@ private fun PlanInformationCard(
         // y = 0.0f represent  the topmost area
         Brush.linearGradient(
             colors = listOf(
-                card.colorInformation.trailingGradientColor,
-                card.colorInformation.leadingGradientColor
+                card.colorInformation.gradientStartColor,
+                card.colorInformation.gradientEndColor
             ),
             start = Offset(0.0f, 0.0f), // top left
             end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY) // bottom right

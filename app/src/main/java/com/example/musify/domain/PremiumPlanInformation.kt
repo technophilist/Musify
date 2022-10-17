@@ -38,12 +38,12 @@ data class PremiumPlanInformation(
     )
 
     /**
-     * A data class that contains the [leadingGradientColor] and [trailingGradientColor]
+     * A data class that contains the [gradientEndColor] and [gradientStartColor]
      * that are associated with a particular [PremiumPlanInformation] instance.
      */
     data class ColorInformation(
-        val leadingGradientColor: Color,
-        val trailingGradientColor: Color
+        val gradientEndColor: Color,
+        val gradientStartColor: Color
     )
 }
 
@@ -67,8 +67,8 @@ val defaultPremiumPlans = listOf(
             term = "For 1 day"
         ),
         colorInformation = PremiumPlanInformation.ColorInformation(
-            leadingGradientColor = Color(0xFF2F4ABC),
-            trailingGradientColor = Color(0xFF4F99F4)
+            gradientEndColor = Color(0xFF2F4ABC),
+            gradientStartColor = Color(0xFF4F99F4)
         )
     ),
     PremiumPlanInformation(
@@ -86,8 +86,8 @@ val defaultPremiumPlans = listOf(
             term = "For 1 month"
         ),
         colorInformation = PremiumPlanInformation.ColorInformation(
-            leadingGradientColor = Color(0xFF16A96A),
-            trailingGradientColor = Color(0xFF045746)
+            gradientEndColor = Color(0xFF16A96A),
+            gradientStartColor = Color(0xFF045746)
         )
     ),
     PremiumPlanInformation(
@@ -108,8 +108,8 @@ val defaultPremiumPlans = listOf(
             term = "For 1 month"
         ),
         colorInformation = PremiumPlanInformation.ColorInformation(
-            leadingGradientColor = Color(0xff3F3F76),
-            trailingGradientColor = Color(0xff5992C2)
+            gradientEndColor = Color(0xff3F3F76),
+            gradientStartColor = Color(0xff5992C2)
         )
     ),
     PremiumPlanInformation(
@@ -128,8 +128,8 @@ val defaultPremiumPlans = listOf(
             term = "For 1 month"
         ),
         colorInformation = PremiumPlanInformation.ColorInformation(
-            leadingGradientColor = Color(0xFF972A8E),
-            trailingGradientColor = Color(0xFF213265)
+            gradientEndColor = Color(0xFF972A8E),
+            gradientStartColor = Color(0xFF213265)
         )
     ),
     PremiumPlanInformation(
@@ -146,8 +146,8 @@ val defaultPremiumPlans = listOf(
             term = "For 1 month"
         ),
         colorInformation = PremiumPlanInformation.ColorInformation(
-            leadingGradientColor = Color(0xFFB27049),
-            trailingGradientColor = Color(0xFFF49A24)
+            gradientEndColor = Color(0xFFB27049),
+            gradientStartColor = Color(0xFFF49A24)
         )
     )
 )
