@@ -77,8 +77,8 @@ val defaultPremiumPlans = listOf(
             cost = "Free",
             term = "For 1 month"
         ),
-        leadingGradientColor = Color(0xFF045746),
-        trailingGradientColor = Color(0xFF16A96A),
+        leadingGradientColor = Color(0xFF16A96A),
+        trailingGradientColor = Color(0xFF045746),
     ),
     PremiumPlanInformation(
         id = "premium_duo",
@@ -88,7 +88,7 @@ val defaultPremiumPlans = listOf(
             "For couples who live together",
             "Ad-free music listening",
             "Download 10,000 songs/device, on up to 5 devices per account",
-            "Choose 1,3,6 or 12 months of Premium",
+            "Choose 1, 3, 6 or 12 months of Premium",
             "Debit and credit cards accepted"
         ),
         termsAndConditions = "Offer only for users who are new to Premium. Terms and conditions apply.",
@@ -105,7 +105,7 @@ val defaultPremiumPlans = listOf(
         name = "Premium Family",
         highlights = listOf(
             "Add-free music listening",
-            "Choose 1,3,6 or 12 months of Premium",
+            "Choose 1, 3, 6 or 12 months of Premium",
             "Ad-free music listening",
             "Debit and credit cards accepted"
         ),
@@ -115,8 +115,8 @@ val defaultPremiumPlans = listOf(
             cost = "Free",
             term = "For 1 month"
         ),
-        leadingGradientColor = Color(0xFF213265),
-        trailingGradientColor = Color(0xFF972A8E)
+        leadingGradientColor = Color(0xFF972A8E),
+        trailingGradientColor = Color(0xFF213265)
     ),
     PremiumPlanInformation(
         id = "premium_student",
