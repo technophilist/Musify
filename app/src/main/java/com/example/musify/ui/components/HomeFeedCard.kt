@@ -1,16 +1,19 @@
 package com.example.musify.ui.components
 
+import android.graphics.Typeface
+import android.text.TextUtils
+import android.widget.TextView
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 
 /**
@@ -31,6 +34,7 @@ fun HomeFeedCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val mediumContentAlpha = ContentAlpha.medium
     Card(
         modifier = Modifier
             .widthIn(min = 160.dp, max = 160.dp)
@@ -51,14 +55,33 @@ fun HomeFeedCard(
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                modifier = Modifier.alpha(ContentAlpha.medium),
-                text = caption,
-                style = MaterialTheme.typography.caption,
-                fontWeight = FontWeight.Normal,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
+            // TODO min lines not yet supported in compose
+            // switch this out with Text composable once it
+            // becomes available
+            // https://issuetracker.google.com/issues/122476634
+            AndroidView(factory = {
+                TextView(it).apply {
+                    maxLines = 2
+                    // the min lines must be the same as max lines.
+                    // This is because, a card may contain varying
+                    // number of characters. This may cause a card
+                    // with 2 lines of text to have a larger height
+                    // than the cards which have a single line of text.
+                    // This is an issue because, if this composable
+                    // was displayed in a list, it will cause the
+                    // the size of the list to change based on the
+                    // item displayed, which in-turn would make the
+                    // ui behave "janky". This becomes a problem
+                    // especially when this composable is used
+                    // inside a lazy composable.
+                    minLines = maxLines
+                    alpha = mediumContentAlpha
+                    text = caption
+                    ellipsize = TextUtils.TruncateAt.END
+                    setTextAppearance(com.google.android.material.R.style.TextAppearance_MaterialComponents_Caption)
+                    setTypeface(typeface, Typeface.NORMAL)
+                }
+            })
         }
     }
 }
