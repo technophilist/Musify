@@ -62,7 +62,7 @@ private fun PlanInformationCard(
         // x = 0.0f represents the leftmost area
         // y = 0.0f represent  the topmost area
         Brush.linearGradient(
-            colors = listOf(card.lightColor, card.darkColor),
+            colors = listOf(card.trailingGradientColor, card.leadingGradientColor),
             start = Offset(0.0f, 0.0f), // top left
             end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY) // bottom right
         )

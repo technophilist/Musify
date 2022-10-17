@@ -5,7 +5,7 @@ import com.example.musify.domain.PremiumPlanInformation.PricingInformation
 
 /**
  * A class that models a premium plan that is available for purchase.
- * The [darkColor] & [lightColor] properties will be used for generating
+ * The [leadingGradientColor] & [trailingGradientColor] properties will be used for generating
  * a gradient.
  *
  * @param id the id of the plan.
@@ -14,8 +14,8 @@ import com.example.musify.domain.PremiumPlanInformation.PricingInformation
  * @param termsAndConditions the terms and conditions of the plan.
  * @param pricingInformation an instance of [PricingInformation] that is
  * related to the plan.
- * @param darkColor the dark color that is to be used in the gradient.
- * @param lightColor the light color that is to be used in the gradient.
+ * @param leadingGradientColor the dark color that is to be used in the gradient.
+ * @param trailingGradientColor the light color that is to be used in the gradient.
  */
 data class PremiumPlanInformation(
     val id: String,
@@ -23,8 +23,8 @@ data class PremiumPlanInformation(
     val highlights: List<String>,
     val termsAndConditions: String,
     val pricingInformation: PricingInformation,
-    val darkColor: Color,
-    val lightColor: Color
+    val leadingGradientColor: Color,
+    val trailingGradientColor: Color
 ) {
     /**
      * A class that contains pricing information related to an instance of
@@ -60,8 +60,8 @@ val defaultPremiumPlans = listOf(
             cost = "From $7",
             term = "For 1 day"
         ),
-        darkColor = Color(0xFF2F4ABC),
-        lightColor = Color(0xFF4F99F4)
+        leadingGradientColor = Color(0xFF2F4ABC),
+        trailingGradientColor = Color(0xFF4F99F4)
     ),
     PremiumPlanInformation(
         id = "premium_individual",
@@ -77,8 +77,8 @@ val defaultPremiumPlans = listOf(
             cost = "Free",
             term = "For 1 month"
         ),
-        darkColor = Color(0xFF045746),
-        lightColor = Color(0xFF16A96A),
+        leadingGradientColor = Color(0xFF045746),
+        trailingGradientColor = Color(0xFF16A96A),
     ),
     PremiumPlanInformation(
         id = "premium_duo",
@@ -97,8 +97,8 @@ val defaultPremiumPlans = listOf(
             cost = "Free",
             term = "For 1 month"
         ),
-        darkColor = Color(0xff3F3F76),
-        lightColor = Color(0xff5992C2),
+        leadingGradientColor = Color(0xff3F3F76),
+        trailingGradientColor = Color(0xff5992C2),
     ),
     PremiumPlanInformation(
         id = "premium_family",
@@ -115,8 +115,8 @@ val defaultPremiumPlans = listOf(
             cost = "Free",
             term = "For 1 month"
         ),
-        darkColor = Color(0xFF213265),
-        lightColor = Color(0xFF972A8E)
+        leadingGradientColor = Color(0xFF213265),
+        trailingGradientColor = Color(0xFF972A8E)
     ),
     PremiumPlanInformation(
         id = "premium_student",
@@ -131,7 +131,7 @@ val defaultPremiumPlans = listOf(
             cost = "Free",
             term = "For 1 month"
         ),
-        darkColor = Color(0xFFB27049),
-        lightColor = Color(0xFFF49A24)
+        leadingGradientColor = Color(0xFFB27049),
+        trailingGradientColor = Color(0xFFF49A24)
     )
 )
