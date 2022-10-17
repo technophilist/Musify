@@ -116,4 +116,10 @@ dependencies {
 
     // color extraction
     implementation 'androidx.palette:palette-ktx:1.0.0'
+
+    // mdc components for view
+    // This dependency is not needed once the min lines param
+    // for Text composable becomes available in compose
+    // This parameter is needed in the home screen
+    implementation 'com.google.android.material:material:1.6.1'
 }
