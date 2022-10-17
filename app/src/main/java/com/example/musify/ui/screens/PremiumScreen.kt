@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.musify.domain.PremiumPlanInformation
 import com.example.musify.domain.defaultPremiumPlans
+import com.example.musify.ui.components.MusifyBottomNavigationConstants
+import com.example.musify.ui.components.MusifyMiniPlayerConstants
 
 
 @Composable
@@ -30,7 +32,10 @@ fun GetPremiumScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),
-        contentPadding = PaddingValues(vertical = 8.dp),
+        contentPadding = PaddingValues(
+            top = 8.dp,
+            bottom = MusifyMiniPlayerConstants.miniPlayerHeight + MusifyBottomNavigationConstants.navigationHeight
+        ),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
