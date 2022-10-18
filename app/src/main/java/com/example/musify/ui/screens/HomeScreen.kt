@@ -36,7 +36,8 @@ fun HomeScreen(
     onHomeFeedFilterClick: (HomeFeedFilters) -> Unit,
     carousels: List<HomeFeedCarousel>,
     onHomeFeedCarouselCardClick: (HomeFeedCarouselCardInfo) -> Unit,
-    isErrorMessageVisible:Boolean
+    isLoading:Boolean,
+    isErrorMessageVisible: Boolean,
 ) {
     val lazyColumState = rememberLazyListState()
     val isStatusbarSpacerVisible = remember {
@@ -45,76 +46,85 @@ fun HomeScreen(
     val lazyColumBottomPaddingValues = remember {
         MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight
     }
-    LazyColumn(
-        state = lazyColumState,
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = lazyColumBottomPaddingValues)
-    ) {
-        item {
-            HeaderRow(
-                timeBasedGreeting = timeBasedGreeting,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .statusBarsPadding()
-                    .padding(horizontal = 16.dp, vertical = 32.dp)
+    val errorMessageItem = @Composable { modifier: Modifier ->
+        Box(modifier = modifier) {
+            DefaultMusifyErrorMessage(
+                title = "Oops! Something doesn't look right",
+                subtitle = "Please check the internet connection",
+                modifier = Modifier.align(Alignment.Center)
             )
         }
-        stickyHeader {
-            if (isStatusbarSpacerVisible.value) {
-                Spacer(
+
+    }
+    Box {
+        LazyColumn(
+            state = lazyColumState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = lazyColumBottomPaddingValues)
+        ) {
+            item {
+                HeaderRow(
+                    timeBasedGreeting = timeBasedGreeting,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .statusBarsPadding()
+                        .padding(horizontal = 16.dp, vertical = 32.dp)
+                )
+            }
+            stickyHeader {
+                if (isStatusbarSpacerVisible.value) {
+                    Spacer(
+                        modifier = Modifier
+                            .background(MaterialTheme.colors.background)
+                            .fillMaxWidth()
+                            .windowInsetsTopHeight(WindowInsets.statusBars)
+                    )
+                }
+                Row(
                     modifier = Modifier
                         .background(MaterialTheme.colors.background)
                         .fillMaxWidth()
-                        .windowInsetsTopHeight(WindowInsets.statusBars)
-                )
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    for (homeFeedFilter in homeFeedFilters) {
+                        FilterChip(
+                            text = homeFeedFilter.title ?: continue,
+                            onClick = { onHomeFeedFilterClick(homeFeedFilter) },
+                            isSelected = homeFeedFilter == currentlySelectedHomeFeedFilter
+                        )
+                    }
+                }
             }
-            Row(
-                modifier = Modifier
-                    .background(MaterialTheme.colors.background)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                for (homeFeedFilter in homeFeedFilters) {
-                    FilterChip(
-                        text = homeFeedFilter.title ?: continue,
-                        onClick = { onHomeFeedFilterClick(homeFeedFilter) },
-                        isSelected = homeFeedFilter == currentlySelectedHomeFeedFilter
+            if (isErrorMessageVisible) {
+                item {
+                    errorMessageItem(
+                        Modifier
+                            .fillParentMaxSize()
+                            .padding(bottom = lazyColumBottomPaddingValues)
+                    )
+                }
+            } else {
+                // not using keys because the items do not change
+                items(carousels) { carousel ->
+                    Text(
+                        modifier = Modifier.padding(16.dp),
+                        text = carousel.title,
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.h5
+                    )
+                    CarouselLazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        carousel = carousel,
+                        onHomeFeedCardClick = { onHomeFeedCarouselCardClick(it) }
                     )
                 }
             }
         }
-        if(isErrorMessageVisible){
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillParentMaxSize()
-                        .padding(bottom = lazyColumBottomPaddingValues)
-                ){
-                    DefaultMusifyErrorMessage(
-                        title = "Oops! Something doesn't look right",
-                        subtitle = "Please check the internet connection",
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
-        }else{
-            // not using keys because the items do not change
-            items(carousels) { carousel ->
-                Text(
-                    modifier = Modifier.padding(16.dp),
-                    text = carousel.title,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.h5
-                )
-                CarouselLazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    carousel = carousel,
-                    onHomeFeedCardClick = { onHomeFeedCarouselCardClick(it) }
-                )
-            }
-        }
-
+        DefaultMusifyLoadingAnimation(
+            isVisible = isLoading,
+            modifier = Modifier.align(Alignment.Center)
+        )
     }
 }
 

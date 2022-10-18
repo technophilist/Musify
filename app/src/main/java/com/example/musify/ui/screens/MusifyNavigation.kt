@@ -120,7 +120,8 @@ private fun NavGraphBuilder.homeScreen(
             onHomeFeedFilterClick = {},
             carousels = homeFeedViewModel.homeFeedCarousels.value,
             onHomeFeedCarouselCardClick = onCarouselCardClicked,
-            isErrorMessageVisible = homeFeedViewModel.uiState.value == HomeFeedViewModel.HomeFeedUiState.ERROR
+            isErrorMessageVisible = homeFeedViewModel.uiState.value == HomeFeedViewModel.HomeFeedUiState.ERROR,
+            isLoading = homeFeedViewModel.uiState.value == HomeFeedViewModel.HomeFeedUiState.LOADING
         )
     }
 }
