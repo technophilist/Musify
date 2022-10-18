@@ -40,7 +40,6 @@ fun NowPlayingScreen(
     onSkipNextButtonClicked: () -> Unit,
     onRepeatButtonClicked: () -> Unit
 ) {
-
     var isImageLoadingPlaceholderVisible by remember { mutableStateOf(true) }
     val dynamicThemeResource = remember(currentlyPlayingTrack) {
         DynamicThemeResource.FromImageUrl(currentlyPlayingTrack.imageUrlString)
@@ -49,26 +48,30 @@ fun NowPlayingScreen(
         DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(0.6f))
     }
     DynamicallyThemedSurface(
-        dynamicThemeResource = dynamicThemeResource, dynamicBackgroundType = dynamicBackgroundType
+        dynamicThemeResource = dynamicThemeResource,
+        dynamicBackgroundType = dynamicBackgroundType
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
-                .padding(bottom = 8.dp)
+                .systemBarsPadding()
                 .padding(start = 16.dp, end = 16.dp)
         ) {
-            Header(modifier = Modifier.fillMaxWidth(),
+            Header(
+                modifier = Modifier.fillMaxWidth(),
                 onCloseButtonClicked = onCloseButtonClicked,
-                onTrailingButtonClick = {/*TODO*/ })
-            AsyncImageWithPlaceholder(modifier = Modifier
+                onTrailingButtonClick = {/*TODO*/ }
+            )
+            AsyncImageWithPlaceholder(
+                modifier = Modifier
                 .size(500.dp)
                 .aspectRatio(1f),
                 model = currentlyPlayingTrack.imageUrlString,
                 contentDescription = null,
                 onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
                 isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
-                onImageLoading = { isImageLoadingPlaceholderVisible = true })
+                onImageLoading = { isImageLoadingPlaceholderVisible = true }
+            )
             Text(
                 text = currentlyPlayingTrack.name,
                 fontWeight = FontWeight.Bold,
@@ -148,7 +151,8 @@ private fun Footer(
 ) {
 
     Row(
-        modifier = modifier, horizontalArrangement = Arrangement.SpaceBetween
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         val availableDevicesIcon = painterResource(id = R.drawable.ic_available_devices)
         IconButton(onClick = onAvailableDevicesButtonClicked,
