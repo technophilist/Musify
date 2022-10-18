@@ -24,10 +24,7 @@ import com.example.musify.R
 import com.example.musify.domain.HomeFeedCarousel
 import com.example.musify.domain.HomeFeedCarouselCardInfo
 import com.example.musify.domain.HomeFeedFilters
-import com.example.musify.ui.components.FilterChip
-import com.example.musify.ui.components.HomeFeedCard
-import com.example.musify.ui.components.MusifyBottomNavigationConstants
-import com.example.musify.ui.components.MusifyMiniPlayerConstants
+import com.example.musify.ui.components.*
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
@@ -38,7 +35,8 @@ fun HomeScreen(
     currentlySelectedHomeFeedFilter: HomeFeedFilters,
     onHomeFeedFilterClick: (HomeFeedFilters) -> Unit,
     carousels: List<HomeFeedCarousel>,
-    onHomeFeedCarouselCardClick: (HomeFeedCarouselCardInfo) -> Unit
+    onHomeFeedCarouselCardClick: (HomeFeedCarouselCardInfo) -> Unit,
+    isErrorMessageVisible:Boolean
 ) {
     val lazyColumState = rememberLazyListState()
     val isStatusbarSpacerVisible = remember {
@@ -86,20 +84,37 @@ fun HomeScreen(
                 }
             }
         }
-        // not using keys because the items do not change
-        items(carousels) { carousel ->
-            Text(
-                modifier = Modifier.padding(16.dp),
-                text = carousel.title,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.h5
-            )
-            CarouselLazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                carousel = carousel,
-                onHomeFeedCardClick = { onHomeFeedCarouselCardClick(it) }
-            )
+        if(isErrorMessageVisible){
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillParentMaxSize()
+                        .padding(bottom = lazyColumBottomPaddingValues)
+                ){
+                    DefaultMusifyErrorMessage(
+                        title = "Oops! Something doesn't look right",
+                        subtitle = "Please check the internet connection",
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+            }
+        }else{
+            // not using keys because the items do not change
+            items(carousels) { carousel ->
+                Text(
+                    modifier = Modifier.padding(16.dp),
+                    text = carousel.title,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h5
+                )
+                CarouselLazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    carousel = carousel,
+                    onHomeFeedCardClick = { onHomeFeedCarouselCardClick(it) }
+                )
+            }
         }
+
     }
 }
 

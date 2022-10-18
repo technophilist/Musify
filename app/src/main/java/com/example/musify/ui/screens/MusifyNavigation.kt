@@ -119,7 +119,8 @@ private fun NavGraphBuilder.homeScreen(
             currentlySelectedHomeFeedFilter = HomeFeedFilters.None,
             onHomeFeedFilterClick = {},
             carousels = homeFeedViewModel.homeFeedCarousels.value,
-            onHomeFeedCarouselCardClick = onCarouselCardClicked
+            onHomeFeedCarouselCardClick = onCarouselCardClicked,
+            isErrorMessageVisible = homeFeedViewModel.uiState.value == HomeFeedViewModel.HomeFeedUiState.ERROR
         )
     }
 }
