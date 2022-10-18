@@ -39,12 +39,8 @@ class HomeFeedViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = HomeFeedUiState.LOADING
             val carousels = mutableListOf<HomeFeedCarousel>()
-            val languageCode = getApplication<MusifyApplication>()
-                .resources
-                .configuration
-                .locale
-                .language
-                .let(::ISO6391LanguageCode) // TODO test
+            val languageCode =
+                getApplication<MusifyApplication>().resources.configuration.locale.language.let(::ISO6391LanguageCode) // TODO test
             val countryCode = getCountryCode()
             val newAlbums = async {
                 homeFeedRepository.fetchNewlyReleasedAlbums(countryCode, MapperImageSize.LARGE)
@@ -58,13 +54,11 @@ class HomeFeedViewModel @Inject constructor(
             }
             val categoricalPlaylists = async {
                 homeFeedRepository.fetchPlaylistsBasedOnCategoriesAvailableForCountry(
-                    countryCode = countryCode,
-                    languageCode = languageCode
+                    countryCode = countryCode, languageCode = languageCode
                 )
             }
             featuredPlaylists.awaitFetchedResourceUpdatingUiState {
-                it.playlists
-                    .map<SearchResult, HomeFeedCarouselCardInfo>(::toHomeFeedCarouselCardInfo)
+                it.playlists.map<SearchResult, HomeFeedCarouselCardInfo>(::toHomeFeedCarouselCardInfo)
                     .let { homeFeedCarouselCardInfoList ->
                         carousels.add(
                             HomeFeedCarousel(
@@ -75,7 +69,7 @@ class HomeFeedViewModel @Inject constructor(
                         )
                     }
             }
-            newAlbums.awaitFetchedResourceUpdatingUiState{
+            newAlbums.awaitFetchedResourceUpdatingUiState {
                 it.map<SearchResult, HomeFeedCarouselCardInfo>(::toHomeFeedCarouselCardInfo)
                     .let { homeFeedCarouselCardInfoList ->
                         carousels.add(
@@ -103,20 +97,17 @@ class HomeFeedViewModel @Inject constructor(
      * "onError" and "onSuccess" callbacks to the [awaitFetchedResource].
      * @see [awaitFetchedResource]
      */
-    private suspend fun <FetchedResourceType> Deferred<FetchedResource<FetchedResourceType, MusifyErrorType>>.awaitFetchedResourceUpdatingUiState(onSuccess:(FetchedResourceType)->Unit) {
-        awaitFetchedResource(
-            onError = {
-                if (_uiState.value == HomeFeedUiState.ERROR) {
-                    _uiState.value = HomeFeedUiState.ERROR
-                }
-            },
-            onSuccess = {
-                if (_uiState.value == HomeFeedUiState.IDLE) {
-                    _uiState.value = HomeFeedUiState.IDLE
-                }
-                onSuccess(it)
-            }
-        )
+    private suspend fun <FetchedResourceType> Deferred<FetchedResource<FetchedResourceType, MusifyErrorType>>.awaitFetchedResourceUpdatingUiState(
+        onSuccess: (FetchedResourceType) -> Unit
+    ) {
+        awaitFetchedResource(onError = {
+            if (_uiState.value == HomeFeedUiState.ERROR) return@awaitFetchedResource
+            _uiState.value = HomeFeedUiState.ERROR
+        }, onSuccess = {
+            onSuccess(it)
+            if (_uiState.value == HomeFeedUiState.IDLE) return@awaitFetchedResource
+            _uiState.value = HomeFeedUiState.IDLE
+        })
     }
 
     /**
@@ -128,8 +119,7 @@ class HomeFeedViewModel @Inject constructor(
      * the [onSuccess]'s parameter will contain [FetchedResource.Success.data].
      */
     private suspend fun <FetchedResourceType> Deferred<FetchedResource<FetchedResourceType, MusifyErrorType>>.awaitFetchedResource(
-        onError: (MusifyErrorType) -> Unit,
-        onSuccess: (FetchedResourceType) -> Unit
+        onError: (MusifyErrorType) -> Unit, onSuccess: (FetchedResourceType) -> Unit
     ) {
         val fetchedResourceResult = this.await()
         if (fetchedResourceResult !is FetchedResource.Success) {
@@ -165,5 +155,5 @@ class HomeFeedViewModel @Inject constructor(
      * An enum class that contains the different UI states associated
      * with a screen that displays the home feed.
      */
-    enum class HomeFeedUiState { IDLE,LOADING,ERROR }
+    enum class HomeFeedUiState { IDLE, LOADING, ERROR }
 }
