@@ -8,10 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Surface
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -40,11 +37,9 @@ class MainActivity : ComponentActivity() {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setContent {
             MusifyTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
+                Surface(modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background,
-                    content = { MusifyApp() }
-                )
+                    content = { MusifyApp() })
             }
         }
     }
@@ -105,19 +100,21 @@ private fun MusifyApp() {
             isPlaybackLoading = playbackState is PlaybackViewModel.PlaybackState.Loading,
             isFullScreenNowPlayingOverlayScreenVisible = isNowPlayingScreenVisible
         )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-        ) {
-            androidx.compose.animation.AnimatedVisibility(
-                visible = playbackState.currentlyPlayingTrack != null || playbackState.previouslyPlayingTrack != null,
-                enter = fadeIn() + slideInVertically { it },
-                exit = fadeOut() + slideOutVertically { -it },
-            ) {
-                playerTrack?.let {
+        Column(modifier = Modifier.align(Alignment.BottomCenter)) {
+            AnimatedContent(
+                modifier = Modifier.fillMaxWidth(),
+                targetState = playerTrack
+            ) { state ->
+                if (state == null) {
+                    SnackbarHost(hostState = snackbarHostState)
+                } else {
                     ExpandableMiniPlayerWithSnackbar(
-                        track = it,
+                        modifier = Modifier
+                            .animateEnterExit(
+                                enter = fadeIn() + slideInVertically { it },
+                                exit = fadeOut() + slideOutVertically { -it }
+                            ),
+                        track = playerTrack!!,
                         onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack,
                         onPlayButtonClicked = { trackToPlay -> onPlayButtonClicked(trackToPlay) },
                         isPlaybackPaused = isPlaybackPaused,
@@ -128,6 +125,7 @@ private fun MusifyApp() {
                     )
                 }
             }
+
             MusifyBottomNavigationConnectedWithBackStack(
                 navController = navController,
                 modifier = Modifier.navigationBarsPadding(),
@@ -146,8 +144,7 @@ private fun MusifyApp() {
                         // restore state if previously saved
                         restoreState = true
                     }
-                }
-            )
+                })
         }
     }
 }
@@ -166,10 +163,8 @@ private fun MusifyBottomNavigationConnectedWithBackStack(
     onItemClick: (MusifyBottomNavigationDestinations) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val currentlySelectedItem = navController.currentBackStackEntryAsState().value
-        ?.destination
-        ?.route
-        ?.let {
+    val currentlySelectedItem =
+        navController.currentBackStackEntryAsState().value?.destination?.route?.let {
             when (it) {
                 MusifyBottomNavigationDestinations.Home.route -> MusifyBottomNavigationDestinations.Home
                 MusifyBottomNavigationDestinations.Search.route -> MusifyBottomNavigationDestinations.Search
