@@ -94,7 +94,7 @@ fun MusifyNavigation(
             }
         }
 
-        composable(MusifyBottomNavigationDestinations.Premium.route){
+        composable(MusifyBottomNavigationDestinations.Premium.route) {
             GetPremiumScreen()
         }
     }
@@ -122,7 +122,8 @@ private fun NavGraphBuilder.homeScreen(
             carousels = homeFeedViewModel.homeFeedCarousels.value,
             onHomeFeedCarouselCardClick = onCarouselCardClicked,
             isErrorMessageVisible = homeFeedViewModel.uiState.value == HomeFeedViewModel.HomeFeedUiState.ERROR,
-            isLoading = homeFeedViewModel.uiState.value == HomeFeedViewModel.HomeFeedUiState.LOADING
+            isLoading = homeFeedViewModel.uiState.value == HomeFeedViewModel.HomeFeedUiState.LOADING,
+            onErrorRetryButtonClick = { /*TODO*/ }
         )
     }
 }

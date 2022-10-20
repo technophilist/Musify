@@ -36,7 +36,8 @@ fun HomeScreen(
     onHomeFeedFilterClick: (HomeFeedFilters) -> Unit,
     carousels: List<HomeFeedCarousel>,
     onHomeFeedCarouselCardClick: (HomeFeedCarouselCardInfo) -> Unit,
-    isLoading:Boolean,
+    onErrorRetryButtonClick:()->Unit,
+    isLoading: Boolean,
     isErrorMessageVisible: Boolean,
 ) {
     val lazyColumState = rememberLazyListState()
@@ -47,14 +48,17 @@ fun HomeScreen(
         MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight
     }
     val errorMessageItem = @Composable { modifier: Modifier ->
-        Box(modifier = modifier) {
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             DefaultMusifyErrorMessage(
                 title = "Oops! Something doesn't look right",
                 subtitle = "Please check the internet connection",
-                modifier = Modifier.align(Alignment.Center)
+                onRetryButtonClicked = onErrorRetryButtonClick
             )
         }
-
     }
     Box {
         LazyColumn(
