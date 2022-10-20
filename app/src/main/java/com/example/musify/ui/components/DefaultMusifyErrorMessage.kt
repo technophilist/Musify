@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
  * styling of the both the [title] and [subtitle].
  * @param modifier the modifier to be applied to the composable.
  */
+@Deprecated(message = "Use the other overload.")
 @Composable
 fun DefaultMusifyErrorMessage(
     title: String,
