@@ -277,6 +277,7 @@ private fun SearchQueryList(
 }
 
 
+@ExperimentalMaterialApi
 @Composable
 private fun FilterChipGroup(
     scrollState: ScrollState,
@@ -306,6 +307,7 @@ private fun FilterChipGroup(
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun SearchBarWithFilterChips(
     searchText: String,

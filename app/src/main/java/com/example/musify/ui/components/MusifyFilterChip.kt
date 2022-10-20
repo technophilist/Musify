@@ -1,11 +1,7 @@
 package com.example.musify.ui.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +17,7 @@ import androidx.compose.ui.unit.dp
  * Based on the selected state of the composable, different styles will be
  * applied.
  */
+@ExperimentalMaterialApi
 @Composable
 fun MusifyFilterChip(
     text: String,
@@ -28,16 +25,16 @@ fun MusifyFilterChip(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false
 ) {
-    OutlinedButton(
+    FilterChip(
         modifier = modifier,
+        selected = isSelected,
         onClick = onClick,
-        shape = RoundedCornerShape(50.dp),
-        colors = ButtonDefaults.outlinedButtonColors(
-            backgroundColor = if (isSelected) MaterialTheme.colors.primary.copy(alpha = 0.7f)
-            else MaterialTheme.colors.surface,
-        ),
         border = if (isSelected) BorderStroke(1.dp, MaterialTheme.colors.primary)
         else ButtonDefaults.outlinedBorder,
+        colors = ChipDefaults.filterChipColors(
+            backgroundColor = if (isSelected) MaterialTheme.colors.primary.copy(alpha = 0.7f)
+            else MaterialTheme.colors.surface
+        ),
         content = { Text(text = text, color = Color.White) }
     )
 }
