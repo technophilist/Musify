@@ -123,7 +123,7 @@ private fun NavGraphBuilder.homeScreen(
             onHomeFeedCarouselCardClick = onCarouselCardClicked,
             isErrorMessageVisible = homeFeedViewModel.uiState.value == HomeFeedViewModel.HomeFeedUiState.ERROR,
             isLoading = homeFeedViewModel.uiState.value == HomeFeedViewModel.HomeFeedUiState.LOADING,
-            onErrorRetryButtonClick = { /*TODO*/ }
+            onErrorRetryButtonClick = homeFeedViewModel::refreshFeed
         )
     }
 }
