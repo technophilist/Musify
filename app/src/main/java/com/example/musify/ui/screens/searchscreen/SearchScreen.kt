@@ -296,7 +296,7 @@ private fun FilterChipGroup(
 
         Spacer(modifier = Modifier.width(startPadding))
         filters.forEach {
-            FilterChip(
+            MusifyFilterChip(
                 text = it.filterLabel,
                 onClick = { onFilterClicked(it) },
                 isSelected = it == currentlySelectedFilter

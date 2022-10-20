@@ -88,7 +88,7 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     for (homeFeedFilter in homeFeedFilters) {
-                        FilterChip(
+                        MusifyFilterChip(
                             text = homeFeedFilter.title ?: continue,
                             onClick = { onHomeFeedFilterClick(homeFeedFilter) },
                             isSelected = homeFeedFilter == currentlySelectedHomeFeedFilter

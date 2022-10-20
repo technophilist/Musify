@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
  * applied.
  */
 @Composable
-fun FilterChip(
+fun MusifyFilterChip(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
