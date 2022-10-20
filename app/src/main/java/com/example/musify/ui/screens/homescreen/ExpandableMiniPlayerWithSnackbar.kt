@@ -1,4 +1,4 @@
-package com.example.musify.ui.screens
+package com.example.musify.ui.screens.homescreen
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.MusifyMiniPlayer
+import com.example.musify.ui.screens.NowPlayingScreen
 import com.example.musify.viewmodels.PlaybackViewModel
 import kotlinx.coroutines.flow.Flow
 

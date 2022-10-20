@@ -23,6 +23,7 @@ import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyBottomNavigationDestinations
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.ui.navigation.NavHostWithDetailScreens
+import com.example.musify.ui.screens.homescreen.HomeScreen
 import com.example.musify.ui.screens.searchscreen.SearchScreen
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
