@@ -89,6 +89,11 @@ class HomeFeedViewModel @Inject constructor(
         }
     }
 
+    fun refreshFeed() {
+        if (_uiState.value == HomeFeedUiState.LOADING) return
+        viewModelScope.launch { fetchAndAssignHomeFeedCarousels() }
+    }
+
     /**
      * A utility function that sets the appropriate [_uiState] based on
      * the result of [Deferred.await]. It uses [awaitFetchedResource]
