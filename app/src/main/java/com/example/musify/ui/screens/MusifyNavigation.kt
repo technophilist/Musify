@@ -198,7 +198,8 @@ private fun NavGraphBuilder.searchScreen(
                     controller?.hide()
                 },
                 currentlyPlayingTrack = currentlyPlayingTrack,
-                isFullScreenNowPlayingOverlayScreenVisible = isFullScreenNowPlayingScreenOverlayVisible
+                isFullScreenNowPlayingOverlayScreenVisible = isFullScreenNowPlayingScreenOverlayVisible,
+                onErrorRetryButtonClick = viewModel::search
             )
         }
     }
