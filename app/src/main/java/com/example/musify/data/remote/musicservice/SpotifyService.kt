@@ -53,7 +53,7 @@ fun SupportedSpotifyGenres.toGenre(): Genre {
         Genre.GenreType.SLEEP -> "Sleep"
     }
     return Genre(
-        id = "${this.name} $ordinal", // TODO
+        id = "$ordinal:${this.name} ",
         label = name,
         genreType = genreType
     )
