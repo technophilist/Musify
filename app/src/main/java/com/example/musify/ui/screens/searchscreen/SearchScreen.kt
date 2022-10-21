@@ -36,6 +36,17 @@ import com.example.musify.ui.components.*
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
 import kotlinx.coroutines.launch
 
+/**
+ * A data class that contains all the different paging items associated
+ * with the[SearchScreen].
+ */
+data class PagingItemsForSearchScreen(
+    val albumListForSearchQuery: LazyPagingItems<SearchResult.AlbumSearchResult>,
+    val artistListForSearchQuery: LazyPagingItems<SearchResult.ArtistSearchResult>,
+    val tracksListForSearchQuery: LazyPagingItems<SearchResult.TrackSearchResult>,
+    val playlistListForSearchQuery: LazyPagingItems<SearchResult.PlaylistSearchResult>
+)
+
 // fix lazy list scrolling to top after config change
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
@@ -44,6 +55,7 @@ import kotlinx.coroutines.launch
 fun SearchScreen(
     genreList: List<Genre>,
     searchScreenFilters: List<SearchFilter>,
+    pagingItems: PagingItemsForSearchScreen,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     currentlySelectedFilter: SearchFilter,
     onSearchFilterChanged: (SearchFilter) -> Unit,
@@ -52,10 +64,6 @@ fun SearchScreen(
     onErrorRetryButtonClick: (searchQuery: String) -> Unit,
     isLoading: Boolean,
     isSearchErrorMessageVisible: Boolean,
-    albumListForSearchQuery: LazyPagingItems<SearchResult.AlbumSearchResult>,
-    artistListForSearchQuery: LazyPagingItems<SearchResult.ArtistSearchResult>,
-    tracksListForSearchQuery: LazyPagingItems<SearchResult.TrackSearchResult>,
-    playlistListForSearchQuery: LazyPagingItems<SearchResult.PlaylistSearchResult>,
     onSearchQueryItemClicked: (SearchResult) -> Unit,
     onImeDoneButtonClicked: KeyboardActionScope.(searchText: String) -> Unit,
     isFullScreenNowPlayingOverlayScreenVisible: Boolean
@@ -128,10 +136,7 @@ fun SearchScreen(
         ) { targetState ->
             when (targetState) {
                 true -> SearchQueryList(
-                    albumListForSearchQuery = albumListForSearchQuery,
-                    artistListForSearchQuery = artistListForSearchQuery,
-                    tracksListForSearchQuery = tracksListForSearchQuery,
-                    playlistListForSearchQuery = playlistListForSearchQuery,
+                    pagingItems = pagingItems,
                     onItemClick = { onSearchQueryItemClicked(it) },
                     isLoadingPlaceholderVisible = { item ->
                         isSearchItemLoadingPlaceholderVisibleMap.getOrPut(item) { false }
@@ -153,7 +158,7 @@ fun SearchScreen(
                 false -> GenresGrid(
                     modifier = Modifier
                         .background(MaterialTheme.colors.background)
-                        .padding(top= 16.dp),
+                        .padding(top = 16.dp),
                     availableGenres = genreList,
                     onGenreItemClick = onGenreItemClick
                 )
@@ -165,10 +170,7 @@ fun SearchScreen(
 @ExperimentalMaterialApi
 @Composable
 private fun SearchQueryList(
-    albumListForSearchQuery: LazyPagingItems<SearchResult.AlbumSearchResult>,
-    artistListForSearchQuery: LazyPagingItems<SearchResult.ArtistSearchResult>,
-    tracksListForSearchQuery: LazyPagingItems<SearchResult.TrackSearchResult>,
-    playlistListForSearchQuery: LazyPagingItems<SearchResult.PlaylistSearchResult>,
+    pagingItems: PagingItemsForSearchScreen,
     onItemClick: (SearchResult) -> Unit,
     currentlySelectedFilter: SearchFilter,
     isLoadingPlaceholderVisible: (SearchResult) -> Boolean,
@@ -207,14 +209,14 @@ private fun SearchQueryList(
             ) {
                 when (currentlySelectedFilter) {
                     SearchFilter.ALBUMS -> searchAlbumListItems(
-                        albumListForSearchQuery = albumListForSearchQuery,
+                        albumListForSearchQuery = pagingItems.albumListForSearchQuery,
                         onItemClick = onItemClick,
                         isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
                         onImageLoading = onImageLoading,
                         onImageLoadingFinished = onImageLoadingFinished
                     )
                     SearchFilter.TRACKS -> searchTrackListItems(
-                        tracksListForSearchQuery = tracksListForSearchQuery,
+                        tracksListForSearchQuery = pagingItems.tracksListForSearchQuery,
                         onItemClick = onItemClick,
                         isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
                         onImageLoading = onImageLoading,
@@ -222,7 +224,7 @@ private fun SearchQueryList(
                         currentlyPlayingTrack = currentlyPlayingTrack
                     )
                     SearchFilter.ARTISTS -> searchArtistListItems(
-                        artistListForSearchQuery = artistListForSearchQuery,
+                        artistListForSearchQuery = pagingItems.artistListForSearchQuery,
                         onItemClick = onItemClick,
                         isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
                         onImageLoading = onImageLoading,
@@ -230,7 +232,7 @@ private fun SearchQueryList(
                         artistImageErrorPainter = artistImageErrorPainter
                     )
                     SearchFilter.PLAYLISTS -> searchPlaylistListItems(
-                        playlistListForSearchQuery = playlistListForSearchQuery,
+                        playlistListForSearchQuery = pagingItems.playlistListForSearchQuery,
                         onItemClick = onItemClick,
                         isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
                         onImageLoading = onImageLoading,

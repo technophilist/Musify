@@ -24,6 +24,7 @@ import com.example.musify.ui.navigation.MusifyBottomNavigationDestinations
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.ui.navigation.NavHostWithDetailScreens
 import com.example.musify.ui.screens.homescreen.HomeScreen
+import com.example.musify.ui.screens.searchscreen.PagingItemsForSearchScreen
 import com.example.musify.ui.screens.searchscreen.SearchScreen
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
@@ -145,6 +146,14 @@ private fun NavGraphBuilder.searchScreen(
         val artists = viewModel.artistListForSearchQuery.collectAsLazyPagingItems()
         val playlists = viewModel.playlistListForSearchQuery.collectAsLazyPagingItems()
         val tracks = viewModel.trackListForSearchQuery.collectAsLazyPagingItems()
+        val pagingItems = remember {
+            PagingItemsForSearchScreen(
+                albums,
+                artists,
+                tracks,
+                playlists
+            )
+        }
         val uiState by viewModel.uiState
         val isLoadingError by remember {
             derivedStateOf {
@@ -177,10 +186,7 @@ private fun NavGraphBuilder.searchScreen(
                 onGenreItemClick = {},
                 onSearchTextChanged = viewModel::search,
                 isLoading = uiState == SearchScreenUiState.LOADING || isPlaybackLoading,
-                albumListForSearchQuery = albums,
-                artistListForSearchQuery = artists,
-                tracksListForSearchQuery = tracks,
-                playlistListForSearchQuery = playlists,
+                pagingItems = pagingItems,
                 onSearchQueryItemClicked = onSearchResultClicked,
                 currentlySelectedFilter = viewModel.currentlySelectedFilter.value,
                 onSearchFilterChanged = viewModel::updateSearchFilter,
