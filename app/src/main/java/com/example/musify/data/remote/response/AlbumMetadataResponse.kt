@@ -41,7 +41,7 @@ data class AlbumMetadataResponse(
 fun AlbumMetadataResponse.toAlbumSearchResult(imageSize: MapperImageSize) = AlbumSearchResult(
     id = id,
     name = name,
-    artistsString = artists.joinToString(",") { it.name },
+    artistsString = artists.joinToString(", ") { it.name },
     albumArtUrlString = images.getImageResponseForImageSize(imageSize).url,
     yearOfReleaseString = releaseDate // TODO
 )
