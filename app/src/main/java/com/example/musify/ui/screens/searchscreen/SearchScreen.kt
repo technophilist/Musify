@@ -272,7 +272,10 @@ private fun FilterChipGroup(
         modifier = modifier.horizontalScroll(scrollState),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        //FIXME lol what's with the spacers!?
+        // There is no content padding param for row.
+        // If the padding is applied directly on the row, then it'll
+        // apply it to the entire row rather than applying it to
+        // whatever is defined in it's content parameter.
         Spacer(modifier = Modifier.width(startPadding))
         filters.forEach {
             MusifyFilterChip(
