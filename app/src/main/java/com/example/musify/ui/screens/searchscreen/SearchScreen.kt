@@ -7,10 +7,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
@@ -154,35 +150,13 @@ fun SearchScreen(
                     onErrorRetryButtonClick = { onErrorRetryButtonClick(searchText) }
                 )
 
-                false -> LazyVerticalGrid(
+                false -> GenresGrid(
                     modifier = Modifier
                         .background(MaterialTheme.colors.background)
-                        .padding(top = 16.dp),
-                    columns = GridCells.Adaptive(170.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) {
-                    item(span = { GridItemSpan(this.maxCurrentLineSpan) }) {
-                        Text(
-                            text = "Genres",
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.subtitle1
-                        )
-                    }
-                    items(items = genreList) {
-                        GenreCard(
-                            genre = it,
-                            modifier = Modifier.height(120.dp),
-                            onClick = { onGenreItemClick(it) },
-                            imageResourceId = it.genreType.getAssociatedImageResource(),
-                            backgroundColor = it.genreType.getAssociatedBackgroundColor()
-                        )
-                    }
-                    item(span = { GridItemSpan(this.maxLineSpan) }) {
-                        Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
-                    }
-                }
+                        .padding(top= 16.dp),
+                    availableGenres = genreList,
+                    onGenreItemClick = onGenreItemClick
+                )
             }
         }
     }
