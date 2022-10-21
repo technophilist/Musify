@@ -58,8 +58,8 @@ fun GenresGrid(
         item(span = { GridItemSpan(this.maxLineSpan) }) {
             Spacer(
                 modifier = Modifier
+                    .height(MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight)
                     .windowInsetsBottomHeight(WindowInsets.navigationBars)
-                    .padding(bottom = MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight)
             )
         }
     }
