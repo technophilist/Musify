@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
@@ -43,7 +42,6 @@ import kotlinx.coroutines.launch
 
 // fix lazy list scrolling to top after config change
 @ExperimentalAnimationApi
-@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
@@ -55,6 +53,7 @@ fun SearchScreen(
     onSearchFilterChanged: (SearchFilter) -> Unit,
     onGenreItemClick: (Genre) -> Unit,
     onSearchTextChanged: (searchText: String) -> Unit,
+    onErrorRetryButtonClick: (searchQuery: String) -> Unit,
     isLoading: Boolean,
     isSearchErrorMessageVisible: Boolean,
     albumListForSearchQuery: LazyPagingItems<SearchResult.AlbumSearchResult>,
@@ -151,7 +150,8 @@ fun SearchScreen(
                     currentlyPlayingTrack = currentlyPlayingTrack,
                     lazyListState = lazyListState,
                     currentlySelectedFilter = currentlySelectedFilter,
-                    isSearchErrorMessageVisible = isSearchErrorMessageVisible
+                    isSearchErrorMessageVisible = isSearchErrorMessageVisible,
+                    onErrorRetryButtonClick = { onErrorRetryButtonClick(searchText) }
                 )
 
                 false -> LazyVerticalGrid(
@@ -204,6 +204,7 @@ private fun SearchQueryList(
     lazyListState: LazyListState = rememberLazyListState(),
     isSearchResultsLoadingAnimationVisible: Boolean = false,
     isSearchErrorMessageVisible: Boolean = false,
+    onErrorRetryButtonClick: () -> Unit
 ) {
     val artistImageErrorPainter =
         rememberVectorPainter(ImageVector.vectorResource(id = R.drawable.ic_outline_account_circle_24))
@@ -217,7 +218,8 @@ private fun SearchQueryList(
                 subtitle = "Please check the internet connection",
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .imePadding()
+                    .imePadding(),
+                onRetryButtonClicked = onErrorRetryButtonClick
             )
         } else {
             LazyColumn(
@@ -294,7 +296,7 @@ private fun FilterChipGroup(
         modifier = modifier.horizontalScroll(scrollState),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-
+        //FIXME lol what's with the spacers!?
         Spacer(modifier = Modifier.width(startPadding))
         filters.forEach {
             MusifyFilterChip(
