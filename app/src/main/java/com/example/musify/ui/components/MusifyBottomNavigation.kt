@@ -42,6 +42,7 @@ object MusifyBottomNavigationConstants {
  * as a parameter to the lambda.
  * @param modifier the modifier to be applied to the navigation bar. The height of the
  * composable is fixed at 80dp.
+ * @see [com.example.musify.ui.navigation.MusifyBottomNavigationConnectedWithBackStack]
  */
 @Composable
 fun MusifyBottomNavigation(
