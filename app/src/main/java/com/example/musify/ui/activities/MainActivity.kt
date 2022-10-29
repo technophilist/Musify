@@ -14,11 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.musify.domain.SearchResult
-import com.example.musify.ui.components.MusifyBottomNavigation
+import com.example.musify.ui.navigation.MusifyBottomNavigationConnectedWithBackStack
 import com.example.musify.ui.navigation.MusifyBottomNavigationDestinations
 import com.example.musify.ui.screens.MusifyNavigation
 import com.example.musify.ui.screens.homescreen.ExpandableMiniPlayerWithSnackbar
@@ -130,52 +128,8 @@ private fun MusifyApp() {
                 navController = navController,
                 modifier = Modifier.navigationBarsPadding(),
                 navigationItems = bottomNavigationItems,
-                onItemClick = { bottomNavigationDestination ->
-                    navController.navigate(bottomNavigationDestination.route) {
-                        popUpTo(navController.graph.startDestinationId) {
-                            // Save backstack state. This will ensure restoration of
-                            // nested navigation screen when the user comes back to
-                            // the destination.
-                            saveState = true
-                        }
-                        // prevent duplicate destinations when the navigation is
-                        // clicked multiple times
-                        launchSingleTop = true
-                        // restore state if previously saved
-                        restoreState = true
-                    }
-                })
+            )
         }
     }
-}
-
-/**
- * A composable that takes care of setting the active icon of the bottom
- * navigation composable based on the currentBackStackEntry of the [navController].
- * This composable acts as a recomposition scope. Therefore, reading the
- * state value of [NavHostController.currentBackStackEntryAsState()] will result
- * in the recomposition of only this composable.
- */
-@Composable
-private fun MusifyBottomNavigationConnectedWithBackStack(
-    navController: NavHostController,
-    navigationItems: List<MusifyBottomNavigationDestinations>,
-    onItemClick: (MusifyBottomNavigationDestinations) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val currentlySelectedItem =
-        navController.currentBackStackEntryAsState().value?.destination?.route?.let {
-            when (it) {
-                MusifyBottomNavigationDestinations.Home.route -> MusifyBottomNavigationDestinations.Home
-                MusifyBottomNavigationDestinations.Search.route -> MusifyBottomNavigationDestinations.Search
-                else -> MusifyBottomNavigationDestinations.Premium
-            }
-        } ?: MusifyBottomNavigationDestinations.Home
-    MusifyBottomNavigation(
-        modifier = modifier,
-        navigationItems = navigationItems,
-        currentlySelectedItem = currentlySelectedItem,
-        onItemClick = onItemClick
-    )
 }
 
