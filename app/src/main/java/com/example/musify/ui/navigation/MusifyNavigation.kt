@@ -1,4 +1,4 @@
-package com.example.musify.ui.screens
+package com.example.musify.ui.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -20,9 +20,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.musify.domain.HomeFeedCarouselCardInfo
 import com.example.musify.domain.HomeFeedFilters
 import com.example.musify.domain.SearchResult
-import com.example.musify.ui.navigation.MusifyBottomNavigationDestinations
-import com.example.musify.ui.navigation.MusifyNavigationDestinations
-import com.example.musify.ui.navigation.NavHostWithDetailScreens
+import com.example.musify.ui.screens.GetPremiumScreen
 import com.example.musify.ui.screens.homescreen.HomeScreen
 import com.example.musify.ui.screens.searchscreen.PagingItemsForSearchScreen
 import com.example.musify.ui.screens.searchscreen.SearchScreen

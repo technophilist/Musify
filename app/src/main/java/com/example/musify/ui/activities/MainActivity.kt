@@ -18,7 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyBottomNavigationConnectedWithBackStack
 import com.example.musify.ui.navigation.MusifyBottomNavigationDestinations
-import com.example.musify.ui.screens.MusifyNavigation
+import com.example.musify.ui.navigation.MusifyNavigation
 import com.example.musify.ui.screens.homescreen.ExpandableMiniPlayerWithSnackbar
 import com.example.musify.ui.theme.MusifyTheme
 import com.example.musify.viewmodels.PlaybackViewModel
