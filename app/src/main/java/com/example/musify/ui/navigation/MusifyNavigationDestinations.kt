@@ -51,7 +51,7 @@ sealed class MusifyNavigationDestinations(val route: String) {
 
     object PlaylistDetailScreen :
         MusifyNavigationDestinations(
-            route = "MusifyNavigationDestinations.AlbumDetailScreen" +
+            route = "MusifyNavigationDestinations.PlaylistDetailScreen" +
                     "/{playlistId}" +
                     "/{playlistName}" +
                     "/{ownerName}" +
@@ -64,7 +64,7 @@ sealed class MusifyNavigationDestinations(val route: String) {
         const val NAV_ARG_OWNER_NAME = "ownerName"
         const val NAV_ARG_NUMBER_OF_TRACKS = "numberOfTracks"
         fun buildRoute(playlistSearchResult: SearchResult.PlaylistSearchResult): String {
-            val routeWithoutUrl = "MusifyNavigationDestinations.AlbumDetailScreen" +
+            val routeWithoutUrl = "MusifyNavigationDestinations.PlaylistDetailScreen" +
                     "/${playlistSearchResult.id}" +
                     "/${playlistSearchResult.name}" +
                     "/${playlistSearchResult.ownerName}" +
