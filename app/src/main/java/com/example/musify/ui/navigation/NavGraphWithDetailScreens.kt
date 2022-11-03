@@ -28,7 +28,11 @@ import java.nio.charset.StandardCharsets
 /**
  * A nested navigation graph that consists of detail screens.
  *
- * @param route the destination's unique route
+ * It uses [prefixedWithRouteOfNavGraphRoute] for the nested destinations.
+ * For information on why [prefixedWithRouteOfNavGraphRoute] see
+ * docs of [NavGraphWithDetailScreensNestedController] class.
+ *
+ * @param navGraphRoute the destination's unique route
  * @param navController the nav controller to be associated with the nav graph.
  * @param startDestination the route for the start destination.
  * @param playTrack lambda to execute when a track is to be played.
@@ -42,42 +46,46 @@ import java.nio.charset.StandardCharsets
  */
 @ExperimentalMaterialApi
 fun NavGraphBuilder.navGraphWithDetailScreens(
-    route: String,
+    navGraphRoute: String,
     navController: NavHostController,
     playTrack: (SearchResult.TrackSearchResult) -> Unit,
     currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     isPlaybackLoading: Boolean,
     startDestination: String,
-    builder: NavGraphBuilder.() -> Unit
+    builder: NavGraphBuilder.(nestedController: NavGraphWithDetailScreensNestedController) -> Unit
 ) {
     val onBackButtonClicked = {
         navController.popBackStack()
         Unit // Need to specify explicitly inorder to avoid compilation errors
     }
+    val nestedController = NavGraphWithDetailScreensNestedController(
+        navController  = navController,
+        associatedNavGraphRoute = navGraphRoute,
+        playTrack = playTrack)
     navigation(
-        route = route,
+        route = navGraphRoute,
         startDestination = startDestination
     ) {
-        builder()
+        builder(nestedController)
         artistDetailScreen(
-            route = MusifyNavigationDestinations.ArtistDetailScreen.route,
+            route = MusifyNavigationDestinations
+                .ArtistDetailScreen
+                .prefixedWithRouteOfNavGraphRoute(navGraphRoute),
             arguments = listOf(
                 navArgument(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ENCODED_IMAGE_URL_STRING) {
                     nullable = true
                 }
             ),
             onBackButtonClicked = onBackButtonClicked,
-            onAlbumClicked = {
-                navController.navigate(MusifyNavigationDestinations.AlbumDetailScreen.buildRoute(it)) {
-                    launchSingleTop = true
-                }
-            },
+            onAlbumClicked = nestedController::navigateToDetailScreen,
             onPlayTrack = playTrack,
             currentlyPlayingTrack = currentlyPlayingTrack,
             isPlaybackLoading = isPlaybackLoading,
         )
         albumDetailScreen(
-            route = MusifyNavigationDestinations.AlbumDetailScreen.route,
+            route = MusifyNavigationDestinations
+                .AlbumDetailScreen
+                .prefixedWithRouteOfNavGraphRoute(navGraphRoute),
             onBackButtonClicked = onBackButtonClicked,
             onPlayTrack = playTrack,
             currentlyPlayingTrack = currentlyPlayingTrack,
@@ -85,7 +93,9 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
         )
 
         playlistDetailScreen(
-            route = MusifyNavigationDestinations.PlaylistDetailScreen.route,
+            route = MusifyNavigationDestinations
+                .PlaylistDetailScreen
+                .prefixedWithRouteOfNavGraphRoute(navGraphRoute),
             onBackButtonClicked = onBackButtonClicked,
             onPlayTrack = playTrack,
             currentlyPlayingTrack = currentlyPlayingTrack,
@@ -219,3 +229,80 @@ private fun NavGraphBuilder.playlistDetailScreen(
         }
     }
 }
+
+/**
+ * A class that acts a controller that is used to navigate within
+ * destinations defined in [NavGraphBuilder.navGraphWithDetailScreens].
+ *
+ * Navigation component doesn't work deterministically when the same
+ * nested graph is used more than once in the same graph. Since the
+ * same destinations defined in [NavGraphBuilder.navGraphWithDetailScreens] are
+ * reused (with the same routes) multiple times within the same graph,
+ * navigation component chooses the destination that appears in the first call
+ * to [NavGraphBuilder.navGraphWithDetailScreens] when ever the client
+ * chooses to navigate to one of the screens defined in
+ * [NavGraphBuilder.navGraphWithDetailScreens].
+ * Eg:
+ * Let's assume that NavGraphBuilder.navGraphWithDetailScreens has an artist
+ * and album detail screen.
+ * ```
+ * NavHost(...){
+ *
+ *      // (1) contains detail screens
+ *      navGraphWithDetailScreens(){
+ *         /* Other composable destinations */
+ *      }
+ *
+ *      // (2) contains the same detail screens as (1)
+ *      navGraphWithDetailScreens(){
+ *         /* Other composable destinations */
+ *      }
+ * }
+ *```
+ * When the client wants to navigate to a detail screen (lets take album detail
+ * screen for example), then, the navigation component will navigate to the
+ * album detail screen defined in (1) and not the detail screen defined in (2)
+ * even if the client is navigating from one of the composable destinations defined
+ * in the second call since the route strings for the detail screens are the same in
+ * both graphs ((1) and (2)). This results in navigating to a destination that has an
+ * unexpected parent navGraph. In order to avoid this, the destinations defined
+ * in [NavGraphBuilder.navGraphWithDetailScreens] are prefixed with the route
+ * of the said navGraph using [prefixedWithRouteOfNavGraphRoute]. The
+ * [NavGraphWithDetailScreensNestedController.navigateToDetailScreen]
+ * prefixes [associatedNavGraphRoute] before navigating in-order to accommodate
+ * for this.
+ */
+class NavGraphWithDetailScreensNestedController(
+    private val navController: NavHostController,
+    private val associatedNavGraphRoute:String,
+    private val playTrack: (SearchResult.TrackSearchResult) -> Unit
+) {
+    fun navigateToDetailScreen(searchResult: SearchResult) {
+        val route = when (searchResult) {
+            is SearchResult.AlbumSearchResult -> MusifyNavigationDestinations
+                .AlbumDetailScreen
+                .buildRoute(searchResult)
+
+            is SearchResult.ArtistSearchResult -> MusifyNavigationDestinations
+                .ArtistDetailScreen
+                .buildRoute(searchResult)
+
+            is SearchResult.PlaylistSearchResult -> MusifyNavigationDestinations
+                .PlaylistDetailScreen
+                .buildRoute(searchResult)
+
+            is SearchResult.TrackSearchResult -> {
+                playTrack(searchResult)
+                return
+            }
+        }
+        navController.navigate(associatedNavGraphRoute + route)
+    }
+}
+
+/**
+ * A utility function that appends the [routeOfNavGraph] to [MusifyNavigationDestinations.route]
+ * as prefix. See docs of [NavGraphWithDetailScreensNestedController] for more information.
+ */
+private fun MusifyNavigationDestinations.prefixedWithRouteOfNavGraphRoute(routeOfNavGraph: String) =
+    routeOfNavGraph + this.route
