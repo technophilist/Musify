@@ -45,7 +45,7 @@ fun MusifyNavigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = MusifyBottomNavigationDestinations.Search.route
+        startDestination = MusifyBottomNavigationDestinations.Home.route
     ) {
         navGraphWithDetailScreens(
             navGraphRoute = MusifyBottomNavigationDestinations.Home.route,
