@@ -14,7 +14,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.musify.domain.HomeFeedCarouselCardInfo
@@ -46,51 +45,38 @@ fun MusifyNavigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = MusifyBottomNavigationDestinations.Home.route
+        startDestination = MusifyBottomNavigationDestinations.Search.route
     ) {
-        composable(MusifyBottomNavigationDestinations.Home.route) {
-            val homeScreenNavController = rememberNavController()
-            NavHostWithDetailScreens(
-                navController = homeScreenNavController,
-                startDestination = MusifyNavigationDestinations.HomeScreen.route,
-                playTrack = playTrack,
-                currentlyPlayingTrack = currentlyPlayingTrack,
-                isPlaybackLoading = isPlaybackLoading
-            ) {
-                homeScreen(
-                    route = MusifyNavigationDestinations.HomeScreen.route,
-                    onCarouselCardClicked = {
-                        homeScreenNavController.navigateBasedOnSearchResult(
-                            searchResult = it.associatedSearchResult,
-                            blockForTrackSearchResult = { track -> playTrack(track) }
-                        )
-                    }
-                )
-            }
+        navGraphWithDetailScreens(
+            navGraphRoute = MusifyBottomNavigationDestinations.Home.route,
+            startDestination = MusifyNavigationDestinations.HomeScreen.route,
+            navController = navController,
+            playTrack = playTrack,
+            currentlyPlayingTrack = currentlyPlayingTrack,
+            isPlaybackLoading = isPlaybackLoading
+        ) { nestedController ->
+            homeScreen(
+                route = MusifyNavigationDestinations.HomeScreen.route,
+                onCarouselCardClicked = {
+                    nestedController.navigateToDetailScreen(searchResult = it.associatedSearchResult)
+                }
+            )
         }
-
-        composable(MusifyBottomNavigationDestinations.Search.route) {
-            val searchScreenNavController = rememberNavController()
-            NavHostWithDetailScreens(
-                navController = searchScreenNavController,
-                startDestination = MusifyNavigationDestinations.SearchScreen.route,
-                playTrack = playTrack,
+        navGraphWithDetailScreens(
+            navGraphRoute = MusifyBottomNavigationDestinations.Search.route,
+            startDestination = MusifyNavigationDestinations.SearchScreen.route,
+            navController = navController,
+            playTrack = playTrack,
+            currentlyPlayingTrack = currentlyPlayingTrack,
+            isPlaybackLoading = isPlaybackLoading
+        ) { nestedController ->
+            searchScreen(
+                route = MusifyNavigationDestinations.SearchScreen.route,
                 currentlyPlayingTrack = currentlyPlayingTrack,
-                isPlaybackLoading = isPlaybackLoading
-            ) {
-                searchScreen(
-                    route = MusifyNavigationDestinations.SearchScreen.route,
-                    currentlyPlayingTrack = currentlyPlayingTrack,
-                    isPlaybackLoading = isPlaybackLoading,
-                    onSearchResultClicked = {
-                        searchScreenNavController.navigateBasedOnSearchResult(
-                            searchResult = it,
-                            blockForTrackSearchResult = { track -> playTrack(track) }
-                        )
-                    },
-                    isFullScreenNowPlayingScreenOverlayVisible = isFullScreenNowPlayingOverlayScreenVisible
-                )
-            }
+                isPlaybackLoading = isPlaybackLoading,
+                onSearchResultClicked = nestedController::navigateToDetailScreen,
+                isFullScreenNowPlayingScreenOverlayVisible = isFullScreenNowPlayingOverlayScreenVisible
+            )
         }
 
         composable(MusifyBottomNavigationDestinations.Premium.route) {
@@ -205,35 +191,6 @@ private fun NavGraphBuilder.searchScreen(
                 isFullScreenNowPlayingOverlayScreenVisible = isFullScreenNowPlayingScreenOverlayVisible,
                 onErrorRetryButtonClick = viewModel::search
             )
-        }
-    }
-}
-
-private fun NavHostController.navigateBasedOnSearchResult(
-    searchResult: SearchResult,
-    blockForTrackSearchResult: (SearchResult.TrackSearchResult) -> Unit
-) {
-    when (searchResult) {
-        is SearchResult.AlbumSearchResult -> navigate(
-            MusifyNavigationDestinations
-                .AlbumDetailScreen
-                .buildRoute(searchResult)
-        ) { launchSingleTop = true }
-
-        is SearchResult.ArtistSearchResult -> navigate(
-            MusifyNavigationDestinations
-                .ArtistDetailScreen
-                .buildRoute(searchResult)
-        ) { launchSingleTop = true }
-
-        is SearchResult.PlaylistSearchResult -> navigate(
-            MusifyNavigationDestinations
-                .PlaylistDetailScreen
-                .buildRoute(searchResult)
-        ) { launchSingleTop = true }
-
-        is SearchResult.TrackSearchResult -> {
-            blockForTrackSearchResult(searchResult)
         }
     }
 }
