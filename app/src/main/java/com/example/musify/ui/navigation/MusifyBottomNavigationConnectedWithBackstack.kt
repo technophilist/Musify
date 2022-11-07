@@ -3,6 +3,7 @@ package com.example.musify.ui.navigation
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -51,27 +52,37 @@ fun MusifyBottomNavigationConnectedWithBackStack(
             } ?: previousValidBottomNavigationDestination
         }
     }
-
     MusifyBottomNavigation(
         modifier = modifier,
         navigationItems = navigationItems,
         currentlySelectedItem = currentlySelectedItem,
         onItemClick = { bottomNavigationDestination ->
-            // TODO if the user preses the same icon, in the same destination, pop the backstack.
-            navController.navigate(bottomNavigationDestination.route) {
-                popUpTo(navController.graph.findStartDestination().id) {
-                    // Save backstack state. This will ensure restoration of
-                    // nested navigation screen when the user comes back to
-                    // the destination.
-                    saveState = true
+            if (
+                bottomNavigationDestination == currentlySelectedItem &&
+                navController.currentDestinationRoute !=
+                navController.parentOfCurrentDestination?.startDestinationRoute
+            ) {
+                // pop the backstack if the user has clicked on the same destination
+                // and the currently visible destination is not the first destination
+                // of the nested navigation graph it belongs.
+                // This will allow the user to tap a bottom navigation icon more than
+                // once to navigate out of a detail screen.
+                navController.popBackStack()
+            } else {
+                navController.navigate(bottomNavigationDestination.route) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        // Save backstack state. This will ensure restoration of
+                        // nested navigation screen when the user comes back to
+                        // the destination.
+                        saveState = true
+                    }
+                    // prevent duplicate destinations when the navigation is
+                    // clicked multiple times
+                    launchSingleTop = true
+                    // restore state if previously saved
+                    restoreState = true
                 }
-                // prevent duplicate destinations when the navigation is
-                // clicked multiple times
-                launchSingleTop = true
-                // restore state if previously saved
-                restoreState = true
             }
-
         }
     )
 }
@@ -81,3 +92,13 @@ fun MusifyBottomNavigationConnectedWithBackStack(
  * of a nested NavGraph.
  */
 private val NavBackStackEntry.isInNestedNavGraph get() = this.destination.parent?.parent != null
+
+/**
+ * A [String] that returns the route of the [NavHostController.currentDestination].
+ */
+private val NavHostController.currentDestinationRoute: String? get() = this.currentDestination?.route
+
+/**
+ * A [String] that returns the parent navigation graph of the [NavHostController.currentDestination].
+ */
+private val NavHostController.parentOfCurrentDestination: NavGraph? get() = this.currentDestination?.parent
