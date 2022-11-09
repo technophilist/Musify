@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -34,9 +33,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.*
-import kotlinx.coroutines.launch
+import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 
-// TODO remove temporarily used item{} for artist image header
 // TODO display error messages - network error
 @ExperimentalMaterialApi
 @Composable
@@ -59,11 +57,14 @@ fun ArtistDetailScreen(
     )
     var isCoverArtPlaceholderVisible by remember { mutableStateOf(false) }
     val lazyListState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
     val fallbackImagePainter =
         rememberVectorPainter(ImageVector.vectorResource(id = fallbackImageRes))
-    val shouldShowScrollUpButton by remember(lazyListState.firstVisibleItemIndex) {
-        derivedStateOf { lazyListState.firstVisibleItemIndex > 3 }
+    val isAppBarVisible by remember {
+        derivedStateOf { lazyListState.firstVisibleItemIndex > 0 }
+    }
+    val dynamicThemeResource = remember {
+        if (artistImageUrlString == null) DynamicThemeResource.Empty
+        else DynamicThemeResource.FromImageUrl(artistImageUrlString)
     }
     Box {
         LazyColumn(
@@ -174,18 +175,19 @@ fun ArtistDetailScreen(
             isVisible = isLoading
         )
         AnimatedVisibility(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .navigationBarsPadding()
-                .padding(bottom = 16.dp, end = 16.dp),
-            visible = shouldShowScrollUpButton,
+            visible = isAppBarVisible,
             enter = fadeIn(),
             exit = fadeOut()
         ) {
-            FloatingActionButton(
-                backgroundColor = MaterialTheme.colors.primary,
-                onClick = { coroutineScope.launch { lazyListState.animateScrollToItem(0) } },
-            ) { Icon(imageVector = Icons.Filled.KeyboardArrowUp, contentDescription = null) }
+            DetailScreenTopAppBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter)
+                    .statusBarsPadding(),
+                title = artistName,
+                onBackButtonClicked = onBackButtonClicked,
+                dynamicThemeResource = dynamicThemeResource
+            )
         }
     }
 }
