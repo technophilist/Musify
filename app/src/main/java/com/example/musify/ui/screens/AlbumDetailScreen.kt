@@ -1,8 +1,12 @@
 package com.example.musify.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,6 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.*
+import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
+import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
+import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 
 @ExperimentalMaterialApi
 @Composable
@@ -27,75 +34,103 @@ fun AlbumDetailScreen(
     currentlyPlayingTrack: SearchResult.TrackSearchResult?
 ) {
     var isLoadingPlaceholderForAlbumArtVisible by remember { mutableStateOf(false) }
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
-            modifier = Modifier
-                .statusBarsPadding()
-                .fillMaxSize(),
-            contentPadding = PaddingValues(
-                bottom = MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight
-            )
-        ) {
-            item {
-                ImageHeaderWithMetadata(
-                    title = albumName,
-                    headerImageSource = HeaderImageSource.ImageFromUrlString(albumArtUrlString),
-                    subtitle = artistsString,
-                    onBackButtonClicked = onBackButtonClicked,
-                    isLoadingPlaceholderVisible = isLoadingPlaceholderForAlbumArtVisible,
-                    onImageLoading = { isLoadingPlaceholderForAlbumArtVisible = true },
-                    onImageLoaded = { isLoadingPlaceholderForAlbumArtVisible = false },
-                    additionalMetadataContent = { AlbumArtHeaderMetadata(yearOfRelease) }
-                )
-                Spacer(modifier = Modifier.size(16.dp))
-            }
-            if (isErrorMessageVisible) {
+    val lazyListState = rememberLazyListState()
+    val isAppBarVisible by remember {
+        derivedStateOf { lazyListState.firstVisibleItemIndex > 0 }
+    }
+    val dynamicThemeResource = remember {
+        DynamicThemeResource.FromImageUrl(albumArtUrlString)
+    }
+    DynamicallyThemedSurface(
+        dynamicThemeResource = DynamicThemeResource.FromImageUrl(albumArtUrlString),
+        dynamicBackgroundType = DynamicBackgroundType.Gradient(fraction = 0.5f)
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .fillMaxSize(),
+                contentPadding = PaddingValues(
+                    bottom = MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight
+                ),
+                state = lazyListState
+            ) {
                 item {
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "Oops! Something doesn't look right",
-                            style = MaterialTheme.typography.h6,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                        Text(
-                            text = "Please check the internet connection",
-                            style = MaterialTheme.typography.subtitle2
+                    ImageHeaderWithMetadata(
+                        title = albumName,
+                        headerImageSource = HeaderImageSource.ImageFromUrlString(albumArtUrlString),
+                        subtitle = artistsString,
+                        onBackButtonClicked = onBackButtonClicked,
+                        isLoadingPlaceholderVisible = isLoadingPlaceholderForAlbumArtVisible,
+                        onImageLoading = { isLoadingPlaceholderForAlbumArtVisible = true },
+                        onImageLoaded = { isLoadingPlaceholderForAlbumArtVisible = false },
+                        additionalMetadataContent = { AlbumArtHeaderMetadata(yearOfRelease) }
+                    )
+                    Spacer(modifier = Modifier.size(16.dp))
+                }
+                if (isErrorMessageVisible) {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Oops! Something doesn't look right",
+                                style = MaterialTheme.typography.h6,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(
+                                text = "Please check the internet connection",
+                                style = MaterialTheme.typography.subtitle2
+                            )
+                        }
+                    }
+                } else {
+                    items(trackList) {
+                        MusifyCompactTrackCard(
+                            track = it,
+                            onClick = onTrackItemClick,
+                            isLoadingPlaceholderVisible = false,
+                            isCurrentlyPlaying = it == currentlyPlayingTrack,
+                            isAlbumArtVisible = false,
+                            subtitleTextStyle = LocalTextStyle.current.copy(
+                                fontWeight = FontWeight.Thin,
+                                color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.disabled),
+                            ),
+                            contentPadding = PaddingValues(16.dp)
                         )
                     }
                 }
-            } else {
-                items(trackList) {
-                    MusifyCompactTrackCard(
-                        track = it,
-                        onClick = onTrackItemClick,
-                        isLoadingPlaceholderVisible = false,
-                        isCurrentlyPlaying = it == currentlyPlayingTrack,
-                        isAlbumArtVisible = false,
-                        subtitleTextStyle = LocalTextStyle.current.copy(
-                            fontWeight = FontWeight.Thin,
-                            color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.disabled),
-                        ),
-                        contentPadding = PaddingValues(16.dp)
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .windowInsetsBottomHeight(WindowInsets.navigationBars)
+                            .padding(bottom = 16.dp)
                     )
                 }
             }
-            item {
-                Spacer(
+            DefaultMusifyLoadingAnimation(
+                modifier = Modifier.align(Alignment.Center),
+                isVisible = isLoading
+            )
+            AnimatedVisibility(
+                visible = isAppBarVisible,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                DetailScreenTopAppBar(
                     modifier = Modifier
-                        .windowInsetsBottomHeight(WindowInsets.navigationBars)
-                        .padding(bottom = 16.dp)
+                        .fillMaxWidth()
+                        .align(Alignment.TopCenter)
+                        .statusBarsPadding(),
+                    title = albumName,
+                    onBackButtonClicked = onBackButtonClicked,
+                    dynamicThemeResource = dynamicThemeResource
                 )
             }
         }
-        DefaultMusifyLoadingAnimation(
-            modifier = Modifier.align(Alignment.Center),
-            isVisible = isLoading
-        )
     }
 }
 

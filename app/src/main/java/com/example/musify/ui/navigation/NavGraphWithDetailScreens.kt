@@ -14,9 +14,6 @@ import com.example.musify.domain.SearchResult
 import com.example.musify.ui.screens.AlbumDetailScreen
 import com.example.musify.ui.screens.ArtistDetailScreen
 import com.example.musify.ui.screens.PlaylistDetailScreen
-import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
-import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
-import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 import com.example.musify.viewmodels.AlbumDetailUiState
 import com.example.musify.viewmodels.AlbumDetailViewModel
 import com.example.musify.viewmodels.PlaylistDetailViewModel
@@ -161,23 +158,18 @@ private fun NavGraphBuilder.albumDetailScreen(
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_ARTISTS_STRING)!!
         val yearOfRelease =
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_YEAR_OF_RELEASE_STRING)!!
-        DynamicallyThemedSurface(
-            dynamicThemeResource = DynamicThemeResource.FromImageUrl(albumArtUrl),
-            dynamicBackgroundType = DynamicBackgroundType.Gradient(fraction = 0.5f)
-        ) {
-            AlbumDetailScreen(
-                albumName = albumName,
-                artistsString = artists,
-                yearOfRelease = yearOfRelease,
-                albumArtUrlString = albumArtUrl,
-                trackList = viewModel.tracks.value,
-                onTrackItemClick = onPlayTrack,
-                onBackButtonClicked = onBackButtonClicked,
-                isLoading = isPlaybackLoading || viewModel.uiState.value is AlbumDetailUiState.Loading,
-                isErrorMessageVisible = viewModel.uiState.value is AlbumDetailUiState.Error,
-                currentlyPlayingTrack = currentlyPlayingTrack
-            )
-        }
+        AlbumDetailScreen(
+            albumName = albumName,
+            artistsString = artists,
+            yearOfRelease = yearOfRelease,
+            albumArtUrlString = albumArtUrl,
+            trackList = viewModel.tracks.value,
+            onTrackItemClick = onPlayTrack,
+            onBackButtonClicked = onBackButtonClicked,
+            isLoading = isPlaybackLoading || viewModel.uiState.value is AlbumDetailUiState.Loading,
+            isErrorMessageVisible = viewModel.uiState.value is AlbumDetailUiState.Error,
+            currentlyPlayingTrack = currentlyPlayingTrack
+        )
     }
 }
 
