@@ -59,9 +59,10 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
         Unit // Need to specify explicitly inorder to avoid compilation errors
     }
     val nestedController = NavGraphWithDetailScreensNestedController(
-        navController  = navController,
+        navController = navController,
         associatedNavGraphRoute = navGraphRoute,
-        playTrack = playTrack)
+        playTrack = playTrack
+    )
     navigation(
         route = navGraphRoute,
         startDestination = startDestination
@@ -209,24 +210,19 @@ private fun NavGraphBuilder.playlistDetailScreen(
 
             }
         }
-        DynamicallyThemedSurface(
-            dynamicThemeResource = DynamicThemeResource.FromImageUrl(imageUrlString),
-            dynamicBackgroundType = DynamicBackgroundType.Gradient(fraction = 0.5f)
-        ) {
-            PlaylistDetailScreen(
-                playlistName = playlistName,
-                playlistImageUrlString = imageUrlString,
-                nameOfPlaylistOwner = ownerName,
-                totalNumberOfTracks = totalNumberOfTracks,
-                imageResToUseWhenImageUrlStringIsNull = R.drawable.ic_outline_account_circle_24, // TODO
-                tracks = tracks,
-                currentlyPlayingTrack = currentlyPlayingTrack,
-                onBackButtonClicked = onBackButtonClicked,
-                onTrackClicked = onPlayTrack,
-                isLoading = tracks.loadState.refresh is LoadState.Loading || isPlaybackLoading,
-                isErrorMessageVisible = isErrorMessageVisible
-            )
-        }
+        PlaylistDetailScreen(
+            playlistName = playlistName,
+            playlistImageUrlString = imageUrlString,
+            nameOfPlaylistOwner = ownerName,
+            totalNumberOfTracks = totalNumberOfTracks,
+            imageResToUseWhenImageUrlStringIsNull = R.drawable.ic_outline_account_circle_24, // TODO
+            tracks = tracks,
+            currentlyPlayingTrack = currentlyPlayingTrack,
+            onBackButtonClicked = onBackButtonClicked,
+            onTrackClicked = onPlayTrack,
+            isLoading = tracks.loadState.refresh is LoadState.Loading || isPlaybackLoading,
+            isErrorMessageVisible = isErrorMessageVisible
+        )
     }
 }
 
@@ -274,7 +270,7 @@ private fun NavGraphBuilder.playlistDetailScreen(
  */
 class NavGraphWithDetailScreensNestedController(
     private val navController: NavHostController,
-    private val associatedNavGraphRoute:String,
+    private val associatedNavGraphRoute: String,
     private val playTrack: (SearchResult.TrackSearchResult) -> Unit
 ) {
     fun navigateToDetailScreen(searchResult: SearchResult) {
