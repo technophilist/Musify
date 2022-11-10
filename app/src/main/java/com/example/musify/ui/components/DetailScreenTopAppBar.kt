@@ -51,10 +51,9 @@ fun DetailScreenTopAppBar(
         dynamicThemeResource = dynamicThemeResource,
         dynamicBackgroundType = dynamicThemeBackgroundType
     ) {
-        // Since the top app bar is laid on top of a dynamically
-        // themed surface, any elevation would make the app bar
-        // look like it has a border. Therefore, set the elevation
-        // to 0dp.
+        // Since the top app bar's background color is transparent,
+        // any elevation to the app bar would make it look like it has
+        // a border. Therefore, set the elevation to 0dp.
         TopAppBar(
             modifier = modifier.clickable(onClick = onClick),
             backgroundColor = Color.Transparent,
