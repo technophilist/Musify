@@ -34,6 +34,7 @@ import androidx.paging.compose.itemsIndexed
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.*
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
+import kotlinx.coroutines.launch
 
 // TODO display error messages - network error
 @ExperimentalMaterialApi
@@ -66,6 +67,7 @@ fun ArtistDetailScreen(
         if (artistImageUrlString == null) DynamicThemeResource.Empty
         else DynamicThemeResource.FromImageUrl(artistImageUrlString)
     }
+    val coroutineScope = rememberCoroutineScope()
     Box {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -186,7 +188,10 @@ fun ArtistDetailScreen(
                     .statusBarsPadding(),
                 title = artistName,
                 onBackButtonClicked = onBackButtonClicked,
-                dynamicThemeResource = dynamicThemeResource
+                dynamicThemeResource = dynamicThemeResource,
+                onClick = {
+                    coroutineScope.launch { lazyListState.animateScrollToItem(0) }
+                }
             )
         }
     }

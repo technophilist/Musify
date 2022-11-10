@@ -20,6 +20,7 @@ import com.example.musify.ui.components.*
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
+import kotlinx.coroutines.launch
 
 
 @ExperimentalMaterialApi
@@ -50,6 +51,7 @@ fun PlaylistDetailScreen(
     val dynamicBackgroundType = remember {
         DynamicBackgroundType.Gradient(fraction = 0.5f)
     }
+    val coroutineScope = rememberCoroutineScope()
     DynamicallyThemedSurface(
         dynamicThemeResource = dynamicThemeResource,
         dynamicBackgroundType = dynamicBackgroundType
@@ -142,7 +144,10 @@ fun PlaylistDetailScreen(
                         .statusBarsPadding(),
                     title = playlistName,
                     onBackButtonClicked = onBackButtonClicked,
-                    dynamicThemeResource = dynamicThemeResource
+                    dynamicThemeResource = dynamicThemeResource,
+                    onClick = {
+                        coroutineScope.launch { lazyListState.animateScrollToItem(0) }
+                    }
                 )
             }
         }
