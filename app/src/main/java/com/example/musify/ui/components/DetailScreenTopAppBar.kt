@@ -1,5 +1,6 @@
 package com.example.musify.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -28,7 +29,10 @@ import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
  * @param onBackButtonClicked the lambda to execute with the user clicks
  * on the back button.
  * @param modifier the modifier to be applied to the app bar.
- * @param dynamicThemeResource the resource to be used to set the
+ * @param onClick the lambda to execute when the app bar clicked. This is
+ * usually used to scroll a list to the first item.
+ * @param dynamicThemeResource the resource to be ugit status
+ * sed to set the
  * background color. By default, it is set to [DynamicThemeResource.Empty].
  */
 @Composable
@@ -36,7 +40,8 @@ fun DetailScreenTopAppBar(
     title: String,
     onBackButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    dynamicThemeResource: DynamicThemeResource = DynamicThemeResource.Empty,
+    onClick: () -> Unit = {},
+    dynamicThemeResource: DynamicThemeResource = DynamicThemeResource.Empty
 ) {
     val dynamicThemeBackgroundType = remember {
         DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(alpha = 0.3f))
@@ -51,7 +56,7 @@ fun DetailScreenTopAppBar(
         // look like it has a border. Therefore, set the elevation
         // to 0dp.
         TopAppBar(
-            modifier = modifier,
+            modifier = modifier.clickable(onClick = onClick),
             backgroundColor = Color.Transparent,
             elevation = 0.dp
         ) {
