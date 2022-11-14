@@ -1,6 +1,7 @@
 package com.example.musify.ui.navigation
 
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -33,7 +34,6 @@ import java.nio.charset.StandardCharsets
  * @param navController the nav controller to be associated with the nav graph.
  * @param startDestination the route for the start destination.
  * @param playTrack lambda to execute when a track is to be played.
- * @param currentlyPlayingTrack indicates that currently playing track.
  * @param isPlaybackLoading indicates whether the playback is loading.
  * @param builder the builder used to define other composables that belong
  * to this nested graph.
@@ -46,7 +46,6 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
     navGraphRoute: String,
     navController: NavHostController,
     playTrack: (SearchResult.TrackSearchResult) -> Unit,
-    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     isPlaybackLoading: Boolean,
     startDestination: String,
     builder: NavGraphBuilder.(nestedController: NavGraphWithDetailScreensNestedController) -> Unit
@@ -77,7 +76,6 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
             onBackButtonClicked = onBackButtonClicked,
             onAlbumClicked = nestedController::navigateToDetailScreen,
             onPlayTrack = playTrack,
-            currentlyPlayingTrack = currentlyPlayingTrack,
             isPlaybackLoading = isPlaybackLoading,
         )
         albumDetailScreen(
@@ -86,7 +84,6 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
                 .prefixedWithRouteOfNavGraphRoute(navGraphRoute),
             onBackButtonClicked = onBackButtonClicked,
             onPlayTrack = playTrack,
-            currentlyPlayingTrack = currentlyPlayingTrack,
             isPlaybackLoading = isPlaybackLoading
         )
 
@@ -96,7 +93,6 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
                 .prefixedWithRouteOfNavGraphRoute(navGraphRoute),
             onBackButtonClicked = onBackButtonClicked,
             onPlayTrack = playTrack,
-            currentlyPlayingTrack = currentlyPlayingTrack,
             isPlaybackLoading = isPlaybackLoading
         )
     }
@@ -107,7 +103,6 @@ private fun NavGraphBuilder.artistDetailScreen(
     route: String,
     onBackButtonClicked: () -> Unit,
     onPlayTrack: (SearchResult.TrackSearchResult) -> Unit,
-    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     isPlaybackLoading: Boolean,
     onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit,
     arguments: List<NamedNavArgument> = emptyList()
@@ -122,6 +117,7 @@ private fun NavGraphBuilder.artistDetailScreen(
                 ?.run { URLDecoder.decode(this, StandardCharsets.UTF_8.toString()) }
         val releases = viewModel.albumsOfArtistFlow.collectAsLazyPagingItems()
         val uiState by viewModel.uiState
+        val currentlyPlayingTrack by viewModel.currentlyPlayingTrackStream.collectAsState(initial = null)
         ArtistDetailScreen(
             artistName = artistName,
             artistImageUrlString = artistImageUrlString,
@@ -144,7 +140,6 @@ private fun NavGraphBuilder.albumDetailScreen(
     route: String,
     onBackButtonClicked: () -> Unit,
     onPlayTrack: (SearchResult.TrackSearchResult) -> Unit,
-    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     isPlaybackLoading: Boolean,
 ) {
     composable(route) { backStackEntry ->
@@ -158,6 +153,7 @@ private fun NavGraphBuilder.albumDetailScreen(
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_ARTISTS_STRING)!!
         val yearOfRelease =
             arguments.getString(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_YEAR_OF_RELEASE_STRING)!!
+        val currentlyPlayingTrack by viewModel.currentlyPlayingTrackStream.collectAsState(initial = null)
         AlbumDetailScreen(
             albumName = albumName,
             artistsString = artists,
@@ -178,7 +174,6 @@ private fun NavGraphBuilder.playlistDetailScreen(
     route: String,
     onBackButtonClicked: () -> Unit,
     onPlayTrack: (SearchResult.TrackSearchResult) -> Unit,
-    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     isPlaybackLoading: Boolean,
     navigationArguments: List<NamedNavArgument> = emptyList()
 ) {
@@ -202,6 +197,7 @@ private fun NavGraphBuilder.playlistDetailScreen(
 
             }
         }
+        val currentlyPlayingTrack by viewModel.currentlyPlayingTrackStream.collectAsState(initial = null)
         PlaylistDetailScreen(
             playlistName = playlistName,
             playlistImageUrlString = imageUrlString,
