@@ -4,7 +4,7 @@ import android.app.Application
 import com.example.musify.R
 import com.example.musify.domain.fakeTrackSearchResult
 import com.example.musify.musicPlayer.MusicPlayerMock
-import com.example.musify.musicplayer.MusicPlayer
+import com.example.musify.musicplayer.MusicPlayerV2
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -22,7 +22,7 @@ class PlaybackViewModelTest {
 
     private lateinit var playbackViewModelWithSuccessfulImageFetch: PlaybackViewModel
     private lateinit var playbackViewModelWithFailingImageFetch: PlaybackViewModel
-    private lateinit var musicPlayer: MusicPlayer
+    private lateinit var musicPlayer: MusicPlayerV2
     private lateinit var application: Application
 
     @Before

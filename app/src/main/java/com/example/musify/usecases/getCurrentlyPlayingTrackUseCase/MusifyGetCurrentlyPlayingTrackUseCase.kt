@@ -1,7 +1,6 @@
 package com.example.musify.usecases.getCurrentlyPlayingTrackUseCase
 
 import com.example.musify.domain.SearchResult
-import com.example.musify.musicplayer.MusicPlayer
 import com.example.musify.musicplayer.MusicPlayerV2
 import com.example.musify.musicplayer.utils.toTrackSearchResult
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +13,6 @@ class MusifyGetCurrentlyPlayingTrackUseCase @Inject constructor(
 ) : GetCurrentlyPlayingTrackUseCase {
     override fun getCurrentlyPlayingTrackStream(): Flow<SearchResult.TrackSearchResult> =
         musicPlayer.currentPlaybackStateStream
-            .filterIsInstance<MusicPlayer.PlaybackState.Playing>()
+            .filterIsInstance<MusicPlayerV2.PlaybackState.Playing>()
             .mapNotNull { it.currentlyPlayingTrack.toTrackSearchResult() }
 }

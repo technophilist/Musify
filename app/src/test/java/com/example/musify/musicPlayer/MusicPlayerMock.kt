@@ -1,30 +1,34 @@
 package com.example.musify.musicPlayer
 
-import com.example.musify.musicplayer.MusicPlayer
+import com.example.musify.musicplayer.MusicPlayerV2
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 
-class MusicPlayerMock : MusicPlayer {
-    private lateinit var onPlaybackStateChangedCallback: (MusicPlayer.PlaybackState) -> Unit
-    private var currentlyPlayingTrack: MusicPlayer.Track? = null
+class MusicPlayerMock : MusicPlayerV2 {
+    private lateinit var onPlaybackStateChangedCallback: (MusicPlayerV2.PlaybackState) -> Unit
+    private var currentlyPlayingTrack: MusicPlayerV2.Track? = null
     private var isPlaybackPaused = false
     override fun pauseCurrentlyPlayingTrack() {
-        val pausedState = currentlyPlayingTrack?.let(MusicPlayer.PlaybackState::Paused) ?: return
+        val pausedState = currentlyPlayingTrack?.let(MusicPlayerV2.PlaybackState::Paused) ?: return
         onPlaybackStateChangedCallback(pausedState)
     }
 
     override fun stopPlayingTrack() {
-        onPlaybackStateChangedCallback(MusicPlayer.PlaybackState.Idle)
+        onPlaybackStateChangedCallback(MusicPlayerV2.PlaybackState.Idle)
     }
 
-    override fun playTrack(track: MusicPlayer.Track) {
+    override val currentPlaybackStateStream: Flow<MusicPlayerV2.PlaybackState>
+        get() = TODO("Not yet implemented")
+
+    override fun playTrack(track: MusicPlayerV2.Track) {
         if (currentlyPlayingTrack == track) {
             return
         }
         currentlyPlayingTrack = track
         onPlaybackStateChangedCallback(
-            MusicPlayer.PlaybackState.Playing(
+            MusicPlayerV2.PlaybackState.Playing(
                 currentlyPlayingTrack = track,
                 totalDuration = 5_000,
                 currentPlaybackPositionInMillisFlow = flow {
@@ -42,10 +46,4 @@ class MusicPlayerMock : MusicPlayer {
         return currentlyPlayingTrack != null
     }
 
-    override fun addOnPlaybackStateChangedListener(onPlaybackStateChanged: (MusicPlayer.PlaybackState) -> Unit) {
-        onPlaybackStateChangedCallback = onPlaybackStateChanged
-        onPlaybackStateChangedCallback(MusicPlayer.PlaybackState.Idle)
-    }
-
-    override fun removeListenersIfAny() {}
 }

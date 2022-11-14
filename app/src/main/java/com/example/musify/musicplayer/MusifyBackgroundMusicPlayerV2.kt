@@ -13,10 +13,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 
@@ -24,7 +21,7 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
     @ApplicationContext context: Context,
     private val exoPlayer: ExoPlayer
 ) : MusicPlayerV2 {
-    private var currentlyPlayingTrack: MusicPlayer.Track? = null
+    private var currentlyPlayingTrack: MusicPlayerV2.Track? = null
     private val notificationManagerBuilder by lazy {
         PlayerNotificationManager.Builder(context, NOTIFICATION_ID, NOTIFICATION_CHANNEL_ID)
             .setChannelImportance(NotificationUtil.IMPORTANCE_LOW).setMediaDescriptionAdapter(
@@ -37,7 +34,7 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
             .setChannelDescriptionResourceId(R.string.notification_channel_description)
     }
 
-    override val currentPlaybackStateStream = callbackFlow {
+    override val currentPlaybackStateStream: Flow<MusicPlayerV2.PlaybackState> = callbackFlow {
         val listener = createEventsListener { player, events ->
             if (!events.containsAny(
                     Player.EVENT_PLAYBACK_STATE_CHANGED,
@@ -50,11 +47,11 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
             val isPaused =
                 events.contains(Player.EVENT_IS_PLAYING_CHANGED) && player.playbackState == Player.STATE_READY && !player.playWhenReady
             val newPlaybackState = when {
-                events.contains(Player.EVENT_PLAYER_ERROR) -> MusicPlayer.PlaybackState.Error
+                events.contains(Player.EVENT_PLAYER_ERROR) -> MusicPlayerV2.PlaybackState.Error
                 isPlaying -> currentlyPlayingTrack?.let { buildPlayingState(it, player) }
-                isPaused -> currentlyPlayingTrack?.let(MusicPlayer.PlaybackState::Paused)
-                player.playbackState == Player.STATE_IDLE -> MusicPlayer.PlaybackState.Idle
-                player.playbackState == Player.STATE_ENDED -> currentlyPlayingTrack?.let(MusicPlayer.PlaybackState::Ended)
+                isPaused -> currentlyPlayingTrack?.let(MusicPlayerV2.PlaybackState::Paused)
+                player.playbackState == Player.STATE_IDLE -> MusicPlayerV2.PlaybackState.Idle
+                player.playbackState == Player.STATE_ENDED -> currentlyPlayingTrack?.let(MusicPlayerV2.PlaybackState::Ended)
                 else -> null
             } ?: return@createEventsListener
             trySend(newPlaybackState)
@@ -69,7 +66,7 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
         .stateIn(
             CoroutineScope(Dispatchers.Default),
             SharingStarted.WhileSubscribed(500),
-            MusicPlayer.PlaybackState.Idle
+            MusicPlayerV2.PlaybackState.Idle
         )
 
     private fun createEventsListener(onEvents: (Player, Player.Events) -> Unit) =
@@ -80,15 +77,15 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
         }
 
     private fun buildPlayingState(
-        track: MusicPlayer.Track,
+        track: MusicPlayerV2.Track,
         player: Player,
-    ) = MusicPlayer.PlaybackState.Playing(
+    ) = MusicPlayerV2.PlaybackState.Playing(
         currentlyPlayingTrack = track,
         totalDuration = player.duration,
         currentPlaybackPositionInMillisFlow = player.getCurrentPlaybackProgressFlow()
     )
 
-    override fun playTrack(track: MusicPlayer.Track) {
+    override fun playTrack(track: MusicPlayerV2.Track) {
         with(exoPlayer) {
             if (currentlyPlayingTrack == track) {
                 seekTo(0)
@@ -121,7 +118,7 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
 
     companion object {
         private const val NOTIFICATION_CHANNEL_ID =
-            "com.example.musify.musicplayer.MusicPlayerService.NOTIFICATION_CHANNEL_ID"
+            "com.example.musify.musicplayer.MusicPlayerV2Service.NOTIFICATION_CHANNEL_ID"
         private const val NOTIFICATION_ID = 1
     }
 }

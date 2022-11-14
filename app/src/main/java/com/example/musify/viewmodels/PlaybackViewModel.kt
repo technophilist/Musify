@@ -9,7 +9,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.toMusicPlayerTrack
-import com.example.musify.musicplayer.MusicPlayer
 import com.example.musify.musicplayer.MusicPlayerV2
 import com.example.musify.musicplayer.utils.toTrackSearchResult
 import com.example.musify.usecases.downloadDrawableFromUrlUseCase.DownloadDrawableFromUrlUseCase
@@ -45,8 +44,8 @@ class PlaybackViewModel @Inject constructor(
     init {
         musicPlayer.currentPlaybackStateStream.onEach{
             _playbackState.value = when (it) {
-                is MusicPlayer.PlaybackState.Idle -> PlaybackState.Idle
-                is MusicPlayer.PlaybackState.Playing -> {
+                is MusicPlayerV2.PlaybackState.Idle -> PlaybackState.Idle
+                is MusicPlayerV2.PlaybackState.Playing -> {
                     _totalDurationOfCurrentTrackTimeText.value =
                         convertTimestampMillisToString(it.totalDuration)
                     flowOfProgressOfCurrentTrack.value =
@@ -55,14 +54,14 @@ class PlaybackViewModel @Inject constructor(
                         it.currentPlaybackPositionInMillisFlow.map(::convertTimestampMillisToString)
                     PlaybackState.Playing(it.currentlyPlayingTrack.toTrackSearchResult())
                 }
-                is MusicPlayer.PlaybackState.Paused -> PlaybackState.Paused(it.currentlyPlayingTrack.toTrackSearchResult())
-                is MusicPlayer.PlaybackState.Error -> {
+                is MusicPlayerV2.PlaybackState.Paused -> PlaybackState.Paused(it.currentlyPlayingTrack.toTrackSearchResult())
+                is MusicPlayerV2.PlaybackState.Error -> {
                     viewModelScope.launch {
                         _eventChannel.send(Event.PlaybackError(playbackErrorMessage))
                     }
                     PlaybackState.Error(playbackErrorMessage)
                 }
-                is MusicPlayer.PlaybackState.Ended -> PlaybackState.PlaybackEnded(it.track.toTrackSearchResult())
+                is MusicPlayerV2.PlaybackState.Ended -> PlaybackState.PlaybackEnded(it.track.toTrackSearchResult())
             }
         }.launchIn(viewModelScope)
     }

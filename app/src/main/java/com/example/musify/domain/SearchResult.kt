@@ -1,7 +1,7 @@
 package com.example.musify.domain
 
 import android.graphics.Bitmap
-import com.example.musify.musicplayer.MusicPlayer
+import com.example.musify.musicplayer.MusicPlayerV2
 
 sealed class SearchResult {
     /**
@@ -57,11 +57,11 @@ sealed class SearchResult {
 
 /**
  * A mapper method used to map an instance of
- * [SearchResult.TrackSearchResult] to an instance of [MusicPlayer.Track].
+ * [SearchResult.TrackSearchResult] to an instance of [MusicPlayerV2.Track].
  */
-fun SearchResult.TrackSearchResult.toMusicPlayerTrack(albumArtBitmap: Bitmap): MusicPlayer.Track {
+fun SearchResult.TrackSearchResult.toMusicPlayerTrack(albumArtBitmap: Bitmap): MusicPlayerV2.Track {
     if (trackUrlString == null) throw IllegalStateException("The trackUrlString cannot be null during conversion")
-    return MusicPlayer.Track(
+    return MusicPlayerV2.Track(
         id = id,
         title = name,
         artistsString = artistsString,
