@@ -64,9 +64,15 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
         // distinctUntilChanged
     }.distinctUntilChanged()
         .stateIn(
-            CoroutineScope(Dispatchers.Default),
-            SharingStarted.WhileSubscribed(500),
-            MusicPlayerV2.PlaybackState.Idle
+            // Convert to stateflow so that new subscribers always get the latest value.
+            // For example, if the user starts playing a track on the search screen
+            // and moves to an album detail screen containing the same track, then
+            // the subscriber associated with the detail screen can be used to
+            // highlight the playing track. It is able to do so because, the first
+            // value that the new subscriber gets will be the currently playing track.
+            scope =  CoroutineScope(Dispatchers.Default),
+            started =  SharingStarted.WhileSubscribed(500),
+            initialValue = MusicPlayerV2.PlaybackState.Idle
         )
 
     private fun createEventsListener(onEvents: (Player, Player.Events) -> Unit) =
