@@ -3,10 +3,7 @@ package com.example.musify.ui.navigation
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -70,7 +67,6 @@ fun MusifyNavigation(
         ) { nestedController ->
             searchScreen(
                 route = MusifyNavigationDestinations.SearchScreen.route,
-                currentlyPlayingTrack = currentlyPlayingTrack,
                 isPlaybackLoading = isPlaybackLoading,
                 onSearchResultClicked = nestedController::navigateToDetailScreen,
                 isFullScreenNowPlayingScreenOverlayVisible = isFullScreenNowPlayingOverlayScreenVisible
@@ -117,7 +113,6 @@ private fun NavGraphBuilder.homeScreen(
 @ExperimentalMaterialApi
 private fun NavGraphBuilder.searchScreen(
     route: String,
-    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     isPlaybackLoading: Boolean,
     onSearchResultClicked: (SearchResult) -> Unit,
     isFullScreenNowPlayingScreenOverlayVisible: Boolean,
@@ -158,6 +153,7 @@ private fun NavGraphBuilder.searchScreen(
                 else DynamicThemeResource.FromImageUrl(imageUrl)
             }
         }
+        val currentlyPlayingTrack by viewModel.currentlyPlayingTrackStream.collectAsState(initial = null)
         DynamicallyThemedSurface(
             dynamicThemeResource = dynamicThemeResource,
             dynamicBackgroundType = DynamicBackgroundType.Gradient()
