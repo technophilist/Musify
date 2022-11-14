@@ -19,7 +19,7 @@ import javax.inject.Inject
 class MusifyBackgroundMusicPlayerV2 @Inject constructor(
     @ApplicationContext context: Context,
     private val exoPlayer: ExoPlayer
-):MusicPlayerV2 {
+) : MusicPlayerV2 {
     private var currentlyPlayingTrack: MusicPlayer.Track? = null
     private val notificationManagerBuilder by lazy {
         PlayerNotificationManager.Builder(context, NOTIFICATION_ID, NOTIFICATION_CHANNEL_ID)
@@ -32,6 +32,7 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
             ).setChannelNameResourceId(R.string.notification_channel_name)
             .setChannelDescriptionResourceId(R.string.notification_channel_description)
     }
+
     override fun getCurrentPlaybackStateStream() = callbackFlow {
         val listener = createEventsListener { player, events ->
             if (!events.containsAny(
@@ -54,7 +55,8 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
             } ?: return@createEventsListener
             trySend(newPlaybackState)
         }
-        awaitClose{ exoPlayer.removeListener(listener) }
+        exoPlayer.addListener(listener)
+        awaitClose { exoPlayer.removeListener(listener) }
         // This callback can be called multiple times on events that may
         // not be of relevance. This may lead to the generation of a new
         // state that is equivalent to the old state. Therefore use
@@ -77,7 +79,7 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
         currentPlaybackPositionInMillisFlow = player.getCurrentPlaybackProgressFlow()
     )
 
-     override fun playTrack(track: MusicPlayer.Track){
+    override fun playTrack(track: MusicPlayer.Track) {
         with(exoPlayer) {
             if (currentlyPlayingTrack == track) {
                 seekTo(0)
@@ -92,15 +94,15 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
         }
     }
 
-     override fun pauseCurrentlyPlayingTrack() {
+    override fun pauseCurrentlyPlayingTrack() {
         exoPlayer.pause()
     }
 
-     override fun stopPlayingTrack() {
+    override fun stopPlayingTrack() {
         exoPlayer.stop()
     }
 
-     override fun tryResume(): Boolean {
+    override fun tryResume(): Boolean {
         if (exoPlayer.isPlaying) return false
         return currentlyPlayingTrack?.let {
             exoPlayer.playWhenReady = true
