@@ -10,14 +10,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.toMusicPlayerTrack
 import com.example.musify.musicplayer.MusicPlayer
+import com.example.musify.musicplayer.MusicPlayerV2
 import com.example.musify.musicplayer.utils.toTrackSearchResult
 import com.example.musify.usecases.downloadDrawableFromUrlUseCase.DownloadDrawableFromUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -25,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PlaybackViewModel @Inject constructor(
     application: Application,
-    private val musicPlayer: MusicPlayer,
+    private val musicPlayer: MusicPlayerV2,
     private val downloadDrawableFromUrlUseCase: DownloadDrawableFromUrlUseCase
 ) : AndroidViewModel(application) {
 
@@ -45,7 +43,7 @@ class PlaybackViewModel @Inject constructor(
     private val playbackErrorMessage = "An error occurred. Please check internet connection."
 
     init {
-        musicPlayer.addOnPlaybackStateChangedListener {
+        musicPlayer.getCurrentPlaybackStateStream().onEach{
             _playbackState.value = when (it) {
                 is MusicPlayer.PlaybackState.Idle -> PlaybackState.Idle
                 is MusicPlayer.PlaybackState.Playing -> {
@@ -66,7 +64,7 @@ class PlaybackViewModel @Inject constructor(
                 }
                 is MusicPlayer.PlaybackState.Ended -> PlaybackState.PlaybackEnded(it.track.toTrackSearchResult())
             }
-        }
+        }.launchIn(viewModelScope)
     }
 
     fun playTrack(
@@ -112,11 +110,6 @@ class PlaybackViewModel @Inject constructor(
         else "%02d%02d:%02d".format(
             toHours(millis), toMinutes(millis), toSeconds(millis)
         )
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        musicPlayer.removeListenersIfAny()
     }
 
     companion object {
