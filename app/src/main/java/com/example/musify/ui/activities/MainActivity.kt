@@ -94,7 +94,6 @@ private fun MusifyApp() {
         MusifyNavigation(
             navController = navController,
             playTrack = playbackViewModel::playTrack,
-            currentlyPlayingTrack = playbackState.currentlyPlayingTrack,
             isPlaybackLoading = playbackState is PlaybackViewModel.PlaybackState.Loading,
             isFullScreenNowPlayingOverlayScreenVisible = isNowPlayingScreenVisible
         )

@@ -36,7 +36,6 @@ import com.example.musify.viewmodels.searchviewmodel.SearchViewModel
 fun MusifyNavigation(
     navController: NavHostController,
     playTrack: (SearchResult.TrackSearchResult) -> Unit,
-    currentlyPlayingTrack: SearchResult.TrackSearchResult?,
     isPlaybackLoading: Boolean,
     isFullScreenNowPlayingOverlayScreenVisible: Boolean,
 ) {
