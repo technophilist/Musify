@@ -12,6 +12,7 @@ import com.example.musify.data.repositories.searchrepository.SearchRepository
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.IODispatcher
 import com.example.musify.domain.SearchResult
+import com.example.musify.usecases.getCurrentlyPlayingTrackUseCase.GetCurrentlyPlayingTrackUseCase
 import com.example.musify.viewmodels.getCountryCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -28,6 +29,7 @@ enum class SearchScreenUiState { LOADING, IDLE }
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     application: Application,
+    getCurrentlyPlayingTrackUseCase: GetCurrentlyPlayingTrackUseCase,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val genresRepository: GenresRepository,
     private val searchRepository: SearchRepository
@@ -60,6 +62,9 @@ class SearchViewModel @Inject constructor(
         MutableStateFlow<PagingData<SearchResult.PlaylistSearchResult>>(PagingData.empty())
     val playlistListForSearchQuery =
         _playlistListForSearchQuery as Flow<PagingData<SearchResult.PlaylistSearchResult>>
+
+    val currentlyPlayingTrackStream =
+        getCurrentlyPlayingTrackUseCase.getCurrentlyPlayingTrackStream()
 
     private fun collectAndAssignSearchResults(
         searchQuery: String,
