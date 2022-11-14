@@ -1,8 +1,6 @@
 package com.example.musify.di
 
-import com.example.musify.musicplayer.MusicPlayer
 import com.example.musify.musicplayer.MusicPlayerV2
-import com.example.musify.musicplayer.MusifyBackgroundMusicPlayer
 import com.example.musify.musicplayer.MusifyBackgroundMusicPlayerV2
 import dagger.Binds
 import dagger.Module
@@ -21,14 +19,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class MusicPlayerModule {
     @Binds
-    abstract fun bindMusicPlayer(
-        musifyBackgroundMusicPlayer: MusifyBackgroundMusicPlayer
-    ): MusicPlayer
-
-    @Binds
     @Singleton
     abstract fun bindMusicPlayerV2(
         musifyBackgroundMusicPlayerV2: MusifyBackgroundMusicPlayerV2
     ): MusicPlayerV2
-
 }
