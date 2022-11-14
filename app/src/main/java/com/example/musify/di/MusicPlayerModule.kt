@@ -2,8 +2,6 @@ package com.example.musify.di
 
 import com.example.musify.musicplayer.MusicPlayer
 import com.example.musify.musicplayer.MusifyBackgroundMusicPlayer
-import com.example.musify.usecases.downloadDrawableFromUrlUseCase.DownloadDrawableFromUrlUseCase
-import com.example.musify.usecases.downloadDrawableFromUrlUseCase.MusifyDownloadDrawableFromUrlUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -24,8 +22,4 @@ abstract class MusicPlayerModule {
         musifyBackgroundMusicPlayer: MusifyBackgroundMusicPlayer
     ): MusicPlayer
 
-    @Binds
-    abstract fun bindDownloadDrawableFromUrlUseCase(
-        impl: MusifyDownloadDrawableFromUrlUseCase
-    ): DownloadDrawableFromUrlUseCase
 }
