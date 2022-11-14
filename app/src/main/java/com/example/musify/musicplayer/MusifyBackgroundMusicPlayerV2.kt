@@ -10,9 +10,13 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 
@@ -33,7 +37,7 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
             .setChannelDescriptionResourceId(R.string.notification_channel_description)
     }
 
-    override fun getCurrentPlaybackStateStream() = callbackFlow {
+    override val currentPlaybackStateStream = callbackFlow {
         val listener = createEventsListener { player, events ->
             if (!events.containsAny(
                     Player.EVENT_PLAYBACK_STATE_CHANGED,
@@ -62,6 +66,11 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
         // state that is equivalent to the old state. Therefore use
         // distinctUntilChanged
     }.distinctUntilChanged()
+        .stateIn(
+            CoroutineScope(Dispatchers.Default),
+            SharingStarted.WhileSubscribed(500),
+            MusicPlayer.PlaybackState.Idle
+        )
 
     private fun createEventsListener(onEvents: (Player, Player.Events) -> Unit) =
         object : Player.Listener {

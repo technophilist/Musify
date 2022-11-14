@@ -43,7 +43,7 @@ class PlaybackViewModel @Inject constructor(
     private val playbackErrorMessage = "An error occurred. Please check internet connection."
 
     init {
-        musicPlayer.getCurrentPlaybackStateStream().onEach{
+        musicPlayer.currentPlaybackStateStream.onEach{
             _playbackState.value = when (it) {
                 is MusicPlayer.PlaybackState.Idle -> PlaybackState.Idle
                 is MusicPlayer.PlaybackState.Playing -> {

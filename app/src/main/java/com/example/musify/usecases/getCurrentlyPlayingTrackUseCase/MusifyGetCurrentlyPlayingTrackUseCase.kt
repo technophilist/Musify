@@ -13,7 +13,7 @@ class MusifyGetCurrentlyPlayingTrackUseCase @Inject constructor(
     val musicPlayer: MusicPlayerV2
 ) : GetCurrentlyPlayingTrackUseCase {
     override fun getCurrentlyPlayingTrackStream(): Flow<SearchResult.TrackSearchResult> =
-        musicPlayer.getCurrentPlaybackStateStream()
+        musicPlayer.currentPlaybackStateStream
             .filterIsInstance<MusicPlayer.PlaybackState.Playing>()
             .mapNotNull { it.currentlyPlayingTrack.toTrackSearchResult() }
 }
