@@ -13,6 +13,7 @@ import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
+import com.example.musify.usecases.getCurrentlyPlayingTrackUseCase.GetCurrentlyPlayingTrackUseCase
 import com.example.musify.viewmodels.getCountryCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -33,6 +34,7 @@ class ArtistDetailViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
     albumsRepository: AlbumsRepository,
+    getCurrentlyPlayingTrackUseCase: GetCurrentlyPlayingTrackUseCase,
     private val tracksRepository: TracksRepository,
 ) : AndroidViewModel(application) {
 
@@ -45,6 +47,9 @@ class ArtistDetailViewModel @Inject constructor(
     private val defaultMapperImageSize = MapperImageSize.MEDIUM
     private val artistId =
         savedStateHandle.get<String>(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ARTIST_ID)!!
+
+    val currentlyPlayingTrackStream =
+        getCurrentlyPlayingTrackUseCase.getCurrentlyPlayingTrackStream()
 
 
     val albumsOfArtistFlow = albumsRepository.getPaginatedStreamForAlbumsOfArtist(

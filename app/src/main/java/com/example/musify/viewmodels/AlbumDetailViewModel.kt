@@ -11,6 +11,7 @@ import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
+import com.example.musify.usecases.getCurrentlyPlayingTrackUseCase.GetCurrentlyPlayingTrackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,8 +26,10 @@ sealed class AlbumDetailUiState {
 class AlbumDetailViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
+    getCurrentlyPlayingTrackUseCase: GetCurrentlyPlayingTrackUseCase,
     private val tracksRepository: TracksRepository,
 ) : AndroidViewModel(application) {
+
 
     private val _tracks = mutableStateOf<List<SearchResult.TrackSearchResult>>(emptyList())
     val tracks = _tracks as State<List<SearchResult.TrackSearchResult>>
@@ -37,6 +40,8 @@ class AlbumDetailViewModel @Inject constructor(
     private val albumId =
         savedStateHandle.get<String>(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_ALBUM_ID)!!
     private val defaultMapperImageSize = MapperImageSize.MEDIUM
+    val currentlyPlayingTrackStream =
+        getCurrentlyPlayingTrackUseCase.getCurrentlyPlayingTrackStream()
 
     init {
         fetchAndAssignTrackList()
