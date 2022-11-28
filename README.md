@@ -4,6 +4,8 @@ completely built with Jetpack compose. It is also worth noting that it is not a 
 that is heavily inspired by the design of the official Spotify app with custom tweaks. It uses many API’s such as Hilt,Retrofit, and Paging 3. I built this
 project purely for educational purposes. I neither intend to release, nor do I plan on monetizing any part of this project. 
 
+# Screenshots
+<img src = "screenshots/home_screen.png" width = "270" height = "600"/> &nbsp; <img src = "screenshots/search_screen.png" width = "270" height = "600"/> &nbsp; <img src = "screenshots/premium_screen.png" width = "270" height = "600"/>
 # Tech Stack
 - Entirely written in [Kotlin](https://kotlinlang.org/).
 - [Hilt](https://www.google.com/url?client=internal-element-cse&cx=000521750095050289010:zpcpi1ea4s8&q=https://developer.android.com/training/dependency-injection/hilt-android&sa=U&ved=2ahUKEwiW5omeu6z4AhWRR2wGHVUsCo0QFnoECAMQAQ&usg=AOvVaw3dCbP79C6od3KVCnJub3v0) for dependency injection.
