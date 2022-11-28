@@ -31,33 +31,29 @@ project purely for educational purposes. I neither intend to release, nor do I p
 
 ## Notable features
 
-### Global Playback state ▶️
-The currently playing track gets highlighted in any screen that contains the currently playing track. This is achieved by maintaining a global playback state. Once the currently playing state changes, it will be notified to all the screens.
-
-### Dynamic theme 🎨
-This app uses Google’s Palette API to fetch the background color of the screens based on an image. For example, the album art associated with the first search result determines the background gradient color of the search screen.
-
-### Specific error messages ⚠️
-When there is an error, the app will try to be as specific as possible. For example, if no tracks are found for a particular search query, then it’ll be specific and state that no “tracks” where found instead of displaying a generic “no results found” message. This applies for the rest of the app as well. In certain cases, it even provides a retry button.
-
-### Insets ⌨️
-The app uses insets to ensure that the content of the screen doesn't get overlaid by system views. It even accomondates the UI for the IME (on screen keyboard). For example, in the search screen, the loading animation will be moved up when the on screen keyboard appears.
-
-### Time & Locale based in-app content 🕐
-The content displayed in the home screen is based on the current time and locale associated with the user's device. This is made possible because the Spotify API allows the specification of timestamp and locale as query parameters.
-
-### Backstack management 🗂
-The app ensures that the backstack is properly managed. By poping upto, but not including the Home Screen everytime the user navigates to a bottom naivgation destination, the number of destinations in the backstack gets reduced. This imporves the overall UX of the app. 
-
-### Attention to tiny details 🔍
-The app was built with an attention to even the tiniest of details. These features might seem trivial, but it affects the UX negatively if they are not present. The app tries to mimic such functionality even though they might get unnoticed in order to immitate the features that the app would need, if it were to be officially released. The following are some of the many UX improving features that the app has. 
-
-- The clear button of the search bar in the search screen will only appear if there is text within it. It also uses a subtle animation while entering/exiting.
+<dl>
+  <dt> Global Playback state ▶️ </dt>
+  <dd> The currently playing track gets highlighted in any screen that contains the currently playing track. This is achieved by maintaining a global playback state. Once the currently playing state changes, it will be notified to all the screens. </dd>
+  <dt> Dynamic theme 🎨 </dt>
+  <dd>This app uses Google’s Palette API to fetch the background color of the screens based on an image. For example, the album art associated with the first search result determines the background gradient color of the search screen.</dd>
+  <dt> Specific error messages ⚠️ </dt>
+  <dd> When there is an error, the app will try to be as specific as possible. For example, if no tracks are found for a particular search query, then it’ll be specific and state that no “tracks” where found instead of displaying a generic “no results found” message. This applies for the rest of the app as well. In certain cases, it even provides a retry button. </dd>
+  <dt> Insets ⌨️ </dt>
+  <dd> The app uses insets to ensure that the content of the screen doesn't get overlaid by system views. It even accomondates the UI for the IME (on screen keyboard). For example, in the search screen, the loading animation will be moved up when the on screen keyboard appears.</dd>
+  <dt> Time & Locale based in-app content 🕐 </dt>
+  <dd> The content displayed in the home screen is based on the current time and locale associated with the user's device. This is made possible because the Spotify API allows the specification of timestamp and locale as query parameters. </dd>
+  <dt> Backstack management 🗂 </dt>
+  <dd> The app ensures that the backstack is properly managed. By poping upto, but not including the Home Screen everytime the user navigates to a bottom naivgation destination, the number of destinations in the backstack gets reduced. This imporves the overall UX of the app. </dd>
+  <dt> Attention to tiny details 🔍 </dt>
+  <dd> The app was built with an attention to even the tiniest of details. These features might seem trivial, but it affects the UX negatively if they are not present. The app tries to mimic such functionality even though they might get unnoticed in order to immitate the features that the app would need, if it were to be officially released. The following are some of the many UX improving features that the app has. <br>
+  
+  - The clear button of the search bar in the search screen will only appear if there is text within it. It also uses a subtle animation while entering/exiting.
 - If the user is inside a nested navigation destination associated with a bottom navigation destination, and taps on the bottom navigation icon, the backstack would be popped.
-
-### Additional features 🎄
-As of writing this, the IOS version of the official Spotify app uses a dynamic background color in the search screen. The Android version of the app doesn't have that feature. The Musify app mimics that feature by using a dynamic background color for the search screen.
-
+   </dd>
+   <dt> Additional features 🎄 </dt>
+   <dd> As of writing this, the IOS version of the official Spotify app uses a dynamic background color in the search screen. The Android version of the app doesn't have that feature. The Musify app mimics that feature by using a dynamic background color for the search screen. </dd>
+  
+</dl>
 
 ## Source code and architecture
 - All concrete implementations are prefixed by the term "Musify".
