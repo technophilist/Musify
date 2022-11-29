@@ -41,4 +41,10 @@ interface SearchRepository {
         countryCode: String,
         imageSize: MapperImageSize
     ): Flow<PagingData<SearchResult.PlaylistSearchResult>>
+
+    fun getPaginatedSearchStreamForPodcasts(
+        searchQuery: String,
+        countryCode: String,
+        imageSize: MapperImageSize
+    ): Flow<PagingData<SearchResult.PodcastSearchResult>>
 }
