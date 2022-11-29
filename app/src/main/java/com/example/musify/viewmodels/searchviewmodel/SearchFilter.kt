@@ -8,5 +8,6 @@ enum class SearchFilter(val filterLabel: String) {
     ALBUMS("Albums"),
     TRACKS("Tracks"),
     ARTISTS("Artists"),
-    PLAYLISTS("Playlists")
+    PLAYLISTS("Playlists"),
+    PODCASTS("Podcasts & Shows")
 }
