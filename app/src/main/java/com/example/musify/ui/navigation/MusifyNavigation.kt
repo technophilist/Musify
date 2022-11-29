@@ -128,7 +128,8 @@ private fun NavGraphBuilder.searchScreen(
                 albums,
                 artists,
                 tracks,
-                playlists
+                playlists,
+                podcasts
             )
         }
         val uiState by viewModel.uiState

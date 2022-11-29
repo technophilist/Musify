@@ -44,7 +44,8 @@ data class PagingItemsForSearchScreen(
     val albumListForSearchQuery: LazyPagingItems<SearchResult.AlbumSearchResult>,
     val artistListForSearchQuery: LazyPagingItems<SearchResult.ArtistSearchResult>,
     val tracksListForSearchQuery: LazyPagingItems<SearchResult.TrackSearchResult>,
-    val playlistListForSearchQuery: LazyPagingItems<SearchResult.PlaylistSearchResult>
+    val playlistListForSearchQuery: LazyPagingItems<SearchResult.PlaylistSearchResult>,
+    val podcastListForSearchQuery:LazyPagingItems<SearchResult.PodcastSearchResult>
 )
 
 // fix lazy list scrolling to top after config change
