@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 /**
  * A response that contains the results of a search operation.
  * All the properties are nullable because a search operation
- * for just [tracks],[albums],[artists] or [playlists], or
+ * for just [tracks],[albums],[artists],[playlists],[shows] or
  * a combination of any of the above can be made, in which
  * case, the other properties will be null.
  */
@@ -15,12 +15,14 @@ data class SearchResultsResponse(
     val tracks: Tracks?,
     val albums: Albums?,
     val artists: Artists?,
-    val playlists: Playlists?
+    val playlists: Playlists?,
+    val shows: Shows?
 ) {
     data class Tracks(@JsonProperty("items") val value: List<TrackResponseWithAlbumMetadata>)
     data class Albums(@JsonProperty("items") val value: List<AlbumMetadataResponse>)
     data class Artists(@JsonProperty("items") val value: List<ArtistResponse>)
     data class Playlists(@JsonProperty("items") val value: List<PlaylistMetadataResponse>)
+    data class Shows(@JsonProperty("items") val value: List<ShowMetadataResponse>)
 }
 
 /**
