@@ -279,6 +279,9 @@ class NavGraphWithDetailScreensNestedController(
                 playTrack(searchResult)
                 return
             }
+            is SearchResult.ShowSearchResult -> {
+                TODO()
+            }
         }
         navController.navigate(associatedNavGraphRoute + route)
     }

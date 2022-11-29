@@ -53,6 +53,13 @@ sealed class SearchResult {
         val artistsString: String,
         val trackUrlString: String?
     ) : SearchResult()
+
+    data class ShowSearchResult(
+        val id: String,
+        val name: String,
+        val nameOfPublisher: String,
+        val imageUrlString: String,
+    ) : SearchResult()
 }
 
 /**
