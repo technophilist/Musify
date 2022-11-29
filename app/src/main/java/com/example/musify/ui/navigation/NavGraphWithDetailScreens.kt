@@ -279,7 +279,7 @@ class NavGraphWithDetailScreensNestedController(
                 playTrack(searchResult)
                 return
             }
-            is SearchResult.ShowSearchResult -> {
+            is SearchResult.PodcastSearchResult -> {
                 TODO()
             }
         }

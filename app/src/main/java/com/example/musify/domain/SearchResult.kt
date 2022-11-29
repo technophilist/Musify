@@ -54,7 +54,7 @@ sealed class SearchResult {
         val trackUrlString: String?
     ) : SearchResult()
 
-    data class ShowSearchResult(
+    data class PodcastSearchResult(
         val id: String,
         val name: String,
         val nameOfPublisher: String,
