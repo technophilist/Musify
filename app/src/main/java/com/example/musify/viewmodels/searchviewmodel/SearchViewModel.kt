@@ -63,6 +63,11 @@ class SearchViewModel @Inject constructor(
     val playlistListForSearchQuery =
         _playlistListForSearchQuery as Flow<PagingData<SearchResult.PlaylistSearchResult>>
 
+    private val _podcastListForSearchQuery =
+        MutableStateFlow<PagingData<SearchResult.PodcastSearchResult>>(PagingData.empty())
+    val podcastListForSearchQuery =
+        _podcastListForSearchQuery as Flow<PagingData<SearchResult.PodcastSearchResult>>
+
     val currentlyPlayingTrackStream =
         getCurrentlyPlayingTrackUseCase.getCurrentlyPlayingTrackStream()
 
@@ -101,6 +106,14 @@ class SearchViewModel @Inject constructor(
         ).cachedIn(viewModelScope)
             .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.PLAYLISTS) {
                 _playlistListForSearchQuery.value = it
+            }
+        searchRepository.getPaginatedSearchStreamForPodcasts(
+            searchQuery = searchQuery,
+            countryCode = getCountryCode(),
+            imageSize = imageSize
+        ).cachedIn(viewModelScope)
+            .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.PODCASTS) {
+                _podcastListForSearchQuery.value = it
             }
     }
 
