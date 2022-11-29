@@ -122,6 +122,7 @@ private fun NavGraphBuilder.searchScreen(
         val artists = viewModel.artistListForSearchQuery.collectAsLazyPagingItems()
         val playlists = viewModel.playlistListForSearchQuery.collectAsLazyPagingItems()
         val tracks = viewModel.trackListForSearchQuery.collectAsLazyPagingItems()
+        val podcasts = viewModel.podcastListForSearchQuery.collectAsLazyPagingItems()
         val pagingItems = remember {
             PagingItemsForSearchScreen(
                 albums,
@@ -147,6 +148,7 @@ private fun NavGraphBuilder.searchScreen(
                     SearchFilter.TRACKS -> tracks.itemSnapshotList.firstOrNull()?.imageUrlString
                     SearchFilter.ARTISTS -> artists.itemSnapshotList.firstOrNull()?.imageUrlString
                     SearchFilter.PLAYLISTS -> playlists.itemSnapshotList.firstOrNull()?.imageUrlString
+                    SearchFilter.PODCASTS  -> podcasts.itemSnapshotList.firstOrNull()?.imageUrlString
                 }
                 if (imageUrl == null) DynamicThemeResource.Empty
                 else DynamicThemeResource.FromImageUrl(imageUrl)
