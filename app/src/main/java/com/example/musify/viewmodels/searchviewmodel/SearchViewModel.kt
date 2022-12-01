@@ -122,6 +122,7 @@ class SearchViewModel @Inject constructor(
         _artistListForSearchQuery.value = PagingData.empty()
         _trackListForSearchQuery.value = PagingData.empty()
         _playlistListForSearchQuery.value = PagingData.empty()
+        _podcastListForSearchQuery.value = PagingData.empty()
     }
 
     /**
