@@ -240,6 +240,7 @@ private fun SearchQueryList(
                         onImageLoadingFinished = onImageLoadingFinished,
                         playlistImageErrorPainter = playlistImageErrorPainter
                     )
+                    SearchFilter.PODCASTS -> searchPodcastListItems(pagingItems.podcastListForSearchQuery,{})
                 }
                 item {
                     Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
