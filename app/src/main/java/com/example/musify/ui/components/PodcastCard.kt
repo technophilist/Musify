@@ -49,7 +49,7 @@ fun PodcastCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(180.dp)
-                    .clip(RoundedCornerShape(10.dp)),
+                    .clip(RoundedCornerShape(16.dp)),
                 model = podcastArtUrlString,
                 contentDescription = null,
                 contentScale = ContentScale.Crop
