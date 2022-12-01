@@ -3,7 +3,7 @@ package com.example.musify.ui.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -12,7 +12,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 
 /**
  * A card that shows basic information about a particular podcast.
@@ -34,6 +33,7 @@ fun PodcastCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var isLoadingPlaceholderVisible by remember { mutableStateOf(true) }
     Card(
         modifier = Modifier
             .width(160.dp)
@@ -45,14 +45,17 @@ fun PodcastCard(
         elevation = 0.dp
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            AsyncImage(
+            AsyncImageWithPlaceholder(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(160.dp)
                     .clip(RoundedCornerShape(16.dp)),
                 model = podcastArtUrlString,
                 contentDescription = null,
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                isLoadingPlaceholderVisible = isLoadingPlaceholderVisible,
+                onImageLoading = { isLoadingPlaceholderVisible = true },
+                onImageLoadingFinished = { isLoadingPlaceholderVisible = false }
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
