@@ -57,14 +57,14 @@ fun PodcastCard(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = name,
-                style = MaterialTheme.typography.subtitle1,
+                style = MaterialTheme.typography.subtitle2,
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = nameOfPublisher,
-                style = MaterialTheme.typography.subtitle1.copy(
+                style = MaterialTheme.typography.subtitle2.copy(
                     Color.White.copy(alpha = ContentAlpha.medium)
                 ),
                 fontWeight = FontWeight.Normal,
