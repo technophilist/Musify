@@ -23,7 +23,7 @@ import coil.compose.AsyncImage
  * @param nameOfPublisher the name of the publisher of the podcast.
  * @param onClick the lambda to execute when the item is clicked.
  * @param modifier the modifier to be applied to the composable. The
- * width is fixed at 175dp.
+ * width is fixed at 160dp.
  */
 @ExperimentalMaterialApi
 @Composable
@@ -36,7 +36,7 @@ fun PodcastCard(
 ) {
     Card(
         modifier = Modifier
-            .width(175.dp)
+            .width(160.dp)
             .height(IntrinsicSize.Min)
             .then(modifier),
         backgroundColor = Color.Transparent,
@@ -48,7 +48,7 @@ fun PodcastCard(
             AsyncImage(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp)
+                    .height(160.dp)
                     .clip(RoundedCornerShape(16.dp)),
                 model = podcastArtUrlString,
                 contentDescription = null,
