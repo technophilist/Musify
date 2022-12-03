@@ -86,3 +86,19 @@ fun SpotifyPodcastSearchPagingSource(
     spotifyService = spotifyService,
     resultsBlock = { it.toSearchResults(imageSize).shows }
 )
+
+@Suppress("FunctionName")
+fun SpotifyEpisodeSearchPagingSource(
+    searchQuery: String,
+    countryCode: String,
+    imageSize: MapperImageSize,
+    tokenRepository: TokenRepository,
+    spotifyService: SpotifyService
+): SpotifySearchPagingSource<SearchResult.EpisodeSearchResult> = SpotifySearchPagingSource(
+    searchQuery = searchQuery,
+    countryCode = countryCode,
+    searchQueryType = SearchQueryType.EPISODE,
+    tokenRepository = tokenRepository,
+    spotifyService = spotifyService,
+    resultsBlock = { it.toSearchResults(imageSize).episodes }
+)
