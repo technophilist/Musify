@@ -10,7 +10,8 @@ enum class SearchQueryType(val value: String) {
     ARTIST("artist"),
     PLAYLIST("playlist"),
     TRACK("track"),
-    SHOW("show")
+    SHOW("show"),
+    EPISODE("episode")
 }
 
 /**
