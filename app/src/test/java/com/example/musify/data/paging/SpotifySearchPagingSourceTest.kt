@@ -33,7 +33,7 @@ class SpotifySearchPagingSourceTest {
                     0 -> getSearchResultsResponseForFakePageNumber(FakeSearchResultsPageNumbers.PAGE_1)
                     2 -> getSearchResultsResponseForFakePageNumber(FakeSearchResultsPageNumbers.PAGE_2)
                     4 -> getSearchResultsResponseForFakePageNumber(FakeSearchResultsPageNumbers.PAGE_3)
-                    else -> SearchResultsResponse(null, null, null, null,null) // last page
+                    else -> SearchResultsResponse(null, null, null, null, null, null) // last page
                 }
             }
         }
@@ -94,7 +94,7 @@ class SpotifySearchPagingSourceTest {
             placeholdersEnabled = false
         )
         val expectedLoadResult = PagingSource.LoadResult.Page(
-            data = SearchResultsResponse(null, null, null, null,null)
+            data = SearchResultsResponse(null, null, null, null, null,null)
                 .toSearchResults(MapperImageSize.SMALL).tracks,
             prevKey = 2,
             nextKey = null

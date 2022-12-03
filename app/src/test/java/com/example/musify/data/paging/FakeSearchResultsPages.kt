@@ -20,5 +20,6 @@ fun getSearchResultsResponseForFakePageNumber(fakePageNumber: FakeSearchResultsP
         albums = SearchResultsResponse.Albums(listOf(fakeAlbums[fakePageNumber.pageIndexValue])),
         artists = SearchResultsResponse.Artists(listOf(fakeArtists[fakePageNumber.pageIndexValue])),
         playlists = SearchResultsResponse.Playlists(listOf(fakePlaylists[fakePageNumber.pageIndexValue])),
-        shows = SearchResultsResponse.Shows(listOf(fakeShows[fakePageNumber.pageIndexValue]))
+        shows = SearchResultsResponse.Shows(listOf(fakeShows[fakePageNumber.pageIndexValue])),
+        episodes = SearchResultsResponse.Episodes(emptyList()) // TODO
     )

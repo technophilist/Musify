@@ -16,13 +16,15 @@ data class SearchResultsResponse(
     val albums: Albums?,
     val artists: Artists?,
     val playlists: Playlists?,
-    val shows: Shows?
+    val shows: Shows?,
+    val episodes: Episodes?
 ) {
     data class Tracks(@JsonProperty("items") val value: List<TrackResponseWithAlbumMetadata>)
     data class Albums(@JsonProperty("items") val value: List<AlbumMetadataResponse>)
     data class Artists(@JsonProperty("items") val value: List<ArtistResponse>)
     data class Playlists(@JsonProperty("items") val value: List<PlaylistMetadataResponse>)
     data class Shows(@JsonProperty("items") val value: List<ShowMetadataResponse>)
+    data class Episodes(@JsonProperty("items") val value: List<EpisodeMetadataResponse>)
 }
 
 /**
