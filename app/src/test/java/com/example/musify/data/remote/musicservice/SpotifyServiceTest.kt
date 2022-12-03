@@ -389,4 +389,18 @@ class SpotifyServiceTest {
             assert(searchResultsDTO.shows!!.value.isNotEmpty())
         }
     }
+
+    @Test
+    fun searchEpisodeTest_validShowName_returnsAtleastOneEpisode() {
+        runBlockingWithToken {
+            val searchResultsDTO = musicService.search(
+                searchQuery = "Waveform: The MKBHD Podcast",
+                market = "US",
+                token = it,
+                type = SearchQueryType.EPISODE.value
+            )
+            assert(searchResultsDTO.episodes != null)
+            assert(searchResultsDTO.episodes!!.value.isNotEmpty())
+        }
+    }
 }
