@@ -60,6 +60,22 @@ sealed class SearchResult {
         val nameOfPublisher: String,
         val imageUrlString: String,
     ) : SearchResult()
+
+    data class EpisodeSearchResult(
+        val id: String,
+        val episodeContentInfo: EpisodeContentInfo,
+        val episodeReleaseDateInfo: EpisodeReleaseDateInfo,
+        val episodeDurationInfo: EpisodeDurationInfo
+    ) : SearchResult() {
+        data class EpisodeContentInfo(
+            val title: String,
+            val description: String,
+            val imageUrlString: String
+        )
+
+        data class EpisodeReleaseDateInfo(val month: String, val day: Int, val year: Int)
+        data class EpisodeDurationInfo(val hours: Int, val minutes: Int)
+    }
 }
 
 /**

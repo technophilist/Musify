@@ -282,6 +282,9 @@ class NavGraphWithDetailScreensNestedController(
             is SearchResult.PodcastSearchResult -> {
                 TODO()
             }
+            is SearchResult.EpisodeSearchResult->{
+                TODO()
+            }
         }
         navController.navigate(associatedNavGraphRoute + route)
     }
