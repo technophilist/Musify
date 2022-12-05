@@ -68,6 +68,12 @@ class SearchViewModel @Inject constructor(
     val podcastListForSearchQuery =
         _podcastListForSearchQuery as Flow<PagingData<SearchResult.PodcastSearchResult>>
 
+    private val _episodeListForSearchQuery =
+        MutableStateFlow<PagingData<SearchResult.EpisodeSearchResult>>(PagingData.empty())
+
+    val episodeListForSearchQuery =
+        _episodeListForSearchQuery as Flow<PagingData<SearchResult.EpisodeSearchResult>>
+
     val currentlyPlayingTrackStream =
         getCurrentlyPlayingTrackUseCase.getCurrentlyPlayingTrackStream()
 
@@ -115,6 +121,15 @@ class SearchViewModel @Inject constructor(
             .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.PODCASTS) {
                 _podcastListForSearchQuery.value = it
             }
+        searchRepository.getPaginatedSearchStreamForEpisodes(
+            searchQuery = searchQuery,
+            countryCode = getCountryCode(),
+            imageSize = imageSize
+        ).cachedIn(viewModelScope)
+            .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.PODCASTS) {
+                _episodeListForSearchQuery.value = it
+            }
+
     }
 
     private fun setEmptyValuesToAllSearchResults() {
@@ -123,6 +138,7 @@ class SearchViewModel @Inject constructor(
         _trackListForSearchQuery.value = PagingData.empty()
         _playlistListForSearchQuery.value = PagingData.empty()
         _podcastListForSearchQuery.value = PagingData.empty()
+        _episodeListForSearchQuery.value = PagingData.empty()
     }
 
     /**
