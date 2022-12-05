@@ -98,4 +98,18 @@ class MusifySearchRepository @Inject constructor(
             spotifyService = spotifyService
         )
     }.flow
+
+    override fun getPaginatedSearchStreamForEpisodes(
+        searchQuery: String,
+        countryCode: String,
+        imageSize: MapperImageSize
+    ): Flow<PagingData<SearchResult.EpisodeSearchResult>> = Pager(pagingConfig) {
+        SpotifyEpisodeSearchPagingSource(
+            searchQuery = searchQuery,
+            countryCode = countryCode,
+            imageSize = imageSize,
+            tokenRepository = tokenRepository,
+            spotifyService = spotifyService
+        )
+    }.flow
 }
