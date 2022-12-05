@@ -188,7 +188,7 @@ fun LazyListScope.searchPodcastListItems(
         LazyRow(
             modifier = Modifier
                 .fillParentMaxWidth()
-                .padding(bottom = 8.dp),
+                .height(238.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
