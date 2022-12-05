@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -13,34 +14,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.musify.domain.SearchResult
 
-data class EpisodeDateInfo(
-    val month:String,
-    val day:Int,
-    val year:Int
-)
-
-data class EpisodeDurationInfo(
-    val hours:Int,
-    val minutes:Int
-)
+@Suppress("RemoveSingleExpressionStringTemplate")
+private fun SearchResult.EpisodeSearchResult.getDateAndDurationString(): String {
+    return "${episodeReleaseDateInfo.month}" +
+            " ${episodeReleaseDateInfo.day}," +
+            " ${episodeReleaseDateInfo.year} • " +
+            "${episodeDurationInfo.hours} hrs " +
+            "${episodeDurationInfo.minutes} mins"
+}
 
 @ExperimentalMaterialApi
 @Composable
 fun EpisodeListCard(
-    imageUrlString: String,
-    title: String,
-    description: String,
-    episodeDurationInfo: EpisodeDurationInfo,
-    episodeDateInfo: EpisodeDateInfo,
+    episodeSearchResult: SearchResult.EpisodeSearchResult,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = Color.Transparent,
 ) {
+    val dateAndDurationString = remember(episodeSearchResult) {
+        episodeSearchResult.getDateAndDurationString()
+    }
     Card(
         modifier = Modifier
             .height(IntrinsicSize.Min)
             .then(modifier),
         elevation = 0.dp,
+        backgroundColor = backgroundColor,
         onClick = onClick
     ) {
         Row(
@@ -54,7 +55,7 @@ fun EpisodeListCard(
                 modifier = Modifier
                     .size(98.dp)
                     .clip(RoundedCornerShape(8.dp)),
-                model = imageUrlString,
+                model = episodeSearchResult.episodeContentInfo.imageUrlString,
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
             )
@@ -65,14 +66,14 @@ fun EpisodeListCard(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    text = title,
+                    text = episodeSearchResult.episodeContentInfo.title,
                     style = MaterialTheme.typography.subtitle2,
                     fontWeight = FontWeight.Bold,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = description,
+                    text = episodeSearchResult.episodeContentInfo.description,
                     style = MaterialTheme.typography.subtitle2.copy(
                         Color.White.copy(alpha = ContentAlpha.medium)
                     ),
@@ -82,7 +83,7 @@ fun EpisodeListCard(
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    text = "${episodeDateInfo.month} ${episodeDateInfo.day}, ${episodeDateInfo.year} • ${episodeDurationInfo.hours} hrs ${episodeDurationInfo.minutes} mins",
+                    text = dateAndDurationString,
                     style = MaterialTheme.typography.subtitle2.copy(
                         Color.White.copy(alpha = ContentAlpha.medium)
                     ),
