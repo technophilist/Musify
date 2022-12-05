@@ -45,7 +45,8 @@ data class PagingItemsForSearchScreen(
     val artistListForSearchQuery: LazyPagingItems<SearchResult.ArtistSearchResult>,
     val tracksListForSearchQuery: LazyPagingItems<SearchResult.TrackSearchResult>,
     val playlistListForSearchQuery: LazyPagingItems<SearchResult.PlaylistSearchResult>,
-    val podcastListForSearchQuery:LazyPagingItems<SearchResult.PodcastSearchResult>
+    val podcastListForSearchQuery: LazyPagingItems<SearchResult.PodcastSearchResult>,
+    val episodeListForSearchQuery: LazyPagingItems<SearchResult.EpisodeSearchResult>
 )
 
 // fix lazy list scrolling to top after config change
@@ -117,8 +118,7 @@ fun SearchScreen(
             },
             onImeDoneButtonClicked = {
                 onImeDoneButtonClicked(
-                    this,
-                    searchText
+                    this, searchText
                 )
             },
             onTextFieldFocusChanged = { if (it.isFocused) isSearchListVisible = true },
@@ -131,13 +131,10 @@ fun SearchScreen(
                 coroutineScope.launch { lazyListState.animateScrollToItem(0) }
             },
         )
-        AnimatedContent(
-            targetState = isSearchListVisible,
-            transitionSpec = { fadeIn() with fadeOut() }
-        ) { targetState ->
+        AnimatedContent(targetState = isSearchListVisible,
+            transitionSpec = { fadeIn() with fadeOut() }) { targetState ->
             when (targetState) {
-                true -> SearchQueryList(
-                    pagingItems = pagingItems,
+                true -> SearchQueryList(pagingItems = pagingItems,
                     onItemClick = { onSearchQueryItemClicked(it) },
                     isLoadingPlaceholderVisible = { item ->
                         isSearchItemLoadingPlaceholderVisibleMap.getOrPut(item) { false }
@@ -153,8 +150,7 @@ fun SearchScreen(
                     lazyListState = lazyListState,
                     currentlySelectedFilter = currentlySelectedFilter,
                     isSearchErrorMessageVisible = isSearchErrorMessageVisible,
-                    onErrorRetryButtonClick = { onErrorRetryButtonClick(searchText) }
-                )
+                    onErrorRetryButtonClick = { onErrorRetryButtonClick(searchText) })
 
                 false -> GenresGrid(
                     modifier = Modifier
@@ -240,7 +236,11 @@ private fun SearchQueryList(
                         onImageLoadingFinished = onImageLoadingFinished,
                         playlistImageErrorPainter = playlistImageErrorPainter
                     )
-                    SearchFilter.PODCASTS -> searchPodcastListItems(pagingItems.podcastListForSearchQuery,{})
+                    SearchFilter.PODCASTS -> searchPodcastListItems(podcastsForSearchQuery = pagingItems.podcastListForSearchQuery,
+                        episodesForSearchQuery = pagingItems.episodeListForSearchQuery,
+                        onPodcastItemClicked = { /*TODO*/ },
+                        onEpisodeItemClicked = { /*TODO*/ }
+                    )
                 }
                 item {
                     Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
@@ -309,21 +309,16 @@ private fun SearchBarWithFilterChips(
         mutableStateOf(isSearchListVisible && searchText.isNotEmpty())
     }
     val textFieldTrailingIcon = @Composable {
-        AnimatedVisibility(
-            visible = isClearSearchTextButtonVisible,
+        AnimatedVisibility(visible = isClearSearchTextButtonVisible,
             enter = fadeIn() + slideInHorizontally { it },
-            exit = slideOutHorizontally { it } + fadeOut()
-        ) {
-            IconButton(
-                onClick = onCloseTextFieldButtonClicked,
-                content = { Icon(imageVector = Icons.Filled.Close, contentDescription = null) }
-            )
+            exit = slideOutHorizontally { it } + fadeOut()) {
+            IconButton(onClick = onCloseTextFieldButtonClicked,
+                content = { Icon(imageVector = Icons.Filled.Close, contentDescription = null) })
         }
     }
     val filterChipGroupScrollState = rememberScrollState()
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -338,15 +333,13 @@ private fun SearchBarWithFilterChips(
                 .onFocusChanged(onTextFieldFocusChanged),
             leadingIcon = {
                 Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = null
+                    imageVector = Icons.Filled.Search, contentDescription = null
                 )
             },
             trailingIcon = textFieldTrailingIcon,
             placeholder = {
                 Text(
-                    text = "Artists, songs, or podcasts",
-                    fontWeight = FontWeight.SemiBold
+                    text = "Artists, songs, or podcasts", fontWeight = FontWeight.SemiBold
                 )
             },
             singleLine = true,
