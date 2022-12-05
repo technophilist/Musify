@@ -171,7 +171,9 @@ fun LazyListScope.searchPlaylistListItems(
 @ExperimentalMaterialApi
 fun LazyListScope.searchPodcastListItems(
     podcastsForSearchQuery: LazyPagingItems<SearchResult.PodcastSearchResult>,
-    onItemClick: (SearchResult.PodcastSearchResult) -> Unit
+    episodesForSearchQuery: LazyPagingItems<SearchResult.EpisodeSearchResult>,
+    onPodcastItemClicked: (SearchResult.PodcastSearchResult) -> Unit,
+    onEpisodeItemClicked: (SearchResult.EpisodeSearchResult) -> Unit
 ) {
     item {
         Text(
@@ -183,10 +185,10 @@ fun LazyListScope.searchPodcastListItems(
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.h6
         )
-    }
-    item {
         LazyRow(
-            modifier = Modifier.fillParentMaxWidth(),
+            modifier = Modifier
+                .fillParentMaxWidth()
+                .padding(bottom = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
@@ -196,10 +198,19 @@ fun LazyListScope.searchPodcastListItems(
                         podcastArtUrlString = it.imageUrlString,
                         name = it.name,
                         nameOfPublisher = it.nameOfPublisher,
-                        onClick = { onItemClick(it) }
+                        onClick = { onPodcastItemClicked(it) }
                     )
                 }
             }
+        }
+    }
+
+    itemsIndexedWithEmptyListContent(episodesForSearchQuery) { _, episode ->
+        episode?.let {
+            EpisodeListCard(
+                episodeSearchResult = it,
+                onClick = { onEpisodeItemClicked(it) }
+            )
         }
     }
 }
