@@ -123,13 +123,15 @@ private fun NavGraphBuilder.searchScreen(
         val playlists = viewModel.playlistListForSearchQuery.collectAsLazyPagingItems()
         val tracks = viewModel.trackListForSearchQuery.collectAsLazyPagingItems()
         val podcasts = viewModel.podcastListForSearchQuery.collectAsLazyPagingItems()
+        val episodes = viewModel.episodeListForSearchQuery.collectAsLazyPagingItems()
         val pagingItems = remember {
             PagingItemsForSearchScreen(
                 albums,
                 artists,
                 tracks,
                 playlists,
-                podcasts
+                podcasts,
+                episodes
             )
         }
         val uiState by viewModel.uiState
