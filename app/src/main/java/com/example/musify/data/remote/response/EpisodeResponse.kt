@@ -33,7 +33,6 @@ fun EpisodeMetadataResponse.toEpisodeSearchResult(imageSize: MapperImageSize): S
         description = this.description,
         imageUrlString = images.getImageResponseForImageSize(imageSize).url
     )
-
     val localDate = LocalDate.parse(this.releaseDate)
     val episodeDateInfo = SearchResult.EpisodeSearchResult.EpisodeReleaseDateInfo(
         month = localDate.month.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
@@ -42,9 +41,13 @@ fun EpisodeMetadataResponse.toEpisodeSearchResult(imageSize: MapperImageSize): S
     )
 
     val duration = Duration.ofMillis(this.durationMillis)
+    // Equivalent to duration#toHoursPart. Not available in java 8 desugared library
+    val hours = (duration.toHours() % 24).toInt()
+    // Equivalent to duration#toMinutesPart. Not available in java 8 desugared library
+    val minutes = (duration.toMinutes() % 60).toInt()
     val episodeDurationInfo = SearchResult.EpisodeSearchResult.EpisodeDurationInfo(
-        hours = duration.toHoursPart(),
-        minutes = duration.toMinutesPart()
+        hours = hours,
+        minutes = minutes
     )
 
     return SearchResult.EpisodeSearchResult(
