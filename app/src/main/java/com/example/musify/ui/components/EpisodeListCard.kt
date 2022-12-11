@@ -19,9 +19,9 @@ import com.example.musify.domain.SearchResult
 
 @Suppress("RemoveSingleExpressionStringTemplate")
 private fun SearchResult.EpisodeSearchResult.getDateAndDurationString(context: Context): String {
-    val dateString = "${episodeReleaseDateInfo.month}" +
-            " ${episodeReleaseDateInfo.day}, " +
-            " ${episodeReleaseDateInfo.year}"
+    val dateString = "${episodeReleaseDateInfo.month} " +
+            "${episodeReleaseDateInfo.day}, " +
+            "${episodeReleaseDateInfo.year}"
     val hourString = if (episodeDurationInfo.hours == 0) {
         ""
     } else {
