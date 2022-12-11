@@ -37,7 +37,7 @@ fun EpisodeListCard(
     var isLoadingPlaceholderVisible by remember { mutableStateOf(true) }
     Card(
         modifier = Modifier
-            .height(IntrinsicSize.Min)
+            .height(114.dp) // TODO mention that this composable has a fixed height in the docs
             .then(modifier),
         elevation = 0.dp,
         backgroundColor = backgroundColor,
