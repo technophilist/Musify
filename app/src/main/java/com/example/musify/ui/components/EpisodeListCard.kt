@@ -78,7 +78,7 @@ fun EpisodeListCard(
                 )
                 Text(
                     text = episodeSearchResult.episodeContentInfo.description,
-                    style = MaterialTheme.typography.subtitle2.copy(
+                    style = MaterialTheme.typography.caption.copy(
                         Color.White.copy(alpha = ContentAlpha.medium)
                     ),
                     fontWeight = FontWeight.SemiBold,
@@ -88,7 +88,7 @@ fun EpisodeListCard(
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
                     text = dateAndDurationString,
-                    style = MaterialTheme.typography.subtitle2.copy(
+                    style = MaterialTheme.typography.caption.copy(
                         Color.White.copy(alpha = ContentAlpha.medium)
                     ),
                     fontWeight = FontWeight.SemiBold,
