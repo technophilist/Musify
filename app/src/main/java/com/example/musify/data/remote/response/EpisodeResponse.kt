@@ -26,6 +26,10 @@ data class EpisodeMetadataResponse(
  * an instance of [SearchResult.EpisodeSearchResult]. The [imageSize]
  * parameter determines the size of image to be used for the
  * [SearchResult.EpisodeSearchResult] instance.
+ * Note: The [SearchResult.EpisodeSearchResult.EpisodeDurationInfo.minutes]
+ * is guaranteed to have a minimum value of 1. This means that any episode
+ * with a duration lower than 1 minute will be coerced to have a value of
+ * 1 minute.
  */
 fun EpisodeMetadataResponse.toEpisodeSearchResult(imageSize: MapperImageSize): SearchResult.EpisodeSearchResult {
     val contentInfo = SearchResult.EpisodeSearchResult.EpisodeContentInfo(
@@ -44,7 +48,7 @@ fun EpisodeMetadataResponse.toEpisodeSearchResult(imageSize: MapperImageSize): S
     // Equivalent to duration#toHoursPart. Not available in java 8 desugared library
     val hours = (duration.toHours() % 24).toInt()
     // Equivalent to duration#toMinutesPart. Not available in java 8 desugared library
-    val minutes = (duration.toMinutes() % 60).toInt()
+    val minutes = (duration.toMinutes() % 60).toInt().coerceAtLeast(1)
     val episodeDurationInfo = SearchResult.EpisodeSearchResult.EpisodeDurationInfo(
         hours = hours,
         minutes = minutes
