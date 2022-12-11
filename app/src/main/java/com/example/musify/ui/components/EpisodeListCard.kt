@@ -85,7 +85,7 @@ fun EpisodeListCard(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(modifier = Modifier.size(8.dp))
+                Spacer(modifier = Modifier.size(4.dp))
                 Text(
                     text = dateAndDurationString,
                     style = MaterialTheme.typography.caption.copy(
