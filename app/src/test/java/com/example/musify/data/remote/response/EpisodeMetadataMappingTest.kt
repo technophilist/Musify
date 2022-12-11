@@ -23,4 +23,14 @@ class EpisodeMetadataMappingTest {
             // 3 hours 25 minutes
         }
     }
+
+    @Test
+    fun episodeMetadataMappingTest_responseWithLessThan1Minute_returnsObjectWith1Minute() {
+        // given an episode with a duration of 30 seconds (less than 1 minute)
+        val response = fakeEpisodeMetadataResponse.copy(durationMillis = 30_000)
+        // when mapping it to an instance of EpisodeSearchResult
+        val mappedObject = response.toEpisodeSearchResult(MapperImageSize.SMALL)
+        // the seconds must be set to 1
+        assert(mappedObject.episodeDurationInfo.minutes == 1)
+    }
 }
