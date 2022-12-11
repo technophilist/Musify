@@ -2,4 +2,12 @@
     <string name="app_name">Musify</string>
     <string name="notification_channel_name">Media playback notifications</string>
     <string name="notification_channel_description">Notifications that contain playback controls</string>
+    <plurals name="numberOfMinutesOfEpisode">
+        <item quantity="one">%d min</item>
+        <item quantity="other">%d mins</item>
+    </plurals>
+    <plurals name="numberOfHoursOfEpisode">
+        <item quantity="one">%d hr</item>
+        <item quantity="other">%d hrs</item>
+    </plurals>
 </resources>
