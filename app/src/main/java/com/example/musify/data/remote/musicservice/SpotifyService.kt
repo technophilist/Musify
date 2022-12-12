@@ -166,8 +166,15 @@ interface SpotifyService {
     suspend fun getPlaylistsForCategory(
         @Header("Authorization") token: BearerToken,
         @Path("category_id") categoryId: String,
-        @Query("country") market: String,
+        @Query("country") market: String, // TODO change query name to "market"
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0
     ): PlaylistsForSpecificCategoryResponse
+
+    @GET(SpotifyEndPoints.SPECIFIC_EPISODE_ENDPOINT)
+    suspend fun getEpisodeWithId(
+        @Header("Authorization") token: BearerToken,
+        @Path("id") id:String,
+        @Query("market") market:String
+    ):EpisodeResponse
 }
