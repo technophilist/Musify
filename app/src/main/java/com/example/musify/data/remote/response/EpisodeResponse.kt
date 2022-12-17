@@ -1,5 +1,6 @@
 package com.example.musify.data.remote.response
 
+import androidx.core.text.HtmlCompat
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getFormattedEpisodeReleaseDateAndDuration
 import com.example.musify.data.utils.getImageResponseForImageSize
@@ -45,7 +46,7 @@ fun EpisodeResponse.toPodcastEpisode(imageSize: MapperImageSize): PodcastEpisode
         day = formattedEpisodeReleaseDateAndDuration.day,
         year = formattedEpisodeReleaseDateAndDuration.year,
     )
-
+ 
     val durationInfo = PodcastEpisode.DurationInfo(
         hours = formattedEpisodeReleaseDateAndDuration.hours,
         minutes = formattedEpisodeReleaseDateAndDuration.minutes
@@ -55,6 +56,7 @@ fun EpisodeResponse.toPodcastEpisode(imageSize: MapperImageSize): PodcastEpisode
         id = this.id,
         title = this.title,
         description = this.description,
+        htmlDescription = HtmlCompat.fromHtml(this.htmlDescription, 0),
         previewUrl = previewUrl,
         releaseDateInfo = releaseDateInfo,
         durationInfo = durationInfo,

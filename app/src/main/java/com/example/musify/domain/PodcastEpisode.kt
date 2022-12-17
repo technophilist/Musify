@@ -1,5 +1,7 @@
 package com.example.musify.domain
 
+import android.text.Spanned
+
 /**
  * A domain class that represents a specific podcast episode.
  */
@@ -7,6 +9,7 @@ data class PodcastEpisode(
     val id: String,
     val title: String,
     val description: String,
+    val htmlDescription:Spanned,
     val previewUrl: String?,
     val releaseDateInfo: ReleaseDateInfo,
     val durationInfo: DurationInfo,
