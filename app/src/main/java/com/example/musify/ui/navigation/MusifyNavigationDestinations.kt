@@ -79,4 +79,13 @@ sealed class MusifyNavigationDestinations(val route: String) {
     }
 
     object HomeScreen : MusifyNavigationDestinations("MusifyNavigationDestinations.HomeScreen")
+
+    object PodcastEpisodeDetailScreen :
+        MusifyNavigationDestinations(
+            route = "MusifyNavigationDestinations.PodcastEpisodeDetailScreen/{episodeId}"
+        ) {
+        const val NAV_ARG_PODCAST_EPISODE_ID = "episodeId"
+        fun buildRoute(episodeId: String): String =
+            "MusifyNavigationDestinations.PodcastEpisodeDetailScreen/$episodeId"
+    }
 }
