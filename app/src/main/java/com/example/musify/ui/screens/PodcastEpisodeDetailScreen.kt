@@ -3,7 +3,9 @@ package com.example.musify.ui.screens
 import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Share
@@ -24,6 +26,7 @@ import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.components.ExpandableText
+import com.example.musify.ui.components.MusifyBottomNavigationConstants
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
@@ -51,6 +54,7 @@ private fun PodcastEpisode.getDateAndDurationString(context: Context): String {
     return "$dateString • $hourString $minuteString"
 }
 
+// TODO : Add callback param for "See all episodes" , Add top bar on scrolled
 @Composable
 fun PodcastEpisodeDetailScreen(
     podcastEpisode: PodcastEpisode,
@@ -61,7 +65,8 @@ fun PodcastEpisodeDetailScreen(
     onBackButtonClicked: () -> Unit
 ) {
     val context = LocalContext.current
-    Column {
+    val scrollState = rememberScrollState()
+    Column(modifier = Modifier.verticalScroll(scrollState)) {
         PodcastEpisodeHeader(
             episodeImageUrl = podcastEpisode.podcastInfo.imageUrl,
             episodeTitle = podcastEpisode.title,
@@ -109,6 +114,7 @@ fun PodcastEpisodeDetailScreen(
                     contentDescription = null
                 )
             }
+            Spacer(modifier = Modifier.size(MusifyBottomNavigationConstants.navigationHeight))
         }
     }
 }
