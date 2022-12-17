@@ -1,11 +1,15 @@
 package com.example.musify.ui.screens
 
 import android.content.Context
+import android.text.Spanned
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Share
@@ -26,10 +30,12 @@ import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.ui.components.AndroidExpandableTextView
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
+import com.example.musify.ui.components.DetailScreenTopAppBar
 import com.example.musify.ui.components.MusifyBottomNavigationConstants
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
+import kotlinx.coroutines.launch
 import com.google.android.material.R as materialR
 
 
@@ -61,55 +67,107 @@ fun PodcastEpisodeDetailScreen(
     onBackButtonClicked: () -> Unit
 ) {
     val context = LocalContext.current
-    val scrollState = rememberScrollState()
-    Column(modifier = Modifier.verticalScroll(scrollState)) {
-        PodcastEpisodeHeader(
-            episodeImageUrl = podcastEpisode.podcastInfo.imageUrl,
-            episodeTitle = podcastEpisode.title,
-            podcastName = podcastEpisode.podcastInfo.name,
-            dateAndDurationString = podcastEpisode.getDateAndDurationString(context),
-            onBackButtonClicked = onBackButtonClicked
-        )
-        Spacer(Modifier.height(16.dp))
-        // The episode header has a background gradient that needs to
-        // be edge-to-edge. Therefore, use a separate column to add
-        // horizontal padding to the rest of the content.
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            ActionsRow(
-                modifier = Modifier.fillMaxWidth(),
-                onPlayButtonClicked = onPlayButtonClicked,
-                onShareButtonClicked = onShareButtonClicked,
-                onAddButtonClicked = onAddButtonClicked,
-                onDownloadButtonClicked = onDownloadButtonClicked
-            )
-            AndroidExpandableTextView(
-                text = podcastEpisode.htmlDescription,
-                expandButtonText = "See more",
-                textAppearanceResId = materialR.style.TextAppearance_MaterialComponents_Subtitle2,
-                color = Color.White.copy(alpha = ContentAlpha.medium),
-                maxLines = 5
-            )
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .clickable {}
-                .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(
-                    text = "See all episodes",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                )
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_baseline_chevron_right_24),
-                    contentDescription = null
+    val lazyListState = rememberLazyListState()
+    val isEpisodeHeaderVisible by remember {
+        derivedStateOf { lazyListState.firstVisibleItemIndex == 0 }
+    }
+    val dynamicThemeResource = remember(podcastEpisode) {
+        DynamicThemeResource.FromImageUrl(podcastEpisode.podcastInfo.imageUrl)
+    }
+    val coroutineScope = rememberCoroutineScope()
+
+    Box {
+        LazyColumn(state = lazyListState) {
+            item {
+                PodcastEpisodeHeader(
+                    episodeImageUrl = podcastEpisode.podcastInfo.imageUrl,
+                    episodeTitle = podcastEpisode.title,
+                    podcastName = podcastEpisode.podcastInfo.name,
+                    dateAndDurationString = podcastEpisode.getDateAndDurationString(context),
+                    onBackButtonClicked = onBackButtonClicked
                 )
             }
-            Spacer(modifier = Modifier.size(MusifyBottomNavigationConstants.navigationHeight))
+            item {
+                // The episode header has a background gradient that needs to
+                // be edge-to-edge. Therefore, use a separate column to add
+                // horizontal padding to the rest of the content.
+                Spacer(Modifier.height(16.dp))
+                PodcastEpisodeScreenContent(
+                    htmlDescription = podcastEpisode.htmlDescription,
+                    onPlayButtonClicked = onPlayButtonClicked,
+                    onShareButtonClicked = onShareButtonClicked,
+                    onAddButtonClicked = onAddButtonClicked,
+                    onDownloadButtonClicked = onDownloadButtonClicked,
+                    onSeeAllEpisodesButtonClicked = {/* TODO */ }
+                )
+            }
         }
+        AnimatedVisibility(
+            modifier = Modifier.align(Alignment.TopCenter),
+            visible = !isEpisodeHeaderVisible,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            DetailScreenTopAppBar(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .fillMaxWidth(),
+                title = podcastEpisode.title,
+                onBackButtonClicked = onBackButtonClicked,
+                onClick = {
+                    coroutineScope.launch { lazyListState.animateScrollToItem(0) }
+                },
+                dynamicThemeResource = dynamicThemeResource
+            )
+        }
+    }
+}
+
+@Composable
+private fun PodcastEpisodeScreenContent(
+    htmlDescription: Spanned,
+    onPlayButtonClicked: () -> Unit,
+    onShareButtonClicked: () -> Unit,
+    onAddButtonClicked: () -> Unit,
+    onDownloadButtonClicked: () -> Unit,
+    onSeeAllEpisodesButtonClicked: () -> Unit
+) {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        ActionsRow(
+            modifier = Modifier.fillMaxWidth(),
+            onPlayButtonClicked = onPlayButtonClicked,
+            onShareButtonClicked = onShareButtonClicked,
+            onAddButtonClicked = onAddButtonClicked,
+            onDownloadButtonClicked = onDownloadButtonClicked
+        )
+        AndroidExpandableTextView(
+            text = htmlDescription,
+            expandButtonText = "See more",
+            textAppearanceResId = materialR.style.TextAppearance_MaterialComponents_Subtitle2,
+            color = Color.White.copy(alpha = ContentAlpha.medium),
+            maxLines = 5
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onSeeAllEpisodesButtonClicked() }
+                .padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(
+                text = "See all episodes",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+            )
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_baseline_chevron_right_24),
+                contentDescription = null
+            )
+        }
+        Spacer(modifier = Modifier.size(MusifyBottomNavigationConstants.navigationHeight))
     }
 }
 
