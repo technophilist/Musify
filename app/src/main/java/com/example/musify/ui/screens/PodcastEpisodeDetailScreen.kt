@@ -56,7 +56,6 @@ private fun PodcastEpisode.getDateAndDurationString(context: Context): String {
     return "$dateString • $hourString $minuteString"
 }
 
-// TODO : Add callback param for "See all episodes" , Add top bar on scrolled
 @Composable
 fun PodcastEpisodeDetailScreen(
     podcastEpisode: PodcastEpisode,
@@ -64,7 +63,8 @@ fun PodcastEpisodeDetailScreen(
     onShareButtonClicked: () -> Unit,
     onAddButtonClicked: () -> Unit,
     onDownloadButtonClicked: () -> Unit,
-    onBackButtonClicked: () -> Unit
+    onBackButtonClicked: () -> Unit,
+    navigateToPodcastDetailScreen: () -> Unit
 ) {
     val context = LocalContext.current
     val lazyListState = rememberLazyListState()
@@ -98,7 +98,7 @@ fun PodcastEpisodeDetailScreen(
                     onShareButtonClicked = onShareButtonClicked,
                     onAddButtonClicked = onAddButtonClicked,
                     onDownloadButtonClicked = onDownloadButtonClicked,
-                    onSeeAllEpisodesButtonClicked = {/* TODO */ }
+                    onSeeAllEpisodesButtonClicked = navigateToPodcastDetailScreen
                 )
             }
         }
