@@ -239,7 +239,7 @@ private fun SearchQueryList(
                     SearchFilter.PODCASTS -> searchPodcastListItems(podcastsForSearchQuery = pagingItems.podcastListForSearchQuery,
                         episodesForSearchQuery = pagingItems.episodeListForSearchQuery,
                         onPodcastItemClicked = { /*TODO*/ },
-                        onEpisodeItemClicked = { /*TODO*/ }
+                        onEpisodeItemClicked = onItemClick
                     )
                 }
                 item {
