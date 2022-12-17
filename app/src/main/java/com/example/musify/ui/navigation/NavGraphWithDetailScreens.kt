@@ -1,23 +1,31 @@
 package com.example.musify.ui.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.musify.R
+import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.SearchResult
+import com.example.musify.ui.components.DefaultMusifyErrorMessage
+import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
 import com.example.musify.ui.screens.AlbumDetailScreen
 import com.example.musify.ui.screens.ArtistDetailScreen
 import com.example.musify.ui.screens.PlaylistDetailScreen
 import com.example.musify.viewmodels.AlbumDetailUiState
 import com.example.musify.viewmodels.AlbumDetailViewModel
 import com.example.musify.viewmodels.PlaylistDetailViewModel
+import com.example.musify.viewmodels.PodcastDetailViewModel
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailScreenUiState
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailViewModel
 import java.net.URLDecoder
@@ -95,6 +103,15 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
             onPlayTrack = playTrack,
             isPlaybackLoading = isPlaybackLoading
         )
+        podcastEpisodeDetailScreen(
+            route = MusifyNavigationDestinations.PodcastEpisodeDetailScreen.prefixedWithRouteOfNavGraphRoute(
+                navGraphRoute
+            ),
+            onBackButtonClicked = onBackButtonClicked,
+            onPlayButtonClicked = { /*TODO*/ },
+            navigateToPodcastDetailScreen = {/*TODO*/ }
+        )
+
     }
 }
 
@@ -282,11 +299,54 @@ class NavGraphWithDetailScreensNestedController(
             is SearchResult.PodcastSearchResult -> {
                 TODO()
             }
-            is SearchResult.EpisodeSearchResult->{
-                TODO()
+            is SearchResult.EpisodeSearchResult -> {
+                MusifyNavigationDestinations.PodcastEpisodeDetailScreen.buildRoute(searchResult.id)
+
             }
         }
         navController.navigate(associatedNavGraphRoute + route)
+    }
+}
+
+private fun NavGraphBuilder.podcastEpisodeDetailScreen(
+    route: String,
+    onPlayButtonClicked: (PodcastEpisode) -> Unit,
+    onBackButtonClicked: () -> Unit,
+    navigateToPodcastDetailScreen: () -> Unit
+) {
+    composable(route = route) {
+        val viewModel = hiltViewModel<PodcastDetailViewModel>()
+        val uiState by viewModel.uiState
+        if (viewModel.podcastEpisode.value == null) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (uiState == PodcastDetailViewModel.UiSate.LOADING) {
+                    DefaultMusifyLoadingAnimation(
+                        modifier = Modifier.align(Alignment.Center),
+                        isVisible = true
+                    )
+                }
+                if (uiState == PodcastDetailViewModel.UiSate.ERROR) {
+                    DefaultMusifyErrorMessage(
+                        modifier = Modifier.align(Alignment.Center),
+                        title = "Oops! Something doesn't look right",
+                        subtitle = "Please check the internet connection",
+                        onRetryButtonClicked = viewModel::retryFetchingEpisode
+                    )
+                }
+            }
+        } else {
+            com.example.musify.ui.screens.PodcastEpisodeDetailScreen(
+                podcastEpisode = viewModel.podcastEpisode.value!!,
+                onPlayButtonClicked = {
+                    onPlayButtonClicked(viewModel.podcastEpisode.value!!)
+                },
+                onShareButtonClicked = { /*TODO*/ },
+                onAddButtonClicked = { /*TODO*/ },
+                onDownloadButtonClicked = { /*TODO*/ },
+                onBackButtonClicked = onBackButtonClicked,
+                navigateToPodcastDetailScreen = navigateToPodcastDetailScreen
+            )
+        }
     }
 }
 
@@ -296,3 +356,4 @@ class NavGraphWithDetailScreensNestedController(
  */
 private fun MusifyNavigationDestinations.prefixedWithRouteOfNavGraphRoute(routeOfNavGraph: String) =
     routeOfNavGraph + this.route
+
