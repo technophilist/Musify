@@ -9,12 +9,14 @@ data class PodcastEpisode(
     val id: String,
     val title: String,
     val description: String,
-    val htmlDescription:Spanned,
+    val htmlDescription: Spanned,
     val previewUrl: String?,
     val releaseDateInfo: ReleaseDateInfo,
     val durationInfo: DurationInfo,
     val podcastInfo: PodcastInfo
-) {
+) : Streamable {
+    override val streamUrl: String? = previewUrl
+
     /**
      * A domain class that contains the associated podcast information of a
      * [PodcastEpisode].
