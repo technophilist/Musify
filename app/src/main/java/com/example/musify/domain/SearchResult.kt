@@ -52,7 +52,9 @@ sealed class SearchResult {
         val imageUrlString: String,
         val artistsString: String,
         val trackUrlString: String?
-    ) : SearchResult()
+    ) : SearchResult(), Streamable {
+        override val streamUrl: String? = trackUrlString
+    }
 
     data class PodcastSearchResult(
         val id: String,
