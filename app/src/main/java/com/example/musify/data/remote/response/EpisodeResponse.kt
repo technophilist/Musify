@@ -13,6 +13,8 @@ data class EpisodeResponse(
     val id: String,
     @JsonProperty("name") val title: String,
     val description: String,
+    @JsonProperty("html_description")
+    val htmlDescription: String,
     @JsonProperty("duration_ms") val durationMillis: Long,
     @JsonProperty("release_date") val releaseDate: String,
     @JsonProperty("audio_preview_url") val previewUrl: String?,
