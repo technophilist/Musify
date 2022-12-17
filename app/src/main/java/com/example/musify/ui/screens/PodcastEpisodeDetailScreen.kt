@@ -24,32 +24,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
+import com.example.musify.ui.components.AndroidExpandableTextView
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
-import com.example.musify.ui.components.ExpandableText
 import com.example.musify.ui.components.MusifyBottomNavigationConstants
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
+import com.google.android.material.R as materialR
 
 
 @Suppress("RemoveSingleExpressionStringTemplate")
 private fun PodcastEpisode.getDateAndDurationString(context: Context): String {
-    val dateString = "${releaseDateInfo.month} " +
-            "${releaseDateInfo.day}, " +
-            "${releaseDateInfo.year}"
+    val dateString =
+        "${releaseDateInfo.month} " + "${releaseDateInfo.day}, " + "${releaseDateInfo.year}"
     val hourString = if (durationInfo.hours == 0) {
         ""
     } else {
         context.resources.getQuantityString(
-            R.plurals.numberOfHoursOfEpisode,
-            durationInfo.hours,
-            durationInfo.hours
+            R.plurals.numberOfHoursOfEpisode, durationInfo.hours, durationInfo.hours
         )
     }
     val minuteString = context.resources.getQuantityString(
-        R.plurals.numberOfMinutesOfEpisode,
-        durationInfo.minutes,
-        durationInfo.minutes
+        R.plurals.numberOfMinutesOfEpisode, durationInfo.minutes, durationInfo.minutes
     )
     return "$dateString • $hourString $minuteString"
 }
@@ -89,21 +85,19 @@ fun PodcastEpisodeDetailScreen(
                 onAddButtonClicked = onAddButtonClicked,
                 onDownloadButtonClicked = onDownloadButtonClicked
             )
-            ExpandableText(
-                text = podcastEpisode.description,
+            AndroidExpandableTextView(
+                text = podcastEpisode.htmlDescription,
                 expandButtonText = "See more",
-                style = MaterialTheme.typography.subtitle2,
+                textAppearanceResId = materialR.style.TextAppearance_MaterialComponents_Subtitle2,
                 color = Color.White.copy(alpha = ContentAlpha.medium),
                 maxLines = 5
             )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {}
-                    .padding(vertical = 8.dp),
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .clickable {}
+                .padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+                horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(
                     text = "See all episodes",
                     color = Color.White,
@@ -131,8 +125,7 @@ private fun PodcastEpisodeHeader(
     val dynamicBackgroundType = remember { DynamicBackgroundType.Gradient() }
     var isImageLoadingPlaceholderVisible by remember { mutableStateOf(true) }
     DynamicallyThemedSurface(
-        dynamicThemeResource = dynamicThemeResource,
-        dynamicBackgroundType = dynamicBackgroundType
+        dynamicThemeResource = dynamicThemeResource, dynamicBackgroundType = dynamicBackgroundType
     ) {
         Column(
             modifier = Modifier
@@ -144,8 +137,7 @@ private fun PodcastEpisodeHeader(
             IconButton(
                 // add offset to accommodate for the touch target sizing
                 // applied to the icon button
-                modifier = Modifier.offset(x = (-16).dp),
-                onClick = onBackButtonClicked
+                modifier = Modifier.offset(x = (-16).dp), onClick = onBackButtonClicked
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_baseline_chevron_left_24),
@@ -213,8 +205,7 @@ fun ActionsRow(
             contentPadding = PaddingValues(vertical = 14.dp)
         ) {
             Text(
-                text = "Play",
-                fontWeight = FontWeight.SemiBold
+                text = "Play", fontWeight = FontWeight.SemiBold
             )
         }
         // Use a separate row to group the secondary action buttons. The primary
