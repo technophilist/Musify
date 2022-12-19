@@ -15,7 +15,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.musify.domain.SearchResult
+import com.example.musify.domain.Streamable
 import com.example.musify.ui.navigation.MusifyBottomNavigationConnectedWithBackStack
 import com.example.musify.ui.navigation.MusifyBottomNavigationDestinations
 import com.example.musify.ui.navigation.MusifyNavigation
@@ -69,12 +69,12 @@ private fun MusifyApp() {
     val isPlaybackPaused = remember(playbackState) {
         playbackState is PlaybackViewModel.PlaybackState.Paused || playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded
     }
-    val onPlayButtonClicked = { track: SearchResult.TrackSearchResult ->
+    val onMiniPlayerPlayButtonClick = { streamable: Streamable ->
         if (playbackState is PlaybackViewModel.PlaybackState.Paused) {
             playbackViewModel.resumePlaybackIfPaused()
         } else if (playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded) {
             // play the same track again
-            playbackViewModel.playTrack(track)
+            playbackViewModel.playStreamable(streamable)
         }
     }
     BackHandler(isNowPlayingScreenVisible) {
@@ -113,7 +113,7 @@ private fun MusifyApp() {
                             ),
                         track = playerTrack!!,
                         onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack,
-                        onPlayButtonClicked = { trackToPlay -> onPlayButtonClicked(trackToPlay) },
+                        onPlayButtonClicked = { onMiniPlayerPlayButtonClick(it) },
                         isPlaybackPaused = isPlaybackPaused,
                         timeElapsedStringFlow = playbackViewModel.flowOfProgressTextOfCurrentTrack.value,
                         playbackProgressFlow = playbackViewModel.flowOfProgressOfCurrentTrack.value,
