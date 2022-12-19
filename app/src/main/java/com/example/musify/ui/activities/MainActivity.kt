@@ -93,7 +93,7 @@ private fun MusifyApp() {
         // to null when the playback is stopped
         MusifyNavigation(
             navController = navController,
-            playTrack = playbackViewModel::playTrack,
+            playStreamable = playbackViewModel::playStreamable,
             isPlaybackLoading = playbackState is PlaybackViewModel.PlaybackState.Loading,
             isFullScreenNowPlayingOverlayScreenVisible = isNowPlayingScreenVisible
         )
