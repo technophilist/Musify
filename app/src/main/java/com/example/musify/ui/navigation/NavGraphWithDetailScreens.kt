@@ -17,6 +17,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.SearchResult
+import com.example.musify.domain.Streamable
 import com.example.musify.ui.components.DefaultMusifyErrorMessage
 import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
 import com.example.musify.ui.screens.AlbumDetailScreen
@@ -41,7 +42,7 @@ import java.nio.charset.StandardCharsets
  * @param navGraphRoute the destination's unique route
  * @param navController the nav controller to be associated with the nav graph.
  * @param startDestination the route for the start destination.
- * @param playTrack lambda to execute when a track is to be played.
+ * @param playStreamable lambda to execute when a [Streamable] is to be played.
  * @param isPlaybackLoading indicates whether the playback is loading.
  * @param builder the builder used to define other composables that belong
  * to this nested graph.
@@ -53,7 +54,7 @@ import java.nio.charset.StandardCharsets
 fun NavGraphBuilder.navGraphWithDetailScreens(
     navGraphRoute: String,
     navController: NavHostController,
-    playTrack: (SearchResult.TrackSearchResult) -> Unit,
+    playStreamable: (Streamable) -> Unit,
     isPlaybackLoading: Boolean,
     startDestination: String,
     builder: NavGraphBuilder.(nestedController: NavGraphWithDetailScreensNestedController) -> Unit
@@ -65,7 +66,7 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
     val nestedController = NavGraphWithDetailScreensNestedController(
         navController = navController,
         associatedNavGraphRoute = navGraphRoute,
-        playTrack = playTrack
+        playTrack = playStreamable
     )
     navigation(
         route = navGraphRoute,
@@ -83,7 +84,7 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
             ),
             onBackButtonClicked = onBackButtonClicked,
             onAlbumClicked = nestedController::navigateToDetailScreen,
-            onPlayTrack = playTrack,
+            onPlayTrack = playStreamable,
             isPlaybackLoading = isPlaybackLoading,
         )
         albumDetailScreen(
@@ -91,7 +92,7 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
                 .AlbumDetailScreen
                 .prefixedWithRouteOfNavGraphRoute(navGraphRoute),
             onBackButtonClicked = onBackButtonClicked,
-            onPlayTrack = playTrack,
+            onPlayTrack = playStreamable,
             isPlaybackLoading = isPlaybackLoading
         )
 
@@ -100,7 +101,7 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
                 .PlaylistDetailScreen
                 .prefixedWithRouteOfNavGraphRoute(navGraphRoute),
             onBackButtonClicked = onBackButtonClicked,
-            onPlayTrack = playTrack,
+            onPlayTrack = playStreamable,
             isPlaybackLoading = isPlaybackLoading
         )
         podcastEpisodeDetailScreen(
@@ -108,7 +109,7 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
                 navGraphRoute
             ),
             onBackButtonClicked = onBackButtonClicked,
-            onPlayButtonClicked = { /*TODO*/ },
+            onPlayButtonClicked = playStreamable,
             navigateToPodcastDetailScreen = {/*TODO*/ }
         )
 

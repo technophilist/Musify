@@ -16,6 +16,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.musify.domain.HomeFeedCarouselCardInfo
 import com.example.musify.domain.HomeFeedFilters
 import com.example.musify.domain.SearchResult
+import com.example.musify.domain.Streamable
 import com.example.musify.ui.screens.GetPremiumScreen
 import com.example.musify.ui.screens.homescreen.HomeScreen
 import com.example.musify.ui.screens.searchscreen.PagingItemsForSearchScreen
@@ -35,7 +36,7 @@ import com.example.musify.viewmodels.searchviewmodel.SearchViewModel
 @Composable
 fun MusifyNavigation(
     navController: NavHostController,
-    playTrack: (SearchResult.TrackSearchResult) -> Unit,
+    playStreamable: (Streamable) -> Unit,
     isPlaybackLoading: Boolean,
     isFullScreenNowPlayingOverlayScreenVisible: Boolean,
 ) {
@@ -47,7 +48,7 @@ fun MusifyNavigation(
             navGraphRoute = MusifyBottomNavigationDestinations.Home.route,
             startDestination = MusifyNavigationDestinations.HomeScreen.route,
             navController = navController,
-            playTrack = playTrack,
+            playStreamable = playStreamable,
             isPlaybackLoading = isPlaybackLoading
         ) { nestedController ->
             homeScreen(
@@ -61,7 +62,7 @@ fun MusifyNavigation(
             navGraphRoute = MusifyBottomNavigationDestinations.Search.route,
             startDestination = MusifyNavigationDestinations.SearchScreen.route,
             navController = navController,
-            playTrack = playTrack,
+            playStreamable = playStreamable,
             isPlaybackLoading = isPlaybackLoading
         ) { nestedController ->
             searchScreen(
