@@ -50,7 +50,7 @@ class PodcastDetailViewModel @Inject constructor(
         val fetchedResource = podcastsRepository.fetchPodcastEpisode(
             episodeId = savedStateHandle[MusifyNavigationDestinations.PodcastEpisodeDetailScreen.NAV_ARG_PODCAST_EPISODE_ID]!!,
             countryCode = getCountryCode(),
-            imageSize = MapperImageSize.SMALL
+            imageSize = MapperImageSize.LARGE // image would be used for both the mini player and the full screen player
         )
         return if (fetchedResource is FetchedResource.Success) fetchedResource.data else null
     }
