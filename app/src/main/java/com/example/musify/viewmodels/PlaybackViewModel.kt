@@ -7,7 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.SearchResult
+import com.example.musify.domain.Streamable
 import com.example.musify.domain.toMusicPlayerTrack
 import com.example.musify.musicplayer.MusicPlayerV2
 import com.example.musify.musicplayer.utils.toTrackSearchResult
@@ -42,7 +44,7 @@ class PlaybackViewModel @Inject constructor(
     private val playbackErrorMessage = "An error occurred. Please check internet connection."
 
     init {
-        musicPlayer.currentPlaybackStateStream.onEach{
+        musicPlayer.currentPlaybackStateStream.onEach {
             _playbackState.value = when (it) {
                 is MusicPlayerV2.PlaybackState.Idle -> PlaybackState.Idle
                 is MusicPlayerV2.PlaybackState.Playing -> {
@@ -66,6 +68,38 @@ class PlaybackViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    fun playStreamable(streamable: Streamable) {
+        viewModelScope.launch {
+            if (streamable.streamUrl == null) {
+                val streamableType = when (streamable) {
+                    is PodcastEpisode -> "podcast episode"
+                    is SearchResult.TrackSearchResult -> "track"
+                }
+                _eventChannel.send(Event.PlaybackError("This $streamableType is currently unavailable for playback."))
+                return@launch
+            }
+            val imageUrlString = when(streamable){
+                is PodcastEpisode -> streamable.podcastInfo.imageUrl
+                is SearchResult.TrackSearchResult -> streamable.imageUrlString
+            }
+            _playbackState.value =
+                PlaybackState.Loading(previousTrack = _playbackState.value.currentlyPlayingTrack)
+            val downloadAlbumArtResult = downloadDrawableFromUrlUseCase.invoke(
+                urlString = imageUrlString,
+                context = getApplication()
+            )
+            if (downloadAlbumArtResult.isSuccess) {
+                val bitmap = downloadAlbumArtResult.getOrNull()!!.toBitmap() // TODO check
+                val musicPlayerTrack = streamable.toMusicPlayerTrack(bitmap)
+                musicPlayer.playTrack(musicPlayerTrack)
+            } else {
+                _eventChannel.send(Event.PlaybackError(playbackErrorMessage))
+                _playbackState.value = PlaybackState.Error(playbackErrorMessage)
+            }
+        }
+    }
+
+    @Deprecated(message = "Use playStreamable()")
     fun playTrack(
         track: SearchResult.TrackSearchResult,
         onSuccess: ((SearchResult.TrackSearchResult, Bitmap) -> Unit)? = null
