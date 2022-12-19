@@ -1,7 +1,6 @@
 package com.example.musify.viewmodels
 
 import android.app.Application
-import android.graphics.Bitmap
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.graphics.drawable.toBitmap
@@ -91,33 +90,6 @@ class PlaybackViewModel @Inject constructor(
             if (downloadAlbumArtResult.isSuccess) {
                 val bitmap = downloadAlbumArtResult.getOrNull()!!.toBitmap() // TODO check
                 val musicPlayerTrack = streamable.toMusicPlayerTrack(bitmap)
-                musicPlayer.playTrack(musicPlayerTrack)
-            } else {
-                _eventChannel.send(Event.PlaybackError(playbackErrorMessage))
-                _playbackState.value = PlaybackState.Error(playbackErrorMessage)
-            }
-        }
-    }
-
-    @Deprecated(message = "Use playStreamable()")
-    fun playTrack(
-        track: SearchResult.TrackSearchResult,
-        onSuccess: ((SearchResult.TrackSearchResult, Bitmap) -> Unit)? = null
-    ) {
-        viewModelScope.launch {
-            if (track.trackUrlString == null) {
-                _eventChannel.send(Event.PlaybackError("This track is currently unavailable for playback."))
-                return@launch
-            }
-            _playbackState.value =
-                PlaybackState.Loading(previousTrack = _playbackState.value.currentlyPlayingTrack)
-            val downloadAlbumArtResult = downloadDrawableFromUrlUseCase.invoke(
-                urlString = track.imageUrlString, context = getApplication()
-            )
-            if (downloadAlbumArtResult.isSuccess) {
-                val bitmap = downloadAlbumArtResult.getOrNull()!!.toBitmap()
-                val musicPlayerTrack = track.toMusicPlayerTrack(bitmap)
-                onSuccess?.invoke(track, bitmap)
                 musicPlayer.playTrack(musicPlayerTrack)
             } else {
                 _eventChannel.send(Event.PlaybackError(playbackErrorMessage))
