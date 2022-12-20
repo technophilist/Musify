@@ -11,6 +11,6 @@ fun MusicPlayerV2.Track.toTrackSearchResult() = SearchResult.TrackSearchResult(
     id = id,
     name = title,
     imageUrlString = albumArtUrlString,
-    artistsString = artistsString,
+    artistsString = subtitle,
     trackUrlString = trackUrlString
 )

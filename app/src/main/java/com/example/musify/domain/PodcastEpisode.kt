@@ -49,7 +49,7 @@ fun PodcastEpisode.toMusicPlayerTrack(imageBitmap: Bitmap): MusicPlayerV2.Track 
     return MusicPlayerV2.Track(
         id = id,
         title = title,
-        artistsString = this.podcastInfo.name,
+        subtitle = this.podcastInfo.name,
         albumArt = imageBitmap,
         albumArtUrlString = this.podcastInfo.imageUrl,
         trackUrlString = this.previewUrl

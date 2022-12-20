@@ -25,11 +25,11 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
     private val notificationManagerBuilder by lazy {
         PlayerNotificationManager.Builder(context, NOTIFICATION_ID, NOTIFICATION_CHANNEL_ID)
             .setChannelImportance(NotificationUtil.IMPORTANCE_LOW).setMediaDescriptionAdapter(
-                MediaDescriptionAdapter(getCurrentContentText = {
-                    currentlyPlayingTrack?.artistsString ?: ""
-                },
+                MediaDescriptionAdapter(
                     getCurrentContentTitle = { currentlyPlayingTrack?.title ?: "" },
-                    getCurrentLargeIcon = { _, _ -> currentlyPlayingTrack?.albumArt })
+                    getCurrentContentText = { currentlyPlayingTrack?.subtitle ?: "" },
+                    getCurrentLargeIcon = { _, _ -> currentlyPlayingTrack?.albumArt }
+                )
             ).setChannelNameResourceId(R.string.notification_channel_name)
             .setChannelDescriptionResourceId(R.string.notification_channel_description)
     }
@@ -51,7 +51,9 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
                 isPlaying -> currentlyPlayingTrack?.let { buildPlayingState(it, player) }
                 isPaused -> currentlyPlayingTrack?.let(MusicPlayerV2.PlaybackState::Paused)
                 player.playbackState == Player.STATE_IDLE -> MusicPlayerV2.PlaybackState.Idle
-                player.playbackState == Player.STATE_ENDED -> currentlyPlayingTrack?.let(MusicPlayerV2.PlaybackState::Ended)
+                player.playbackState == Player.STATE_ENDED -> currentlyPlayingTrack?.let(
+                    MusicPlayerV2.PlaybackState::Ended
+                )
                 else -> null
             } ?: return@createEventsListener
             trySend(newPlaybackState)
@@ -70,8 +72,8 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
             // the subscriber associated with the detail screen can be used to
             // highlight the playing track. It is able to do so because, the first
             // value that the new subscriber gets will be the currently playing track.
-            scope =  CoroutineScope(Dispatchers.Default),
-            started =  SharingStarted.WhileSubscribed(500),
+            scope = CoroutineScope(Dispatchers.Default),
+            started = SharingStarted.WhileSubscribed(500),
             initialValue = MusicPlayerV2.PlaybackState.Idle
         )
 

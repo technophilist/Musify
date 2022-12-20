@@ -20,7 +20,7 @@ interface MusicPlayerV2 {
     data class Track(
         val id: String,
         val title: String,
-        val artistsString: String,
+        val subtitle: String,
         val albumArt: Bitmap,
         val albumArtUrlString: String,
         val trackUrlString: String

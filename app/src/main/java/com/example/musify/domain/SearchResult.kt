@@ -89,7 +89,7 @@ fun SearchResult.TrackSearchResult.toMusicPlayerTrack(albumArtBitmap: Bitmap): M
     return MusicPlayerV2.Track(
         id = id,
         title = name,
-        artistsString = artistsString,
+        subtitle = artistsString,
         albumArt = albumArtBitmap,
         albumArtUrlString = this.imageUrlString,
         trackUrlString = trackUrlString,
