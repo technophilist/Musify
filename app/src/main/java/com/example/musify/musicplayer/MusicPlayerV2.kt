@@ -2,7 +2,6 @@ package com.example.musify.musicplayer
 
 import android.graphics.Bitmap
 import com.example.musify.domain.SearchResult
-import com.example.musify.musicplayer.utils.toTrackSearchResult
 import kotlinx.coroutines.flow.Flow
 
 interface MusicPlayerV2 {
@@ -45,3 +44,15 @@ interface MusicPlayerV2 {
     fun stopPlayingTrack()
     fun tryResume(): Boolean
 }
+
+/**
+ * A mapper method used to map an instance of [MusicPlayerV2.Track]
+ * to an instance of [SearchResult.TrackSearchResult].
+ */
+fun MusicPlayerV2.Track.toTrackSearchResult() = SearchResult.TrackSearchResult(
+    id = id,
+    name = title,
+    imageUrlString = albumArtUrlString,
+    artistsString = subtitle,
+    trackUrlString = trackUrlString
+)

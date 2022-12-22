@@ -11,7 +11,7 @@ import com.example.musify.domain.SearchResult
 import com.example.musify.domain.Streamable
 import com.example.musify.domain.toMusicPlayerTrack
 import com.example.musify.musicplayer.MusicPlayerV2
-import com.example.musify.musicplayer.utils.toTrackSearchResult
+import com.example.musify.musicplayer.toTrackSearchResult
 import com.example.musify.usecases.downloadDrawableFromUrlUseCase.DownloadDrawableFromUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
