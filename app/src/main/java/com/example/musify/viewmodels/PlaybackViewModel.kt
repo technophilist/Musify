@@ -9,9 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.Streamable
-import com.example.musify.domain.toMusicPlayerTrack
 import com.example.musify.musicplayer.MusicPlayerV2
-import com.example.musify.musicplayer.toTrackSearchResult
 import com.example.musify.usecases.downloadDrawableFromUrlUseCase.DownloadDrawableFromUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -53,16 +51,16 @@ class PlaybackViewModel @Inject constructor(
                         it.currentPlaybackPositionInMillisFlow.map { progress -> (progress.toFloat() / it.totalDuration) * 100f }
                     flowOfProgressTextOfCurrentTrack.value =
                         it.currentPlaybackPositionInMillisFlow.map(::convertTimestampMillisToString)
-                    PlaybackState.Playing(it.currentlyPlayingTrack.toTrackSearchResult())
+                    PlaybackState.Playing(it.currentlyPlayingStreamable)
                 }
-                is MusicPlayerV2.PlaybackState.Paused -> PlaybackState.Paused(it.currentlyPlayingTrack.toTrackSearchResult())
+                is MusicPlayerV2.PlaybackState.Paused -> PlaybackState.Paused(it.currentlyPlayingStreamable)
                 is MusicPlayerV2.PlaybackState.Error -> {
                     viewModelScope.launch {
                         _eventChannel.send(Event.PlaybackError(playbackErrorMessage))
                     }
                     PlaybackState.Error(playbackErrorMessage)
                 }
-                is MusicPlayerV2.PlaybackState.Ended -> PlaybackState.PlaybackEnded(it.track.toTrackSearchResult())
+                is MusicPlayerV2.PlaybackState.Ended -> PlaybackState.PlaybackEnded(it.streamable)
             }
         }.launchIn(viewModelScope)
     }
@@ -77,20 +75,22 @@ class PlaybackViewModel @Inject constructor(
                 _eventChannel.send(Event.PlaybackError("This $streamableType is currently unavailable for playback."))
                 return@launch
             }
-            val imageUrlString = when(streamable){
+            val imageUrlString = when (streamable) {
                 is PodcastEpisode -> streamable.podcastInfo.imageUrl
                 is SearchResult.TrackSearchResult -> streamable.imageUrlString
             }
             _playbackState.value =
-                PlaybackState.Loading(previousTrack = _playbackState.value.currentlyPlayingTrack)
+                PlaybackState.Loading(previousStreamable = _playbackState.value.currentlyPlayingStreamable)
             val downloadAlbumArtResult = downloadDrawableFromUrlUseCase.invoke(
                 urlString = imageUrlString,
                 context = getApplication()
             )
             if (downloadAlbumArtResult.isSuccess) {
                 val bitmap = downloadAlbumArtResult.getOrNull()!!.toBitmap() // TODO check
-                val musicPlayerTrack = streamable.toMusicPlayerTrack(bitmap)
-                musicPlayer.playTrack(musicPlayerTrack)
+                musicPlayer.playStreamable(
+                    streamable = streamable,
+                    associatedAlbumArt = bitmap
+                )
             } else {
                 _eventChannel.send(Event.PlaybackError(playbackErrorMessage))
                 _playbackState.value = PlaybackState.Error(playbackErrorMessage)
@@ -122,20 +122,20 @@ class PlaybackViewModel @Inject constructor(
     }
 
     sealed class PlaybackState(
-        val currentlyPlayingTrack: SearchResult.TrackSearchResult? = null,
-        val previouslyPlayingTrack: SearchResult.TrackSearchResult? = null
+        val currentlyPlayingStreamable: Streamable? = null,
+        val previouslyPlayingStreamable: Streamable? = null
     ) {
         object Idle : PlaybackState()
         object Stopped : PlaybackState()
         data class Error(val errorMessage: String) : PlaybackState()
-        data class Paused(val track: SearchResult.TrackSearchResult) : PlaybackState(track)
-        data class Playing(val track: SearchResult.TrackSearchResult) : PlaybackState(track)
-        data class PlaybackEnded(val track: SearchResult.TrackSearchResult) : PlaybackState(track)
+        data class Paused(val streamable: Streamable) : PlaybackState(streamable)
+        data class Playing(val streamable: Streamable) : PlaybackState(streamable)
+        data class PlaybackEnded(val streamable: Streamable) : PlaybackState(streamable)
         data class Loading(
-            // track instance that indicates the track that was playing before
+            // Streamable instance that indicates the track that was playing before
             // the state was changed to loading
-            val previousTrack: SearchResult.TrackSearchResult?
-        ) : PlaybackState(previouslyPlayingTrack = previousTrack)
+            val previousStreamable: Streamable?
+        ) : PlaybackState(previouslyPlayingStreamable = previousStreamable)
     }
 
     sealed class Event {
