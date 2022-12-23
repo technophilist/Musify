@@ -1,13 +1,18 @@
 package com.example.musify.musicplayer
 
 import android.content.Context
+import android.graphics.Bitmap
 import com.example.musify.R
+import com.example.musify.domain.PodcastEpisode
+import com.example.musify.domain.SearchResult
+import com.example.musify.domain.Streamable
 import com.example.musify.musicplayer.utils.MediaDescriptionAdapter
 import com.example.musify.musicplayer.utils.getCurrentPlaybackProgressFlow
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
+import com.google.android.exoplayer2.ui.PlayerNotificationManager.MediaDescriptionAdapter
 import com.google.android.exoplayer2.util.NotificationUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -21,16 +26,11 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
     @ApplicationContext context: Context,
     private val exoPlayer: ExoPlayer
 ) : MusicPlayerV2 {
-    private var currentlyPlayingTrack: MusicPlayerV2.Track? = null
+    private var currentlyPlayingStreamable: Streamable? = null
     private val notificationManagerBuilder by lazy {
         PlayerNotificationManager.Builder(context, NOTIFICATION_ID, NOTIFICATION_CHANNEL_ID)
-            .setChannelImportance(NotificationUtil.IMPORTANCE_LOW).setMediaDescriptionAdapter(
-                MediaDescriptionAdapter(
-                    getCurrentContentTitle = { currentlyPlayingTrack?.title ?: "" },
-                    getCurrentContentText = { currentlyPlayingTrack?.subtitle ?: "" },
-                    getCurrentLargeIcon = { _, _ -> currentlyPlayingTrack?.albumArt }
-                )
-            ).setChannelNameResourceId(R.string.notification_channel_name)
+            .setChannelImportance(NotificationUtil.IMPORTANCE_LOW)
+            .setChannelNameResourceId(R.string.notification_channel_name)
             .setChannelDescriptionResourceId(R.string.notification_channel_description)
     }
 
@@ -48,10 +48,10 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
                 events.contains(Player.EVENT_IS_PLAYING_CHANGED) && player.playbackState == Player.STATE_READY && !player.playWhenReady
             val newPlaybackState = when {
                 events.contains(Player.EVENT_PLAYER_ERROR) -> MusicPlayerV2.PlaybackState.Error
-                isPlaying -> currentlyPlayingTrack?.let { buildPlayingState(it, player) }
-                isPaused -> currentlyPlayingTrack?.let(MusicPlayerV2.PlaybackState::Paused)
+                isPlaying -> currentlyPlayingStreamable?.let { buildPlayingState(it, player) }
+                isPaused -> currentlyPlayingStreamable?.let(MusicPlayerV2.PlaybackState::Paused)
                 player.playbackState == Player.STATE_IDLE -> MusicPlayerV2.PlaybackState.Idle
-                player.playbackState == Player.STATE_ENDED -> currentlyPlayingTrack?.let(
+                player.playbackState == Player.STATE_ENDED -> currentlyPlayingStreamable?.let(
                     MusicPlayerV2.PlaybackState::Ended
                 )
                 else -> null
@@ -85,25 +85,54 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
         }
 
     private fun buildPlayingState(
-        track: MusicPlayerV2.Track,
+        streamable: Streamable,
         player: Player,
     ) = MusicPlayerV2.PlaybackState.Playing(
-        currentlyPlayingTrack = track,
+        currentlyPlayingStreamable = streamable,
         totalDuration = player.duration,
         currentPlaybackPositionInMillisFlow = player.getCurrentPlaybackProgressFlow()
     )
 
-    override fun playTrack(track: MusicPlayerV2.Track) {
+    private fun buildMediaDescriptionAdapterForStreamable(
+        streamable: Streamable,
+        largeIcon: Bitmap
+    ): MediaDescriptionAdapter {
+        val title = when (streamable) {
+            is PodcastEpisode -> streamable.title
+            is SearchResult.TrackSearchResult -> streamable.name
+        }
+        val contentText = when (streamable) {
+            is PodcastEpisode -> TODO()
+            is SearchResult.TrackSearchResult -> streamable.artistsString
+        }
+        return MediaDescriptionAdapter(
+            getCurrentContentTitle = { title },
+            getCurrentContentText = { contentText },
+            getCurrentLargeIcon = { _, _ -> largeIcon }
+        )
+    }
+
+    override fun playStreamable(
+        streamable: Streamable,
+        associatedAlbumArt:Bitmap
+    ) {
         with(exoPlayer) {
-            if (currentlyPlayingTrack == track) {
+            if (streamable.streamUrl == null) return@with
+            if (currentlyPlayingStreamable == streamable) {
                 seekTo(0)
                 return@with
             }
             if (isPlaying) exoPlayer.stop()
-            currentlyPlayingTrack = track
-            setMediaItem(MediaItem.fromUri(track.trackUrlString))
+            currentlyPlayingStreamable = streamable
+            setMediaItem(MediaItem.fromUri(streamable.streamUrl!!))
             prepare()
-            notificationManagerBuilder.build().setPlayer(exoPlayer)
+            val mediaDescriptionAdapter = buildMediaDescriptionAdapterForStreamable(
+                streamable = currentlyPlayingStreamable!!,
+                largeIcon = associatedAlbumArt
+            )
+            notificationManagerBuilder
+                .setMediaDescriptionAdapter(mediaDescriptionAdapter)
+                .build().setPlayer(exoPlayer)
             play()
         }
     }
@@ -118,7 +147,7 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
 
     override fun tryResume(): Boolean {
         if (exoPlayer.isPlaying) return false
-        return currentlyPlayingTrack?.let {
+        return currentlyPlayingStreamable?.let {
             exoPlayer.playWhenReady = true
             true
         } ?: false
