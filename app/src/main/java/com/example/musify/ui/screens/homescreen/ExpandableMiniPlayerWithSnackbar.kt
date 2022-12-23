@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.musify.domain.SearchResult
+import com.example.musify.domain.Streamable
 import com.example.musify.ui.components.MusifyMiniPlayer
 import com.example.musify.ui.screens.NowPlayingScreen
 import com.example.musify.viewmodels.PlaybackViewModel
@@ -26,7 +27,7 @@ import kotlinx.coroutines.flow.Flow
  * mine player is expanded, then the snack bar will be displayed
  * at the bottom of the screen.
  *
- * @param track the track to be displayed.
+ * @param streamable the [Streamable] to be displayed.
  * @param onPauseButtonClicked the lambda to execute when the pause button
  * is clicked.
  * @param onPlayButtonClicked the lambda to execute when the play button
@@ -45,9 +46,9 @@ import kotlinx.coroutines.flow.Flow
 @ExperimentalAnimationApi
 @Composable
 fun ExpandableMiniPlayerWithSnackbar(
-    track: SearchResult.TrackSearchResult,
+    streamable: Streamable,
     onPauseButtonClicked: () -> Unit,
-    onPlayButtonClicked: (SearchResult.TrackSearchResult) -> Unit,
+    onPlayButtonClicked: (Streamable) -> Unit,
     isPlaybackPaused: Boolean,
     timeElapsedStringFlow: Flow<String>,
     playbackProgressFlow: Flow<Float>,
@@ -55,6 +56,7 @@ fun ExpandableMiniPlayerWithSnackbar(
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
+    if (streamable !is SearchResult.TrackSearchResult) TODO()
     var isNowPlayingScreenVisible by remember { mutableStateOf(false) }
     AnimatedContent(
         modifier = modifier,
@@ -66,7 +68,7 @@ fun ExpandableMiniPlayerWithSnackbar(
         if (isFullScreenVisible) {
             Box {
                 NowPlayingScreen(
-                    currentlyPlayingTrack = track,
+                    currentlyPlayingTrack = streamable,
                     isPlaybackPaused = isPlaybackPaused,
                     timeElapsedStringFlow = timeElapsedStringFlow,
                     totalDurationOfCurrentTrackProvider = { totalDurationOfCurrentTrackText },
@@ -75,7 +77,7 @@ fun ExpandableMiniPlayerWithSnackbar(
                     onCloseButtonClicked = { isNowPlayingScreenVisible = false },
                     onShuffleButtonClicked = { /*TODO*/ },
                     onSkipPreviousButtonClicked = { /*TODO*/ },
-                    onPlayButtonClicked = { onPlayButtonClicked(track) },
+                    onPlayButtonClicked = { onPlayButtonClicked(streamable) },
                     onPauseButtonClicked = onPauseButtonClicked,
                     onSkipNextButtonClicked = { /*TODO*/ },
                     onRepeatButtonClicked = {}
@@ -99,9 +101,9 @@ fun ExpandableMiniPlayerWithSnackbar(
                         .padding(horizontal = 8.dp)
                         .clickable { isNowPlayingScreenVisible = true },
                     isPlaybackPaused = isPlaybackPaused,
-                    currentlyPlayingTrack = track,
+                    currentlyPlayingTrack = streamable,
                     onLikedButtonClicked = {},
-                    onPlayButtonClicked = { onPlayButtonClicked(track) },
+                    onPlayButtonClicked = { onPlayButtonClicked(streamable) },
                     onPauseButtonClicked = onPauseButtonClicked
                 )
             }
