@@ -55,8 +55,8 @@ private fun MusifyApp() {
     val playbackEvent: PlaybackViewModel.Event? by playbackViewModel.playbackEventsFlow.collectAsState(
         initial = null
     )
-    val playerTrack = remember(playbackState) {
-        playbackState.currentlyPlayingTrack ?: playbackState.previouslyPlayingTrack
+    val miniPlayerStreamable = remember(playbackState) {
+        playbackState.currentlyPlayingStreamable ?: playbackState.previouslyPlayingStreamable
     }
     var isNowPlayingScreenVisible by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = playbackEvent) {
@@ -100,7 +100,7 @@ private fun MusifyApp() {
         Column(modifier = Modifier.align(Alignment.BottomCenter)) {
             AnimatedContent(
                 modifier = Modifier.fillMaxWidth(),
-                targetState = playerTrack
+                targetState = miniPlayerStreamable
             ) { state ->
                 if (state == null) {
                     SnackbarHost(hostState = snackbarHostState)
@@ -111,7 +111,7 @@ private fun MusifyApp() {
                                 enter = fadeIn() + slideInVertically { it },
                                 exit = fadeOut() + slideOutVertically { -it }
                             ),
-                        track = playerTrack!!,
+                        streamable = miniPlayerStreamable!!,
                         onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack,
                         onPlayButtonClicked = { onMiniPlayerPlayButtonClick(it) },
                         isPlaybackPaused = isPlaybackPaused,
