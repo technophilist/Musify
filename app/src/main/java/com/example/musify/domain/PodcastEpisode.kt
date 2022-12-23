@@ -39,19 +39,3 @@ data class PodcastEpisode(
      */
     data class DurationInfo(val hours: Int, val minutes: Int)
 }
-
-/**
- * A mapper method used to map an instance of
- * [SearchResult.PodcastSearchResult] to an instance of [MusicPlayerV2.Track].
- */
-fun PodcastEpisode.toMusicPlayerTrack(imageBitmap: Bitmap): MusicPlayerV2.Track {
-    if (previewUrl == null) throw IllegalStateException("The previewUrl cannot be null during conversion")
-    return MusicPlayerV2.Track(
-        id = id,
-        title = title,
-        subtitle = this.podcastInfo.name,
-        albumArt = imageBitmap,
-        albumArtUrlString = this.podcastInfo.imageUrl,
-        trackUrlString = this.previewUrl
-    )
-}
