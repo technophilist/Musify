@@ -10,10 +10,13 @@ import com.example.musify.data.repositories.podcastsrepository.PodcastsRepositor
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.PodcastEpisode
+import com.example.musify.musicplayer.MusicPlayerV2
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.usecases.getCurrentlyPlayingPodcastEpisodeUseCase.GetCurrentlyPlayingPodcastEpisodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +25,7 @@ class PodcastDetailViewModel @Inject constructor(
     application: Application,
     private val podcastsRepository: PodcastsRepository,
     private val savedStateHandle: SavedStateHandle,
+    private val musicPlayerV2: MusicPlayerV2,
     getCurrentlyPlayingPodcastEpisodeUseCase: GetCurrentlyPlayingPodcastEpisodeUseCase
 ) : AndroidViewModel(application) {
 
@@ -32,12 +36,26 @@ class PodcastDetailViewModel @Inject constructor(
     private val _podcastEpisode = mutableStateOf<PodcastEpisode?>(null)
     val podcastEpisode = _podcastEpisode as State<PodcastEpisode?>
 
+    private val _isPlaybackPaused = mutableStateOf<Boolean?>(null)
+    val isPlaybackPaused = _isPlaybackPaused as State<Boolean?>
+
     val currentlyPlayingPodcastEpisode: Flow<PodcastEpisode?> =
         getCurrentlyPlayingPodcastEpisodeUseCase
             .getCurrentlyPlayingPodcastEpisodeStream()
 
     init {
         fetchEpisodeUpdatingUiState()
+        musicPlayerV2.currentPlaybackStateStream
+            .onEach {
+                if (it is MusicPlayerV2.PlaybackState.Playing && _isPlaybackPaused.value == true) {
+                    _isPlaybackPaused.value = false
+                    return@onEach
+                }
+                if (it !is MusicPlayerV2.PlaybackState.Paused) return@onEach
+                if (_isPlaybackPaused.value == true) return@onEach
+                _isPlaybackPaused.value = true
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun fetchEpisodeUpdatingUiState() {
@@ -65,6 +83,4 @@ class PodcastDetailViewModel @Inject constructor(
     fun retryFetchingEpisode() {
         fetchEpisodeUpdatingUiState()
     }
-
-
 }
