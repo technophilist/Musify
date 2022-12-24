@@ -32,12 +32,12 @@ object MusifyMiniPlayerConstants {
 }
 
 /**
- * A mini player composable that contains information of the [currentlyPlayingTrack].
- * It also contains 3 icons - Available Devices, Favorite and Play/Pause.
+ * A mini player composable.
+ * It also displays 2 icons - Available Devices, and Play/Pause.
  *
  * Note: The size of this composable is **fixed to 60dp**.
  *
- * @param currentlyPlayingTrack the currently playing track.
+ * @param streamable the currently [Streamable].
  * @param isPlaybackPaused indicates whether the playback is paused.
  * Based on this, either [onPlayButtonClicked] or [onPauseButtonClicked]
  * will be invoked. Also, the play and pause icons will also be displayed
