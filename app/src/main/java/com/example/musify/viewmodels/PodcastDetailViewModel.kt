@@ -11,7 +11,9 @@ import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
+import com.example.musify.usecases.getCurrentlyPlayingPodcastEpisodeUseCase.GetCurrentlyPlayingPodcastEpisodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,6 +22,7 @@ class PodcastDetailViewModel @Inject constructor(
     application: Application,
     private val podcastsRepository: PodcastsRepository,
     private val savedStateHandle: SavedStateHandle,
+    getCurrentlyPlayingPodcastEpisodeUseCase: GetCurrentlyPlayingPodcastEpisodeUseCase
 ) : AndroidViewModel(application) {
 
     enum class UiSate { IDLE, LOADING, ERROR }
@@ -28,6 +31,10 @@ class PodcastDetailViewModel @Inject constructor(
     val uiState = _uiState as State<UiSate>
     private val _podcastEpisode = mutableStateOf<PodcastEpisode?>(null)
     val podcastEpisode = _podcastEpisode as State<PodcastEpisode?>
+
+    val currentlyPlayingPodcastEpisode: Flow<PodcastEpisode?> =
+        getCurrentlyPlayingPodcastEpisodeUseCase
+            .getCurrentlyPlayingPodcastEpisodeStream()
 
     init {
         fetchEpisodeUpdatingUiState()
