@@ -102,7 +102,7 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
             is SearchResult.TrackSearchResult -> streamable.name
         }
         val contentText = when (streamable) {
-            is PodcastEpisode -> TODO()
+            is PodcastEpisode -> streamable.podcastInfo.name
             is SearchResult.TrackSearchResult -> streamable.artistsString
         }
         return MediaDescriptionAdapter(
