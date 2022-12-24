@@ -317,6 +317,12 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
 ) {
     composable(route = route) {
         val viewModel = hiltViewModel<PodcastDetailViewModel>()
+        val currentlyPlayingPodcastEpisode by viewModel.currentlyPlayingPodcastEpisode
+            .collectAsState(initial = null)
+        val isEpisodeCurrentlyPlaying = remember(currentlyPlayingPodcastEpisode) {
+            if (viewModel.podcastEpisode.value == null || currentlyPlayingPodcastEpisode == null) return@remember false
+            viewModel.podcastEpisode.value == currentlyPlayingPodcastEpisode
+        }
         val uiState by viewModel.uiState
         if (viewModel.podcastEpisode.value == null) {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -338,6 +344,7 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
         } else {
             com.example.musify.ui.screens.PodcastEpisodeDetailScreen(
                 podcastEpisode = viewModel.podcastEpisode.value!!,
+                isEpisodeCurrentlyPlaying = isEpisodeCurrentlyPlaying,
                 onPlayButtonClicked = {
                     onPlayButtonClicked(viewModel.podcastEpisode.value!!)
                 },

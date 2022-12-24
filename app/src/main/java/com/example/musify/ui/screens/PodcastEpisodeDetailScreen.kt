@@ -59,6 +59,7 @@ private fun PodcastEpisode.getDateAndDurationString(context: Context): String {
 @Composable
 fun PodcastEpisodeDetailScreen(
     podcastEpisode: PodcastEpisode,
+    isEpisodeCurrentlyPlaying: Boolean,
     onPlayButtonClicked: () -> Unit,
     onPauseButtonClicked: () -> Unit,
     onShareButtonClicked: () -> Unit,
@@ -94,7 +95,7 @@ fun PodcastEpisodeDetailScreen(
                 // horizontal padding to the rest of the content.
                 Spacer(Modifier.height(16.dp))
                 PodcastEpisodeScreenContent(
-                    isEpisodePlaying = false, // TODO
+                    isEpisodePlaying = isEpisodeCurrentlyPlaying,
                     htmlDescription = podcastEpisode.htmlDescription,
                     onPlayButtonClicked = onPlayButtonClicked,
                     onPauseButtonClicked = onPauseButtonClicked,
@@ -128,7 +129,7 @@ fun PodcastEpisodeDetailScreen(
 
 @Composable
 private fun PodcastEpisodeScreenContent(
-    isEpisodePlaying:Boolean,
+    isEpisodePlaying: Boolean,
     htmlDescription: Spanned,
     onPlayButtonClicked: () -> Unit,
     onPauseButtonClicked: () -> Unit,
