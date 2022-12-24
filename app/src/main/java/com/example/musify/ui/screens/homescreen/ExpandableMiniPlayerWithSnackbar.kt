@@ -56,7 +56,7 @@ fun ExpandableMiniPlayerWithSnackbar(
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
-    if (streamable !is SearchResult.TrackSearchResult) TODO()
+    if (streamable !is SearchResult.TrackSearchResult) TODO("Create separate composables for podcast and track search result instances⚠️")
     var isNowPlayingScreenVisible by remember { mutableStateOf(false) }
     AnimatedContent(
         modifier = modifier,
@@ -101,7 +101,7 @@ fun ExpandableMiniPlayerWithSnackbar(
                         .padding(horizontal = 8.dp)
                         .clickable { isNowPlayingScreenVisible = true },
                     isPlaybackPaused = isPlaybackPaused,
-                    currentlyPlayingTrack = streamable,
+                    streamable = streamable,
                     onLikedButtonClicked = {},
                     onPlayButtonClicked = { onPlayButtonClicked(streamable) },
                     onPauseButtonClicked = onPauseButtonClicked

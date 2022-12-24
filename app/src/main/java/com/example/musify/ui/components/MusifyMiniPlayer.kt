@@ -19,7 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.musify.R
+import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.SearchResult
+import com.example.musify.domain.Streamable
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
@@ -56,7 +58,7 @@ object MusifyMiniPlayerConstants {
 // TODO debug recompositions
 @Composable
 fun MusifyMiniPlayer(
-    currentlyPlayingTrack: SearchResult.TrackSearchResult,
+    streamable: Streamable,
     isPlaybackPaused: Boolean,
     modifier: Modifier = Modifier,
     onLikedButtonClicked: (Boolean) -> Unit,
@@ -64,8 +66,27 @@ fun MusifyMiniPlayer(
     onPauseButtonClicked: () -> Unit
 ) {
     var isThumbnailImageLoading by remember { mutableStateOf(false) }
-    val dynamicThemeResource = remember(currentlyPlayingTrack) {
-        DynamicThemeResource.FromImageUrl(currentlyPlayingTrack.imageUrlString)
+    val title = remember(streamable){
+        when(streamable){
+            is PodcastEpisode -> streamable.title
+            is SearchResult.TrackSearchResult -> streamable.name
+        }
+
+    }
+    val subtitle = remember(streamable){
+        when(streamable){
+            is PodcastEpisode -> streamable.podcastInfo.name
+            is SearchResult.TrackSearchResult -> streamable.artistsString
+        }
+    }
+    val imageUrl = remember(streamable){
+        when(streamable){
+            is PodcastEpisode -> streamable.podcastInfo.imageUrl
+            is SearchResult.TrackSearchResult -> streamable.imageUrlString
+        }
+    }
+    val dynamicThemeResource = remember(imageUrl) {
+        DynamicThemeResource.FromImageUrl(imageUrl)
     }
     var isLiked by remember { mutableStateOf(false) }
     DynamicallyThemedSurface(
@@ -88,25 +109,26 @@ fun MusifyMiniPlayer(
                     .padding(8.dp)
                     .clip(RoundedCornerShape(4.dp))
                     .aspectRatio(1f),
-                model = currentlyPlayingTrack.imageUrlString,
+                model = imageUrl,
                 contentDescription = null,
                 onImageLoadingFinished = { isThumbnailImageLoading = false },
                 isLoadingPlaceholderVisible = isThumbnailImageLoading,
                 onImageLoading = { isThumbnailImageLoading = true },
             )
             Column(
-                modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Center
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
 
-                    text = currentlyPlayingTrack.name,
+                    text = title,
                     fontWeight = FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = MaterialTheme.typography.subtitle2
                 )
                 Text(
-                    text = currentlyPlayingTrack.artistsString,
+                    text = subtitle,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.caption.copy(
                         color = MaterialTheme.colors.onBackground.copy(alpha = 0.6f)
