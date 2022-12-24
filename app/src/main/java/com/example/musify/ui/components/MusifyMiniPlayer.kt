@@ -6,9 +6,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,21 +63,21 @@ fun MusifyMiniPlayer(
     onPauseButtonClicked: () -> Unit
 ) {
     var isThumbnailImageLoading by remember { mutableStateOf(false) }
-    val title = remember(streamable){
-        when(streamable){
+    val title = remember(streamable) {
+        when (streamable) {
             is PodcastEpisode -> streamable.title
             is SearchResult.TrackSearchResult -> streamable.name
         }
 
     }
-    val subtitle = remember(streamable){
-        when(streamable){
+    val subtitle = remember(streamable) {
+        when (streamable) {
             is PodcastEpisode -> streamable.podcastInfo.name
             is SearchResult.TrackSearchResult -> streamable.artistsString
         }
     }
-    val imageUrl = remember(streamable){
-        when(streamable){
+    val imageUrl = remember(streamable) {
+        when (streamable) {
             is PodcastEpisode -> streamable.podcastInfo.imageUrl
             is SearchResult.TrackSearchResult -> streamable.imageUrlString
         }
@@ -88,7 +85,6 @@ fun MusifyMiniPlayer(
     val dynamicThemeResource = remember(imageUrl) {
         DynamicThemeResource.FromImageUrl(imageUrl)
     }
-    var isLiked by remember { mutableStateOf(false) }
     DynamicallyThemedSurface(
         modifier = Modifier
             .then(modifier)
@@ -142,18 +138,6 @@ fun MusifyMiniPlayer(
                     painter = painterResource(id = R.drawable.ic_available_devices),
                     contentDescription = null
                 )
-            }
-            IconButton(
-                onClick = {
-                    isLiked = !isLiked
-                    onLikedButtonClicked(isLiked)
-                }) {
-                Icon(
-                    imageVector = if (isLiked) Icons.Filled.Favorite
-                    else Icons.Filled.FavoriteBorder,
-                    contentDescription = null,
-
-                    )
             }
             IconButton(onClick = {
                 if (isPlaybackPaused) {
