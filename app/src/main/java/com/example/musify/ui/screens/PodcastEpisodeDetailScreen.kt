@@ -60,6 +60,7 @@ private fun PodcastEpisode.getDateAndDurationString(context: Context): String {
 fun PodcastEpisodeDetailScreen(
     podcastEpisode: PodcastEpisode,
     onPlayButtonClicked: () -> Unit,
+    onPauseButtonClicked: () -> Unit,
     onShareButtonClicked: () -> Unit,
     onAddButtonClicked: () -> Unit,
     onDownloadButtonClicked: () -> Unit,
@@ -93,8 +94,10 @@ fun PodcastEpisodeDetailScreen(
                 // horizontal padding to the rest of the content.
                 Spacer(Modifier.height(16.dp))
                 PodcastEpisodeScreenContent(
+                    isEpisodePlaying = false, // TODO
                     htmlDescription = podcastEpisode.htmlDescription,
                     onPlayButtonClicked = onPlayButtonClicked,
+                    onPauseButtonClicked = onPauseButtonClicked,
                     onShareButtonClicked = onShareButtonClicked,
                     onAddButtonClicked = onAddButtonClicked,
                     onDownloadButtonClicked = onDownloadButtonClicked,
@@ -125,8 +128,10 @@ fun PodcastEpisodeDetailScreen(
 
 @Composable
 private fun PodcastEpisodeScreenContent(
+    isEpisodePlaying:Boolean,
     htmlDescription: Spanned,
     onPlayButtonClicked: () -> Unit,
+    onPauseButtonClicked: () -> Unit,
     onShareButtonClicked: () -> Unit,
     onAddButtonClicked: () -> Unit,
     onDownloadButtonClicked: () -> Unit,
@@ -138,10 +143,12 @@ private fun PodcastEpisodeScreenContent(
     ) {
         ActionsRow(
             modifier = Modifier.fillMaxWidth(),
+            isPlaying = isEpisodePlaying,
             onPlayButtonClicked = onPlayButtonClicked,
+            onPauseButtonClicked = onPauseButtonClicked,
             onShareButtonClicked = onShareButtonClicked,
             onAddButtonClicked = onAddButtonClicked,
-            onDownloadButtonClicked = onDownloadButtonClicked
+            onDownloadButtonClicked = onDownloadButtonClicked,
         )
         AndroidExpandableTextView(
             text = htmlDescription,
@@ -246,7 +253,9 @@ private fun PodcastEpisodeHeader(
 @Composable
 fun ActionsRow(
     modifier: Modifier = Modifier,
+    isPlaying: Boolean,
     onPlayButtonClicked: () -> Unit,
+    onPauseButtonClicked: () -> Unit,
     onShareButtonClicked: () -> Unit,
     onAddButtonClicked: () -> Unit,
     onDownloadButtonClicked: () -> Unit
@@ -258,12 +267,16 @@ fun ActionsRow(
     ) {
         Button(
             modifier = Modifier.width(width = 120.dp),
-            onClick = onPlayButtonClicked,
+            onClick = {
+                if (isPlaying) onPauseButtonClicked()
+                else onPlayButtonClicked()
+            },
             shape = RoundedCornerShape(50),
             contentPadding = PaddingValues(vertical = 14.dp)
         ) {
             Text(
-                text = "Play", fontWeight = FontWeight.SemiBold
+                text = if (isPlaying) "Pause" else "Play",
+                fontWeight = FontWeight.SemiBold
             )
         }
         // Use a separate row to group the secondary action buttons. The primary

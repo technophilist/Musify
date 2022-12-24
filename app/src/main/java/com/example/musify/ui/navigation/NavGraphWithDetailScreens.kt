@@ -341,6 +341,9 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
                 onPlayButtonClicked = {
                     onPlayButtonClicked(viewModel.podcastEpisode.value!!)
                 },
+                onPauseButtonClicked = {
+                    /*TODO*/
+                },
                 onShareButtonClicked = { /*TODO*/ },
                 onAddButtonClicked = { /*TODO*/ },
                 onDownloadButtonClicked = { /*TODO*/ },
