@@ -13,7 +13,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.musify.R
+import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.SearchResult
+import com.example.musify.domain.Streamable
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
@@ -21,12 +23,13 @@ import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 import kotlinx.coroutines.flow.Flow
 
 // TODO make artist and album name scrollable if they overflow
+// TODO change layout based on [Streamable] type
 // collecting the flow within the composable scopes the collector to the composable.
 // This ensures that the collection of flow is stopped as soon this composable
 // is removed from composition.
 @Composable
 fun NowPlayingScreen(
-    currentlyPlayingTrack: SearchResult.TrackSearchResult,
+    streamable: Streamable,
     playbackProgressFlow: Flow<Float>,
     timeElapsedStringFlow: Flow<String>,
     playbackDurationRange: ClosedFloatingPointRange<Float>,
@@ -41,8 +44,27 @@ fun NowPlayingScreen(
     onRepeatButtonClicked: () -> Unit
 ) {
     var isImageLoadingPlaceholderVisible by remember { mutableStateOf(true) }
-    val dynamicThemeResource = remember(currentlyPlayingTrack) {
-        DynamicThemeResource.FromImageUrl(currentlyPlayingTrack.imageUrlString)
+    val title = remember(streamable) {
+        when (streamable) {
+            is PodcastEpisode -> streamable.title
+            is SearchResult.TrackSearchResult -> streamable.name
+        }
+
+    }
+    val subtitle = remember(streamable) {
+        when (streamable) {
+            is PodcastEpisode -> streamable.podcastInfo.name
+            is SearchResult.TrackSearchResult -> streamable.artistsString
+        }
+    }
+    val imageUrl = remember(streamable) {
+        when (streamable) {
+            is PodcastEpisode -> streamable.podcastInfo.imageUrl
+            is SearchResult.TrackSearchResult -> streamable.imageUrlString
+        }
+    }
+    val dynamicThemeResource = remember(imageUrl) {
+        DynamicThemeResource.FromImageUrl(imageUrl)
     }
     val dynamicBackgroundType = remember {
         DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(0.6f))
@@ -66,21 +88,21 @@ fun NowPlayingScreen(
                 modifier = Modifier
                 .size(500.dp)
                 .aspectRatio(1f),
-                model = currentlyPlayingTrack.imageUrlString,
+                model = imageUrl,
                 contentDescription = null,
                 onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
                 isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
                 onImageLoading = { isImageLoadingPlaceholderVisible = true }
             )
             Text(
-                text = currentlyPlayingTrack.name,
+                text = title,
                 fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = MaterialTheme.typography.h5
             )
             Text(
-                text = currentlyPlayingTrack.artistsString,
+                text = subtitle,
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.subtitle1.copy(
                     color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)

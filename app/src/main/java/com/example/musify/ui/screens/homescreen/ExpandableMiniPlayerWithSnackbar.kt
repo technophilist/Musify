@@ -13,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.musify.domain.SearchResult
 import com.example.musify.domain.Streamable
 import com.example.musify.ui.components.MusifyMiniPlayer
 import com.example.musify.ui.screens.NowPlayingScreen
@@ -56,7 +55,6 @@ fun ExpandableMiniPlayerWithSnackbar(
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
-    if (streamable !is SearchResult.TrackSearchResult) TODO("Create separate composables for podcast and track search result instances⚠️")
     var isNowPlayingScreenVisible by remember { mutableStateOf(false) }
     AnimatedContent(
         modifier = modifier,
@@ -68,7 +66,7 @@ fun ExpandableMiniPlayerWithSnackbar(
         if (isFullScreenVisible) {
             Box {
                 NowPlayingScreen(
-                    currentlyPlayingTrack = streamable,
+                    streamable = streamable,
                     isPlaybackPaused = isPlaybackPaused,
                     timeElapsedStringFlow = timeElapsedStringFlow,
                     totalDurationOfCurrentTrackProvider = { totalDurationOfCurrentTrackText },
