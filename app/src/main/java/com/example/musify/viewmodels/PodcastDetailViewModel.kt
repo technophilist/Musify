@@ -1,8 +1,7 @@
 package com.example.musify.viewmodels
 
 import android.app.Application
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -36,24 +35,30 @@ class PodcastDetailViewModel @Inject constructor(
     private val _podcastEpisode = mutableStateOf<PodcastEpisode?>(null)
     val podcastEpisode = _podcastEpisode as State<PodcastEpisode?>
 
-    private val _isPlaybackPaused = mutableStateOf<Boolean?>(null)
-    val isPlaybackPaused = _isPlaybackPaused as State<Boolean?>
-
-    val currentlyPlayingPodcastEpisode: Flow<PodcastEpisode?> =
+    private var isMusicPlayerPlaying by mutableStateOf<Boolean?>(null)
+    private var currentlyPlayingPodcastEpisode by mutableStateOf<PodcastEpisode?>(null)
+    private val currentlyPlayingPodcastEpisodeStream: Flow<PodcastEpisode?> =
         getCurrentlyPlayingPodcastEpisodeUseCase
             .getCurrentlyPlayingPodcastEpisodeStream()
 
+    val isEpisodeCurrentlyPlaying = derivedStateOf {
+        isMusicPlayerPlaying == true && currentlyPlayingPodcastEpisode == podcastEpisode.value
+    }
+
     init {
         fetchEpisodeUpdatingUiState()
+        currentlyPlayingPodcastEpisodeStream
+            .onEach { currentlyPlayingPodcastEpisode = it }
+            .launchIn(viewModelScope)
         musicPlayerV2.currentPlaybackStateStream
             .onEach {
-                if (it is MusicPlayerV2.PlaybackState.Playing && _isPlaybackPaused.value == true) {
-                    _isPlaybackPaused.value = false
+                if (it is MusicPlayerV2.PlaybackState.Playing && (isMusicPlayerPlaying == false || isMusicPlayerPlaying == null)) {
+                    isMusicPlayerPlaying = true
                     return@onEach
                 }
-                if (it !is MusicPlayerV2.PlaybackState.Paused) return@onEach
-                if (_isPlaybackPaused.value == true) return@onEach
-                _isPlaybackPaused.value = true
+                if (it is MusicPlayerV2.PlaybackState.Ended || it is MusicPlayerV2.PlaybackState.Paused) {
+                    if (isMusicPlayerPlaying == true) isMusicPlayerPlaying = false
+                }
             }
             .launchIn(viewModelScope)
     }

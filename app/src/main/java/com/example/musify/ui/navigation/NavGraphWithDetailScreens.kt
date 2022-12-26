@@ -317,14 +317,8 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
 ) {
     composable(route = route) {
         val viewModel = hiltViewModel<PodcastDetailViewModel>()
-        val currentlyPlayingPodcastEpisode by viewModel.currentlyPlayingPodcastEpisode
-            .collectAsState(initial = null)
-        val isPlaybackPaused by viewModel.isPlaybackPaused
-        val isEpisodeCurrentlyPlaying = remember(currentlyPlayingPodcastEpisode, isPlaybackPaused) {
-            if (isPlaybackPaused == true || viewModel.podcastEpisode.value == null || currentlyPlayingPodcastEpisode == null) return@remember false
-            viewModel.podcastEpisode.value == currentlyPlayingPodcastEpisode
-        }
         val uiState by viewModel.uiState
+        val isEpisodeCurrentlyPlaying by viewModel.isEpisodeCurrentlyPlaying
         if (viewModel.podcastEpisode.value == null) {
             Box(modifier = Modifier.fillMaxSize()) {
                 if (uiState == PodcastDetailViewModel.UiSate.LOADING) {
