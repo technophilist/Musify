@@ -28,10 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
-import com.example.musify.ui.components.AndroidExpandableTextView
-import com.example.musify.ui.components.AsyncImageWithPlaceholder
-import com.example.musify.ui.components.DetailScreenTopAppBar
-import com.example.musify.ui.components.MusifyBottomNavigationConstants
+import com.example.musify.ui.components.*
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
@@ -59,6 +56,7 @@ private fun PodcastEpisode.getDateAndDurationString(context: Context): String {
 @Composable
 fun PodcastEpisodeDetailScreen(
     podcastEpisode: PodcastEpisode,
+    isPlaybackLoading:Boolean,
     isEpisodeCurrentlyPlaying: Boolean,
     onPlayButtonClicked: () -> Unit,
     onPauseButtonClicked: () -> Unit,
@@ -124,6 +122,10 @@ fun PodcastEpisodeDetailScreen(
                 dynamicThemeResource = dynamicThemeResource
             )
         }
+        DefaultMusifyLoadingAnimation(
+            modifier = Modifier.align(Alignment.Center),
+            isVisible = isPlaybackLoading
+        )
     }
 }
 
