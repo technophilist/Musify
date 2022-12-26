@@ -319,8 +319,9 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
         val viewModel = hiltViewModel<PodcastDetailViewModel>()
         val currentlyPlayingPodcastEpisode by viewModel.currentlyPlayingPodcastEpisode
             .collectAsState(initial = null)
-        val isEpisodeCurrentlyPlaying = remember(currentlyPlayingPodcastEpisode) {
-            if (viewModel.podcastEpisode.value == null || currentlyPlayingPodcastEpisode == null) return@remember false
+        val isPlaybackPaused by viewModel.isPlaybackPaused
+        val isEpisodeCurrentlyPlaying = remember(currentlyPlayingPodcastEpisode, isPlaybackPaused) {
+            if (isPlaybackPaused == true || viewModel.podcastEpisode.value == null || currentlyPlayingPodcastEpisode == null) return@remember false
             viewModel.podcastEpisode.value == currentlyPlayingPodcastEpisode
         }
         val uiState by viewModel.uiState
