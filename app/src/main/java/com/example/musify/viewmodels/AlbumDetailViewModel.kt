@@ -14,6 +14,7 @@ import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.usecases.getCurrentlyPlayingTrackUseCase.GetCurrentlyPlayingTrackUseCase
 import com.example.musify.usecases.getPlaybackLoadingStatusUseCase.GetPlaybackLoadingStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -59,7 +60,7 @@ class AlbumDetailViewModel @Inject constructor(
                     _uiState.value = AlbumDetailUiState.Idle
                     return@onEach
                 }
-            }
+            }.launchIn(viewModelScope)
     }
 
     private fun fetchAndAssignTrackList() {
