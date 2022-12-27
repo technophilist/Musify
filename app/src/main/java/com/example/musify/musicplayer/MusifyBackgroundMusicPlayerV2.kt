@@ -39,7 +39,8 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
             if (!events.containsAny(
                     Player.EVENT_PLAYBACK_STATE_CHANGED,
                     Player.EVENT_PLAYER_ERROR,
-                    Player.EVENT_IS_PLAYING_CHANGED
+                    Player.EVENT_IS_PLAYING_CHANGED,
+                    Player.EVENT_IS_LOADING_CHANGED
                 )
             ) return@createEventsListener
             val isPlaying =
@@ -54,6 +55,7 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
                 player.playbackState == Player.STATE_ENDED -> currentlyPlayingStreamable?.let(
                     MusicPlayerV2.PlaybackState::Ended
                 )
+                player.isLoading -> MusicPlayerV2.PlaybackState.Loading(previouslyPlayingStreamable = currentlyPlayingStreamable)
                 else -> null
             } ?: return@createEventsListener
             trySend(newPlaybackState)

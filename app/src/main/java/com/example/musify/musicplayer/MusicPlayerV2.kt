@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface MusicPlayerV2 {
     sealed class PlaybackState {
+        data class Loading(val previouslyPlayingStreamable: Streamable?) : PlaybackState()
         data class Playing(
             val currentlyPlayingStreamable: Streamable,
             val totalDuration: Long,

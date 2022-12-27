@@ -43,6 +43,7 @@ class PlaybackViewModel @Inject constructor(
     init {
         musicPlayer.currentPlaybackStateStream.onEach {
             _playbackState.value = when (it) {
+                is MusicPlayerV2.PlaybackState.Loading -> PlaybackState.Loading(it.previouslyPlayingStreamable)
                 is MusicPlayerV2.PlaybackState.Idle -> PlaybackState.Idle
                 is MusicPlayerV2.PlaybackState.Playing -> {
                     _totalDurationOfCurrentTrackTimeText.value =
@@ -79,8 +80,6 @@ class PlaybackViewModel @Inject constructor(
                 is PodcastEpisode -> streamable.podcastInfo.imageUrl
                 is SearchResult.TrackSearchResult -> streamable.imageUrlString
             }
-            _playbackState.value =
-                PlaybackState.Loading(previousStreamable = _playbackState.value.currentlyPlayingStreamable)
             val downloadAlbumArtResult = downloadDrawableFromUrlUseCase.invoke(
                 urlString = imageUrlString,
                 context = getApplication()
