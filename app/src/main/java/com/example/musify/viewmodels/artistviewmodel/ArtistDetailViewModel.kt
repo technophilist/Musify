@@ -14,8 +14,11 @@ import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.usecases.getCurrentlyPlayingTrackUseCase.GetCurrentlyPlayingTrackUseCase
+import com.example.musify.usecases.getPlaybackLoadingStatusUseCase.GetPlaybackLoadingStatusUseCase
 import com.example.musify.viewmodels.getCountryCode
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,6 +38,7 @@ class ArtistDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     albumsRepository: AlbumsRepository,
     getCurrentlyPlayingTrackUseCase: GetCurrentlyPlayingTrackUseCase,
+    getPlaybackLoadingStatusUseCase: GetPlaybackLoadingStatusUseCase,
     private val tracksRepository: TracksRepository,
 ) : AndroidViewModel(application) {
 
@@ -51,15 +55,22 @@ class ArtistDetailViewModel @Inject constructor(
     val currentlyPlayingTrackStream =
         getCurrentlyPlayingTrackUseCase.getCurrentlyPlayingTrackStream()
 
-
     val albumsOfArtistFlow = albumsRepository.getPaginatedStreamForAlbumsOfArtist(
-        artistId = artistId,
-        countryCode = getCountryCode(),
-        imageSize = defaultMapperImageSize
+        artistId = artistId, countryCode = getCountryCode(), imageSize = defaultMapperImageSize
     ).cachedIn(viewModelScope)
 
     init {
         viewModelScope.launch { fetchAndAssignPopularTracks() }
+        getPlaybackLoadingStatusUseCase.loadingStatusStream.onEach { isPlaybackLoading ->
+            if (isPlaybackLoading && _uiState.value !is ArtistDetailScreenUiState.Loading) {
+                _uiState.value = ArtistDetailScreenUiState.Loading
+                return@onEach
+            }
+            if (!isPlaybackLoading && _uiState.value is ArtistDetailScreenUiState.Loading) {
+                _uiState.value = ArtistDetailScreenUiState.Idle
+                return@onEach
+            }
+        }.launchIn(viewModelScope)
     }
 
     private suspend fun fetchAndAssignPopularTracks() {
