@@ -12,7 +12,9 @@ import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.usecases.getCurrentlyPlayingTrackUseCase.GetCurrentlyPlayingTrackUseCase
+import com.example.musify.usecases.getPlaybackLoadingStatusUseCase.GetPlaybackLoadingStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,6 +29,7 @@ class AlbumDetailViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
     getCurrentlyPlayingTrackUseCase: GetCurrentlyPlayingTrackUseCase,
+    getPlaybackLoadingStatusUseCase: GetPlaybackLoadingStatusUseCase,
     private val tracksRepository: TracksRepository,
 ) : AndroidViewModel(application) {
 
@@ -45,6 +48,18 @@ class AlbumDetailViewModel @Inject constructor(
 
     init {
         fetchAndAssignTrackList()
+        getPlaybackLoadingStatusUseCase
+            .loadingStatusStream
+            .onEach { isPlaybackLoading ->
+                if (isPlaybackLoading && _uiState.value !is AlbumDetailUiState.Loading) {
+                    _uiState.value = AlbumDetailUiState.Loading
+                    return@onEach
+                }
+                if (!isPlaybackLoading && _uiState.value is AlbumDetailUiState.Loading) {
+                    _uiState.value = AlbumDetailUiState.Idle
+                    return@onEach
+                }
+            }
     }
 
     private fun fetchAndAssignTrackList() {
