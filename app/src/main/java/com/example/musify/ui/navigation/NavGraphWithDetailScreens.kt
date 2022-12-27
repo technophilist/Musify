@@ -91,10 +91,8 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
                 .AlbumDetailScreen
                 .prefixedWithRouteOfNavGraphRoute(navGraphRoute),
             onBackButtonClicked = onBackButtonClicked,
-            onPlayTrack = playStreamable,
-            isPlaybackLoading = isPlaybackLoading
+            onPlayTrack = playStreamable
         )
-
         playlistDetailScreen(
             route = MusifyNavigationDestinations
                 .PlaylistDetailScreen
@@ -155,8 +153,7 @@ private fun NavGraphBuilder.artistDetailScreen(
 private fun NavGraphBuilder.albumDetailScreen(
     route: String,
     onBackButtonClicked: () -> Unit,
-    onPlayTrack: (SearchResult.TrackSearchResult) -> Unit,
-    isPlaybackLoading: Boolean,
+    onPlayTrack: (SearchResult.TrackSearchResult) -> Unit
 ) {
     composable(route) { backStackEntry ->
         val arguments = backStackEntry.arguments!!
@@ -178,7 +175,7 @@ private fun NavGraphBuilder.albumDetailScreen(
             trackList = viewModel.tracks.value,
             onTrackItemClick = onPlayTrack,
             onBackButtonClicked = onBackButtonClicked,
-            isLoading = isPlaybackLoading || viewModel.uiState.value is AlbumDetailUiState.Loading,
+            isLoading = viewModel.uiState.value is AlbumDetailUiState.Loading,
             isErrorMessageVisible = viewModel.uiState.value is AlbumDetailUiState.Error,
             currentlyPlayingTrack = currentlyPlayingTrack
         )
