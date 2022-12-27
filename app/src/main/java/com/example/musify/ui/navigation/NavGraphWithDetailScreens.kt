@@ -84,8 +84,7 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
             ),
             onBackButtonClicked = onBackButtonClicked,
             onAlbumClicked = nestedController::navigateToDetailScreen,
-            onPlayTrack = playStreamable,
-            isPlaybackLoading = isPlaybackLoading,
+            onPlayTrack = playStreamable
         )
         albumDetailScreen(
             route = MusifyNavigationDestinations
@@ -121,7 +120,6 @@ private fun NavGraphBuilder.artistDetailScreen(
     route: String,
     onBackButtonClicked: () -> Unit,
     onPlayTrack: (SearchResult.TrackSearchResult) -> Unit,
-    isPlaybackLoading: Boolean,
     onAlbumClicked: (SearchResult.AlbumSearchResult) -> Unit,
     arguments: List<NamedNavArgument> = emptyList()
 ) {
@@ -146,7 +144,7 @@ private fun NavGraphBuilder.artistDetailScreen(
             onPlayButtonClicked = { /*TODO*/ },
             onTrackClicked = onPlayTrack,
             onAlbumClicked = onAlbumClicked,
-            isLoading = uiState is ArtistDetailScreenUiState.Loading || isPlaybackLoading,
+            isLoading = uiState is ArtistDetailScreenUiState.Loading,
             fallbackImageRes = R.drawable.ic_outline_account_circle_24,
             isErrorMessageVisible = uiState is ArtistDetailScreenUiState.Error
         )
