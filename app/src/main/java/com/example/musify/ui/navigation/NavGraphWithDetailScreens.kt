@@ -101,8 +101,7 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
                 .PlaylistDetailScreen
                 .prefixedWithRouteOfNavGraphRoute(navGraphRoute),
             onBackButtonClicked = onBackButtonClicked,
-            onPlayTrack = playStreamable,
-            isPlaybackLoading = isPlaybackLoading
+            onPlayTrack = playStreamable
         )
         podcastEpisodeDetailScreen(
             route = MusifyNavigationDestinations.PodcastEpisodeDetailScreen.prefixedWithRouteOfNavGraphRoute(
@@ -193,7 +192,6 @@ private fun NavGraphBuilder.playlistDetailScreen(
     route: String,
     onBackButtonClicked: () -> Unit,
     onPlayTrack: (SearchResult.TrackSearchResult) -> Unit,
-    isPlaybackLoading: Boolean,
     navigationArguments: List<NamedNavArgument> = emptyList()
 ) {
     composable(route = route, arguments = navigationArguments) {
@@ -217,6 +215,7 @@ private fun NavGraphBuilder.playlistDetailScreen(
             }
         }
         val currentlyPlayingTrack by viewModel.currentlyPlayingTrackStream.collectAsState(initial = null)
+        val isPlaybackLoading by viewModel.playbackLoadingStateStream.collectAsState(initial = false)
         PlaylistDetailScreen(
             playlistName = playlistName,
             playlistImageUrlString = imageUrlString,
