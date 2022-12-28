@@ -12,8 +12,8 @@ import com.example.musify.domain.PodcastEpisode
 import com.example.musify.musicplayer.MusicPlayerV2
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.usecases.getCurrentlyPlayingPodcastEpisodeUseCase.GetCurrentlyPlayingPodcastEpisodeUseCase
+import com.example.musify.usecases.getPlaybackLoadingStatusUseCase.GetPlaybackLoadingStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -25,10 +25,11 @@ class PodcastDetailViewModel @Inject constructor(
     private val podcastsRepository: PodcastsRepository,
     private val savedStateHandle: SavedStateHandle,
     private val musicPlayerV2: MusicPlayerV2,
-    getCurrentlyPlayingPodcastEpisodeUseCase: GetCurrentlyPlayingPodcastEpisodeUseCase
+    getCurrentlyPlayingPodcastEpisodeUseCase: GetCurrentlyPlayingPodcastEpisodeUseCase,
+    getPlaybackLoadingStatusUseCase: GetPlaybackLoadingStatusUseCase
 ) : AndroidViewModel(application) {
 
-    enum class UiSate { IDLE, LOADING, ERROR }
+    enum class UiSate { IDLE, LOADING, PLAYBACK_LOADING, ERROR }
 
     private val _uiState = mutableStateOf(UiSate.IDLE)
     val uiState = _uiState as State<UiSate>
@@ -37,9 +38,6 @@ class PodcastDetailViewModel @Inject constructor(
 
     private var isMusicPlayerPlaying by mutableStateOf<Boolean?>(null)
     private var currentlyPlayingPodcastEpisode by mutableStateOf<PodcastEpisode?>(null)
-    private val currentlyPlayingPodcastEpisodeStream: Flow<PodcastEpisode?> =
-        getCurrentlyPlayingPodcastEpisodeUseCase
-            .getCurrentlyPlayingPodcastEpisodeStream()
 
     val isEpisodeCurrentlyPlaying = derivedStateOf {
         isMusicPlayerPlaying == true && currentlyPlayingPodcastEpisode == podcastEpisode.value
@@ -47,7 +45,23 @@ class PodcastDetailViewModel @Inject constructor(
 
     init {
         fetchEpisodeUpdatingUiState()
-        currentlyPlayingPodcastEpisodeStream
+        
+        getPlaybackLoadingStatusUseCase
+            .loadingStatusStream
+            .onEach { isPlaybackLoading ->
+                if (isPlaybackLoading && _uiState.value != UiSate.PLAYBACK_LOADING) {
+                    _uiState.value = UiSate.PLAYBACK_LOADING
+                    return@onEach
+                }
+                if (!isPlaybackLoading && _uiState.value == UiSate.PLAYBACK_LOADING) {
+                    _uiState.value = UiSate.IDLE
+                    return@onEach
+                }
+            }
+            .launchIn(viewModelScope)
+
+        getCurrentlyPlayingPodcastEpisodeUseCase
+            .getCurrentlyPlayingPodcastEpisodeStream()
             .onEach { currentlyPlayingPodcastEpisode = it }
             .launchIn(viewModelScope)
         musicPlayerV2.currentPlaybackStateStream
