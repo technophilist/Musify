@@ -106,7 +106,6 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
             ),
             onBackButtonClicked = onBackButtonClicked,
             onPlayButtonClicked = playStreamable,
-            isPlaybackLoading = isPlaybackLoading,
             navigateToPodcastDetailScreen = {/*TODO*/ }
         )
 
@@ -308,7 +307,6 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
     route: String,
     onPlayButtonClicked: (PodcastEpisode) -> Unit,
     onBackButtonClicked: () -> Unit,
-    isPlaybackLoading: Boolean,
     navigateToPodcastDetailScreen: () -> Unit
 ) {
     composable(route = route) {
@@ -336,7 +334,7 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
             com.example.musify.ui.screens.PodcastEpisodeDetailScreen(
                 podcastEpisode = viewModel.podcastEpisode.value!!,
                 isEpisodeCurrentlyPlaying = isEpisodeCurrentlyPlaying,
-                isPlaybackLoading = isPlaybackLoading,
+                isPlaybackLoading = uiState == PodcastDetailViewModel.UiSate.PLAYBACK_LOADING,
                 onPlayButtonClicked = {
                     onPlayButtonClicked(viewModel.podcastEpisode.value!!)
                 },
