@@ -43,7 +43,6 @@ import java.nio.charset.StandardCharsets
  * @param navController the nav controller to be associated with the nav graph.
  * @param startDestination the route for the start destination.
  * @param playStreamable lambda to execute when a [Streamable] is to be played.
- * @param isPlaybackLoading indicates whether the playback is loading.
  * @param builder the builder used to define other composables that belong
  * to this nested graph.
  * @see NavGraphBuilder.artistDetailScreen
@@ -55,7 +54,6 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
     navGraphRoute: String,
     navController: NavHostController,
     playStreamable: (Streamable) -> Unit,
-    isPlaybackLoading: Boolean,
     startDestination: String,
     builder: NavGraphBuilder.(nestedController: NavGraphWithDetailScreensNestedController) -> Unit
 ) {

@@ -48,8 +48,7 @@ fun MusifyNavigation(
             navGraphRoute = MusifyBottomNavigationDestinations.Home.route,
             startDestination = MusifyNavigationDestinations.HomeScreen.route,
             navController = navController,
-            playStreamable = playStreamable,
-            isPlaybackLoading = isPlaybackLoading
+            playStreamable = playStreamable
         ) { nestedController ->
             homeScreen(
                 route = MusifyNavigationDestinations.HomeScreen.route,
@@ -62,8 +61,7 @@ fun MusifyNavigation(
             navGraphRoute = MusifyBottomNavigationDestinations.Search.route,
             startDestination = MusifyNavigationDestinations.SearchScreen.route,
             navController = navController,
-            playStreamable = playStreamable,
-            isPlaybackLoading = isPlaybackLoading
+            playStreamable = playStreamable
         ) { nestedController ->
             searchScreen(
                 route = MusifyNavigationDestinations.SearchScreen.route,
