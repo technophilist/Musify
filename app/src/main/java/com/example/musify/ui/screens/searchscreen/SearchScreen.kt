@@ -54,6 +54,7 @@ data class PagingItemsForSearchScreen(
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 fun SearchScreen(
     genreList: List<Genre>,
     searchScreenFilters: List<SearchFilter>,
@@ -164,6 +165,7 @@ fun SearchScreen(
     }
 }
 
+@ExperimentalLayoutApi
 @ExperimentalMaterialApi
 @Composable
 private fun SearchQueryList(
@@ -236,7 +238,8 @@ private fun SearchQueryList(
                         onImageLoadingFinished = onImageLoadingFinished,
                         playlistImageErrorPainter = playlistImageErrorPainter
                     )
-                    SearchFilter.PODCASTS -> searchPodcastListItems(podcastsForSearchQuery = pagingItems.podcastListForSearchQuery,
+                    SearchFilter.PODCASTS -> searchPodcastListItems(
+                        podcastsForSearchQuery = pagingItems.podcastListForSearchQuery,
                         episodesForSearchQuery = pagingItems.episodeListForSearchQuery,
                         onPodcastItemClicked = { /*TODO*/ },
                         onEpisodeItemClicked = onItemClick
@@ -247,10 +250,19 @@ private fun SearchQueryList(
                 }
             }
         }
-        DefaultMusifyLoadingAnimation(
-            modifier = Modifier
+        val musifyLoadingAnimationModifier = if (WindowInsets.isImeVisible) {
+            Modifier
                 .align(Alignment.Center)
-                .imePadding(),
+                .imePadding()
+        } else {
+            Modifier
+                .align(Alignment.Center)
+                .padding(
+                    bottom = MusifyMiniPlayerConstants.miniPlayerHeight + MusifyBottomNavigationConstants.navigationHeight
+                )
+        }
+        DefaultMusifyLoadingAnimation(
+            modifier = musifyLoadingAnimationModifier,
             isVisible = isSearchResultsLoadingAnimationVisible
         )
     }
