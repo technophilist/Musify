@@ -13,11 +13,14 @@ import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.IODispatcher
 import com.example.musify.domain.SearchResult
 import com.example.musify.usecases.getCurrentlyPlayingTrackUseCase.GetCurrentlyPlayingTrackUseCase
+import com.example.musify.usecases.getPlaybackLoadingStatusUseCase.GetPlaybackLoadingStatusUseCase
 import com.example.musify.viewmodels.getCountryCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 /**
@@ -30,6 +33,7 @@ enum class SearchScreenUiState { LOADING, IDLE }
 class SearchViewModel @Inject constructor(
     application: Application,
     getCurrentlyPlayingTrackUseCase: GetCurrentlyPlayingTrackUseCase,
+    getPlaybackLoadingStatusUseCase: GetPlaybackLoadingStatusUseCase,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val genresRepository: GenresRepository,
     private val searchRepository: SearchRepository
@@ -76,6 +80,22 @@ class SearchViewModel @Inject constructor(
 
     val currentlyPlayingTrackStream =
         getCurrentlyPlayingTrackUseCase.getCurrentlyPlayingTrackStream()
+
+    init {
+        getPlaybackLoadingStatusUseCase
+            .loadingStatusStream
+            .onEach { isPlaybackLoading ->
+                if (isPlaybackLoading && _uiState.value != SearchScreenUiState.LOADING) {
+                    _uiState.value = SearchScreenUiState.LOADING
+                    return@onEach
+                }
+                if (!isPlaybackLoading && _uiState.value == SearchScreenUiState.LOADING) {
+                    _uiState.value = SearchScreenUiState.IDLE
+                    return@onEach
+                }
+            }
+            .launchIn(viewModelScope)
+    }
 
     private fun collectAndAssignSearchResults(
         searchQuery: String,
