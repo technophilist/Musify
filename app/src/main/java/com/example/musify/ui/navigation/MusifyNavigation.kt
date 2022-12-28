@@ -65,7 +65,6 @@ fun MusifyNavigation(
         ) { nestedController ->
             searchScreen(
                 route = MusifyNavigationDestinations.SearchScreen.route,
-                isPlaybackLoading = isPlaybackLoading,
                 onSearchResultClicked = nestedController::navigateToDetailScreen,
                 isFullScreenNowPlayingScreenOverlayVisible = isFullScreenNowPlayingOverlayScreenVisible
             )
@@ -111,7 +110,6 @@ private fun NavGraphBuilder.homeScreen(
 @ExperimentalMaterialApi
 private fun NavGraphBuilder.searchScreen(
     route: String,
-    isPlaybackLoading: Boolean,
     onSearchResultClicked: (SearchResult) -> Unit,
     isFullScreenNowPlayingScreenOverlayVisible: Boolean,
 ) {
@@ -166,7 +164,7 @@ private fun NavGraphBuilder.searchScreen(
                 searchScreenFilters = filters,
                 onGenreItemClick = {},
                 onSearchTextChanged = viewModel::search,
-                isLoading = uiState == SearchScreenUiState.LOADING || isPlaybackLoading,
+                isLoading = uiState == SearchScreenUiState.LOADING,
                 pagingItems = pagingItems,
                 onSearchQueryItemClicked = onSearchResultClicked,
                 currentlySelectedFilter = viewModel.currentlySelectedFilter.value,
