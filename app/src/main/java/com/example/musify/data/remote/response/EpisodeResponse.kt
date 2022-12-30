@@ -55,7 +55,6 @@ fun EpisodeResponse.toPodcastEpisode(imageSize: MapperImageSize): PodcastEpisode
     return PodcastEpisode(
         id = this.id,
         title = this.title,
-        description = this.description,
         htmlDescription = HtmlCompat.fromHtml(this.htmlDescription, 0),
         previewUrl = previewUrl,
         releaseDateInfo = releaseDateInfo,

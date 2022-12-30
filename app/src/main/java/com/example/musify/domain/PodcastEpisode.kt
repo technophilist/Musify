@@ -1,8 +1,6 @@
 package com.example.musify.domain
 
-import android.graphics.Bitmap
 import android.text.Spanned
-import com.example.musify.musicplayer.MusicPlayerV2
 
 /**
  * A domain class that represents a specific podcast episode.
@@ -10,7 +8,6 @@ import com.example.musify.musicplayer.MusicPlayerV2
 data class PodcastEpisode(
     val id: String,
     val title: String,
-    val description: String,
     val htmlDescription: Spanned,
     val previewUrl: String?,
     val releaseDateInfo: ReleaseDateInfo,
