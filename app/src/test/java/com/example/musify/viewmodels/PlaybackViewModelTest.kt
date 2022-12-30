@@ -59,7 +59,7 @@ class PlaybackViewModelTest {
         val track = fakeTrackSearchResult
         playbackViewModelWithSuccessfulImageFetch.playStreamable(track)
         assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value is PlaybackViewModel.PlaybackState.Playing)
-        assert((playbackViewModelWithSuccessfulImageFetch.playbackState.value as PlaybackViewModel.PlaybackState.Playing).track == track)
+        assert((playbackViewModelWithSuccessfulImageFetch.playbackState.value as PlaybackViewModel.PlaybackState.Playing).streamable == track)
     }
 
     @Test
@@ -83,7 +83,7 @@ class PlaybackViewModelTest {
     fun stoppedStateTest_whenUnderlyingMusicPlayerStopsPlayingTrack_currentlyPlayingTrackMustBeNull() {
         musicPlayer.stopPlayingTrack()
         assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value is PlaybackViewModel.PlaybackState.Stopped)
-        assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value.currentlyPlayingTrack == null)
+        assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value.currentlyPlayingStreamable == null)
     }
 
 }
