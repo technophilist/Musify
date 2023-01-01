@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class EpisodeResponse(
     val id: String,
     @JsonProperty("name") val title: String,
-    @JsonProperty("html_description") val htmlDescription: String,
+    val description: String,
+    @JsonProperty("html_description")
+    val htmlDescription: String,
     @JsonProperty("duration_ms") val durationMillis: Long,
     @JsonProperty("release_date") val releaseDate: String,
     @JsonProperty("audio_preview_url") val previewUrl: String?,
@@ -44,7 +46,7 @@ fun EpisodeResponse.toPodcastEpisode(imageSize: MapperImageSize): PodcastEpisode
         day = formattedEpisodeReleaseDateAndDuration.day,
         year = formattedEpisodeReleaseDateAndDuration.year,
     )
-
+ 
     val durationInfo = PodcastEpisode.DurationInfo(
         hours = formattedEpisodeReleaseDateAndDuration.hours,
         minutes = formattedEpisodeReleaseDateAndDuration.minutes
