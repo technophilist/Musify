@@ -1,8 +1,8 @@
 package com.example.musify.domain
 
-import android.graphics.Bitmap
+import android.content.Context
 import android.text.Spanned
-import com.example.musify.musicplayer.MusicPlayerV2
+import com.example.musify.utils.generateMusifyDateAndDurationString
 
 /**
  * A domain class that represents a specific podcast episode.
@@ -39,3 +39,18 @@ data class PodcastEpisode(
      */
     data class DurationInfo(val hours: Int, val minutes: Int)
 }
+
+/**
+ * A utility method used to get a string that contains date and duration
+ * information in a formatted manner.
+ * @see generateMusifyDateAndDurationString
+ */
+fun PodcastEpisode.getDateAndDurationString(context: Context): String =
+    generateMusifyDateAndDurationString(
+        context = context,
+        month = releaseDateInfo.month,
+        day = releaseDateInfo.day,
+        year = releaseDateInfo.year,
+        hours = durationInfo.hours,
+        minutes = durationInfo.minutes
+    )
