@@ -85,7 +85,7 @@ sealed class SearchResult {
  * information in a formatted manner.
  * @see generateMusifyDateAndDurationString
  */
-fun SearchResult.EpisodeSearchResult.getDateAndDurationString(context: Context): String =
+fun SearchResult.EpisodeSearchResult.getFormattedDateAndDurationString(context: Context): String =
     generateMusifyDateAndDurationString(
         context = context,
         month = episodeReleaseDateInfo.month,

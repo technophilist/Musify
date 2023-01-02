@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.musify.domain.SearchResult
-import com.example.musify.domain.getDateAndDurationString
+import com.example.musify.domain.getFormattedDateAndDurationString
 
 @ExperimentalMaterialApi
 @Composable
@@ -26,7 +26,7 @@ fun EpisodeListCard(
 ) {
     val context = LocalContext.current
     val dateAndDurationString = remember(episodeSearchResult) {
-        episodeSearchResult.getDateAndDurationString(context)
+        episodeSearchResult.getFormattedDateAndDurationString(context)
     }
     var isLoadingPlaceholderVisible by remember { mutableStateOf(true) }
     Card(
