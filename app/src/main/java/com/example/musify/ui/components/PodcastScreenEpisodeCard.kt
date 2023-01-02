@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
-import com.example.musify.domain.getDateAndDurationString
+import com.example.musify.domain.getFormattedDateAndDurationString
 
 
 @ExperimentalMaterialApi
@@ -43,7 +43,7 @@ fun PodcastScreenEpisodeCard(
         thumbnailImageUrlString = episode.podcastInfo.imageUrl,
         title = episode.title,
         description = episode.description,
-        dateAndDurationString = episode.getDateAndDurationString(context),
+        dateAndDurationString = episode.getFormattedDateAndDurationString(context),
         modifier = modifier
     )
 }

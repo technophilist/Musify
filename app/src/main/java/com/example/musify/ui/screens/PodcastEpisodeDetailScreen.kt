@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
-import com.example.musify.domain.getDateAndDurationString
+import com.example.musify.domain.getFormattedDateAndDurationString
 import com.example.musify.ui.components.*
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
@@ -66,7 +66,7 @@ fun PodcastEpisodeDetailScreen(
                     episodeImageUrl = podcastEpisode.podcastInfo.imageUrl,
                     episodeTitle = podcastEpisode.title,
                     podcastName = podcastEpisode.podcastInfo.name,
-                    dateAndDurationString = podcastEpisode.getDateAndDurationString(context),
+                    dateAndDurationString = podcastEpisode.getFormattedDateAndDurationString(context),
                     onBackButtonClicked = onBackButtonClicked
                 )
             }

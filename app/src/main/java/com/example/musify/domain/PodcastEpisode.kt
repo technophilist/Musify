@@ -45,7 +45,7 @@ data class PodcastEpisode(
  * information in a formatted manner.
  * @see generateMusifyDateAndDurationString
  */
-fun PodcastEpisode.getDateAndDurationString(context: Context): String =
+fun PodcastEpisode.getFormattedDateAndDurationString(context: Context): String =
     generateMusifyDateAndDurationString(
         context = context,
         month = releaseDateInfo.month,
