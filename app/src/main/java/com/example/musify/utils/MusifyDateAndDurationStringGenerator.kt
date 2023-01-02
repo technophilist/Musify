@@ -30,7 +30,7 @@ fun generateMusifyDateAndDurationString(
         formatArgs = arrayOf(hours)
     )
     val minuteString = context.getQuantityStringResource(
-        id = R.plurals.numberOfHoursOfEpisode,
+        id = R.plurals.numberOfMinutesOfEpisode,
         quantity = minutes,
         formatArgs = arrayOf(minutes)
     )
@@ -47,4 +47,4 @@ private fun Context.getQuantityStringResource(
     id: Int,
     quantity: Int,
     vararg formatArgs: Any? = emptyArray()
-) = resources.getQuantityString(id, quantity, formatArgs)
+) = resources.getQuantityString(id, quantity, *formatArgs)
