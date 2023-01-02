@@ -1,5 +1,8 @@
 package com.example.musify.domain
 
+import android.content.Context
+import com.example.musify.utils.generateMusifyDateAndDurationString
+
 sealed class SearchResult {
     /**
      * A class that models the result of a search operation for a
@@ -76,3 +79,18 @@ sealed class SearchResult {
         data class EpisodeDurationInfo(val hours: Int, val minutes: Int)
     }
 }
+
+/**
+ * A utility method used to get a string that contains date and duration
+ * information in a formatted manner.
+ * @see generateMusifyDateAndDurationString
+ */
+fun SearchResult.EpisodeSearchResult.getDateAndDurationString(context: Context): String =
+    generateMusifyDateAndDurationString(
+        context = context,
+        month = episodeReleaseDateInfo.month,
+        day = episodeReleaseDateInfo.day,
+        year = episodeReleaseDateInfo.year,
+        hours = episodeDurationInfo.hours,
+        minutes = episodeDurationInfo.minutes
+    )
