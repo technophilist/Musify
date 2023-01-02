@@ -1,6 +1,5 @@
 package com.example.musify.ui.components
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -14,30 +13,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.musify.R
 import com.example.musify.domain.SearchResult
-
-@Suppress("RemoveSingleExpressionStringTemplate")
-private fun SearchResult.EpisodeSearchResult.getDateAndDurationString(context: Context): String {
-    val dateString = "${episodeReleaseDateInfo.month} " +
-            "${episodeReleaseDateInfo.day}, " +
-            "${episodeReleaseDateInfo.year}"
-    val hourString = if (episodeDurationInfo.hours == 0) {
-        ""
-    } else {
-        context.resources.getQuantityString(
-            R.plurals.numberOfHoursOfEpisode,
-            episodeDurationInfo.hours,
-            episodeDurationInfo.hours
-        )
-    }
-    val minuteString = context.resources.getQuantityString(
-        R.plurals.numberOfMinutesOfEpisode,
-        episodeDurationInfo.minutes,
-        episodeDurationInfo.minutes
-    )
-    return "$dateString • $hourString $minuteString"
-}
+import com.example.musify.domain.getDateAndDurationString
 
 @ExperimentalMaterialApi
 @Composable
