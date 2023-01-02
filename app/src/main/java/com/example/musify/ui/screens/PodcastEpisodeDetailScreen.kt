@@ -1,6 +1,5 @@
 package com.example.musify.ui.screens
 
-import android.content.Context
 import android.text.Spanned
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -28,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
+import com.example.musify.domain.getDateAndDurationString
 import com.example.musify.ui.components.*
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
@@ -35,23 +35,6 @@ import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 import kotlinx.coroutines.launch
 import com.google.android.material.R as materialR
 
-
-@Suppress("RemoveSingleExpressionStringTemplate")
-private fun PodcastEpisode.getDateAndDurationString(context: Context): String {
-    val dateString =
-        "${releaseDateInfo.month} " + "${releaseDateInfo.day}, " + "${releaseDateInfo.year}"
-    val hourString = if (durationInfo.hours == 0) {
-        ""
-    } else {
-        context.resources.getQuantityString(
-            R.plurals.numberOfHoursOfEpisode, durationInfo.hours, durationInfo.hours
-        )
-    }
-    val minuteString = context.resources.getQuantityString(
-        R.plurals.numberOfMinutesOfEpisode, durationInfo.minutes, durationInfo.minutes
-    )
-    return "$dateString • $hourString $minuteString"
-}
 
 @Composable
 fun PodcastEpisodeDetailScreen(

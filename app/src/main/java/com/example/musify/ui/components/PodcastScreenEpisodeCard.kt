@@ -1,6 +1,5 @@
 package com.example.musify.ui.components
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -22,25 +21,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
+import com.example.musify.domain.getDateAndDurationString
 
-// TODO this method is needed in a lot of composables.
-// Remove copy pastes of this func and make it available everywhere.
-@Suppress("RemoveSingleExpressionStringTemplate")
-private fun PodcastEpisode.getDateAndDurationString(context: Context): String {
-    val dateString =
-        "${releaseDateInfo.month} " + "${releaseDateInfo.day}, " + "${releaseDateInfo.year}"
-    val hourString = if (durationInfo.hours == 0) {
-        ""
-    } else {
-        context.resources.getQuantityString(
-            R.plurals.numberOfHoursOfEpisode, durationInfo.hours, durationInfo.hours
-        )
-    }
-    val minuteString = context.resources.getQuantityString(
-        R.plurals.numberOfMinutesOfEpisode, durationInfo.minutes, durationInfo.minutes
-    )
-    return "$dateString • $hourString $minuteString"
-}
 
 @ExperimentalMaterialApi
 @Composable
