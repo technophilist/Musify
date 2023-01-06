@@ -403,4 +403,20 @@ class SpotifyServiceTest {
             )
         }
     }
+
+    @Test
+    fun getEpisodesForShowWithIdTest_validShowId_isFetchedSuccessfully() {
+        runBlockingWithToken {
+            val validShowId = "6o81QuW22s5m2nfcXWjucc"
+            val episodesForShow = musicService.getEpisodesForShowWithId(
+                token = it,
+                id = validShowId,
+                market = "IN",
+                limit = 20,
+                offset = 0
+            )
+            assert(episodesForShow.items.isNotEmpty())
+            assert(episodesForShow.items.size <= 20)
+        }
+    }
 }
