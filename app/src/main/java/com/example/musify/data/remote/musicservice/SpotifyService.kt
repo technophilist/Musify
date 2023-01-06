@@ -174,7 +174,14 @@ interface SpotifyService {
     @GET(SpotifyEndPoints.SPECIFIC_EPISODE_ENDPOINT)
     suspend fun getEpisodeWithId(
         @Header("Authorization") token: BearerToken,
-        @Path("id") id:String,
-        @Query("market") market:String
-    ):EpisodeResponse
+        @Path("id") id: String,
+        @Query("market") market: String
+    ): EpisodeResponse
+
+    @GET(SpotifyEndPoints.SPECIFIC_SHOW_ENDPOINT)
+    suspend fun getShowWithId(
+        @Header("Authorization") token: BearerToken,
+        @Path("id") id: String,
+        @Query("market") market: String
+    ): ShowResponse
 }
