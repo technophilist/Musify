@@ -184,4 +184,13 @@ interface SpotifyService {
         @Path("id") id: String,
         @Query("market") market: String
     ): ShowResponse
+
+    @GET(SpotifyEndPoints.SHOW_EPISODES_ENDPOINT)
+    suspend fun getEpisodesForShowWithId(
+        @Header("Authorization") token: BearerToken,
+        @Path("id") id: String,
+        @Query("market") market: String,
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0
+    ): EpisodesWithPreviewUrlResponse
 }
