@@ -1,5 +1,9 @@
 package com.example.musify.data.remote.response
 
+import androidx.core.text.HtmlCompat
+import com.example.musify.data.utils.MapperImageSize
+import com.example.musify.data.utils.getImageResponseForImageSize
+import com.example.musify.domain.PodcastShow
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
@@ -11,4 +15,16 @@ data class ShowResponse(
     val publisher: String,
     @JsonProperty("html_description") val htmlDescription: String,
     val images: List<ImageResponse>
+)
+
+/**
+ * A mapper function used to map an instance of [ShowResponse] to an instance
+ * of [PodcastShow].
+ */
+fun ShowResponse.toPodcastShow(mapperImageSize: MapperImageSize) = PodcastShow(
+    id = id,
+    name = name,
+    imageUrlString = images.getImageResponseForImageSize(mapperImageSize).url,
+    nameOfPublisher = publisher,
+    htmlDescription = HtmlCompat.fromHtml(htmlDescription, 0) // TODO see what's the difference between this and .toSpanned()
 )
