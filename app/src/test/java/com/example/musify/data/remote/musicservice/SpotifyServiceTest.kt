@@ -391,4 +391,16 @@ class SpotifyServiceTest {
             musicService.getEpisodeWithId(token = it, market = "IN", id = validEpisodeId)
         }
     }
+
+    @Test
+    fun getShowWithIdTest_validShowId_isFetchedSuccessfully() {
+        runBlockingWithToken {
+            val validShowId = "6o81QuW22s5m2nfcXWjucc"
+            musicService.getShowWithId(
+                token = it,
+                id = validShowId,
+                market = "IN"
+            )
+        }
+    }
 }
