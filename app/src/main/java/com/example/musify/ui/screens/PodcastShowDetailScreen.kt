@@ -41,11 +41,11 @@ import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 fun PodcastShowDetailScreen(
     podcastShow: PodcastShow,
     onBackButtonClicked: () -> Unit,
-    onEpisodePlayButtonClicked: (SearchResult.EpisodeSearchResult) -> Unit,
-    onEpisodePauseButtonClicked: (SearchResult.EpisodeSearchResult) -> Unit,
-    currentlyPlayingEpisode:SearchResult.EpisodeSearchResult,
-    onEpisodeClicked: (SearchResult.EpisodeSearchResult) -> Unit,
-    episodes: LazyPagingItems<SearchResult.EpisodeSearchResult>
+    onEpisodePlayButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
+    onEpisodePauseButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
+    currentlyPlayingEpisode:SearchResult.StreamableEpisodeSearchResult,
+    onEpisodeClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
+    episodes: LazyPagingItems<SearchResult.StreamableEpisodeSearchResult>
 ) {
     val context = LocalContext.current
     Column(modifier = Modifier.fillMaxSize()) {
