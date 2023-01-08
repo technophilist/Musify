@@ -33,7 +33,7 @@ fun StreamableEpisodeCard(
     onPlayButtonClicked: () -> Unit,
     onPauseButtonClicked: () -> Unit,
     onClicked: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     StreamableEpisodeCard(
