@@ -33,6 +33,7 @@ import com.example.musify.domain.PodcastShow
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.AndroidExpandableTextView
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
+import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
 import com.example.musify.ui.components.DetailScreenTopAppBar
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
@@ -46,6 +47,7 @@ fun PodcastShowDetailScreen(
     onEpisodePlayButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
     onEpisodePauseButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
     currentlyPlayingEpisode: SearchResult.StreamableEpisodeSearchResult?,
+    isPlaybackLoading: Boolean,
     onEpisodeClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
     episodes: LazyPagingItems<SearchResult.StreamableEpisodeSearchResult>
 ) {
@@ -116,6 +118,10 @@ fun PodcastShowDetailScreen(
                 dynamicThemeResource = DynamicThemeResource.FromImageUrl(podcastShow.imageUrlString)
             )
         }
+        DefaultMusifyLoadingAnimation(
+            modifier = Modifier.align(Alignment.Center),
+            isVisible = isPlaybackLoading
+        )
     }
 }
 
