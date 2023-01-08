@@ -25,7 +25,7 @@ interface PodcastsRepository {
         imageSize: MapperImageSize
     ): FetchedResource<PodcastShow, MusifyErrorType>
 
-    suspend fun getEpisodesStreamForPodcastShow(
+    fun getEpisodesStreamForPodcastShow(
         showId: String,
         countryCode: String,
         imageSize: MapperImageSize

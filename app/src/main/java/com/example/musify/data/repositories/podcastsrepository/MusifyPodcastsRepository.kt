@@ -42,8 +42,10 @@ class MusifyPodcastsRepository @Inject constructor(
         ).toPodcastShow(imageSize)
     }
 
-    override suspend fun getEpisodesStreamForPodcastShow(
-        showId: String, countryCode: String, imageSize: MapperImageSize
+    override fun getEpisodesStreamForPodcastShow(
+        showId: String,
+        countryCode: String,
+        imageSize: MapperImageSize
     ): Flow<PagingData<SearchResult.StreamableEpisodeSearchResult>> = Pager(pagingConfig) {
         EpisodesForPodcastShowPagingSource(
             showId = showId,
