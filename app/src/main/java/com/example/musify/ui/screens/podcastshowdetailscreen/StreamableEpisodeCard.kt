@@ -82,9 +82,10 @@ fun StreamableEpisodeCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                AsyncImageWithPlaceholder(modifier = Modifier
-                    .size(45.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+                AsyncImageWithPlaceholder(
+                    modifier = Modifier
+                        .size(45.dp)
+                        .clip(RoundedCornerShape(4.dp)),
                     model = thumbnailImageUrlString,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
@@ -98,7 +99,9 @@ fun StreamableEpisodeCard(
                     style = MaterialTheme.typography.subtitle2,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    color = if (isEpisodePlaying) MaterialTheme.colors.primary
+                    else Color.Unspecified
                 )
 
             }
