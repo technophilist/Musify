@@ -298,7 +298,7 @@ class NavGraphWithDetailScreensNestedController(
                 return
             }
             is SearchResult.PodcastSearchResult -> {
-                TODO()
+                MusifyNavigationDestinations.PodcastShowDetailScreen.buildRoute(searchResult.id)
             }
             is SearchResult.EpisodeSearchResult -> {
                 MusifyNavigationDestinations.PodcastEpisodeDetailScreen.buildRoute(searchResult.id)
