@@ -135,7 +135,8 @@ fun SearchScreen(
         AnimatedContent(targetState = isSearchListVisible,
             transitionSpec = { fadeIn() with fadeOut() }) { targetState ->
             when (targetState) {
-                true -> SearchQueryList(pagingItems = pagingItems,
+                true -> SearchQueryList(
+                    pagingItems = pagingItems,
                     onItemClick = { onSearchQueryItemClicked(it) },
                     isLoadingPlaceholderVisible = { item ->
                         isSearchItemLoadingPlaceholderVisibleMap.getOrPut(item) { false }
@@ -151,8 +152,8 @@ fun SearchScreen(
                     lazyListState = lazyListState,
                     currentlySelectedFilter = currentlySelectedFilter,
                     isSearchErrorMessageVisible = isSearchErrorMessageVisible,
-                    onErrorRetryButtonClick = { onErrorRetryButtonClick(searchText) })
-
+                    onErrorRetryButtonClick = { onErrorRetryButtonClick(searchText) }
+                )
                 false -> GenresGrid(
                     modifier = Modifier
                         .background(MaterialTheme.colors.background)
@@ -241,7 +242,7 @@ private fun SearchQueryList(
                     SearchFilter.PODCASTS -> searchPodcastListItems(
                         podcastsForSearchQuery = pagingItems.podcastListForSearchQuery,
                         episodesForSearchQuery = pagingItems.episodeListForSearchQuery,
-                        onPodcastItemClicked = { /*TODO*/ },
+                        onPodcastItemClicked = onItemClick,
                         onEpisodeItemClicked = onItemClick
                     )
                 }
