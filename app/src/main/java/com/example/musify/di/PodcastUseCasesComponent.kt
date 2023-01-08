@@ -2,6 +2,8 @@ package com.example.musify.di
 
 import com.example.musify.usecases.getCurrentlyPlayingPodcastEpisodeUseCase.GetCurrentlyPlayingPodcastEpisodeUseCase
 import com.example.musify.usecases.getCurrentlyPlayingPodcastEpisodeUseCase.MusifyGetCurrentlyPlayingPodcastEpisodeUseCase
+import com.example.musify.usecases.getCurrentlyPlayingStreamableUseCase.GetCurrentlyPlayingStreamableUseCase
+import com.example.musify.usecases.getCurrentlyPlayingStreamableUseCase.MusifyGetCurrentlyPlayingStreamableUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,4 +16,9 @@ abstract class PodcastUseCasesComponent {
     abstract fun bindGetCurrentlyPlayingPodcastEpisodeUseCase(
         impl: MusifyGetCurrentlyPlayingPodcastEpisodeUseCase
     ): GetCurrentlyPlayingPodcastEpisodeUseCase
+
+    @Binds
+    abstract fun bindGetCurrentlyPlayingStreamableUseCase(
+        impl: MusifyGetCurrentlyPlayingStreamableUseCase
+    ): GetCurrentlyPlayingStreamableUseCase
 }
