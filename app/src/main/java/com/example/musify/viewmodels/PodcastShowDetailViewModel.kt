@@ -41,7 +41,7 @@ class PodcastShowDetailViewModel @Inject constructor(
         fetchShowUpdatingUiState()
     }
 
-    fun retry() {
+    fun retryFetchingShow() {
         fetchShowUpdatingUiState()
     }
 
