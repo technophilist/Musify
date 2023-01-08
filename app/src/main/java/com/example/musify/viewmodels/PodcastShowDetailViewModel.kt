@@ -10,8 +10,11 @@ import com.example.musify.data.repositories.podcastsrepository.PodcastsRepositor
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.PodcastShow
+import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
+import com.example.musify.usecases.getCurrentlyPlayingStreamableUseCase.GetCurrentlyPlayingStreamableUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +22,7 @@ import javax.inject.Inject
 class PodcastShowDetailViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
+    getCurrentlyPlayingStreamableUseCase: GetCurrentlyPlayingStreamableUseCase,
     private val podcastsRepository: PodcastsRepository
 ) : AndroidViewModel(application) {
 
@@ -36,6 +40,10 @@ class PodcastShowDetailViewModel @Inject constructor(
 
     private val _podcastShow = mutableStateOf<PodcastShow?>(null)
     val podcastShow = _podcastShow as State<PodcastShow?>
+
+    val currentlyPlayingEpisode = getCurrentlyPlayingStreamableUseCase
+        .currentlyPlayingStreamableFlow
+        .filterIsInstance<SearchResult.StreamableEpisodeSearchResult>()
 
     init {
         fetchShowUpdatingUiState()
