@@ -102,7 +102,8 @@ sealed class SearchResult {
 
 /**
  * A utility method used to get a string that contains date and duration
- * information in a formatted manner.
+ * information in a formatted manner for an instance of
+ * [SearchResult.EpisodeSearchResult].
  * @see generateMusifyDateAndDurationString
  */
 fun SearchResult.EpisodeSearchResult.getFormattedDateAndDurationString(context: Context): String =
@@ -114,3 +115,21 @@ fun SearchResult.EpisodeSearchResult.getFormattedDateAndDurationString(context: 
         hours = episodeDurationInfo.hours,
         minutes = episodeDurationInfo.minutes
     )
+
+
+/**
+ * A utility method used to get a string that contains date and duration
+ * information in a formatted manner for an instance of
+ * [SearchResult.StreamableEpisodeSearchResult].
+ * @see generateMusifyDateAndDurationString
+ */
+fun SearchResult.StreamableEpisodeSearchResult.getFormattedDateAndDurationString(context: Context): String =
+    generateMusifyDateAndDurationString(
+        context = context,
+        month = episodeReleaseDateInfo.month,
+        day = episodeReleaseDateInfo.day,
+        year = episodeReleaseDateInfo.year,
+        hours = episodeDurationInfo.hours,
+        minutes = episodeDurationInfo.minutes
+    )
+
