@@ -43,7 +43,7 @@ fun PodcastShowDetailScreen(
     onBackButtonClicked: () -> Unit,
     onEpisodePlayButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
     onEpisodePauseButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
-    currentlyPlayingEpisode:SearchResult.StreamableEpisodeSearchResult,
+    currentlyPlayingEpisode: SearchResult.StreamableEpisodeSearchResult?,
     onEpisodeClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
     episodes: LazyPagingItems<SearchResult.StreamableEpisodeSearchResult>
 ) {
