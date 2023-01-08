@@ -31,7 +31,6 @@ import com.example.musify.domain.SearchResult
 import com.example.musify.domain.getFormattedDateAndDurationString
 import com.example.musify.ui.components.AndroidExpandableTextView
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
-import com.example.musify.ui.screens.podcastshowdetailscreen.PodcastScreenEpisodeCard
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
@@ -76,7 +75,7 @@ fun PodcastShowDetailScreen(
         LazyColumn {
             items(episodes) {
                 it?.let { episode ->
-                    PodcastScreenEpisodeCard(
+                    StreamableEpisodeCard(
                         isEpisodePlaying = currentlyPlayingEpisode == episode,
                         onPlayButtonClicked = { onEpisodePlayButtonClicked(episode) },
                         onPauseButtonClicked = { onEpisodePauseButtonClicked(episode) },

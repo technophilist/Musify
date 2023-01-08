@@ -20,15 +20,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.musify.R
-import com.example.musify.domain.PodcastEpisode
+import com.example.musify.domain.SearchResult
 import com.example.musify.domain.getFormattedDateAndDurationString
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 
 
 @ExperimentalMaterialApi
 @Composable
-fun PodcastScreenEpisodeCard(
-    episode: PodcastEpisode,
+fun StreamableEpisodeCard(
+    episode: SearchResult.StreamableEpisodeSearchResult,
     isEpisodePlaying: Boolean,
     onPlayButtonClicked: () -> Unit,
     onPauseButtonClicked: () -> Unit,
@@ -36,14 +36,14 @@ fun PodcastScreenEpisodeCard(
     modifier: Modifier
 ) {
     val context = LocalContext.current
-    PodcastScreenEpisodeCard(
+    StreamableEpisodeCard(
         isEpisodePlaying = isEpisodePlaying,
         onPlayButtonClicked = onPlayButtonClicked,
         onPauseButtonClicked = onPauseButtonClicked,
         onClicked = onClicked,
-        thumbnailImageUrlString = episode.podcastInfo.imageUrl,
-        title = episode.title,
-        description = episode.description,
+        thumbnailImageUrlString = episode.streamInfo.imageUrl,
+        title = episode.streamInfo.title,
+        description = episode.episodeContentInfo.description,
         dateAndDurationString = episode.getFormattedDateAndDurationString(context),
         modifier = modifier
     )
@@ -51,7 +51,7 @@ fun PodcastScreenEpisodeCard(
 
 @ExperimentalMaterialApi
 @Composable
-fun PodcastScreenEpisodeCard(
+fun StreamableEpisodeCard(
     isEpisodePlaying: Boolean,
     onPlayButtonClicked: () -> Unit,
     onPauseButtonClicked: () -> Unit,
