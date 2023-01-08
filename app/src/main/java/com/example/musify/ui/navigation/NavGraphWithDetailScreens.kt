@@ -294,7 +294,9 @@ class NavGraphWithDetailScreensNestedController(
             }
             is SearchResult.EpisodeSearchResult -> {
                 MusifyNavigationDestinations.PodcastEpisodeDetailScreen.buildRoute(searchResult.id)
-
+            }
+            is SearchResult.StreamableEpisodeSearchResult->{
+                TODO()
             }
         }
         navController.navigate(associatedNavGraphRoute + route)
