@@ -1,4 +1,4 @@
-package com.example.musify.ui.screens
+package com.example.musify.ui.screens.podcastshowdetailscreen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
