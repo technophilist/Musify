@@ -23,10 +23,8 @@ import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
 import com.example.musify.ui.screens.AlbumDetailScreen
 import com.example.musify.ui.screens.ArtistDetailScreen
 import com.example.musify.ui.screens.PlaylistDetailScreen
-import com.example.musify.viewmodels.AlbumDetailUiState
-import com.example.musify.viewmodels.AlbumDetailViewModel
-import com.example.musify.viewmodels.PlaylistDetailViewModel
-import com.example.musify.viewmodels.PodcastDetailViewModel
+import com.example.musify.ui.screens.PodcastShowDetailScreen
+import com.example.musify.viewmodels.*
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailScreenUiState
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailViewModel
 import java.net.URLDecoder
@@ -105,6 +103,16 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
             onBackButtonClicked = onBackButtonClicked,
             onPlayButtonClicked = playStreamable,
             navigateToPodcastDetailScreen = {/*TODO*/ }
+        )
+
+        podcastShowDetailScreen(
+            route = MusifyNavigationDestinations.PodcastShowDetailScreen.prefixedWithRouteOfNavGraphRoute(
+                navGraphRoute
+            ),
+            onPlayButtonClicked = playStreamable,
+            onPauseButtonClicked = { TODO() },
+            onEpisodeClicked = playStreamable,
+            onBackButtonClicked = onBackButtonClicked
         )
 
     }
@@ -295,7 +303,7 @@ class NavGraphWithDetailScreensNestedController(
             is SearchResult.EpisodeSearchResult -> {
                 MusifyNavigationDestinations.PodcastEpisodeDetailScreen.buildRoute(searchResult.id)
             }
-            is SearchResult.StreamableEpisodeSearchResult->{
+            is SearchResult.StreamableEpisodeSearchResult -> {
                 TODO()
             }
         }
@@ -346,6 +354,50 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
                 onDownloadButtonClicked = { /*TODO*/ },
                 onBackButtonClicked = onBackButtonClicked,
                 navigateToPodcastDetailScreen = navigateToPodcastDetailScreen
+            )
+        }
+    }
+}
+
+@ExperimentalMaterialApi
+private fun NavGraphBuilder.podcastShowDetailScreen(
+    route: String,
+    onPlayButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
+    onPauseButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
+    onEpisodeClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
+    onBackButtonClicked: () -> Unit
+) {
+    composable(route = route) {
+        val viewModel = hiltViewModel<PodcastShowDetailViewModel>()
+        val uiState by viewModel.uiState
+        val currentlyPlayingEpisode by viewModel.currentlyPlayingEpisode.collectAsState(initial = null)
+        val episodesForShow = viewModel.episodesForShowStream.collectAsLazyPagingItems()
+        if (viewModel.podcastShow.value == null) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (uiState == PodcastShowDetailViewModel.UiState.LOADING) {
+                    DefaultMusifyLoadingAnimation(
+                        modifier = Modifier.align(Alignment.Center),
+                        isVisible = true
+                    )
+                }
+                if (uiState == PodcastShowDetailViewModel.UiState.ERROR) {
+                    DefaultMusifyErrorMessage(
+                        modifier = Modifier.align(Alignment.Center),
+                        title = "Oops! Something doesn't look right",
+                        subtitle = "Please check the internet connection",
+                        onRetryButtonClicked = viewModel::retryFetchingShow
+                    )
+                }
+            }
+        } else {
+            PodcastShowDetailScreen(
+                podcastShow = viewModel.podcastShow.value!!,
+                onBackButtonClicked = onBackButtonClicked,
+                onEpisodePlayButtonClicked = onPlayButtonClicked,
+                onEpisodePauseButtonClicked = onPauseButtonClicked,
+                currentlyPlayingEpisode = currentlyPlayingEpisode,
+                onEpisodeClicked = onEpisodeClicked,
+                episodes = episodesForShow
             )
         }
     }
