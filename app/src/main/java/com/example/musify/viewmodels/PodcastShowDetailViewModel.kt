@@ -13,8 +13,11 @@ import com.example.musify.domain.PodcastShow
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.usecases.getCurrentlyPlayingStreamableUseCase.GetCurrentlyPlayingStreamableUseCase
+import com.example.musify.usecases.getPlaybackLoadingStatusUseCase.GetPlaybackLoadingStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,10 +26,11 @@ class PodcastShowDetailViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
     getCurrentlyPlayingStreamableUseCase: GetCurrentlyPlayingStreamableUseCase,
+    getPlaybackLoadingStatusUseCase: GetPlaybackLoadingStatusUseCase,
     private val podcastsRepository: PodcastsRepository
 ) : AndroidViewModel(application) {
 
-    enum class UiState { IDLE, LOADING, ERROR }
+    enum class UiState { IDLE, LOADING, PLAYBACK_LOADING, ERROR }
 
     private val _uiState = mutableStateOf(UiState.IDLE)
     val uiState = _uiState as State<UiState>
@@ -47,6 +51,15 @@ class PodcastShowDetailViewModel @Inject constructor(
 
     init {
         fetchShowUpdatingUiState()
+        getPlaybackLoadingStatusUseCase
+            .loadingStatusStream
+            .onEach { isPlaybackLoading ->
+                if (isPlaybackLoading && _uiState.value != UiState.PLAYBACK_LOADING) {
+                    _uiState.value = UiState.PLAYBACK_LOADING
+                    return@onEach
+                }
+                if (_uiState.value == UiState.PLAYBACK_LOADING) _uiState.value = UiState.IDLE
+            }.launchIn(viewModelScope)
     }
 
     fun retryFetchingShow() {
