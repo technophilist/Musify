@@ -83,6 +83,21 @@ sealed class SearchResult {
         data class EpisodeReleaseDateInfo(val month: String, val day: Int, val year: Int)
         data class EpisodeDurationInfo(val hours: Int, val minutes: Int)
     }
+
+    data class StreamableEpisodeSearchResult(
+        val id: String,
+        val episodeUrlString: String?,
+        val episodeContentInfo: EpisodeSearchResult.EpisodeContentInfo,
+        val episodeReleaseDateInfo: EpisodeSearchResult.EpisodeReleaseDateInfo,
+        val episodeDurationInfo: EpisodeSearchResult.EpisodeDurationInfo
+    ) : SearchResult(), Streamable {
+        override val streamInfo = StreamInfo(
+            streamUrl = episodeUrlString,
+            imageUrl = episodeContentInfo.imageUrlString,
+            title = episodeContentInfo.title,
+            subtitle = episodeContentInfo.description
+        )
+    }
 }
 
 /**
