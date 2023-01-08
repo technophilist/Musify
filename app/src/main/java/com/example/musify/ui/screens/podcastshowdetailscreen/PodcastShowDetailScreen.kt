@@ -1,8 +1,12 @@
 package com.example.musify.ui.screens.podcastshowdetailscreen
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -17,7 +21,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -30,6 +33,7 @@ import com.example.musify.domain.PodcastShow
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.AndroidExpandableTextView
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
+import com.example.musify.ui.components.DetailScreenTopAppBar
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
@@ -45,33 +49,47 @@ fun PodcastShowDetailScreen(
     onEpisodeClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
     episodes: LazyPagingItems<SearchResult.StreamableEpisodeSearchResult>
 ) {
-    val context = LocalContext.current
-    Column(modifier = Modifier.fillMaxSize()) {
-        Header(
-            imageUrlString = podcastShow.imageUrlString,
-            onBackButtonClicked = onBackButtonClicked,
-            title = podcastShow.name,
-            nameOfPublisher = podcastShow.nameOfPublisher
-        )
-        // TODO Fix - text view doesn't expand
-        AndroidExpandableTextView(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = podcastShow.htmlDescription,
-            expandButtonText = "see more",
-            textAppearanceResId = com.google.android.material.R.style.TextAppearance_MaterialComponents_Subtitle2,
-            color = Color.White.copy(alpha = ContentAlpha.medium),
-            maxLines = 2
-        )
-        Spacer(modifier = Modifier.size(8.dp))
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            color = Color.White,
-            text = "Episodes",
-            fontWeight = FontWeight.SemiBold,
-            style = MaterialTheme.typography.subtitle1
-        )
-        Spacer(modifier = Modifier.size(8.dp))
-        LazyColumn {
+    val lazyListState = rememberLazyListState()
+    val isAppBarVisible by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemScrollOffset > 200
+        }
+    }
+    Box {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = lazyListState
+        ) {
+            item {
+                Header(
+                    imageUrlString = podcastShow.imageUrlString,
+                    onBackButtonClicked = onBackButtonClicked,
+                    title = podcastShow.name,
+                    nameOfPublisher = podcastShow.nameOfPublisher
+                )
+            }
+            item {
+                AndroidExpandableTextView(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = podcastShow.htmlDescription,
+                    expandButtonText = "see more",
+                    textAppearanceResId = com.google.android.material.R.style.TextAppearance_MaterialComponents_Subtitle2,
+                    color = Color.White.copy(alpha = ContentAlpha.medium),
+                    maxLines = 2
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    color = Color.White,
+                    text = "Episodes",
+                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.subtitle1
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+            }
+
             items(episodes) {
                 it?.let { episode ->
                     StreamableEpisodeCard(
@@ -83,6 +101,20 @@ fun PodcastShowDetailScreen(
                     )
                 }
             }
+        }
+        AnimatedVisibility(
+            visible = isAppBarVisible,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            DetailScreenTopAppBar(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .fillMaxWidth(),
+                title = podcastShow.name,
+                onBackButtonClicked = onBackButtonClicked,
+                dynamicThemeResource = DynamicThemeResource.FromImageUrl(podcastShow.imageUrlString)
+            )
         }
     }
 }
