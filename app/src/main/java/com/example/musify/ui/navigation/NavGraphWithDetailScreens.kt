@@ -23,7 +23,7 @@ import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
 import com.example.musify.ui.screens.AlbumDetailScreen
 import com.example.musify.ui.screens.ArtistDetailScreen
 import com.example.musify.ui.screens.PlaylistDetailScreen
-import com.example.musify.ui.screens.PodcastShowDetailScreen
+import com.example.musify.ui.screens.podcastshowdetailscreen.PodcastShowDetailScreen
 import com.example.musify.viewmodels.*
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailScreenUiState
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailViewModel

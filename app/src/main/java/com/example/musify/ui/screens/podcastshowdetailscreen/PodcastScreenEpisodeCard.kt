@@ -1,4 +1,4 @@
-package com.example.musify.ui.components
+package com.example.musify.ui.screens.podcastshowdetailscreen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.getFormattedDateAndDurationString
+import com.example.musify.ui.components.AsyncImageWithPlaceholder
 
 
 @ExperimentalMaterialApi

@@ -31,7 +31,7 @@ import com.example.musify.domain.SearchResult
 import com.example.musify.domain.getFormattedDateAndDurationString
 import com.example.musify.ui.components.AndroidExpandableTextView
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
-import com.example.musify.ui.components.PodcastScreenEpisodeCard
+import com.example.musify.ui.screens.podcastshowdetailscreen.PodcastScreenEpisodeCard
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
