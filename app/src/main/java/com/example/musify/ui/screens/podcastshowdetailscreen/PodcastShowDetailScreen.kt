@@ -28,7 +28,6 @@ import androidx.paging.compose.items
 import com.example.musify.R
 import com.example.musify.domain.PodcastShow
 import com.example.musify.domain.SearchResult
-import com.example.musify.domain.getFormattedDateAndDurationString
 import com.example.musify.ui.components.AndroidExpandableTextView
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
@@ -76,14 +75,11 @@ fun PodcastShowDetailScreen(
             items(episodes) {
                 it?.let { episode ->
                     StreamableEpisodeCard(
+                        episode = episode,
                         isEpisodePlaying = currentlyPlayingEpisode == episode,
                         onPlayButtonClicked = { onEpisodePlayButtonClicked(episode) },
                         onPauseButtonClicked = { onEpisodePauseButtonClicked(episode) },
                         onClicked = { onEpisodeClicked(episode) },
-                        title = episode.episodeContentInfo.title,
-                        thumbnailImageUrlString = episode.episodeContentInfo.imageUrlString,
-                        description = episode.episodeContentInfo.description,
-                        dateAndDurationString = episode.getFormattedDateAndDurationString(context)
                     )
                 }
             }
