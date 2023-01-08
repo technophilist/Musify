@@ -68,7 +68,7 @@ class PlaybackViewModel @Inject constructor(
 
     fun playStreamable(streamable: Streamable) {
         viewModelScope.launch {
-            if (streamable.streamUrl == null) {
+            if (streamable.streamInfo.streamUrl == null) {
                 val streamableType = when (streamable) {
                     is PodcastEpisode -> "podcast episode"
                     is SearchResult.TrackSearchResult -> "track"
@@ -76,12 +76,9 @@ class PlaybackViewModel @Inject constructor(
                 _eventChannel.send(Event.PlaybackError("This $streamableType is currently unavailable for playback."))
                 return@launch
             }
-            val imageUrlString = when (streamable) {
-                is PodcastEpisode -> streamable.podcastInfo.imageUrl
-                is SearchResult.TrackSearchResult -> streamable.imageUrlString
-            }
+
             val downloadAlbumArtResult = downloadDrawableFromUrlUseCase.invoke(
-                urlString = imageUrlString,
+                urlString = streamable.streamInfo.imageUrl,
                 context = getApplication()
             )
             if (downloadAlbumArtResult.isSuccess) {

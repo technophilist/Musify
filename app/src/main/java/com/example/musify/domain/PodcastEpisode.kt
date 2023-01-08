@@ -17,7 +17,12 @@ data class PodcastEpisode(
     val durationInfo: DurationInfo,
     val podcastInfo: PodcastInfo
 ) : Streamable {
-    override val streamUrl: String? = previewUrl
+    override val streamInfo = StreamInfo(
+        streamUrl = previewUrl,
+        imageUrl = podcastInfo.imageUrl,
+        title = title,
+        subtitle = podcastInfo.name
+    )
 
     /**
      * A domain class that contains the associated podcast information of a

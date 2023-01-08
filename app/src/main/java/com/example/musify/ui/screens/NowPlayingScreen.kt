@@ -13,8 +13,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.musify.R
-import com.example.musify.domain.PodcastEpisode
-import com.example.musify.domain.SearchResult
 import com.example.musify.domain.Streamable
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
@@ -44,27 +42,8 @@ fun NowPlayingScreen(
     onRepeatButtonClicked: () -> Unit
 ) {
     var isImageLoadingPlaceholderVisible by remember { mutableStateOf(true) }
-    val title = remember(streamable) {
-        when (streamable) {
-            is PodcastEpisode -> streamable.title
-            is SearchResult.TrackSearchResult -> streamable.name
-        }
-
-    }
-    val subtitle = remember(streamable) {
-        when (streamable) {
-            is PodcastEpisode -> streamable.podcastInfo.name
-            is SearchResult.TrackSearchResult -> streamable.artistsString
-        }
-    }
-    val imageUrl = remember(streamable) {
-        when (streamable) {
-            is PodcastEpisode -> streamable.podcastInfo.imageUrl
-            is SearchResult.TrackSearchResult -> streamable.imageUrlString
-        }
-    }
-    val dynamicThemeResource = remember(imageUrl) {
-        DynamicThemeResource.FromImageUrl(imageUrl)
+    val dynamicThemeResource = remember {
+        DynamicThemeResource.FromImageUrl(streamable.streamInfo.imageUrl)
     }
     val dynamicBackgroundType = remember {
         DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(0.6f))
@@ -88,21 +67,21 @@ fun NowPlayingScreen(
                 modifier = Modifier
                 .size(500.dp)
                 .aspectRatio(1f),
-                model = imageUrl,
+                model = streamable.streamInfo.imageUrl,
                 contentDescription = null,
                 onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
                 isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
                 onImageLoading = { isImageLoadingPlaceholderVisible = true }
             )
             Text(
-                text = title,
+                text = streamable.streamInfo.title,
                 fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = MaterialTheme.typography.h5
             )
             Text(
-                text = subtitle,
+                text = streamable.streamInfo.subtitle,
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.subtitle1.copy(
                     color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)

@@ -53,7 +53,12 @@ sealed class SearchResult {
         val artistsString: String,
         val trackUrlString: String?
     ) : SearchResult(), Streamable {
-        override val streamUrl: String? = trackUrlString
+        override val streamInfo = StreamInfo(
+            streamUrl = trackUrlString,
+            imageUrl = imageUrlString,
+            title = name,
+            subtitle = artistsString
+        )
     }
 
     data class PodcastSearchResult(
