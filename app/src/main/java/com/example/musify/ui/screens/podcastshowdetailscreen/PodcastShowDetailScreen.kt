@@ -47,6 +47,7 @@ fun PodcastShowDetailScreen(
     onEpisodePlayButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
     onEpisodePauseButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
     currentlyPlayingEpisode: SearchResult.StreamableEpisodeSearchResult?,
+    isCurrentlyPlayingEpisodePaused: Boolean?,
     isPlaybackLoading: Boolean,
     onEpisodeClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
     episodes: LazyPagingItems<SearchResult.StreamableEpisodeSearchResult>
@@ -91,12 +92,11 @@ fun PodcastShowDetailScreen(
                 )
                 Spacer(modifier = Modifier.size(8.dp))
             }
-
             items(episodes) {
                 it?.let { episode ->
                     StreamableEpisodeCard(
                         episode = episode,
-                        isEpisodePlaying = currentlyPlayingEpisode == episode,
+                        isEpisodePlaying = currentlyPlayingEpisode == episode && isCurrentlyPlayingEpisodePaused == false,
                         isCardHighlighted = currentlyPlayingEpisode == episode,
                         onPlayButtonClicked = { onEpisodePlayButtonClicked(episode) },
                         onPauseButtonClicked = { onEpisodePauseButtonClicked(episode) },

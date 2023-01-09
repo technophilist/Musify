@@ -371,6 +371,7 @@ private fun NavGraphBuilder.podcastShowDetailScreen(
         val viewModel = hiltViewModel<PodcastShowDetailViewModel>()
         val uiState by viewModel.uiState
         val currentlyPlayingEpisode by viewModel.currentlyPlayingEpisode.collectAsState(initial = null)
+        val isCurrentlyPlayingEpisodePaused by viewModel.isCurrentlyPlayingEpisodePaused
         val episodesForShow = viewModel.episodesForShowStream.collectAsLazyPagingItems()
         if (viewModel.podcastShow.value == null) {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -396,6 +397,7 @@ private fun NavGraphBuilder.podcastShowDetailScreen(
                 onEpisodePlayButtonClicked = onPlayButtonClicked,
                 onEpisodePauseButtonClicked = onPauseButtonClicked,
                 currentlyPlayingEpisode = currentlyPlayingEpisode,
+                isCurrentlyPlayingEpisodePaused = isCurrentlyPlayingEpisodePaused,
                 isPlaybackLoading = uiState == PodcastShowDetailViewModel.UiState.PLAYBACK_LOADING,
                 onEpisodeClicked = onEpisodeClicked,
                 episodes = episodesForShow
