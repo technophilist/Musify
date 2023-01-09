@@ -93,6 +93,8 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
     )
 
 
+    // TODO add an additional parameter that allows the client to specify
+    //  what happens when the method is called with the same streamable.
     override fun playStreamable(
         streamable: Streamable,
         associatedAlbumArt: Bitmap
@@ -101,6 +103,10 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
             if (streamable.streamInfo.streamUrl == null) return@with
             if (currentlyPlayingStreamable == streamable) {
                 seekTo(0)
+                // without this statement, after seeking to the start,
+                // the player will be ready to play, but will not actually
+                // start the playback if playWhenReady is set to false.
+                playWhenReady = true
                 return@with
             }
             if (isPlaying) exoPlayer.stop()
