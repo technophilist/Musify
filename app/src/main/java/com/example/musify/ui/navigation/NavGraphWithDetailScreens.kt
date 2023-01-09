@@ -103,6 +103,7 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
             ),
             onBackButtonClicked = onBackButtonClicked,
             onPlayButtonClicked = playStreamable,
+            onPauseButtonClicked = onPausePlayback,
             navigateToPodcastDetailScreen = {/*TODO*/ }
         )
 
@@ -315,6 +316,7 @@ class NavGraphWithDetailScreensNestedController(
 private fun NavGraphBuilder.podcastEpisodeDetailScreen(
     route: String,
     onPlayButtonClicked: (PodcastEpisode) -> Unit,
+    onPauseButtonClicked: () -> Unit,
     onBackButtonClicked: () -> Unit,
     navigateToPodcastDetailScreen: () -> Unit
 ) {
@@ -347,9 +349,7 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
                 onPlayButtonClicked = {
                     onPlayButtonClicked(viewModel.podcastEpisode.value!!)
                 },
-                onPauseButtonClicked = {
-                    /*TODO*/
-                },
+                onPauseButtonClicked = { onPauseButtonClicked() },
                 onShareButtonClicked = { /*TODO*/ },
                 onAddButtonClicked = { /*TODO*/ },
                 onDownloadButtonClicked = { /*TODO*/ },
