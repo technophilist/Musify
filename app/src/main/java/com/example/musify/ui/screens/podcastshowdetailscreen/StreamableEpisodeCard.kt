@@ -30,6 +30,7 @@ import com.example.musify.ui.components.AsyncImageWithPlaceholder
 fun StreamableEpisodeCard(
     episode: SearchResult.StreamableEpisodeSearchResult,
     isEpisodePlaying: Boolean,
+    isCardHighlighted:Boolean,
     onPlayButtonClicked: () -> Unit,
     onPauseButtonClicked: () -> Unit,
     onClicked: () -> Unit,
@@ -38,6 +39,7 @@ fun StreamableEpisodeCard(
     val context = LocalContext.current
     StreamableEpisodeCard(
         isEpisodePlaying = isEpisodePlaying,
+        isCardHighlighted = isCardHighlighted,
         onPlayButtonClicked = onPlayButtonClicked,
         onPauseButtonClicked = onPauseButtonClicked,
         onClicked = onClicked,
@@ -53,6 +55,7 @@ fun StreamableEpisodeCard(
 @Composable
 fun StreamableEpisodeCard(
     isEpisodePlaying: Boolean,
+    isCardHighlighted:Boolean,
     onPlayButtonClicked: () -> Unit,
     onPauseButtonClicked: () -> Unit,
     onClicked: () -> Unit,
@@ -100,7 +103,7 @@ fun StreamableEpisodeCard(
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = if (isEpisodePlaying) MaterialTheme.colors.primary
+                    color = if (isCardHighlighted) MaterialTheme.colors.primary
                     else Color.Unspecified
                 )
 

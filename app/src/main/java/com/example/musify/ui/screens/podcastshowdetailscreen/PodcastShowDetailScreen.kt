@@ -97,6 +97,7 @@ fun PodcastShowDetailScreen(
                     StreamableEpisodeCard(
                         episode = episode,
                         isEpisodePlaying = currentlyPlayingEpisode == episode,
+                        isCardHighlighted = currentlyPlayingEpisode == episode,
                         onPlayButtonClicked = { onEpisodePlayButtonClicked(episode) },
                         onPauseButtonClicked = { onEpisodePauseButtonClicked(episode) },
                         onClicked = { onEpisodeClicked(episode) },
