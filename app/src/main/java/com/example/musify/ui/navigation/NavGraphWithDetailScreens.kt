@@ -110,8 +110,8 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
             route = MusifyNavigationDestinations.PodcastShowDetailScreen.prefixedWithRouteOfNavGraphRoute(
                 navGraphRoute
             ),
-            onPlayButtonClicked = playStreamable,
-            onPauseButtonClicked = { TODO() },
+            onEpisodePlayButtonClicked = playStreamable,
+            onEpisodePauseButtonClicked = { onPausePlayback() },
             onEpisodeClicked = playStreamable,
             onBackButtonClicked = onBackButtonClicked
         )
@@ -363,8 +363,8 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
 @ExperimentalMaterialApi
 private fun NavGraphBuilder.podcastShowDetailScreen(
     route: String,
-    onPlayButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
-    onPauseButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
+    onEpisodePlayButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
+    onEpisodePauseButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
     onEpisodeClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
     onBackButtonClicked: () -> Unit
 ) {
@@ -395,8 +395,8 @@ private fun NavGraphBuilder.podcastShowDetailScreen(
             PodcastShowDetailScreen(
                 podcastShow = viewModel.podcastShow.value!!,
                 onBackButtonClicked = onBackButtonClicked,
-                onEpisodePlayButtonClicked = onPlayButtonClicked,
-                onEpisodePauseButtonClicked = onPauseButtonClicked,
+                onEpisodePlayButtonClicked = onEpisodePlayButtonClicked,
+                onEpisodePauseButtonClicked = onEpisodePauseButtonClicked,
                 currentlyPlayingEpisode = currentlyPlayingEpisode,
                 isCurrentlyPlayingEpisodePaused = isCurrentlyPlayingEpisodePaused,
                 isPlaybackLoading = uiState == PodcastShowDetailViewModel.UiState.PLAYBACK_LOADING,
