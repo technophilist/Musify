@@ -37,6 +37,7 @@ import com.example.musify.viewmodels.searchviewmodel.SearchViewModel
 fun MusifyNavigation(
     navController: NavHostController,
     playStreamable: (Streamable) -> Unit,
+    onPausePlayback:()->Unit,
     isFullScreenNowPlayingOverlayScreenVisible: Boolean
 ) {
     NavHost(
@@ -47,7 +48,8 @@ fun MusifyNavigation(
             navGraphRoute = MusifyBottomNavigationDestinations.Home.route,
             startDestination = MusifyNavigationDestinations.HomeScreen.route,
             navController = navController,
-            playStreamable = playStreamable
+            playStreamable = playStreamable,
+            onPausePlayback = onPausePlayback
         ) { nestedController ->
             homeScreen(
                 route = MusifyNavigationDestinations.HomeScreen.route,
@@ -60,7 +62,8 @@ fun MusifyNavigation(
             navGraphRoute = MusifyBottomNavigationDestinations.Search.route,
             startDestination = MusifyNavigationDestinations.SearchScreen.route,
             navController = navController,
-            playStreamable = playStreamable
+            playStreamable = playStreamable,
+            onPausePlayback = onPausePlayback
         ) { nestedController ->
             searchScreen(
                 route = MusifyNavigationDestinations.SearchScreen.route,

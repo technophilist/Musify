@@ -52,6 +52,7 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
     navGraphRoute: String,
     navController: NavHostController,
     playStreamable: (Streamable) -> Unit,
+    onPausePlayback: () -> Unit,
     startDestination: String,
     builder: NavGraphBuilder.(nestedController: NavGraphWithDetailScreensNestedController) -> Unit
 ) {

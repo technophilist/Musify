@@ -94,7 +94,8 @@ private fun MusifyApp() {
         MusifyNavigation(
             navController = navController,
             playStreamable = playbackViewModel::playStreamable,
-            isFullScreenNowPlayingOverlayScreenVisible = isNowPlayingScreenVisible
+            isFullScreenNowPlayingOverlayScreenVisible = isNowPlayingScreenVisible,
+            onPausePlayback = playbackViewModel::pauseCurrentlyPlayingTrack
         )
         Column(modifier = Modifier.align(Alignment.BottomCenter)) {
             AnimatedContent(
