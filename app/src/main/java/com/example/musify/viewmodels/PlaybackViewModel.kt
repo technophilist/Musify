@@ -69,10 +69,9 @@ class PlaybackViewModel @Inject constructor(
     fun playOrResumeStreamable(streamable: Streamable) {
         if (playbackState.value is PlaybackState.Paused) {
             musicPlayer.tryResume()
-        } else if (playbackState.value is PlaybackState.PlaybackEnded) {
-            // play the same track again
-            playStreamable(streamable)
+            return
         }
+        playStreamable(streamable)
     }
 
     private fun playStreamable(streamable: Streamable) {
