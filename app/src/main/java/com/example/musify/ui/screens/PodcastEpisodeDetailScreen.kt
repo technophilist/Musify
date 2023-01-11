@@ -51,8 +51,8 @@ fun PodcastEpisodeDetailScreen(
 ) {
     val context = LocalContext.current
     val lazyListState = rememberLazyListState()
-    val isEpisodeHeaderVisible by remember {
-        derivedStateOf { lazyListState.firstVisibleItemIndex == 0 }
+    val isTopAppBarVisible by remember {
+        derivedStateOf { lazyListState.firstVisibleItemScrollOffset >= 200 }
     }
     val dynamicThemeResource = remember(podcastEpisode) {
         DynamicThemeResource.FromImageUrl(podcastEpisode.podcastInfo.imageUrl)
@@ -89,7 +89,7 @@ fun PodcastEpisodeDetailScreen(
         }
         AnimatedVisibility(
             modifier = Modifier.align(Alignment.TopCenter),
-            visible = !isEpisodeHeaderVisible,
+            visible = isTopAppBarVisible,
             enter = fadeIn(),
             exit = fadeOut()
         ) {
