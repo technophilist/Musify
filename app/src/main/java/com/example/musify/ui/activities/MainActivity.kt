@@ -15,7 +15,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.musify.domain.Streamable
 import com.example.musify.ui.navigation.MusifyBottomNavigationConnectedWithBackStack
 import com.example.musify.ui.navigation.MusifyBottomNavigationDestinations
 import com.example.musify.ui.navigation.MusifyNavigation
@@ -69,14 +68,7 @@ private fun MusifyApp() {
     val isPlaybackPaused = remember(playbackState) {
         playbackState is PlaybackViewModel.PlaybackState.Paused || playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded
     }
-    val onMiniPlayerPlayButtonClick = { streamable: Streamable ->
-        if (playbackState is PlaybackViewModel.PlaybackState.Paused) {
-            playbackViewModel.resumePlaybackIfPaused()
-        } else if (playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded) {
-            // play the same track again
-            playbackViewModel.playStreamable(streamable)
-        }
-    }
+
     BackHandler(isNowPlayingScreenVisible) {
         isNowPlayingScreenVisible = false
     }
@@ -93,7 +85,7 @@ private fun MusifyApp() {
         // to null when the playback is stopped
         MusifyNavigation(
             navController = navController,
-            playStreamable = playbackViewModel::playStreamable,
+            playStreamable = playbackViewModel::playOrResumeStreamable,
             isFullScreenNowPlayingOverlayScreenVisible = isNowPlayingScreenVisible,
             onPausePlayback = playbackViewModel::pauseCurrentlyPlayingTrack
         )
@@ -113,7 +105,7 @@ private fun MusifyApp() {
                             ),
                         streamable = miniPlayerStreamable!!,
                         onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack,
-                        onPlayButtonClicked = { onMiniPlayerPlayButtonClick(it) },
+                        onPlayButtonClicked = playbackViewModel::playOrResumeStreamable,
                         isPlaybackPaused = isPlaybackPaused,
                         timeElapsedStringFlow = playbackViewModel.flowOfProgressTextOfCurrentTrack.value,
                         playbackProgressFlow = playbackViewModel.flowOfProgressOfCurrentTrack.value,

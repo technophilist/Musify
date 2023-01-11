@@ -66,7 +66,16 @@ class PlaybackViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun playStreamable(streamable: Streamable) {
+    fun playOrResumeStreamable(streamable: Streamable) {
+        if (playbackState.value is PlaybackState.Paused) {
+            musicPlayer.tryResume()
+        } else if (playbackState.value is PlaybackState.PlaybackEnded) {
+            // play the same track again
+            playStreamable(streamable)
+        }
+    }
+
+    private fun playStreamable(streamable: Streamable) {
         viewModelScope.launch {
             if (streamable.streamInfo.streamUrl == null) {
                 val streamableType = when (streamable) {
@@ -96,10 +105,6 @@ class PlaybackViewModel @Inject constructor(
 
     fun pauseCurrentlyPlayingTrack() {
         musicPlayer.pauseCurrentlyPlayingTrack()
-    }
-
-    fun resumePlaybackIfPaused() {
-        musicPlayer.tryResume()
     }
 
     private fun convertTimestampMillisToString(millis: Long): String = with(TimeUnit.MILLISECONDS) {
