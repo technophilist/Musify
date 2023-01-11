@@ -78,8 +78,7 @@ class SearchViewModel @Inject constructor(
     val episodeListForSearchQuery =
         _episodeListForSearchQuery as Flow<PagingData<SearchResult.EpisodeSearchResult>>
 
-    val currentlyPlayingTrackStream =
-        getCurrentlyPlayingTrackUseCase.getCurrentlyPlayingTrackStream()
+    val currentlyPlayingTrackStream = getCurrentlyPlayingTrackUseCase.currentlyPlayingTrackStream
 
     init {
         getPlaybackLoadingStatusUseCase

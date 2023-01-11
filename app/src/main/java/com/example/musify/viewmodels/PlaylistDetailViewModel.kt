@@ -24,8 +24,7 @@ class PlaylistDetailViewModel @Inject constructor(
     private val playlistId =
         savedStateHandle.get<String>(MusifyNavigationDestinations.PlaylistDetailScreen.NAV_ARG_PLAYLIST_ID)!!
     val playbackLoadingStateStream = getPlaybackLoadingStatusUseCase.loadingStatusStream
-    val currentlyPlayingTrackStream =
-        getCurrentlyPlayingTrackUseCase.getCurrentlyPlayingTrackStream()
+    val currentlyPlayingTrackStream = getCurrentlyPlayingTrackUseCase.currentlyPlayingTrackStream
     val tracks = tracksRepository.getPaginatedStreamForPlaylistTracks(
         playlistId = playlistId,
         countryCode = getCountryCode(),

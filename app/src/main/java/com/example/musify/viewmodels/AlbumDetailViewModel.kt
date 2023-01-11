@@ -44,8 +44,7 @@ class AlbumDetailViewModel @Inject constructor(
     private val albumId =
         savedStateHandle.get<String>(MusifyNavigationDestinations.AlbumDetailScreen.NAV_ARG_ALBUM_ID)!!
     private val defaultMapperImageSize = MapperImageSize.MEDIUM
-    val currentlyPlayingTrackStream =
-        getCurrentlyPlayingTrackUseCase.getCurrentlyPlayingTrackStream()
+    val currentlyPlayingTrackStream = getCurrentlyPlayingTrackUseCase.currentlyPlayingTrackStream
 
     init {
         fetchAndAssignTrackList()

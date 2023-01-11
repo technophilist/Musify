@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.filterIsInstance
 import javax.inject.Inject
 
 class MusifyGetCurrentlyPlayingTrackUseCase @Inject constructor(
-    private val getCurrentlyPlayingStreamableUseCase: GetCurrentlyPlayingStreamableUseCase
+    getCurrentlyPlayingStreamableUseCase: GetCurrentlyPlayingStreamableUseCase
 ) : GetCurrentlyPlayingTrackUseCase {
     @Suppress("RemoveExplicitTypeArguments")
-    override fun getCurrentlyPlayingTrackStream(): Flow<SearchResult.TrackSearchResult> =
+    override val currentlyPlayingTrackStream: Flow<SearchResult.TrackSearchResult> =
         getCurrentlyPlayingStreamableUseCase
             .currentlyPlayingStreamableFlow
             .filterIsInstance<SearchResult.TrackSearchResult>()

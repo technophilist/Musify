@@ -52,8 +52,7 @@ class ArtistDetailViewModel @Inject constructor(
     private val artistId =
         savedStateHandle.get<String>(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ARTIST_ID)!!
 
-    val currentlyPlayingTrackStream =
-        getCurrentlyPlayingTrackUseCase.getCurrentlyPlayingTrackStream()
+    val currentlyPlayingTrackStream = getCurrentlyPlayingTrackUseCase.currentlyPlayingTrackStream
 
     val albumsOfArtistFlow = albumsRepository.getPaginatedStreamForAlbumsOfArtist(
         artistId = artistId, countryCode = getCountryCode(), imageSize = defaultMapperImageSize
