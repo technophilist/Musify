@@ -11,9 +11,10 @@ import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.musicplayer.MusicPlayerV2
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
-import com.example.musify.usecases.getCurrentlyPlayingPodcastEpisodeUseCase.GetCurrentlyPlayingPodcastEpisodeUseCase
+import com.example.musify.usecases.getCurrentlyPlayingStreamableUseCase.GetCurrentlyPlayingStreamableUseCase
 import com.example.musify.usecases.getPlaybackLoadingStatusUseCase.GetPlaybackLoadingStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -24,8 +25,8 @@ class PodcastEpisodeDetailViewModel @Inject constructor(
     application: Application,
     private val podcastsRepository: PodcastsRepository,
     private val savedStateHandle: SavedStateHandle,
-    private val musicPlayerV2: MusicPlayerV2,
-    getCurrentlyPlayingPodcastEpisodeUseCase: GetCurrentlyPlayingPodcastEpisodeUseCase,
+    musicPlayerV2: MusicPlayerV2,
+    getCurrentlyPlayingStreamableUseCase: GetCurrentlyPlayingStreamableUseCase,
     getPlaybackLoadingStatusUseCase: GetPlaybackLoadingStatusUseCase
 ) : AndroidViewModel(application) {
 
@@ -60,8 +61,9 @@ class PodcastEpisodeDetailViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
-        getCurrentlyPlayingPodcastEpisodeUseCase
-            .getCurrentlyPlayingPodcastEpisodeStream()
+        getCurrentlyPlayingStreamableUseCase
+            .currentlyPlayingStreamableStream
+            .filterIsInstance<PodcastEpisode>()
             .onEach { currentlyPlayingPodcastEpisode = it }
             .launchIn(viewModelScope)
         musicPlayerV2.currentPlaybackStateStream
