@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PodcastDetailViewModel @Inject constructor(
+class PodcastEpisodeDetailViewModel @Inject constructor(
     application: Application,
     private val podcastsRepository: PodcastsRepository,
     private val savedStateHandle: SavedStateHandle,

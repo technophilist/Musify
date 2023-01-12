@@ -321,18 +321,18 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
     navigateToPodcastDetailScreen: () -> Unit
 ) {
     composable(route = route) {
-        val viewModel = hiltViewModel<PodcastDetailViewModel>()
+        val viewModel = hiltViewModel<PodcastEpisodeDetailViewModel>()
         val uiState by viewModel.uiState
         val isEpisodeCurrentlyPlaying by viewModel.isEpisodeCurrentlyPlaying
         if (viewModel.podcastEpisode.value == null) {
             Box(modifier = Modifier.fillMaxSize()) {
-                if (uiState == PodcastDetailViewModel.UiSate.LOADING) {
+                if (uiState == PodcastEpisodeDetailViewModel.UiSate.LOADING) {
                     DefaultMusifyLoadingAnimation(
                         modifier = Modifier.align(Alignment.Center),
                         isVisible = true
                     )
                 }
-                if (uiState == PodcastDetailViewModel.UiSate.ERROR) {
+                if (uiState == PodcastEpisodeDetailViewModel.UiSate.ERROR) {
                     DefaultMusifyErrorMessage(
                         modifier = Modifier.align(Alignment.Center),
                         title = "Oops! Something doesn't look right",
@@ -345,7 +345,7 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
             com.example.musify.ui.screens.PodcastEpisodeDetailScreen(
                 podcastEpisode = viewModel.podcastEpisode.value!!,
                 isEpisodeCurrentlyPlaying = isEpisodeCurrentlyPlaying,
-                isPlaybackLoading = uiState == PodcastDetailViewModel.UiSate.PLAYBACK_LOADING,
+                isPlaybackLoading = uiState == PodcastEpisodeDetailViewModel.UiSate.PLAYBACK_LOADING,
                 onPlayButtonClicked = {
                     onPlayButtonClicked(viewModel.podcastEpisode.value!!)
                 },
