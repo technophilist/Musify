@@ -1,7 +1,5 @@
 package com.example.musify.di
 
-import com.example.musify.usecases.getCurrentlyPlayingPodcastEpisodeUseCase.GetCurrentlyPlayingPodcastEpisodeUseCase
-import com.example.musify.usecases.getCurrentlyPlayingPodcastEpisodeUseCase.MusifyGetCurrentlyPlayingPodcastEpisodeUseCase
 import com.example.musify.usecases.getCurrentlyPlayingStreamableUseCase.GetCurrentlyPlayingStreamableUseCase
 import com.example.musify.usecases.getCurrentlyPlayingStreamableUseCase.MusifyGetCurrentlyPlayingStreamableUseCase
 import dagger.Binds
@@ -12,11 +10,6 @@ import dagger.hilt.android.components.ViewModelComponent
 @Module
 @InstallIn(ViewModelComponent::class)
 abstract class PodcastUseCasesComponent {
-    @Binds
-    abstract fun bindGetCurrentlyPlayingPodcastEpisodeUseCase(
-        impl: MusifyGetCurrentlyPlayingPodcastEpisodeUseCase
-    ): GetCurrentlyPlayingPodcastEpisodeUseCase
-
     @Binds
     abstract fun bindGetCurrentlyPlayingStreamableUseCase(
         impl: MusifyGetCurrentlyPlayingStreamableUseCase
