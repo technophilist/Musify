@@ -12,6 +12,6 @@ class MusifyGetCurrentlyPlayingTrackUseCase @Inject constructor(
     @Suppress("RemoveExplicitTypeArguments")
     override val currentlyPlayingTrackStream: Flow<SearchResult.TrackSearchResult> =
         getCurrentlyPlayingStreamableUseCase
-            .currentlyPlayingStreamableFlow
+            .currentlyPlayingStreamableStream
             .filterIsInstance<SearchResult.TrackSearchResult>()
 }

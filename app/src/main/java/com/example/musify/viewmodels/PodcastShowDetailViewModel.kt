@@ -50,7 +50,7 @@ class PodcastShowDetailViewModel @Inject constructor(
     // TODO STOPSHIP when playback is done, the pause button is still
     // displayed in the ui
     val currentlyPlayingEpisode = getCurrentlyPlayingStreamableUseCase
-        .currentlyPlayingStreamableFlow
+        .currentlyPlayingStreamableStream
         .filterIsInstance<SearchResult.StreamableEpisodeSearchResult>()
 
     private val _isCurrentlyPlayingEpisodePaused = mutableStateOf<Boolean?>(null)

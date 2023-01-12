@@ -10,7 +10,7 @@ import javax.inject.Inject
 class MusifyGetCurrentlyPlayingStreamableUseCase @Inject constructor(
     musicPlayer: MusicPlayerV2
 ) : GetCurrentlyPlayingStreamableUseCase {
-    override val currentlyPlayingStreamableFlow: Flow<Streamable> = musicPlayer
+    override val currentlyPlayingStreamableStream: Flow<Streamable> = musicPlayer
         .currentPlaybackStateStream
         .filterIsInstance<MusicPlayerV2.PlaybackState.Playing>()
         .map { it.currentlyPlayingStreamable }
