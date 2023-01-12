@@ -1,6 +1,5 @@
 package com.example.musify.data.remote.response
 
-import android.util.Log
 import com.example.musify.data.remote.response.EpisodesWithPreviewUrlResponse.EpisodeMetadataResponseWithPreviewUrl
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getFormattedEpisodeReleaseDateAndDuration
@@ -39,7 +38,6 @@ data class EpisodesWithPreviewUrlResponse(val items: List<EpisodeMetadataRespons
 fun EpisodeMetadataResponseWithPreviewUrl.toStreamableEpisodeSearchResult(
     imageSize: MapperImageSize
 ): SearchResult.StreamableEpisodeSearchResult {
-    Log.d("TESTTESTESTESTST","$title - $previewUrl")
     val formattedDateAndDuration = getFormattedEpisodeReleaseDateAndDuration(
         releaseDateString = releaseDate,
         durationMillis = durationMillis
