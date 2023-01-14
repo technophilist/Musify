@@ -25,7 +25,7 @@ class PodcastEpisodeDetailViewModel @Inject constructor(
     application: Application,
     private val podcastsRepository: PodcastsRepository,
     private val savedStateHandle: SavedStateHandle,
-    getEpisodePlaybackStateUseCase: GetCurrentlyPlayingEpisodePlaybackStateUseCase,
+    getCurrentlyPlayingEpisodePlaybackStateUseCase: GetCurrentlyPlayingEpisodePlaybackStateUseCase,
 ) : AndroidViewModel(application) {
 
     enum class UiSate { IDLE, LOADING, PLAYBACK_LOADING, ERROR }
@@ -41,7 +41,7 @@ class PodcastEpisodeDetailViewModel @Inject constructor(
 
     init {
         fetchEpisodeUpdatingUiState()
-        getEpisodePlaybackStateUseCase
+        getCurrentlyPlayingEpisodePlaybackStateUseCase
             .currentlyPlayingEpisodePlaybackStateStream
             .onEach {
                 when (it) {
