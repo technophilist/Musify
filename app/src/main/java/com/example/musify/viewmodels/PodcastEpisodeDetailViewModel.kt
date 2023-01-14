@@ -1,8 +1,9 @@
 package com.example.musify.viewmodels
 
 import android.app.Application
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -29,14 +30,14 @@ class PodcastEpisodeDetailViewModel @Inject constructor(
 
     enum class UiSate { IDLE, LOADING, PLAYBACK_LOADING, ERROR }
 
-    private val _uiState = mutableStateOf(UiSate.IDLE)
-    val uiState = _uiState as State<UiSate>
-    private val _podcastEpisode = mutableStateOf<PodcastEpisode?>(null)
-    val podcastEpisode = _podcastEpisode as State<PodcastEpisode?>
+    var uiState by mutableStateOf(UiSate.IDLE)
+        private set
 
+    var podcastEpisode by mutableStateOf<PodcastEpisode?>(null)
+        private set
 
-    private var _isEpisodeCurrentlyPlaying = mutableStateOf(false)
-    val isEpisodeCurrentlyPlaying = _isEpisodeCurrentlyPlaying as State<Boolean>
+    var isEpisodeCurrentlyPlaying by mutableStateOf(false)
+        private set
 
     init {
         fetchEpisodeUpdatingUiState()
@@ -44,12 +45,12 @@ class PodcastEpisodeDetailViewModel @Inject constructor(
             .currentlyPlayingEpisodePlaybackStateStream
             .onEach {
                 when (it) {
-                    is UseCasePlaybackState.Ended -> _isEpisodeCurrentlyPlaying.value = false
-                    is UseCasePlaybackState.Loading -> _uiState.value = UiSate.PLAYBACK_LOADING
-                    is UseCasePlaybackState.Paused -> _isEpisodeCurrentlyPlaying.value = false
+                    is UseCasePlaybackState.Ended -> isEpisodeCurrentlyPlaying = false
+                    is UseCasePlaybackState.Loading -> uiState = UiSate.PLAYBACK_LOADING
+                    is UseCasePlaybackState.Paused -> isEpisodeCurrentlyPlaying = false
                     is UseCasePlaybackState.Playing -> {
-                        if (_uiState.value == UiSate.PLAYBACK_LOADING) _uiState.value = UiSate.IDLE
-                        _isEpisodeCurrentlyPlaying.value = true
+                        if (uiState == UiSate.PLAYBACK_LOADING) uiState = UiSate.IDLE
+                        isEpisodeCurrentlyPlaying = true
                     }
                 }
             }.launchIn(viewModelScope)
@@ -57,12 +58,12 @@ class PodcastEpisodeDetailViewModel @Inject constructor(
 
     private fun fetchEpisodeUpdatingUiState() {
         viewModelScope.launch {
-            _uiState.value = UiSate.LOADING
+            uiState = UiSate.LOADING
             val episode = fetchEpisode()
-            _uiState.value = if (episode == null) {
+            uiState = if (episode == null) {
                 UiSate.ERROR
             } else {
-                _podcastEpisode.value = episode
+                podcastEpisode = episode
                 UiSate.IDLE
             }
         }
