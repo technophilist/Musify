@@ -78,7 +78,7 @@ class PlaybackViewModel @Inject constructor(
         viewModelScope.launch {
             if (streamable.streamInfo.streamUrl == null) {
                 val streamableType = when (streamable) {
-                    is PodcastEpisode, is SearchResult.StreamableEpisodeSearchResult -> "podcast episode"
+                    is PodcastEpisode -> "podcast episode"
                     is SearchResult.TrackSearchResult -> "track"
                 }
                 _eventChannel.send(Event.PlaybackError("This $streamableType is currently unavailable for playback."))
