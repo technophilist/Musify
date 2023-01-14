@@ -25,9 +25,16 @@ interface PodcastsRepository {
         imageSize: MapperImageSize
     ): FetchedResource<PodcastShow, MusifyErrorType>
 
+    @Deprecated("Use getPodcastEpisodesStreamForPodcastShow")
     fun getEpisodesStreamForPodcastShow(
         showId: String,
         countryCode: String,
         imageSize: MapperImageSize
     ): Flow<PagingData<SearchResult.StreamableEpisodeSearchResult>>
+
+    fun getPodcastEpisodesStreamForPodcastShow(
+        showId: String,
+        countryCode: String,
+        imageSize: MapperImageSize
+    ): Flow<PagingData<PodcastEpisode>>
 }
