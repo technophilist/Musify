@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.musify.R
-import com.example.musify.domain.SearchResult
+import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.getFormattedDateAndDurationString
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 
@@ -28,7 +28,7 @@ import com.example.musify.ui.components.AsyncImageWithPlaceholder
 @ExperimentalMaterialApi
 @Composable
 fun StreamableEpisodeCard(
-    episode: SearchResult.StreamableEpisodeSearchResult,
+    episode: PodcastEpisode,
     isEpisodePlaying: Boolean,
     isCardHighlighted:Boolean,
     onPlayButtonClicked: () -> Unit,
@@ -45,7 +45,7 @@ fun StreamableEpisodeCard(
         onClicked = onClicked,
         thumbnailImageUrlString = episode.streamInfo.imageUrl,
         title = episode.streamInfo.title,
-        description = episode.episodeContentInfo.description,
+        description = episode.description,
         dateAndDurationString = episode.getFormattedDateAndDurationString(context),
         modifier = modifier
     )
