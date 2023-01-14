@@ -9,8 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.musify.data.repositories.podcastsrepository.PodcastsRepository
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
+import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.PodcastShow
-import com.example.musify.domain.SearchResult
 import com.example.musify.musicplayer.MusicPlayerV2
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.usecases.getCurrentlyPlayingStreamableUseCase.GetCurrentlyPlayingStreamableUseCase
@@ -38,12 +38,12 @@ class PodcastShowDetailViewModel @Inject constructor(
     val uiState = _uiState as State<UiState>
     private val showId =
         savedStateHandle.get<String>(MusifyNavigationDestinations.PodcastShowDetailScreen.NAV_ARG_PODCAST_SHOW_ID)!!
-    val episodesForShowStream = podcastsRepository.getEpisodesStreamForPodcastShow(
+    val episodesForShowStream = podcastsRepository.getPodcastEpisodesStreamForPodcastShow(
         showId = showId,
         countryCode = getCountryCode(),
         imageSize = MapperImageSize.MEDIUM
     )
-
+    
     private val _podcastShow = mutableStateOf<PodcastShow?>(null)
     val podcastShow = _podcastShow as State<PodcastShow?>
 
@@ -51,7 +51,7 @@ class PodcastShowDetailViewModel @Inject constructor(
     // displayed in the ui
     val currentlyPlayingEpisode = getCurrentlyPlayingStreamableUseCase
         .currentlyPlayingStreamableStream
-        .filterIsInstance<SearchResult.StreamableEpisodeSearchResult>()
+        .filterIsInstance<PodcastEpisode>()
 
     private val _isCurrentlyPlayingEpisodePaused = mutableStateOf<Boolean?>(null)
     val isCurrentlyPlayingEpisodePaused = _isCurrentlyPlayingEpisodePaused as State<Boolean?>
