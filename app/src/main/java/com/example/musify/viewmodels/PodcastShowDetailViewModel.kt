@@ -12,29 +12,26 @@ import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.PodcastShow
-import com.example.musify.musicplayer.MusicPlayerV2
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
-import com.example.musify.usecases.getCurrentlyPlayingStreamableUseCase.GetCurrentlyPlayingStreamableUseCase
-import com.example.musify.usecases.getPlaybackLoadingStatusUseCase.GetPlaybackLoadingStatusUseCase
+import com.example.musify.usecases.getCurrentlyPlayingEpisodePlaybackStateUseCase.GetCurrentlyPlayingEpisodePlaybackStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.example.musify.usecases.getCurrentlyPlayingEpisodePlaybackStateUseCase.GetCurrentlyPlayingEpisodePlaybackStateUseCase.PlaybackState as UseCasePlaybackState
+
 
 @HiltViewModel
 class PodcastShowDetailViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
-    musicPlayer: MusicPlayerV2,
-    getCurrentlyPlayingStreamableUseCase: GetCurrentlyPlayingStreamableUseCase,
-    getPlaybackLoadingStatusUseCase: GetPlaybackLoadingStatusUseCase,
+    getCurrentlyPlayingEpisodePlaybackStateUseCase: GetCurrentlyPlayingEpisodePlaybackStateUseCase,
     private val podcastsRepository: PodcastsRepository
 ) : AndroidViewModel(application) {
 
     enum class UiState { IDLE, LOADING, PLAYBACK_LOADING, ERROR }
-    
+
     private val showId =
         savedStateHandle.get<String>(MusifyNavigationDestinations.PodcastShowDetailScreen.NAV_ARG_PODCAST_SHOW_ID)!!
     val episodesForShowStream = podcastsRepository.getPodcastEpisodesStreamForPodcastShow(
@@ -42,11 +39,9 @@ class PodcastShowDetailViewModel @Inject constructor(
         countryCode = getCountryCode(),
         imageSize = MapperImageSize.MEDIUM
     )
-    // TODO STOPSHIP when playback is done, the pause button is still
-    // displayed in the ui
-    val currentlyPlayingEpisode = getCurrentlyPlayingStreamableUseCase
-        .currentlyPlayingStreamableStream
-        .filterIsInstance<PodcastEpisode>()
+
+    var currentlyPlayingEpisode by mutableStateOf<PodcastEpisode?>(null)
+        private set
 
     var uiState by mutableStateOf(UiState.IDLE)
         private set
@@ -59,24 +54,25 @@ class PodcastShowDetailViewModel @Inject constructor(
 
     init {
         fetchShowUpdatingUiState()
-        getPlaybackLoadingStatusUseCase
-            .loadingStatusStream
-            .onEach { isPlaybackLoading ->
-                if (isPlaybackLoading && uiState != UiState.PLAYBACK_LOADING) {
-                    uiState = UiState.PLAYBACK_LOADING
-                    return@onEach
-                }
-                if (uiState == UiState.PLAYBACK_LOADING) uiState = UiState.IDLE
-            }.launchIn(viewModelScope)
-        musicPlayer
-            .currentPlaybackStateStream
+        getCurrentlyPlayingEpisodePlaybackStateUseCase
+            .currentlyPlayingEpisodePlaybackStateStream
             .onEach {
-                if (it is MusicPlayerV2.PlaybackState.Playing && (isCurrentlyPlayingEpisodePaused == null || isCurrentlyPlayingEpisodePaused == true)) {
-                    isCurrentlyPlayingEpisodePaused = false
-                    return@onEach
-                }
-                if (it is MusicPlayerV2.PlaybackState.Paused && isCurrentlyPlayingEpisodePaused == false) {
-                    isCurrentlyPlayingEpisodePaused = true
+                when (it) {
+                    is UseCasePlaybackState.Ended ->{
+                        if (isCurrentlyPlayingEpisodePaused == false) {
+                            isCurrentlyPlayingEpisodePaused = true
+                        }
+                        currentlyPlayingEpisode = null
+                    }
+                    is UseCasePlaybackState.Loading -> uiState = UiState.PLAYBACK_LOADING
+                    is UseCasePlaybackState.Paused -> isCurrentlyPlayingEpisodePaused = true
+                    is UseCasePlaybackState.Playing -> {
+                        if (uiState != UiState.IDLE) uiState = UiState.IDLE
+                        if (isCurrentlyPlayingEpisodePaused == null || isCurrentlyPlayingEpisodePaused == true) {
+                            isCurrentlyPlayingEpisodePaused = false
+                        }
+                        currentlyPlayingEpisode = it.playingEpisode
+                    }
                 }
             }.launchIn(viewModelScope)
     }
