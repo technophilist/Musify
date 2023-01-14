@@ -1,9 +1,11 @@
 package com.example.musify.data.remote.response
 
+import androidx.core.text.HtmlCompat
 import com.example.musify.data.remote.response.EpisodesWithPreviewUrlResponse.EpisodeMetadataResponseWithPreviewUrl
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getFormattedEpisodeReleaseDateAndDuration
 import com.example.musify.data.utils.getImageResponseForImageSize
+import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.SearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -62,5 +64,45 @@ fun EpisodeMetadataResponseWithPreviewUrl.toStreamableEpisodeSearchResult(
         episodeContentInfo = episodeContentInfo,
         episodeReleaseDateInfo = episodeReleaseDateInfo,
         episodeDurationInfo = episodeDurationInfo
+    )
+}
+
+/**
+ * A mapper function used to map an instance of [EpisodeMetadataResponseWithPreviewUrl]
+ * to an instance of [PodcastEpisode].
+ * TODO : each episode has a unique image. But [PodcastEpisode] doeesn't accomodate for
+ * that.
+ * */
+fun EpisodeMetadataResponseWithPreviewUrl.toPodcastEpisode(
+    imageSize: MapperImageSize,
+    showResponse: ShowResponse
+): PodcastEpisode {
+    val formattedDateAndDuration = getFormattedEpisodeReleaseDateAndDuration(
+        releaseDateString = releaseDate,
+        durationMillis = durationMillis
+    )
+    val releaseDateInfo = PodcastEpisode.ReleaseDateInfo(
+        month = formattedDateAndDuration.month,
+        day = formattedDateAndDuration.day,
+        year = formattedDateAndDuration.year
+    )
+    val durationInfo = PodcastEpisode.DurationInfo(
+        hours = formattedDateAndDuration.hours,
+        minutes = formattedDateAndDuration.minutes
+    )
+    val podcastInfo = PodcastEpisode.PodcastInfo(
+        id = showResponse.id,
+        name = showResponse.name,
+        imageUrl = showResponse.images.getImageResponseForImageSize(imageSize).url
+    )
+    return PodcastEpisode(
+        id = id,
+        title = title,
+        description = description,
+        htmlDescription = HtmlCompat.fromHtml(showResponse.htmlDescription, 0),
+        previewUrl = previewUrl,
+        releaseDateInfo = releaseDateInfo,
+        durationInfo = durationInfo,
+        podcastInfo = podcastInfo
     )
 }
