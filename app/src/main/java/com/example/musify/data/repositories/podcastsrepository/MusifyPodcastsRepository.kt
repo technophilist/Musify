@@ -3,7 +3,6 @@ package com.example.musify.data.repositories.podcastsrepository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.musify.data.paging.EpisodesForPodcastShowPagingSource
 import com.example.musify.data.paging.PodcastEpisodesForPodcastShowPagingSource
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.response.toPodcastEpisode
@@ -15,7 +14,6 @@ import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.PodcastShow
-import com.example.musify.domain.SearchResult
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -42,20 +40,6 @@ class MusifyPodcastsRepository @Inject constructor(
             token = it, id = showId, market = countryCode
         ).toPodcastShow(imageSize)
     }
-
-    override fun getEpisodesStreamForPodcastShow(
-        showId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
-    ): Flow<PagingData<SearchResult.StreamableEpisodeSearchResult>> = Pager(pagingConfig) {
-        EpisodesForPodcastShowPagingSource(
-            showId = showId,
-            countryCode = countryCode,
-            imageSize = imageSize,
-            tokenRepository = tokenRepository,
-            spotifyService = spotifyService
-        )
-    }.flow
 
     override fun getPodcastEpisodesStreamForPodcastShow(
         showId: String,

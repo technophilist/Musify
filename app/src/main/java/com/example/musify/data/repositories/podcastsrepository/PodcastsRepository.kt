@@ -6,7 +6,6 @@ import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.PodcastShow
-import com.example.musify.domain.SearchResult
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -24,14 +23,7 @@ interface PodcastsRepository {
         countryCode: String,
         imageSize: MapperImageSize
     ): FetchedResource<PodcastShow, MusifyErrorType>
-
-    @Deprecated("Use getPodcastEpisodesStreamForPodcastShow")
-    fun getEpisodesStreamForPodcastShow(
-        showId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
-    ): Flow<PagingData<SearchResult.StreamableEpisodeSearchResult>>
-
+    
     fun getPodcastEpisodesStreamForPodcastShow(
         showId: String,
         countryCode: String,
