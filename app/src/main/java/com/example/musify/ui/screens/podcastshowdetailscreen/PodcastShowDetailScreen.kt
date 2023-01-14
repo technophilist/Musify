@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import com.example.musify.R
+import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.PodcastShow
-import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.AndroidExpandableTextView
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
@@ -44,13 +44,13 @@ import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 fun PodcastShowDetailScreen(
     podcastShow: PodcastShow,
     onBackButtonClicked: () -> Unit,
-    onEpisodePlayButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
-    onEpisodePauseButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
-    currentlyPlayingEpisode: SearchResult.StreamableEpisodeSearchResult?,
+    onEpisodePlayButtonClicked: (PodcastEpisode) -> Unit,
+    onEpisodePauseButtonClicked: (PodcastEpisode) -> Unit,
+    currentlyPlayingEpisode: PodcastEpisode?,
     isCurrentlyPlayingEpisodePaused: Boolean?,
     isPlaybackLoading: Boolean,
-    onEpisodeClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
-    episodes: LazyPagingItems<SearchResult.StreamableEpisodeSearchResult>
+    onEpisodeClicked: (PodcastEpisode) -> Unit,
+    episodes: LazyPagingItems<PodcastEpisode>
 ) {
     val lazyListState = rememberLazyListState()
     val isAppBarVisible by remember {

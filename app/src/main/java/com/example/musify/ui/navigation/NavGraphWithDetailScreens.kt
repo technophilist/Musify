@@ -363,9 +363,9 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
 @ExperimentalMaterialApi
 private fun NavGraphBuilder.podcastShowDetailScreen(
     route: String,
-    onEpisodePlayButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
-    onEpisodePauseButtonClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
-    onEpisodeClicked: (SearchResult.StreamableEpisodeSearchResult) -> Unit,
+    onEpisodePlayButtonClicked: (PodcastEpisode) -> Unit,
+    onEpisodePauseButtonClicked: (PodcastEpisode) -> Unit,
+    onEpisodeClicked: (PodcastEpisode) -> Unit,
     onBackButtonClicked: () -> Unit
 ) {
     composable(route = route) {
