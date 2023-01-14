@@ -1,8 +1,9 @@
 package com.example.musify.viewmodels
 
 import android.app.Application
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -33,9 +34,7 @@ class PodcastShowDetailViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
     enum class UiState { IDLE, LOADING, PLAYBACK_LOADING, ERROR }
-
-    private val _uiState = mutableStateOf(UiState.IDLE)
-    val uiState = _uiState as State<UiState>
+    
     private val showId =
         savedStateHandle.get<String>(MusifyNavigationDestinations.PodcastShowDetailScreen.NAV_ARG_PODCAST_SHOW_ID)!!
     val episodesForShowStream = podcastsRepository.getPodcastEpisodesStreamForPodcastShow(
@@ -43,39 +42,41 @@ class PodcastShowDetailViewModel @Inject constructor(
         countryCode = getCountryCode(),
         imageSize = MapperImageSize.MEDIUM
     )
-    
-    private val _podcastShow = mutableStateOf<PodcastShow?>(null)
-    val podcastShow = _podcastShow as State<PodcastShow?>
-
     // TODO STOPSHIP when playback is done, the pause button is still
     // displayed in the ui
     val currentlyPlayingEpisode = getCurrentlyPlayingStreamableUseCase
         .currentlyPlayingStreamableStream
         .filterIsInstance<PodcastEpisode>()
 
-    private val _isCurrentlyPlayingEpisodePaused = mutableStateOf<Boolean?>(null)
-    val isCurrentlyPlayingEpisodePaused = _isCurrentlyPlayingEpisodePaused as State<Boolean?>
+    var uiState by mutableStateOf(UiState.IDLE)
+        private set
+
+    var podcastShow by mutableStateOf<PodcastShow?>(null)
+        private set
+
+    var isCurrentlyPlayingEpisodePaused by mutableStateOf<Boolean?>(null)
+        private set
 
     init {
         fetchShowUpdatingUiState()
         getPlaybackLoadingStatusUseCase
             .loadingStatusStream
             .onEach { isPlaybackLoading ->
-                if (isPlaybackLoading && _uiState.value != UiState.PLAYBACK_LOADING) {
-                    _uiState.value = UiState.PLAYBACK_LOADING
+                if (isPlaybackLoading && uiState != UiState.PLAYBACK_LOADING) {
+                    uiState = UiState.PLAYBACK_LOADING
                     return@onEach
                 }
-                if (_uiState.value == UiState.PLAYBACK_LOADING) _uiState.value = UiState.IDLE
+                if (uiState == UiState.PLAYBACK_LOADING) uiState = UiState.IDLE
             }.launchIn(viewModelScope)
         musicPlayer
             .currentPlaybackStateStream
             .onEach {
-                if (it is MusicPlayerV2.PlaybackState.Playing && (_isCurrentlyPlayingEpisodePaused.value == null || _isCurrentlyPlayingEpisodePaused.value == true)) {
-                    _isCurrentlyPlayingEpisodePaused.value = false
+                if (it is MusicPlayerV2.PlaybackState.Playing && (isCurrentlyPlayingEpisodePaused == null || isCurrentlyPlayingEpisodePaused == true)) {
+                    isCurrentlyPlayingEpisodePaused = false
                     return@onEach
                 }
-                if (it is MusicPlayerV2.PlaybackState.Paused && _isCurrentlyPlayingEpisodePaused.value == false) {
-                    _isCurrentlyPlayingEpisodePaused.value = true
+                if (it is MusicPlayerV2.PlaybackState.Paused && isCurrentlyPlayingEpisodePaused == false) {
+                    isCurrentlyPlayingEpisodePaused = true
                 }
             }.launchIn(viewModelScope)
     }
@@ -86,17 +87,17 @@ class PodcastShowDetailViewModel @Inject constructor(
 
     private fun fetchShowUpdatingUiState() {
         viewModelScope.launch {
-            _uiState.value = UiState.LOADING
+            uiState = UiState.LOADING
             val result = podcastsRepository.fetchPodcastShow(
                 showId = showId,
                 countryCode = getCountryCode(),
                 imageSize = MapperImageSize.LARGE
             )
             if (result is FetchedResource.Success) {
-                _uiState.value = UiState.IDLE
-                _podcastShow.value = result.data
+                uiState = UiState.IDLE
+                podcastShow = result.data
             } else {
-                _uiState.value = UiState.ERROR
+                uiState = UiState.ERROR
             }
         }
     }

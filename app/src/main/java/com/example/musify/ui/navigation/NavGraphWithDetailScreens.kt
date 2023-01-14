@@ -368,11 +368,11 @@ private fun NavGraphBuilder.podcastShowDetailScreen(
 ) {
     composable(route = route) {
         val viewModel = hiltViewModel<PodcastShowDetailViewModel>()
-        val uiState by viewModel.uiState
+        val uiState = viewModel.uiState
+        val isCurrentlyPlayingEpisodePaused = viewModel.isCurrentlyPlayingEpisodePaused
         val currentlyPlayingEpisode by viewModel.currentlyPlayingEpisode.collectAsState(initial = null)
-        val isCurrentlyPlayingEpisodePaused by viewModel.isCurrentlyPlayingEpisodePaused
         val episodesForShow = viewModel.episodesForShowStream.collectAsLazyPagingItems()
-        if (viewModel.podcastShow.value == null) {
+        if (viewModel.podcastShow == null) {
             Box(modifier = Modifier.fillMaxSize()) {
                 if (uiState == PodcastShowDetailViewModel.UiState.LOADING) {
                     DefaultMusifyLoadingAnimation(
@@ -391,7 +391,7 @@ private fun NavGraphBuilder.podcastShowDetailScreen(
             }
         } else {
             PodcastShowDetailScreen(
-                podcastShow = viewModel.podcastShow.value!!,
+                podcastShow = viewModel.podcastShow!!,
                 onBackButtonClicked = onBackButtonClicked,
                 onEpisodePlayButtonClicked = onEpisodePlayButtonClicked,
                 onEpisodePauseButtonClicked = onEpisodePauseButtonClicked,
