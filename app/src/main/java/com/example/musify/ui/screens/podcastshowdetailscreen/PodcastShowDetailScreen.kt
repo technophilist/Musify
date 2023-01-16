@@ -55,6 +55,10 @@ fun PodcastShowDetailScreen(
     val lazyListState = rememberLazyListState()
     val isAppBarVisible by remember {
         derivedStateOf {
+            if (lazyListState.firstVisibleItemIndex != 0) return@derivedStateOf true
+            // The first item in the list is the header with the image of the show.
+            // If the first item (item at index 0) is offset by more than 200dp
+            // display the app bar.
             lazyListState.firstVisibleItemScrollOffset > 200
         }
     }
