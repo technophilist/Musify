@@ -39,7 +39,7 @@ import com.google.android.material.R as materialR
 @Composable
 fun PodcastEpisodeDetailScreen(
     podcastEpisode: PodcastEpisode,
-    isPlaybackLoading:Boolean,
+    isPlaybackLoading: Boolean,
     isEpisodeCurrentlyPlaying: Boolean,
     onPlayButtonClicked: () -> Unit,
     onPauseButtonClicked: () -> Unit,
@@ -52,7 +52,13 @@ fun PodcastEpisodeDetailScreen(
     val context = LocalContext.current
     val lazyListState = rememberLazyListState()
     val isTopAppBarVisible by remember {
-        derivedStateOf { lazyListState.firstVisibleItemScrollOffset >= 200 }
+        derivedStateOf {
+            if (lazyListState.firstVisibleItemIndex != 0) return@derivedStateOf true
+            // The first item in the list is the header with the image of the show.
+            // If the first item (item at index 0) is offset by more than 200dp
+            // display the app bar.
+            lazyListState.firstVisibleItemScrollOffset > 200
+        }
     }
     val dynamicThemeResource = remember(podcastEpisode) {
         DynamicThemeResource.FromImageUrl(podcastEpisode.podcastInfo.imageUrl)
