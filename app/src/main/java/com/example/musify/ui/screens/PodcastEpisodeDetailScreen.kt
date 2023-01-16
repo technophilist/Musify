@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.text.HtmlCompat
 import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.getFormattedDateAndDurationString
@@ -64,6 +65,7 @@ fun PodcastEpisodeDetailScreen(
         DynamicThemeResource.FromImageUrl(podcastEpisode.podcastInfo.imageUrl)
     }
     val coroutineScope = rememberCoroutineScope()
+    val descriptionSpannedText = remember { HtmlCompat.fromHtml(podcastEpisode.htmlDescription, 0) }
 
     Box {
         LazyColumn(state = lazyListState) {
@@ -83,7 +85,7 @@ fun PodcastEpisodeDetailScreen(
                 Spacer(Modifier.height(16.dp))
                 PodcastEpisodeScreenContent(
                     isEpisodePlaying = isEpisodeCurrentlyPlaying,
-                    htmlDescription = podcastEpisode.htmlDescription,
+                    htmlDescription = descriptionSpannedText,
                     onPlayButtonClicked = onPlayButtonClicked,
                     onPauseButtonClicked = onPauseButtonClicked,
                     onShareButtonClicked = onShareButtonClicked,

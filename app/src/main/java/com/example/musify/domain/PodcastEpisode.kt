@@ -1,7 +1,6 @@
 package com.example.musify.domain
 
 import android.content.Context
-import android.text.Spanned
 import com.example.musify.utils.generateMusifyDateAndDurationString
 
 /**
@@ -11,7 +10,7 @@ data class PodcastEpisode(
     val id: String,
     val title: String,
     val description: String,
-    val htmlDescription: Spanned,
+    val htmlDescription: String,
     val previewUrl: String?,
     val releaseDateInfo: ReleaseDateInfo,
     val durationInfo: DurationInfo,

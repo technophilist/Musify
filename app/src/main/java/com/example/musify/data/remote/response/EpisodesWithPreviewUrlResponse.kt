@@ -1,6 +1,5 @@
 package com.example.musify.data.remote.response
 
-import androidx.core.text.HtmlCompat
 import com.example.musify.data.remote.response.EpisodesWithPreviewUrlResponse.EpisodeMetadataResponseWithPreviewUrl
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getFormattedEpisodeReleaseDateAndDuration
@@ -61,7 +60,7 @@ fun EpisodeMetadataResponseWithPreviewUrl.toPodcastEpisode(
         id = id,
         title = title,
         description = description,
-        htmlDescription = HtmlCompat.fromHtml(showResponse.htmlDescription, 0),
+        htmlDescription = showResponse.htmlDescription,
         previewUrl = previewUrl,
         releaseDateInfo = releaseDateInfo,
         durationInfo = durationInfo,
