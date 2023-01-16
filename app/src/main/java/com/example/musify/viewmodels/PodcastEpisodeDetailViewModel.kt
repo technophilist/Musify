@@ -1,6 +1,7 @@
 package com.example.musify.viewmodels
 
 import android.app.Application
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,14 +31,15 @@ class PodcastEpisodeDetailViewModel @Inject constructor(
 
     enum class UiSate { IDLE, LOADING, PLAYBACK_LOADING, ERROR }
 
+    private var currentlyPlayingEpisode by mutableStateOf<PodcastEpisode?>(null)
+
     var uiState by mutableStateOf(UiSate.IDLE)
         private set
 
     var podcastEpisode by mutableStateOf<PodcastEpisode?>(null)
         private set
 
-    var isEpisodeCurrentlyPlaying by mutableStateOf(false)
-        private set
+    val isEpisodeCurrentlyPlaying by derivedStateOf { currentlyPlayingEpisode == podcastEpisode }
 
     init {
         fetchEpisodeUpdatingUiState()
@@ -45,15 +47,20 @@ class PodcastEpisodeDetailViewModel @Inject constructor(
             .currentlyPlayingEpisodePlaybackStateStream
             .onEach {
                 when (it) {
-                    is UseCasePlaybackState.Ended -> isEpisodeCurrentlyPlaying = false
+                    is UseCasePlaybackState.Paused,
+                    is UseCasePlaybackState.Ended -> currentlyPlayingEpisode = null
                     is UseCasePlaybackState.Loading -> uiState = UiSate.PLAYBACK_LOADING
-                    is UseCasePlaybackState.Paused -> isEpisodeCurrentlyPlaying = false
                     is UseCasePlaybackState.Playing -> {
-                        if (uiState == UiSate.PLAYBACK_LOADING) uiState = UiSate.IDLE
-                        isEpisodeCurrentlyPlaying = true
+                        if (uiState != UiSate.IDLE) uiState = UiSate.IDLE
+                        // Initially this.podcastEpisode might be null when the
+                        // flow sends it's first emission. This makes it impossible
+                        // to compare this.podcastEpisode and it.playingEpisode.
+                        // Therefore, assign the property to a state variable.
+                        currentlyPlayingEpisode = it.playingEpisode
                     }
                 }
-            }.launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun fetchEpisodeUpdatingUiState() {
@@ -81,4 +88,5 @@ class PodcastEpisodeDetailViewModel @Inject constructor(
     fun retryFetchingEpisode() {
         fetchEpisodeUpdatingUiState()
     }
+
 }
