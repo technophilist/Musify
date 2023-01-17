@@ -58,14 +58,15 @@ class PodcastShowDetailViewModel @Inject constructor(
             .currentlyPlayingEpisodePlaybackStateStream
             .onEach {
                 when (it) {
-                    is UseCasePlaybackState.Ended ->{
-                        if (isCurrentlyPlayingEpisodePaused == false) {
-                            isCurrentlyPlayingEpisodePaused = true
-                        }
+                    is UseCasePlaybackState.Ended -> {
+                        isCurrentlyPlayingEpisodePaused = null
                         currentlyPlayingEpisode = null
                     }
                     is UseCasePlaybackState.Loading -> uiState = UiState.PLAYBACK_LOADING
-                    is UseCasePlaybackState.Paused -> isCurrentlyPlayingEpisodePaused = true
+                    is UseCasePlaybackState.Paused ->{
+                        currentlyPlayingEpisode = it.pausedEpisode
+                        isCurrentlyPlayingEpisodePaused = true
+                    }
                     is UseCasePlaybackState.Playing -> {
                         if (uiState != UiState.IDLE) uiState = UiState.IDLE
                         if (isCurrentlyPlayingEpisodePaused == null || isCurrentlyPlayingEpisodePaused == true) {
