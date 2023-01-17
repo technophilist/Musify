@@ -31,6 +31,7 @@ import androidx.paging.compose.items
 import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.PodcastShow
+import com.example.musify.domain.equalsIgnoringImageSize
 import com.example.musify.ui.components.AndroidExpandableTextView
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
@@ -100,8 +101,8 @@ fun PodcastShowDetailScreen(
                 it?.let { episode ->
                     StreamableEpisodeCard(
                         episode = episode,
-                        isEpisodePlaying = currentlyPlayingEpisode == episode && isCurrentlyPlayingEpisodePaused == false,
-                        isCardHighlighted = currentlyPlayingEpisode == episode,
+                        isEpisodePlaying = currentlyPlayingEpisode.equalsIgnoringImageSize(episode) && isCurrentlyPlayingEpisodePaused == false,
+                        isCardHighlighted = currentlyPlayingEpisode.equalsIgnoringImageSize(episode),
                         onPlayButtonClicked = { onEpisodePlayButtonClicked(episode) },
                         onPauseButtonClicked = { onEpisodePauseButtonClicked(episode) },
                         onClicked = { onEpisodeClicked(episode) },
