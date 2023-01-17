@@ -12,6 +12,7 @@ import com.example.musify.data.repositories.podcastsrepository.PodcastsRepositor
 import com.example.musify.data.utils.FetchedResource
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.PodcastEpisode
+import com.example.musify.domain.equalsIgnoringImageSize
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.usecases.getCurrentlyPlayingEpisodePlaybackStateUseCase.GetCurrentlyPlayingEpisodePlaybackStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,7 +40,9 @@ class PodcastEpisodeDetailViewModel @Inject constructor(
     var podcastEpisode by mutableStateOf<PodcastEpisode?>(null)
         private set
 
-    val isEpisodeCurrentlyPlaying by derivedStateOf { currentlyPlayingEpisode == podcastEpisode }
+    val isEpisodeCurrentlyPlaying by derivedStateOf {
+        currentlyPlayingEpisode.equalsIgnoringImageSize(podcastEpisode)
+    }
 
     init {
         fetchEpisodeUpdatingUiState()
