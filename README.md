@@ -60,5 +60,4 @@ that is heavily inspired by the design of the official Spotify app with some cus
 - All concrete implementations are prefixed by the term "Musify".
 - Uses multi-repository pattern.
 - MVVM archtecture.
-
-
+- Commit messages follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
