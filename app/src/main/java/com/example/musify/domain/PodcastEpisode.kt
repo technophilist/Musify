@@ -14,20 +14,20 @@ data class PodcastEpisode(
     val previewUrl: String?,
     val releaseDateInfo: ReleaseDateInfo,
     val durationInfo: DurationInfo,
-    val podcastInfo: PodcastInfo
+    val podcastShowInfo: PodcastShowInfo
 ) : Streamable {
     override val streamInfo = StreamInfo(
         streamUrl = previewUrl,
-        imageUrl = podcastInfo.imageUrl,
+        imageUrl = podcastShowInfo.imageUrl,
         title = title,
-        subtitle = podcastInfo.name
+        subtitle = podcastShowInfo.name
     )
 
     /**
-     * A domain class that contains the associated podcast information of a
+     * A domain class that contains the associated podcast show information of a
      * [PodcastEpisode].
      */
-    data class PodcastInfo(
+    data class PodcastShowInfo(
         val id: String,
         val name: String,
         val imageUrl: String
@@ -61,7 +61,7 @@ fun PodcastEpisode.getFormattedDateAndDurationString(context: Context): String =
 
 /**
  * A method used to check whether two instances of [PodcastEpisode]'s are equal,
- * ignoring the [PodcastEpisode.PodcastInfo.imageUrl].
+ * ignoring the [PodcastEpisode.PodcastShowInfo.imageUrl].
  * Since the objects might have urls for different image sizes based on the
  * size mentioned by the caller, both objects may represent the same podcast
  * episode, but they might not be equal because the urls are different. Hence,
@@ -84,9 +84,9 @@ fun PodcastEpisode.getFormattedDateAndDurationString(context: Context): String =
 fun PodcastEpisode?.equalsIgnoringImageSize(other: PodcastEpisode?): Boolean {
     if (other == null || this == null) return false
     if (this == other) return true
-    val podcastInfoOfThisWithEmptyImageUrl = this.podcastInfo.copy(imageUrl = "")
-    val podcastInfoOfOtherWithEmptyImageUrl = other.podcastInfo.copy(imageUrl = "")
-    val thisWithEmptyImageUrl = this.copy(podcastInfo = podcastInfoOfThisWithEmptyImageUrl)
-    val otherWithEmptyImageUrl = other.copy(podcastInfo = podcastInfoOfOtherWithEmptyImageUrl)
+    val podcastInfoOfThisWithEmptyImageUrl = this.podcastShowInfo.copy(imageUrl = "")
+    val podcastInfoOfOtherWithEmptyImageUrl = other.podcastShowInfo.copy(imageUrl = "")
+    val thisWithEmptyImageUrl = this.copy(podcastShowInfo = podcastInfoOfThisWithEmptyImageUrl)
+    val otherWithEmptyImageUrl = other.copy(podcastShowInfo = podcastInfoOfOtherWithEmptyImageUrl)
     return thisWithEmptyImageUrl == otherWithEmptyImageUrl
 }

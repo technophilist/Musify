@@ -59,7 +59,7 @@ fun EpisodeResponse.toPodcastEpisode(imageSize: MapperImageSize): PodcastEpisode
         previewUrl = previewUrl,
         releaseDateInfo = releaseDateInfo,
         durationInfo = durationInfo,
-        podcastInfo = PodcastEpisode.PodcastInfo(
+        podcastShowInfo = PodcastEpisode.PodcastShowInfo(
             id = this.show.id,
             name = this.show.name,
             imageUrl = this.show.images.getImageResponseForImageSize(imageSize).url

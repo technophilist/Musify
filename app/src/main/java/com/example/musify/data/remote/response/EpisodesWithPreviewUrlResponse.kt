@@ -52,7 +52,7 @@ fun EpisodeMetadataResponseWithPreviewUrl.toPodcastEpisode(
         hours = formattedDateAndDuration.hours,
         minutes = formattedDateAndDuration.minutes
     )
-    val podcastInfo = PodcastEpisode.PodcastInfo(
+    val podcastInfo = PodcastEpisode.PodcastShowInfo(
         id = showResponse.id,
         name = showResponse.name,
         imageUrl = showResponse.images.getImageResponseForImageSize(imageSize).url
@@ -65,6 +65,6 @@ fun EpisodeMetadataResponseWithPreviewUrl.toPodcastEpisode(
         previewUrl = previewUrl,
         releaseDateInfo = releaseDateInfo,
         durationInfo = durationInfo,
-        podcastInfo = podcastInfo
+        podcastShowInfo = podcastInfo
     )
 }

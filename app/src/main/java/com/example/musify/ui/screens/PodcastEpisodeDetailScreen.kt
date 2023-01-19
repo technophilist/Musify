@@ -62,7 +62,7 @@ fun PodcastEpisodeDetailScreen(
         }
     }
     val dynamicThemeResource = remember(podcastEpisode) {
-        DynamicThemeResource.FromImageUrl(podcastEpisode.podcastInfo.imageUrl)
+        DynamicThemeResource.FromImageUrl(podcastEpisode.podcastShowInfo.imageUrl)
     }
     val coroutineScope = rememberCoroutineScope()
     val descriptionSpannedText = remember { HtmlCompat.fromHtml(podcastEpisode.htmlDescription, 0) }
@@ -71,9 +71,9 @@ fun PodcastEpisodeDetailScreen(
         LazyColumn(state = lazyListState) {
             item {
                 PodcastEpisodeHeader(
-                    episodeImageUrl = podcastEpisode.podcastInfo.imageUrl,
+                    episodeImageUrl = podcastEpisode.podcastShowInfo.imageUrl,
                     episodeTitle = podcastEpisode.title,
-                    podcastName = podcastEpisode.podcastInfo.name,
+                    podcastName = podcastEpisode.podcastShowInfo.name,
                     dateAndDurationString = podcastEpisode.getFormattedDateAndDurationString(context),
                     onBackButtonClicked = onBackButtonClicked
                 )
