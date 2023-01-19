@@ -50,14 +50,14 @@ class PlaybackViewModelTest {
     @Test
     fun playTrackTest_trackWithTrackUrlStringSetToNull_updatesStateToError() {
         val track = fakeTrackSearchResult.copy(trackUrlString = null)
-        playbackViewModelWithSuccessfulImageFetch.playStreamable(track)
+        playbackViewModelWithSuccessfulImageFetch.playOrResumeStreamable(track)
         assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value is PlaybackViewModel.PlaybackState.Error)
     }
 
     @Test
     fun playTrackTest_trackWithTrackUrlString_withImageFetchAlwaysSucceeding_updatesStateToPlaying() {
         val track = fakeTrackSearchResult
-        playbackViewModelWithSuccessfulImageFetch.playStreamable(track)
+        playbackViewModelWithSuccessfulImageFetch.playOrResumeStreamable(track)
         assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value is PlaybackViewModel.PlaybackState.Playing)
         assert((playbackViewModelWithSuccessfulImageFetch.playbackState.value as PlaybackViewModel.PlaybackState.Playing).streamable == track)
     }
@@ -65,7 +65,7 @@ class PlaybackViewModelTest {
     @Test
     fun playTrackTest_trackWithTrackUrlString_withImageFetchAlwaysFailing_updatesStateToError() {
         val track = fakeTrackSearchResult
-        playbackViewModelWithFailingImageFetch.playStreamable(track)
+        playbackViewModelWithFailingImageFetch.playOrResumeStreamable(track)
         assert(playbackViewModelWithFailingImageFetch.playbackState.value is PlaybackViewModel.PlaybackState.Error)
     }
 
