@@ -75,7 +75,8 @@ fun PodcastEpisodeDetailScreen(
                     episodeTitle = podcastEpisode.title,
                     podcastName = podcastEpisode.podcastShowInfo.name,
                     dateAndDurationString = podcastEpisode.getFormattedDateAndDurationString(context),
-                    onBackButtonClicked = onBackButtonClicked
+                    onBackButtonClicked = onBackButtonClicked,
+                    onPodcastShowTitleClicked = navigateToPodcastDetailScreen
                 )
             }
             item {
@@ -175,10 +176,11 @@ private fun PodcastEpisodeScreenContent(
 @Composable
 private fun PodcastEpisodeHeader(
     onBackButtonClicked: () -> Unit,
+    onPodcastShowTitleClicked: () -> Unit,
     episodeImageUrl: String,
     episodeTitle: String,
     podcastName: String,
-    dateAndDurationString: String,
+    dateAndDurationString: String
 ) {
     val dynamicThemeResource = remember { DynamicThemeResource.FromImageUrl(episodeImageUrl) }
     val dynamicBackgroundType = remember { DynamicBackgroundType.Gradient() }
@@ -228,6 +230,7 @@ private fun PodcastEpisodeHeader(
             // using a column to prevent the text being spaced by 16dp (set by the parent column)
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
+                    modifier = Modifier.clickable { onPodcastShowTitleClicked() },
                     text = podcastName,
                     style = MaterialTheme.typography.caption,
                     color = Color.White,
