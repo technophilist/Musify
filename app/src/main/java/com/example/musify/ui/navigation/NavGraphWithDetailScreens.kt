@@ -98,19 +98,19 @@ fun NavGraphBuilder.navGraphWithDetailScreens(
             onPlayTrack = playStreamable
         )
         podcastEpisodeDetailScreen(
-            route = MusifyNavigationDestinations.PodcastEpisodeDetailScreen.prefixedWithRouteOfNavGraphRoute(
-                navGraphRoute
-            ),
+            route = MusifyNavigationDestinations
+                .PodcastEpisodeDetailScreen
+                .prefixedWithRouteOfNavGraphRoute(navGraphRoute),
             onBackButtonClicked = onBackButtonClicked,
             onPlayButtonClicked = playStreamable,
             onPauseButtonClicked = onPausePlayback,
-            navigateToPodcastDetailScreen = {/*TODO*/ }
+            navigateToPodcastShowDetailScreen = nestedController::navigateToDetailScreen
         )
 
         podcastShowDetailScreen(
-            route = MusifyNavigationDestinations.PodcastShowDetailScreen.prefixedWithRouteOfNavGraphRoute(
-                navGraphRoute
-            ),
+            route = MusifyNavigationDestinations
+                .PodcastShowDetailScreen
+                .prefixedWithRouteOfNavGraphRoute(navGraphRoute),
             onEpisodePlayButtonClicked = playStreamable,
             onEpisodePauseButtonClicked = { onPausePlayback() },
             onEpisodeClicked = playStreamable,
@@ -281,6 +281,13 @@ class NavGraphWithDetailScreensNestedController(
     private val associatedNavGraphRoute: String,
     private val playTrack: (SearchResult.TrackSearchResult) -> Unit
 ) {
+    fun navigateToDetailScreen(podcastEpisode: PodcastEpisode) {
+        val route = MusifyNavigationDestinations
+            .PodcastShowDetailScreen
+            .buildRoute(podcastEpisode.podcastShowInfo.id);
+        navController.navigate(associatedNavGraphRoute + route)
+    }
+
     fun navigateToDetailScreen(searchResult: SearchResult) {
         val route = when (searchResult) {
             is SearchResult.AlbumSearchResult -> MusifyNavigationDestinations
@@ -315,7 +322,7 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
     onPlayButtonClicked: (PodcastEpisode) -> Unit,
     onPauseButtonClicked: () -> Unit,
     onBackButtonClicked: () -> Unit,
-    navigateToPodcastDetailScreen: () -> Unit
+    navigateToPodcastShowDetailScreen: (PodcastEpisode) -> Unit
 ) {
     composable(route = route) {
         val viewModel = hiltViewModel<PodcastEpisodeDetailViewModel>()
@@ -352,7 +359,9 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
                 onAddButtonClicked = { /*TODO*/ },
                 onDownloadButtonClicked = { /*TODO*/ },
                 onBackButtonClicked = onBackButtonClicked,
-                navigateToPodcastDetailScreen = navigateToPodcastDetailScreen
+                navigateToPodcastDetailScreen = {
+                    viewModel.podcastEpisode?.let { navigateToPodcastShowDetailScreen(it) }
+                }
             )
         }
     }
