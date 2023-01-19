@@ -1,6 +1,5 @@
 package com.example.musify.data.remote.response
 
-import androidx.core.text.HtmlCompat
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.data.utils.getImageResponseForImageSize
 import com.example.musify.domain.PodcastShow
@@ -26,5 +25,5 @@ fun ShowResponse.toPodcastShow(mapperImageSize: MapperImageSize) = PodcastShow(
     name = name,
     imageUrlString = images.getImageResponseForImageSize(mapperImageSize).url,
     nameOfPublisher = publisher,
-    htmlDescription = HtmlCompat.fromHtml(htmlDescription, 0) // TODO see what's the difference between this and .toSpanned()
+    htmlDescription = htmlDescription
 )

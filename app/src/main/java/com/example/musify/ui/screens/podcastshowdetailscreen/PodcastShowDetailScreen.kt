@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.text.HtmlCompat
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import com.example.musify.R
@@ -63,6 +64,9 @@ fun PodcastShowDetailScreen(
             lazyListState.firstVisibleItemScrollOffset > 200
         }
     }
+    val spannedHtmlDescription = remember {
+        HtmlCompat.fromHtml(podcastShow.htmlDescription, 0)
+    }
     Box {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -79,7 +83,7 @@ fun PodcastShowDetailScreen(
             item {
                 AndroidExpandableTextView(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    text = podcastShow.htmlDescription,
+                    text = spannedHtmlDescription,
                     expandButtonText = "see more",
                     textAppearanceResId = com.google.android.material.R.style.TextAppearance_MaterialComponents_Subtitle2,
                     color = Color.White.copy(alpha = ContentAlpha.medium),
