@@ -15,7 +15,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyBottomNavigationConnectedWithBackStack
 import com.example.musify.ui.navigation.MusifyBottomNavigationDestinations
 import com.example.musify.ui.navigation.MusifyNavigation
@@ -55,8 +54,8 @@ private fun MusifyApp() {
     val playbackEvent: PlaybackViewModel.Event? by playbackViewModel.playbackEventsFlow.collectAsState(
         initial = null
     )
-    val playerTrack = remember(playbackState) {
-        playbackState.currentlyPlayingTrack ?: playbackState.previouslyPlayingTrack
+    val miniPlayerStreamable = remember(playbackState) {
+        playbackState.currentlyPlayingStreamable ?: playbackState.previouslyPlayingStreamable
     }
     var isNowPlayingScreenVisible by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = playbackEvent) {
@@ -69,14 +68,7 @@ private fun MusifyApp() {
     val isPlaybackPaused = remember(playbackState) {
         playbackState is PlaybackViewModel.PlaybackState.Paused || playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded
     }
-    val onPlayButtonClicked = { track: SearchResult.TrackSearchResult ->
-        if (playbackState is PlaybackViewModel.PlaybackState.Paused) {
-            playbackViewModel.resumePlaybackIfPaused()
-        } else if (playbackState is PlaybackViewModel.PlaybackState.PlaybackEnded) {
-            // play the same track again
-            playbackViewModel.playTrack(track)
-        }
-    }
+
     BackHandler(isNowPlayingScreenVisible) {
         isNowPlayingScreenVisible = false
     }
@@ -93,14 +85,14 @@ private fun MusifyApp() {
         // to null when the playback is stopped
         MusifyNavigation(
             navController = navController,
-            playTrack = playbackViewModel::playTrack,
-            isPlaybackLoading = playbackState is PlaybackViewModel.PlaybackState.Loading,
-            isFullScreenNowPlayingOverlayScreenVisible = isNowPlayingScreenVisible
+            playStreamable = playbackViewModel::playOrResumeStreamable,
+            isFullScreenNowPlayingOverlayScreenVisible = isNowPlayingScreenVisible,
+            onPausePlayback = playbackViewModel::pauseCurrentlyPlayingTrack
         )
         Column(modifier = Modifier.align(Alignment.BottomCenter)) {
             AnimatedContent(
                 modifier = Modifier.fillMaxWidth(),
-                targetState = playerTrack
+                targetState = miniPlayerStreamable
             ) { state ->
                 if (state == null) {
                     SnackbarHost(hostState = snackbarHostState)
@@ -111,9 +103,9 @@ private fun MusifyApp() {
                                 enter = fadeIn() + slideInVertically { it },
                                 exit = fadeOut() + slideOutVertically { -it }
                             ),
-                        track = playerTrack!!,
+                        streamable = miniPlayerStreamable!!,
                         onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack,
-                        onPlayButtonClicked = { trackToPlay -> onPlayButtonClicked(trackToPlay) },
+                        onPlayButtonClicked = playbackViewModel::playOrResumeStreamable,
                         isPlaybackPaused = isPlaybackPaused,
                         timeElapsedStringFlow = playbackViewModel.flowOfProgressTextOfCurrentTrack.value,
                         playbackProgressFlow = playbackViewModel.flowOfProgressOfCurrentTrack.value,

@@ -4,5 +4,5 @@ import com.example.musify.domain.SearchResult
 import kotlinx.coroutines.flow.Flow
 
 interface GetCurrentlyPlayingTrackUseCase {
-    fun getCurrentlyPlayingTrackStream(): Flow<SearchResult.TrackSearchResult?>
+    val currentlyPlayingTrackStream:Flow<SearchResult.TrackSearchResult?>
 }

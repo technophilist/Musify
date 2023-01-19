@@ -1,18 +1,17 @@
 package com.example.musify.usecases.getCurrentlyPlayingTrackUseCase
 
 import com.example.musify.domain.SearchResult
-import com.example.musify.musicplayer.MusicPlayerV2
-import com.example.musify.musicplayer.utils.toTrackSearchResult
+import com.example.musify.usecases.getCurrentlyPlayingStreamableUseCase.GetCurrentlyPlayingStreamableUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.mapNotNull
 import javax.inject.Inject
 
 class MusifyGetCurrentlyPlayingTrackUseCase @Inject constructor(
-    val musicPlayer: MusicPlayerV2
+    getCurrentlyPlayingStreamableUseCase: GetCurrentlyPlayingStreamableUseCase
 ) : GetCurrentlyPlayingTrackUseCase {
-    override fun getCurrentlyPlayingTrackStream(): Flow<SearchResult.TrackSearchResult> =
-        musicPlayer.currentPlaybackStateStream
-            .filterIsInstance<MusicPlayerV2.PlaybackState.Playing>()
-            .mapNotNull { it.currentlyPlayingTrack.toTrackSearchResult() }
+    @Suppress("RemoveExplicitTypeArguments")
+    override val currentlyPlayingTrackStream: Flow<SearchResult.TrackSearchResult> =
+        getCurrentlyPlayingStreamableUseCase
+            .currentlyPlayingStreamableStream
+            .filterIsInstance<SearchResult.TrackSearchResult>()
 }

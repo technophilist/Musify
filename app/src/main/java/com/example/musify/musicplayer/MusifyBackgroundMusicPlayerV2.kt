@@ -1,7 +1,9 @@
 package com.example.musify.musicplayer
 
 import android.content.Context
+import android.graphics.Bitmap
 import com.example.musify.R
+import com.example.musify.domain.Streamable
 import com.example.musify.musicplayer.utils.MediaDescriptionAdapter
 import com.example.musify.musicplayer.utils.getCurrentPlaybackProgressFlow
 import com.google.android.exoplayer2.ExoPlayer
@@ -21,16 +23,11 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
     @ApplicationContext context: Context,
     private val exoPlayer: ExoPlayer
 ) : MusicPlayerV2 {
-    private var currentlyPlayingTrack: MusicPlayerV2.Track? = null
+    private var currentlyPlayingStreamable: Streamable? = null
     private val notificationManagerBuilder by lazy {
         PlayerNotificationManager.Builder(context, NOTIFICATION_ID, NOTIFICATION_CHANNEL_ID)
-            .setChannelImportance(NotificationUtil.IMPORTANCE_LOW).setMediaDescriptionAdapter(
-                MediaDescriptionAdapter(getCurrentContentText = {
-                    currentlyPlayingTrack?.artistsString ?: ""
-                },
-                    getCurrentContentTitle = { currentlyPlayingTrack?.title ?: "" },
-                    getCurrentLargeIcon = { _, _ -> currentlyPlayingTrack?.albumArt })
-            ).setChannelNameResourceId(R.string.notification_channel_name)
+            .setChannelImportance(NotificationUtil.IMPORTANCE_LOW)
+            .setChannelNameResourceId(R.string.notification_channel_name)
             .setChannelDescriptionResourceId(R.string.notification_channel_description)
     }
 
@@ -39,7 +36,8 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
             if (!events.containsAny(
                     Player.EVENT_PLAYBACK_STATE_CHANGED,
                     Player.EVENT_PLAYER_ERROR,
-                    Player.EVENT_IS_PLAYING_CHANGED
+                    Player.EVENT_IS_PLAYING_CHANGED,
+                    Player.EVENT_IS_LOADING_CHANGED
                 )
             ) return@createEventsListener
             val isPlaying =
@@ -48,10 +46,13 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
                 events.contains(Player.EVENT_IS_PLAYING_CHANGED) && player.playbackState == Player.STATE_READY && !player.playWhenReady
             val newPlaybackState = when {
                 events.contains(Player.EVENT_PLAYER_ERROR) -> MusicPlayerV2.PlaybackState.Error
-                isPlaying -> currentlyPlayingTrack?.let { buildPlayingState(it, player) }
-                isPaused -> currentlyPlayingTrack?.let(MusicPlayerV2.PlaybackState::Paused)
+                isPlaying -> currentlyPlayingStreamable?.let { buildPlayingState(it, player) }
+                isPaused -> currentlyPlayingStreamable?.let(MusicPlayerV2.PlaybackState::Paused)
                 player.playbackState == Player.STATE_IDLE -> MusicPlayerV2.PlaybackState.Idle
-                player.playbackState == Player.STATE_ENDED -> currentlyPlayingTrack?.let(MusicPlayerV2.PlaybackState::Ended)
+                player.playbackState == Player.STATE_ENDED -> currentlyPlayingStreamable?.let(
+                    MusicPlayerV2.PlaybackState::Ended
+                )
+                player.isLoading -> MusicPlayerV2.PlaybackState.Loading(previouslyPlayingStreamable = currentlyPlayingStreamable)
                 else -> null
             } ?: return@createEventsListener
             trySend(newPlaybackState)
@@ -70,8 +71,8 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
             // the subscriber associated with the detail screen can be used to
             // highlight the playing track. It is able to do so because, the first
             // value that the new subscriber gets will be the currently playing track.
-            scope =  CoroutineScope(Dispatchers.Default),
-            started =  SharingStarted.WhileSubscribed(500),
+            scope = CoroutineScope(Dispatchers.Default),
+            started = SharingStarted.WhileSubscribed(500),
             initialValue = MusicPlayerV2.PlaybackState.Idle
         )
 
@@ -83,25 +84,43 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
         }
 
     private fun buildPlayingState(
-        track: MusicPlayerV2.Track,
+        streamable: Streamable,
         player: Player,
     ) = MusicPlayerV2.PlaybackState.Playing(
-        currentlyPlayingTrack = track,
+        currentlyPlayingStreamable = streamable,
         totalDuration = player.duration,
         currentPlaybackPositionInMillisFlow = player.getCurrentPlaybackProgressFlow()
     )
 
-    override fun playTrack(track: MusicPlayerV2.Track) {
+
+    // TODO add an additional parameter that allows the client to specify
+    //  what happens when the method is called with the same streamable.
+    override fun playStreamable(
+        streamable: Streamable,
+        associatedAlbumArt: Bitmap
+    ) {
         with(exoPlayer) {
-            if (currentlyPlayingTrack == track) {
+            if (streamable.streamInfo.streamUrl == null) return@with
+            if (currentlyPlayingStreamable == streamable) {
                 seekTo(0)
+                // without this statement, after seeking to the start,
+                // the player will be ready to play, but will not actually
+                // start the playback if playWhenReady is set to false.
+                playWhenReady = true
                 return@with
             }
             if (isPlaying) exoPlayer.stop()
-            currentlyPlayingTrack = track
-            setMediaItem(MediaItem.fromUri(track.trackUrlString))
+            currentlyPlayingStreamable = streamable
+            setMediaItem(MediaItem.fromUri(streamable.streamInfo.streamUrl!!))
             prepare()
-            notificationManagerBuilder.build().setPlayer(exoPlayer)
+            val mediaDescriptionAdapter = MediaDescriptionAdapter(
+                getCurrentContentTitle = { streamable.streamInfo.title },
+                getCurrentContentText = { streamable.streamInfo.subtitle },
+                getCurrentLargeIcon = { _, _ -> associatedAlbumArt }
+            )
+            notificationManagerBuilder
+                .setMediaDescriptionAdapter(mediaDescriptionAdapter)
+                .build().setPlayer(exoPlayer)
             play()
         }
     }
@@ -116,7 +135,7 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
 
     override fun tryResume(): Boolean {
         if (exoPlayer.isPlaying) return false
-        return currentlyPlayingTrack?.let {
+        return currentlyPlayingStreamable?.let {
             exoPlayer.playWhenReady = true
             true
         } ?: false

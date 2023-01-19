@@ -3,10 +3,7 @@ package com.example.musify.data.repositories.searchrepository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.musify.data.paging.SpotifyAlbumSearchPagingSource
-import com.example.musify.data.paging.SpotifyArtistSearchPagingSource
-import com.example.musify.data.paging.SpotifyPlaylistSearchPagingSource
-import com.example.musify.data.paging.SpotifyTrackSearchPagingSource
+import com.example.musify.data.paging.*
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.response.toSearchResults
 import com.example.musify.data.repositories.tokenrepository.TokenRepository
@@ -80,6 +77,34 @@ class MusifySearchRepository @Inject constructor(
         imageSize: MapperImageSize
     ): Flow<PagingData<SearchResult.PlaylistSearchResult>> = Pager(pagingConfig) {
         SpotifyPlaylistSearchPagingSource(
+            searchQuery = searchQuery,
+            countryCode = countryCode,
+            imageSize = imageSize,
+            tokenRepository = tokenRepository,
+            spotifyService = spotifyService
+        )
+    }.flow
+
+    override fun getPaginatedSearchStreamForPodcasts(
+        searchQuery: String,
+        countryCode: String,
+        imageSize: MapperImageSize
+    ): Flow<PagingData<SearchResult.PodcastSearchResult>> = Pager(pagingConfig) {
+        SpotifyPodcastSearchPagingSource(
+            searchQuery = searchQuery,
+            countryCode = countryCode,
+            imageSize = imageSize,
+            tokenRepository = tokenRepository,
+            spotifyService = spotifyService
+        )
+    }.flow
+
+    override fun getPaginatedSearchStreamForEpisodes(
+        searchQuery: String,
+        countryCode: String,
+        imageSize: MapperImageSize
+    ): Flow<PagingData<SearchResult.EpisodeSearchResult>> = Pager(pagingConfig) {
+        SpotifyEpisodeSearchPagingSource(
             searchQuery = searchQuery,
             countryCode = countryCode,
             imageSize = imageSize,

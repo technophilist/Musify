@@ -1,7 +1,7 @@
 package com.example.musify.domain
 
-import android.graphics.Bitmap
-import com.example.musify.musicplayer.MusicPlayerV2
+import android.content.Context
+import com.example.musify.utils.generateMusifyDateAndDurationString
 
 sealed class SearchResult {
     /**
@@ -52,21 +52,51 @@ sealed class SearchResult {
         val imageUrlString: String,
         val artistsString: String,
         val trackUrlString: String?
+    ) : SearchResult(), Streamable {
+        override val streamInfo = StreamInfo(
+            streamUrl = trackUrlString,
+            imageUrl = imageUrlString,
+            title = name,
+            subtitle = artistsString
+        )
+    }
+
+    data class PodcastSearchResult(
+        val id: String,
+        val name: String,
+        val nameOfPublisher: String,
+        val imageUrlString: String,
     ) : SearchResult()
+
+    data class EpisodeSearchResult(
+        val id: String,
+        val episodeContentInfo: EpisodeContentInfo,
+        val episodeReleaseDateInfo: EpisodeReleaseDateInfo,
+        val episodeDurationInfo: EpisodeDurationInfo
+    ) : SearchResult() {
+        data class EpisodeContentInfo(
+            val title: String,
+            val description: String,
+            val imageUrlString: String
+        )
+
+        data class EpisodeReleaseDateInfo(val month: String, val day: Int, val year: Int)
+        data class EpisodeDurationInfo(val hours: Int, val minutes: Int)
+    }
 }
 
 /**
- * A mapper method used to map an instance of
- * [SearchResult.TrackSearchResult] to an instance of [MusicPlayerV2.Track].
+ * A utility method used to get a string that contains date and duration
+ * information in a formatted manner for an instance of
+ * [SearchResult.EpisodeSearchResult].
+ * @see generateMusifyDateAndDurationString
  */
-fun SearchResult.TrackSearchResult.toMusicPlayerTrack(albumArtBitmap: Bitmap): MusicPlayerV2.Track {
-    if (trackUrlString == null) throw IllegalStateException("The trackUrlString cannot be null during conversion")
-    return MusicPlayerV2.Track(
-        id = id,
-        title = name,
-        artistsString = artistsString,
-        albumArt = albumArtBitmap,
-        albumArtUrlString = this.imageUrlString,
-        trackUrlString = trackUrlString,
+fun SearchResult.EpisodeSearchResult.getFormattedDateAndDurationString(context: Context): String =
+    generateMusifyDateAndDurationString(
+        context = context,
+        month = episodeReleaseDateInfo.month,
+        day = episodeReleaseDateInfo.day,
+        year = episodeReleaseDateInfo.year,
+        hours = episodeDurationInfo.hours,
+        minutes = episodeDurationInfo.minutes
     )
-}

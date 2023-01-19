@@ -1,20 +1,22 @@
 package com.example.musify.ui.screens.searchscreen
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.items
 import androidx.paging.compose.itemsIndexed
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.*
@@ -161,6 +163,53 @@ fun LazyListScope.searchPlaylistListItems(
                 onThumbnailLoading = { onImageLoading(it) },
                 errorPainter = playlistImageErrorPainter,
                 contentPadding = MusifyCompactTrackCardDefaults.defaultContentPadding
+            )
+        }
+    }
+}
+
+@ExperimentalMaterialApi
+fun LazyListScope.searchPodcastListItems(
+    podcastsForSearchQuery: LazyPagingItems<SearchResult.PodcastSearchResult>,
+    episodesForSearchQuery: LazyPagingItems<SearchResult.EpisodeSearchResult>,
+    onPodcastItemClicked: (SearchResult.PodcastSearchResult) -> Unit,
+    onEpisodeItemClicked: (SearchResult.EpisodeSearchResult) -> Unit
+) {
+    item {
+        Text(
+            modifier = Modifier.padding(
+                horizontal = 16.dp,
+                vertical = 8.dp
+            ),
+            text = "Podcasts & Shows",
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.h6
+        )
+        LazyRow(
+            modifier = Modifier
+                .fillParentMaxWidth()
+                .height(238.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp)
+        ) {
+            items(podcastsForSearchQuery) { podcast ->
+                podcast?.let {
+                    PodcastCard(
+                        podcastArtUrlString = it.imageUrlString,
+                        name = it.name,
+                        nameOfPublisher = it.nameOfPublisher,
+                        onClick = { onPodcastItemClicked(it) }
+                    )
+                }
+            }
+        }
+    }
+
+    itemsIndexedWithEmptyListContent(episodesForSearchQuery) { _, episode ->
+        episode?.let {
+            EpisodeListCard(
+                episodeSearchResult = it,
+                onClick = { onEpisodeItemClicked(it) }
             )
         }
     }

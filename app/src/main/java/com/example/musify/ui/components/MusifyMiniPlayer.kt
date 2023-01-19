@@ -6,9 +6,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.musify.R
-import com.example.musify.domain.SearchResult
+import com.example.musify.domain.Streamable
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
@@ -33,12 +30,12 @@ object MusifyMiniPlayerConstants {
 }
 
 /**
- * A mini player composable that contains information of the [currentlyPlayingTrack].
- * It also contains 3 icons - Available Devices, Favorite and Play/Pause.
+ * A mini player composable.
+ * It also displays 2 icons - Available Devices, and Play/Pause.
  *
  * Note: The size of this composable is **fixed to 60dp**.
  *
- * @param currentlyPlayingTrack the currently playing track.
+ * @param streamable the currently [Streamable].
  * @param isPlaybackPaused indicates whether the playback is paused.
  * Based on this, either [onPlayButtonClicked] or [onPauseButtonClicked]
  * will be invoked. Also, the play and pause icons will also be displayed
@@ -56,7 +53,7 @@ object MusifyMiniPlayerConstants {
 // TODO debug recompositions
 @Composable
 fun MusifyMiniPlayer(
-    currentlyPlayingTrack: SearchResult.TrackSearchResult,
+    streamable: Streamable,
     isPlaybackPaused: Boolean,
     modifier: Modifier = Modifier,
     onLikedButtonClicked: (Boolean) -> Unit,
@@ -64,10 +61,9 @@ fun MusifyMiniPlayer(
     onPauseButtonClicked: () -> Unit
 ) {
     var isThumbnailImageLoading by remember { mutableStateOf(false) }
-    val dynamicThemeResource = remember(currentlyPlayingTrack) {
-        DynamicThemeResource.FromImageUrl(currentlyPlayingTrack.imageUrlString)
+    val dynamicThemeResource = remember {
+        DynamicThemeResource.FromImageUrl(streamable.streamInfo.imageUrl)
     }
-    var isLiked by remember { mutableStateOf(false) }
     DynamicallyThemedSurface(
         modifier = Modifier
             .then(modifier)
@@ -88,25 +84,25 @@ fun MusifyMiniPlayer(
                     .padding(8.dp)
                     .clip(RoundedCornerShape(4.dp))
                     .aspectRatio(1f),
-                model = currentlyPlayingTrack.imageUrlString,
+                model = streamable.streamInfo.imageUrl,
                 contentDescription = null,
                 onImageLoadingFinished = { isThumbnailImageLoading = false },
                 isLoadingPlaceholderVisible = isThumbnailImageLoading,
                 onImageLoading = { isThumbnailImageLoading = true },
             )
             Column(
-                modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Center
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
-
-                    text = currentlyPlayingTrack.name,
+                    text = streamable.streamInfo.title,
                     fontWeight = FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = MaterialTheme.typography.subtitle2
                 )
                 Text(
-                    text = currentlyPlayingTrack.artistsString,
+                    text = streamable.streamInfo.subtitle,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.caption.copy(
                         color = MaterialTheme.colors.onBackground.copy(alpha = 0.6f)
@@ -120,18 +116,6 @@ fun MusifyMiniPlayer(
                     painter = painterResource(id = R.drawable.ic_available_devices),
                     contentDescription = null
                 )
-            }
-            IconButton(
-                onClick = {
-                    isLiked = !isLiked
-                    onLikedButtonClicked(isLiked)
-                }) {
-                Icon(
-                    imageVector = if (isLiked) Icons.Filled.Favorite
-                    else Icons.Filled.FavoriteBorder,
-                    contentDescription = null,
-
-                    )
             }
             IconButton(onClick = {
                 if (isPlaybackPaused) {

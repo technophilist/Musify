@@ -50,22 +50,22 @@ class PlaybackViewModelTest {
     @Test
     fun playTrackTest_trackWithTrackUrlStringSetToNull_updatesStateToError() {
         val track = fakeTrackSearchResult.copy(trackUrlString = null)
-        playbackViewModelWithSuccessfulImageFetch.playTrack(track)
+        playbackViewModelWithSuccessfulImageFetch.playOrResumeStreamable(track)
         assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value is PlaybackViewModel.PlaybackState.Error)
     }
 
     @Test
     fun playTrackTest_trackWithTrackUrlString_withImageFetchAlwaysSucceeding_updatesStateToPlaying() {
         val track = fakeTrackSearchResult
-        playbackViewModelWithSuccessfulImageFetch.playTrack(track)
+        playbackViewModelWithSuccessfulImageFetch.playOrResumeStreamable(track)
         assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value is PlaybackViewModel.PlaybackState.Playing)
-        assert((playbackViewModelWithSuccessfulImageFetch.playbackState.value as PlaybackViewModel.PlaybackState.Playing).track == track)
+        assert((playbackViewModelWithSuccessfulImageFetch.playbackState.value as PlaybackViewModel.PlaybackState.Playing).streamable == track)
     }
 
     @Test
     fun playTrackTest_trackWithTrackUrlString_withImageFetchAlwaysFailing_updatesStateToError() {
         val track = fakeTrackSearchResult
-        playbackViewModelWithFailingImageFetch.playTrack(track)
+        playbackViewModelWithFailingImageFetch.playOrResumeStreamable(track)
         assert(playbackViewModelWithFailingImageFetch.playbackState.value is PlaybackViewModel.PlaybackState.Error)
     }
 
@@ -83,7 +83,7 @@ class PlaybackViewModelTest {
     fun stoppedStateTest_whenUnderlyingMusicPlayerStopsPlayingTrack_currentlyPlayingTrackMustBeNull() {
         musicPlayer.stopPlayingTrack()
         assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value is PlaybackViewModel.PlaybackState.Stopped)
-        assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value.currentlyPlayingTrack == null)
+        assert(playbackViewModelWithSuccessfulImageFetch.playbackState.value.currentlyPlayingStreamable == null)
     }
 
 }

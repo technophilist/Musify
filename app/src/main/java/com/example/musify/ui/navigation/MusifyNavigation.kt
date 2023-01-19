@@ -16,6 +16,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.musify.domain.HomeFeedCarouselCardInfo
 import com.example.musify.domain.HomeFeedFilters
 import com.example.musify.domain.SearchResult
+import com.example.musify.domain.Streamable
 import com.example.musify.ui.screens.GetPremiumScreen
 import com.example.musify.ui.screens.homescreen.HomeScreen
 import com.example.musify.ui.screens.searchscreen.PagingItemsForSearchScreen
@@ -35,9 +36,9 @@ import com.example.musify.viewmodels.searchviewmodel.SearchViewModel
 @Composable
 fun MusifyNavigation(
     navController: NavHostController,
-    playTrack: (SearchResult.TrackSearchResult) -> Unit,
-    isPlaybackLoading: Boolean,
-    isFullScreenNowPlayingOverlayScreenVisible: Boolean,
+    playStreamable: (Streamable) -> Unit,
+    onPausePlayback:()->Unit,
+    isFullScreenNowPlayingOverlayScreenVisible: Boolean
 ) {
     NavHost(
         navController = navController,
@@ -47,8 +48,8 @@ fun MusifyNavigation(
             navGraphRoute = MusifyBottomNavigationDestinations.Home.route,
             startDestination = MusifyNavigationDestinations.HomeScreen.route,
             navController = navController,
-            playTrack = playTrack,
-            isPlaybackLoading = isPlaybackLoading
+            playStreamable = playStreamable,
+            onPausePlayback = onPausePlayback
         ) { nestedController ->
             homeScreen(
                 route = MusifyNavigationDestinations.HomeScreen.route,
@@ -61,12 +62,11 @@ fun MusifyNavigation(
             navGraphRoute = MusifyBottomNavigationDestinations.Search.route,
             startDestination = MusifyNavigationDestinations.SearchScreen.route,
             navController = navController,
-            playTrack = playTrack,
-            isPlaybackLoading = isPlaybackLoading
+            playStreamable = playStreamable,
+            onPausePlayback = onPausePlayback
         ) { nestedController ->
             searchScreen(
                 route = MusifyNavigationDestinations.SearchScreen.route,
-                isPlaybackLoading = isPlaybackLoading,
                 onSearchResultClicked = nestedController::navigateToDetailScreen,
                 isFullScreenNowPlayingScreenOverlayVisible = isFullScreenNowPlayingOverlayScreenVisible
             )
@@ -112,7 +112,6 @@ private fun NavGraphBuilder.homeScreen(
 @ExperimentalMaterialApi
 private fun NavGraphBuilder.searchScreen(
     route: String,
-    isPlaybackLoading: Boolean,
     onSearchResultClicked: (SearchResult) -> Unit,
     isFullScreenNowPlayingScreenOverlayVisible: Boolean,
 ) {
@@ -122,12 +121,16 @@ private fun NavGraphBuilder.searchScreen(
         val artists = viewModel.artistListForSearchQuery.collectAsLazyPagingItems()
         val playlists = viewModel.playlistListForSearchQuery.collectAsLazyPagingItems()
         val tracks = viewModel.trackListForSearchQuery.collectAsLazyPagingItems()
+        val podcasts = viewModel.podcastListForSearchQuery.collectAsLazyPagingItems()
+        val episodes = viewModel.episodeListForSearchQuery.collectAsLazyPagingItems()
         val pagingItems = remember {
             PagingItemsForSearchScreen(
                 albums,
                 artists,
                 tracks,
-                playlists
+                playlists,
+                podcasts,
+                episodes
             )
         }
         val uiState by viewModel.uiState
@@ -147,6 +150,7 @@ private fun NavGraphBuilder.searchScreen(
                     SearchFilter.TRACKS -> tracks.itemSnapshotList.firstOrNull()?.imageUrlString
                     SearchFilter.ARTISTS -> artists.itemSnapshotList.firstOrNull()?.imageUrlString
                     SearchFilter.PLAYLISTS -> playlists.itemSnapshotList.firstOrNull()?.imageUrlString
+                    SearchFilter.PODCASTS  -> podcasts.itemSnapshotList.firstOrNull()?.imageUrlString
                 }
                 if (imageUrl == null) DynamicThemeResource.Empty
                 else DynamicThemeResource.FromImageUrl(imageUrl)
@@ -162,7 +166,7 @@ private fun NavGraphBuilder.searchScreen(
                 searchScreenFilters = filters,
                 onGenreItemClick = {},
                 onSearchTextChanged = viewModel::search,
-                isLoading = uiState == SearchScreenUiState.LOADING || isPlaybackLoading,
+                isLoading = uiState == SearchScreenUiState.LOADING,
                 pagingItems = pagingItems,
                 onSearchQueryItemClicked = onSearchResultClicked,
                 currentlySelectedFilter = viewModel.currentlySelectedFilter.value,

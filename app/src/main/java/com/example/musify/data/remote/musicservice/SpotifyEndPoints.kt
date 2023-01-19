@@ -18,6 +18,9 @@ object SpotifyEndPoints {
     const val FEATURED_PLAYLISTS = "v1/browse/featured-playlists"
     const val PLAYLISTS_FOR_BESPOKE_CATEGORY = "v1/browse/categories/{category_id}/playlists"
     const val BROWSE_CATEGORIES_FOR_COUNTRY_AND_LOCALE_ENDPOINT = "v1/browse/categories"
+    const val SPECIFIC_EPISODE_ENDPOINT = "v1/episodes/{id}"
+    const val SPECIFIC_SHOW_ENDPOINT = "v1/shows/{id}"
+    const val SHOW_EPISODES_ENDPOINT = "v1/shows/{id}/episodes"
 
     object Defaults {
         const val defaultPlaylistFields =

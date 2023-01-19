@@ -19,12 +19,9 @@ class SpotifyServiceTest {
     // artist id of 'Anirudh Ravichander'
     private val validArtistId = "4zCH9qm4R2DADamUHMCa6O"
     private val tokenRepository = SpotifyTokenRepository(
-        Retrofit.Builder()
-            .baseUrl(SpotifyBaseUrls.AUTHENTICATION_URL)
-            .addConverterFactory(defaultMusifyJacksonConverterFactory)
-            .build()
-            .create(TokenManager::class.java),
-        TestBase64Encoder()
+        Retrofit.Builder().baseUrl(SpotifyBaseUrls.AUTHENTICATION_URL)
+            .addConverterFactory(defaultMusifyJacksonConverterFactory).build()
+            .create(TokenManager::class.java), TestBase64Encoder()
     )
     lateinit var musicService: SpotifyService
 
@@ -35,10 +32,8 @@ class SpotifyServiceTest {
 
     @Before
     fun setup() {
-        musicService = Retrofit.Builder()
-            .baseUrl("https://api.spotify.com/")
-            .addConverterFactory(defaultMusifyJacksonConverterFactory)
-            .build()
+        musicService = Retrofit.Builder().baseUrl("https://api.spotify.com/")
+            .addConverterFactory(defaultMusifyJacksonConverterFactory).build()
             .create(SpotifyService::class.java)
     }
 
@@ -82,10 +77,7 @@ class SpotifyServiceTest {
         val albums = runBlockingWithToken {
             // the albums associated with the artist must be fetched successfully
             musicService.getAlbumsOfArtistWithId(
-                artistId = artistId,
-                market = "IN",
-                limit = limit,
-                token = it
+                artistId = artistId, market = "IN", limit = limit, token = it
             )
         }
         // the number of items should be equal to the specified limit
@@ -100,9 +92,7 @@ class SpotifyServiceTest {
             // the top ten tracks associated with the artist must be
             // successfully fetched
             musicService.getTopTenTracksForArtistWithId(
-                artistId = artistId,
-                market = "IN",
-                token = it
+                artistId = artistId, market = "IN", token = it
             )
         }
     }
@@ -265,8 +255,7 @@ class SpotifyServiceTest {
         // when mapping the object to a kotlin class with the same field
         // declared as non-nullable
         jacksonObjectMapper().readValue(
-            jsonString,
-            AlbumMetadataResponse.ArtistInfoResponse::class.java
+            jsonString, AlbumMetadataResponse.ArtistInfoResponse::class.java
         )
         // an exception should be thrown
     }
@@ -318,8 +307,7 @@ class SpotifyServiceTest {
     fun getNewReleasesTest_valid_market_returnsNotEmptyAlbumListSuccessfully() {
         runBlockingWithToken {
             val newlyReleasedAlbums = musicService.getNewReleases(
-                token = it,
-                market = "IN"
+                token = it, market = "IN"
             ).albums
             assert(newlyReleasedAlbums.items.isNotEmpty())
         }
@@ -330,8 +318,7 @@ class SpotifyServiceTest {
         runBlockingWithToken {
             try {
                 musicService.getNewReleases(
-                    token = it,
-                    market = "xyz"
+                    token = it, market = "xyz"
                 ).albums
             } catch (exception: Exception) {
                 assert(exception is HttpException)
@@ -343,10 +330,7 @@ class SpotifyServiceTest {
     fun getFeaturedPlaylistsTest_valid_market_locale_and_timestamp_returnsNonEmptyPlaylistList() {
         runBlockingWithToken {
             val featuredPlaylistsResponse = musicService.getFeaturedPlaylists(
-                token = it,
-                market = "IN",
-                locale = "en_IN",
-                timestamp = "2022-08-05T09:00:00"
+                token = it, market = "IN", locale = "en_IN", timestamp = "2022-08-05T09:00:00"
             )
             assert(featuredPlaylistsResponse.playlists.items.isNotEmpty())
         }
@@ -356,9 +340,7 @@ class SpotifyServiceTest {
     fun getPlaylistsForCategory_valid_categoryId_returnsNonEmptyPlaylistList() {
         runBlockingWithToken {
             val playlistsForSpecificCategoryResponse = musicService.getPlaylistsForCategory(
-                token = it,
-                categoryId = "hiphop",
-                market = "US"
+                token = it, categoryId = "hiphop", market = "US"
             )
             assert(playlistsForSpecificCategoryResponse.playlists.items.isNotEmpty())
         }
@@ -368,11 +350,73 @@ class SpotifyServiceTest {
     fun getBrowseCategoriesTest_valid_market_and_locale_returnsNonEmptyListOfCategories() {
         runBlockingWithToken {
             val browseCategoriesResponse = musicService.getBrowseCategories(
-                token = it,
-                market = "US",
-                locale = "en_US"
+                token = it, market = "US", locale = "en_US"
             )
             assert(browseCategoriesResponse.categories.items.isNotEmpty())
+        }
+    }
+
+    @Test
+    fun searchShowTest_validShowName_returnsAtleastOneShow() {
+        runBlockingWithToken {
+            val searchResultsDTO = musicService.search(
+                searchQuery = "Waveform: The MKBHD Podcast",
+                market = "US",
+                token = it,
+                type = SearchQueryType.SHOW.value
+            )
+            assert(searchResultsDTO.shows != null)
+            assert(searchResultsDTO.shows!!.value.isNotEmpty())
+        }
+    }
+
+    @Test
+    fun searchEpisodeTest_validShowName_returnsAtleastOneEpisode() {
+        runBlockingWithToken {
+            val searchResultsDTO = musicService.search(
+                searchQuery = "Waveform: The MKBHD Podcast",
+                market = "US",
+                token = it,
+                type = SearchQueryType.EPISODE.value
+            )
+            assert(searchResultsDTO.episodes != null)
+            assert(searchResultsDTO.episodes!!.value.isNotEmpty())
+        }
+    }
+
+    @Test
+    fun getEpisodeWithIdTest_validEpisodeId_isFetchedSuccessfully() {
+        runBlockingWithToken {
+            val validEpisodeId = "5pLYyCItRvIc2SEbuJ3eO8"
+            musicService.getEpisodeWithId(token = it, market = "IN", id = validEpisodeId)
+        }
+    }
+
+    @Test
+    fun getShowWithIdTest_validShowId_isFetchedSuccessfully() {
+        runBlockingWithToken {
+            val validShowId = "6o81QuW22s5m2nfcXWjucc"
+            musicService.getShowWithId(
+                token = it,
+                id = validShowId,
+                market = "IN"
+            )
+        }
+    }
+
+    @Test
+    fun getEpisodesForShowWithIdTest_validShowId_isFetchedSuccessfully() {
+        runBlockingWithToken {
+            val validShowId = "6o81QuW22s5m2nfcXWjucc"
+            val episodesForShow = musicService.getEpisodesForShowWithId(
+                token = it,
+                id = validShowId,
+                market = "IN",
+                limit = 20,
+                offset = 0
+            )
+            assert(episodesForShow.items.isNotEmpty())
+            assert(episodesForShow.items.size <= 20)
         }
     }
 }

@@ -9,6 +9,7 @@ import com.example.musify.data.repositories.tracksrepository.TracksRepository
 import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.usecases.getCurrentlyPlayingTrackUseCase.GetCurrentlyPlayingTrackUseCase
+import com.example.musify.usecases.getPlaybackLoadingStatusUseCase.GetPlaybackLoadingStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -18,15 +19,15 @@ class PlaylistDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     tracksRepository: TracksRepository,
     getCurrentlyPlayingTrackUseCase: GetCurrentlyPlayingTrackUseCase,
+    getPlaybackLoadingStatusUseCase: GetPlaybackLoadingStatusUseCase,
 ) : AndroidViewModel(application) {
     private val playlistId =
         savedStateHandle.get<String>(MusifyNavigationDestinations.PlaylistDetailScreen.NAV_ARG_PLAYLIST_ID)!!
+    val playbackLoadingStateStream = getPlaybackLoadingStatusUseCase.loadingStatusStream
+    val currentlyPlayingTrackStream = getCurrentlyPlayingTrackUseCase.currentlyPlayingTrackStream
     val tracks = tracksRepository.getPaginatedStreamForPlaylistTracks(
         playlistId = playlistId,
         countryCode = getCountryCode(),
         imageSize = MapperImageSize.MEDIUM
     ).cachedIn(viewModelScope)
-    val currentlyPlayingTrackStream =
-        getCurrentlyPlayingTrackUseCase.getCurrentlyPlayingTrackStream()
-
 }

@@ -13,11 +13,14 @@ import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.IODispatcher
 import com.example.musify.domain.SearchResult
 import com.example.musify.usecases.getCurrentlyPlayingTrackUseCase.GetCurrentlyPlayingTrackUseCase
+import com.example.musify.usecases.getPlaybackLoadingStatusUseCase.GetPlaybackLoadingStatusUseCase
 import com.example.musify.viewmodels.getCountryCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 /**
@@ -30,6 +33,7 @@ enum class SearchScreenUiState { LOADING, IDLE }
 class SearchViewModel @Inject constructor(
     application: Application,
     getCurrentlyPlayingTrackUseCase: GetCurrentlyPlayingTrackUseCase,
+    getPlaybackLoadingStatusUseCase: GetPlaybackLoadingStatusUseCase,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val genresRepository: GenresRepository,
     private val searchRepository: SearchRepository
@@ -63,8 +67,34 @@ class SearchViewModel @Inject constructor(
     val playlistListForSearchQuery =
         _playlistListForSearchQuery as Flow<PagingData<SearchResult.PlaylistSearchResult>>
 
-    val currentlyPlayingTrackStream =
-        getCurrentlyPlayingTrackUseCase.getCurrentlyPlayingTrackStream()
+    private val _podcastListForSearchQuery =
+        MutableStateFlow<PagingData<SearchResult.PodcastSearchResult>>(PagingData.empty())
+    val podcastListForSearchQuery =
+        _podcastListForSearchQuery as Flow<PagingData<SearchResult.PodcastSearchResult>>
+
+    private val _episodeListForSearchQuery =
+        MutableStateFlow<PagingData<SearchResult.EpisodeSearchResult>>(PagingData.empty())
+
+    val episodeListForSearchQuery =
+        _episodeListForSearchQuery as Flow<PagingData<SearchResult.EpisodeSearchResult>>
+
+    val currentlyPlayingTrackStream = getCurrentlyPlayingTrackUseCase.currentlyPlayingTrackStream
+
+    init {
+        getPlaybackLoadingStatusUseCase
+            .loadingStatusStream
+            .onEach { isPlaybackLoading ->
+                if (isPlaybackLoading && _uiState.value != SearchScreenUiState.LOADING) {
+                    _uiState.value = SearchScreenUiState.LOADING
+                    return@onEach
+                }
+                if (!isPlaybackLoading && _uiState.value == SearchScreenUiState.LOADING) {
+                    _uiState.value = SearchScreenUiState.IDLE
+                    return@onEach
+                }
+            }
+            .launchIn(viewModelScope)
+    }
 
     private fun collectAndAssignSearchResults(
         searchQuery: String,
@@ -102,6 +132,23 @@ class SearchViewModel @Inject constructor(
             .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.PLAYLISTS) {
                 _playlistListForSearchQuery.value = it
             }
+        searchRepository.getPaginatedSearchStreamForPodcasts(
+            searchQuery = searchQuery,
+            countryCode = getCountryCode(),
+            imageSize = imageSize
+        ).cachedIn(viewModelScope)
+            .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.PODCASTS) {
+                _podcastListForSearchQuery.value = it
+            }
+        searchRepository.getPaginatedSearchStreamForEpisodes(
+            searchQuery = searchQuery,
+            countryCode = getCountryCode(),
+            imageSize = imageSize
+        ).cachedIn(viewModelScope)
+            .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.PODCASTS) {
+                _episodeListForSearchQuery.value = it
+            }
+
     }
 
     private fun setEmptyValuesToAllSearchResults() {
@@ -109,6 +156,8 @@ class SearchViewModel @Inject constructor(
         _artistListForSearchQuery.value = PagingData.empty()
         _trackListForSearchQuery.value = PagingData.empty()
         _playlistListForSearchQuery.value = PagingData.empty()
+        _podcastListForSearchQuery.value = PagingData.empty()
+        _episodeListForSearchQuery.value = PagingData.empty()
     }
 
     /**
