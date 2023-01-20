@@ -1,4 +1,6 @@
 # Musify
+[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip) 
+
 Musify is a clone of the popular Spotify app built completely using Jetpack compose. Both podcasts episodes and tracks are available for playback. Under the hood, it uses the Spotify API to fetch the data. It is 
 completely built using Jetpack compose. It is also worth noting that it is not a complete one-on-one clone of the app. It can be considered as an app 
 that is heavily inspired by the design of the official Spotify app with some custom design tweaks. It uses many API’s such as Hilt,Retrofit, and Paging 3. I built this project purely for educational purposes. I neither intend to release, nor do I plan on monetizing any part of this project. 
