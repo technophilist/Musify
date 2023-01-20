@@ -32,7 +32,7 @@ class PodcastEpisodesForPodcastShowPagingSource(
                 .items
                 .map {
                     it.toPodcastEpisode(
-                        imageSize = imageSize,
+                        imageSizeForPodcastShowImage = imageSize,
                         showResponse = showResponse
                     )
                 }

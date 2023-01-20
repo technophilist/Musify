@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class EpisodeResponse(
     val id: String,
     @JsonProperty("name") val title: String,
+    @JsonProperty("images") val episodeImages: List<ImageResponse>,
     val description: String,
-    @JsonProperty("html_description")
-    val htmlDescription: String,
+    @JsonProperty("html_description") val htmlDescription: String,
     @JsonProperty("duration_ms") val durationMillis: Long,
     @JsonProperty("release_date") val releaseDate: String,
     @JsonProperty("audio_preview_url") val previewUrl: String?,
@@ -29,13 +29,17 @@ data class EpisodeResponse(
 
 /**
  * A mapper function used to map an instance of [EpisodeResponse] to
- * an instance of [PodcastEpisode]. The [imageSize] parameter determines the size of image
+ * an instance of [PodcastEpisode]. The [imageSizeForPodcastShowImage] parameter determines the size of image
  * to be used for the [PodcastEpisode] instance.
  * Note: The [PodcastEpisode.DurationInfo.minutes] is guaranteed to have a minimum value of 1.
  * This means that any episode with a duration lower than 1 minute will be coerced to have
  * a value of 1 minute.
+ * // TODO update docs about the new imageSizeParameters
  */
-fun EpisodeResponse.toPodcastEpisode(imageSize: MapperImageSize): PodcastEpisode {
+fun EpisodeResponse.toPodcastEpisode(
+    imageSizeForPodcastShowImage: MapperImageSize,
+    imageSizeForEpisodeImage: MapperImageSize = imageSizeForPodcastShowImage
+): PodcastEpisode {
     val formattedEpisodeReleaseDateAndDuration = getFormattedEpisodeReleaseDateAndDuration(
         releaseDateString = this.releaseDate,
         durationMillis = this.durationMillis
@@ -45,7 +49,7 @@ fun EpisodeResponse.toPodcastEpisode(imageSize: MapperImageSize): PodcastEpisode
         day = formattedEpisodeReleaseDateAndDuration.day,
         year = formattedEpisodeReleaseDateAndDuration.year,
     )
- 
+
     val durationInfo = PodcastEpisode.DurationInfo(
         hours = formattedEpisodeReleaseDateAndDuration.hours,
         minutes = formattedEpisodeReleaseDateAndDuration.minutes
@@ -54,6 +58,7 @@ fun EpisodeResponse.toPodcastEpisode(imageSize: MapperImageSize): PodcastEpisode
     return PodcastEpisode(
         id = this.id,
         title = this.title,
+        episodeImageUrl = episodeImages.getImageResponseForImageSize(imageSizeForEpisodeImage).url,
         description = this.description,
         htmlDescription = this.htmlDescription,
         previewUrl = previewUrl,
@@ -62,7 +67,7 @@ fun EpisodeResponse.toPodcastEpisode(imageSize: MapperImageSize): PodcastEpisode
         podcastShowInfo = PodcastEpisode.PodcastShowInfo(
             id = this.show.id,
             name = this.show.name,
-            imageUrl = this.show.images.getImageResponseForImageSize(imageSize).url
+            imageUrl = this.show.images.getImageResponseForImageSize(imageSizeForPodcastShowImage).url
         )
     )
 }

@@ -36,7 +36,8 @@ data class EpisodesWithPreviewUrlResponse(val items: List<EpisodeMetadataRespons
  * that.
  * */
 fun EpisodeMetadataResponseWithPreviewUrl.toPodcastEpisode(
-    imageSize: MapperImageSize,
+    imageSizeForPodcastShowImage: MapperImageSize,
+    imageSizeForEpisodeImage:MapperImageSize = imageSizeForPodcastShowImage,
     showResponse: ShowResponse
 ): PodcastEpisode {
     val formattedDateAndDuration = getFormattedEpisodeReleaseDateAndDuration(
@@ -55,12 +56,13 @@ fun EpisodeMetadataResponseWithPreviewUrl.toPodcastEpisode(
     val podcastInfo = PodcastEpisode.PodcastShowInfo(
         id = showResponse.id,
         name = showResponse.name,
-        imageUrl = showResponse.images.getImageResponseForImageSize(imageSize).url
+        imageUrl = showResponse.images.getImageResponseForImageSize(imageSizeForPodcastShowImage).url
     )
     return PodcastEpisode(
         id = id,
         title = title,
         description = description,
+        episodeImageUrl = images.getImageResponseForImageSize(imageSizeForEpisodeImage).url,
         htmlDescription = htmlDescription,
         previewUrl = previewUrl,
         releaseDateInfo = releaseDateInfo,
