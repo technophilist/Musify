@@ -145,12 +145,12 @@ private fun PodcastEpisodeScreenContent(
             onAddButtonClicked = onAddButtonClicked,
             onDownloadButtonClicked = onDownloadButtonClicked,
         )
-        AndroidExpandableTextView(
+        // Todo make text expandable once support for spanned
+        //  text is made available for compose.
+        HtmlTextView(
             text = htmlDescription,
-            expandButtonText = "See more",
             textAppearanceResId = materialR.style.TextAppearance_MaterialComponents_Subtitle2,
-            color = Color.White.copy(alpha = ContentAlpha.medium),
-            maxLines = 5
+            color = Color.White.copy(alpha = ContentAlpha.medium)
         )
         Row(
             modifier = Modifier

@@ -33,10 +33,10 @@ import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.PodcastShow
 import com.example.musify.domain.equalsIgnoringImageSize
-import com.example.musify.ui.components.AndroidExpandableTextView
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
 import com.example.musify.ui.components.DetailScreenTopAppBar
+import com.example.musify.ui.components.HtmlTextView
 import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
 import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
 import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
@@ -81,13 +81,13 @@ fun PodcastShowDetailScreen(
                 )
             }
             item {
-                AndroidExpandableTextView(
+                // Todo make text expandable once support for spanned
+                //  text is made available for compose.
+                HtmlTextView(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     text = spannedHtmlDescription,
-                    expandButtonText = "see more",
                     textAppearanceResId = com.google.android.material.R.style.TextAppearance_MaterialComponents_Subtitle2,
                     color = Color.White.copy(alpha = ContentAlpha.medium),
-                    maxLines = 2
                 )
             }
             item {
