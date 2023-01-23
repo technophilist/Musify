@@ -80,7 +80,7 @@ fun NowPlayingScreen(
                 fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.h6
             )
             Text(
                 text = streamable.streamInfo.subtitle,
