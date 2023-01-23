@@ -66,15 +66,11 @@ class PlaybackViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun playOrResumeStreamable(streamable: Streamable) {
-        if (playbackState.value is PlaybackState.Paused) {
-            musicPlayer.tryResume()
-            return
-        }
-        playStreamable(streamable)
+    fun resumeIfPaused() {
+        musicPlayer.tryResume()
     }
 
-    private fun playStreamable(streamable: Streamable) {
+    fun playStreamable(streamable: Streamable) {
         viewModelScope.launch {
             if (streamable.streamInfo.streamUrl == null) {
                 val streamableType = when (streamable) {

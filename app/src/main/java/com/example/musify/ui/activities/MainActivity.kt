@@ -85,7 +85,7 @@ private fun MusifyApp() {
         // to null when the playback is stopped
         MusifyNavigation(
             navController = navController,
-            playStreamable = playbackViewModel::playOrResumeStreamable,
+            playStreamable = playbackViewModel::playStreamable,
             isFullScreenNowPlayingOverlayScreenVisible = isNowPlayingScreenVisible,
             onPausePlayback = playbackViewModel::pauseCurrentlyPlayingTrack
         )
@@ -105,7 +105,7 @@ private fun MusifyApp() {
                             ),
                         streamable = miniPlayerStreamable!!,
                         onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack,
-                        onPlayButtonClicked = playbackViewModel::playOrResumeStreamable,
+                        onPlayButtonClicked = { playbackViewModel.resumeIfPaused() },
                         isPlaybackPaused = isPlaybackPaused,
                         timeElapsedStringFlow = playbackViewModel.flowOfProgressTextOfCurrentTrack.value,
                         playbackProgressFlow = playbackViewModel.flowOfProgressOfCurrentTrack.value,
