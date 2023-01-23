@@ -63,16 +63,18 @@ fun NowPlayingScreen(
                 onCloseButtonClicked = onCloseButtonClicked,
                 onTrailingButtonClick = {/*TODO*/ }
             )
+            Spacer(modifier = Modifier.size(64.dp))
             AsyncImageWithPlaceholder(
                 modifier = Modifier
-                .size(500.dp)
-                .aspectRatio(1f),
+                    .size(330.dp)
+                    .align(Alignment.CenterHorizontally),
                 model = streamable.streamInfo.imageUrl,
                 contentDescription = null,
                 onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
                 isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
                 onImageLoading = { isImageLoadingPlaceholderVisible = true }
             )
+            Spacer(modifier = Modifier.size(64.dp))
             Text(
                 text = streamable.streamInfo.title,
                 fontWeight = FontWeight.Bold,
