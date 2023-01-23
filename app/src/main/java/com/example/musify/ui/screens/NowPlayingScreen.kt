@@ -45,9 +45,7 @@ fun NowPlayingScreen(
     val dynamicThemeResource = remember {
         DynamicThemeResource.FromImageUrl(streamable.streamInfo.imageUrl)
     }
-    val dynamicBackgroundType = remember {
-        DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(0.6f))
-    }
+    val dynamicBackgroundType = remember { DynamicBackgroundType.Gradient() }
     DynamicallyThemedSurface(
         dynamicThemeResource = dynamicThemeResource,
         dynamicBackgroundType = dynamicBackgroundType
