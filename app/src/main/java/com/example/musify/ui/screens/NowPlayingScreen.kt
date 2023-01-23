@@ -45,9 +45,7 @@ fun NowPlayingScreen(
     val dynamicThemeResource = remember {
         DynamicThemeResource.FromImageUrl(streamable.streamInfo.imageUrl)
     }
-    val dynamicBackgroundType = remember {
-        DynamicBackgroundType.Filled(scrimColor = Color.Black.copy(0.6f))
-    }
+    val dynamicBackgroundType = remember { DynamicBackgroundType.Gradient() }
     DynamicallyThemedSurface(
         dynamicThemeResource = dynamicThemeResource,
         dynamicBackgroundType = dynamicBackgroundType
@@ -63,22 +61,24 @@ fun NowPlayingScreen(
                 onCloseButtonClicked = onCloseButtonClicked,
                 onTrailingButtonClick = {/*TODO*/ }
             )
+            Spacer(modifier = Modifier.size(64.dp))
             AsyncImageWithPlaceholder(
                 modifier = Modifier
-                .size(500.dp)
-                .aspectRatio(1f),
+                    .size(330.dp)
+                    .align(Alignment.CenterHorizontally),
                 model = streamable.streamInfo.imageUrl,
                 contentDescription = null,
                 onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
                 isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
                 onImageLoading = { isImageLoadingPlaceholderVisible = true }
             )
+            Spacer(modifier = Modifier.size(64.dp))
             Text(
                 text = streamable.streamInfo.title,
                 fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.h6
             )
             Text(
                 text = streamable.streamInfo.subtitle,
