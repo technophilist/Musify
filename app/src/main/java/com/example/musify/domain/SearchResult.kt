@@ -50,6 +50,7 @@ sealed class SearchResult {
         val id: String,
         val name: String,
         val largeImageUrlString: String,
+        val smallImageUrlString: String? = null,
         val artistsString: String,
         val trackUrlString: String?
     ) : SearchResult(), Streamable {
