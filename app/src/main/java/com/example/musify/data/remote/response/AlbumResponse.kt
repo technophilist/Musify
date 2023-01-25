@@ -91,7 +91,7 @@ fun AlbumResponse.TrackResponseWithoutAlbumMetadataResponse.toTrackSearchResult(
 ) = SearchResult.TrackSearchResult(
     id = id,
     name = name,
-    imageUrlString = albumArtImageUrlString,
+    largeImageUrlString = albumArtImageUrlString,
     artistsString = albumArtistsString,
     trackUrlString = previewUrl
 )
