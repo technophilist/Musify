@@ -34,7 +34,7 @@ class MusifyTracksRepository @Inject constructor(
                 market = countryCode,
                 token = it,
             ).value.map { trackDTOWithAlbumMetadata ->
-                trackDTOWithAlbumMetadata.toTrackSearchResult(imageSize)
+                trackDTOWithAlbumMetadata.toTrackSearchResult()
             }
         }
 
@@ -49,7 +49,7 @@ class MusifyTracksRepository @Inject constructor(
                 market = countryCode,
                 token = it
             ).value.map { trackDTOWithAlbumMetadata ->
-                trackDTOWithAlbumMetadata.toTrackSearchResult(imageSize)
+                trackDTOWithAlbumMetadata.toTrackSearchResult()
             }
         }
 
