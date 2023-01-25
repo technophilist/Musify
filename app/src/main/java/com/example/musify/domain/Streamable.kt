@@ -17,7 +17,21 @@ sealed interface Streamable {
  */
 data class StreamInfo(
     val streamUrl: String?,
+    @Deprecated("Use imageUrls property")
     val imageUrl: String,
     val title: String,
     val subtitle: String,
-)
+    val imageUrls: ImageUrls? = null
+) {
+    /**
+     * A data class that contains image urls for an instance of [StreamInfo]
+     * class.
+     */
+    data class ImageUrls(val smallImage: String, val largeImage: String)
+}
+
+
+
+
+
+
