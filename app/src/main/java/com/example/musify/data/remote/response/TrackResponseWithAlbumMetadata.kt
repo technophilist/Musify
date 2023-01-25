@@ -25,11 +25,25 @@ data class TrackResponseWithAlbumMetadata(
  * parameter describes the size of image to be used for the
  * [TrackSearchResult] instance.
  */
+@Deprecated(message = "Use other overload")
 fun TrackResponseWithAlbumMetadata.toTrackSearchResult(imageSize: MapperImageSize) =
     TrackSearchResult(
         id = id,
         name = name,
         largeImageUrlString = albumMetadata.images.getImageResponseForImageSize(imageSize).url,
+        artistsString = albumMetadata.artists.joinToString(",") { it.name },
+        trackUrlString = previewUrl
+    )
+
+/**
+ * todo add doc
+ */
+fun TrackResponseWithAlbumMetadata.toTrackSearchResult() =
+    TrackSearchResult(
+        id = id,
+        name = name,
+        largeImageUrlString = albumMetadata.images[0].url,
+        smallImageUrlString = albumMetadata.images[1].url,
         artistsString = albumMetadata.artists.joinToString(",") { it.name },
         trackUrlString = previewUrl
     )
