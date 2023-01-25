@@ -95,3 +95,19 @@ fun AlbumResponse.TrackResponseWithoutAlbumMetadataResponse.toTrackSearchResult(
     artistsString = albumArtistsString,
     trackUrlString = previewUrl
 )
+
+/**
+ * todo - add doc
+ */
+fun AlbumResponse.TrackResponseWithoutAlbumMetadataResponse.toTrackSearchResult(
+    largeAlbumArtImageUrlString: String,
+    smallAlbumArtImageUrlString: String,
+    albumArtistsString: String
+) = SearchResult.TrackSearchResult(
+    id = id,
+    name = name,
+    largeImageUrlString = largeAlbumArtImageUrlString,
+    smallImageUrlString = smallAlbumArtImageUrlString,
+    artistsString = albumArtistsString,
+    trackUrlString = previewUrl
+)
