@@ -73,19 +73,6 @@ fun AlbumResponse.toAlbumSearchResult(imageSize: MapperImageSize) = SearchResult
  * A utility function used to get a list of [SearchResult.TrackSearchResult]s
  * associated with a [AlbumResponse].
  */
-@Deprecated("Use other overload.")
-fun AlbumResponse.getTracks(imageSize: MapperImageSize): List<SearchResult.TrackSearchResult> =
-    tracks.value.map { trackResponse ->
-        trackResponse.toTrackSearchResult(
-            albumArtImageUrlString = images.getImageResponseForImageSize(imageSize).url,
-            albumArtistsString = artists.joinToString(",") { it.name }
-        )
-    }
-
-/**
- * A utility function used to get a list of [SearchResult.TrackSearchResult]s
- * associated with a [AlbumResponse].
- */
 fun AlbumResponse.getTracks(): List<SearchResult.TrackSearchResult> =
     tracks.value.map { trackResponse ->
         trackResponse.toTrackSearchResult(
