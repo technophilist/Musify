@@ -1,7 +1,5 @@
 package com.example.musify.data.remote.response
 
-import com.example.musify.data.utils.MapperImageSize
-import com.example.musify.data.utils.getImageResponseForImageSize
 import com.example.musify.domain.SearchResult.TrackSearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -24,19 +22,7 @@ data class TrackResponseWithAlbumMetadata(
  * an instance of [TrackSearchResult]. The [imageSize]
  * parameter describes the size of image to be used for the
  * [TrackSearchResult] instance.
- */
-@Deprecated(message = "Use other overload")
-fun TrackResponseWithAlbumMetadata.toTrackSearchResult(imageSize: MapperImageSize) =
-    TrackSearchResult(
-        id = id,
-        name = name,
-        largeImageUrlString = albumMetadata.images.getImageResponseForImageSize(imageSize).url,
-        artistsString = albumMetadata.artists.joinToString(",") { it.name },
-        trackUrlString = previewUrl
-    )
-
-/**
- * todo add doc
+ * // todo update docs
  */
 fun TrackResponseWithAlbumMetadata.toTrackSearchResult() =
     TrackSearchResult(
