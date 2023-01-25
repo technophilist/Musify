@@ -59,7 +59,7 @@ class MusifyTracksRepository @Inject constructor(
         imageSize: MapperImageSize
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> =
         tokenRepository.runCatchingWithToken {
-            spotifyService.getAlbumWithId(albumId, countryCode, it).getTracks(imageSize)
+            spotifyService.getAlbumWithId(albumId, countryCode, it).getTracks()
         }
 
     override fun getPaginatedStreamForPlaylistTracks(
