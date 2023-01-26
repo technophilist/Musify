@@ -47,8 +47,7 @@ class MusifyPodcastsRepository @Inject constructor(
 
     override fun getPodcastEpisodesStreamForPodcastShow(
         showId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
+        countryCode: String
     ): Flow<PagingData<PodcastEpisode>> = Pager(pagingConfig) {
         PodcastEpisodesForPodcastShowPagingSource(
             showId = showId,

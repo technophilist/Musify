@@ -26,7 +26,6 @@ interface PodcastsRepository {
     
     fun getPodcastEpisodesStreamForPodcastShow(
         showId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
+        countryCode: String
     ): Flow<PagingData<PodcastEpisode>>
 }
