@@ -21,7 +21,7 @@ data class StreamInfo(
     val imageUrl: String,
     val title: String,
     val subtitle: String,
-    val imageUrls: ImageUrls? = null
+    val imageUrls: ImageUrls
 ) {
     /**
      * A data class that contains image urls for an instance of [StreamInfo]
