@@ -53,7 +53,6 @@ class MusifyPodcastsRepository @Inject constructor(
         PodcastEpisodesForPodcastShowPagingSource(
             showId = showId,
             countryCode = countryCode,
-            imageSize = imageSize,
             tokenRepository = tokenRepository,
             spotifyService = spotifyService
         )

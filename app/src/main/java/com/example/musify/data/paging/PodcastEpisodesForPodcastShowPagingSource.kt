@@ -11,7 +11,6 @@ import java.io.IOException
 class PodcastEpisodesForPodcastShowPagingSource(
     showId: String,
     countryCode: String,
-    imageSize: MapperImageSize,
     tokenRepository: TokenRepository,
     spotifyService: SpotifyService
 ) : SpotifyPagingSource<PodcastEpisode>(
