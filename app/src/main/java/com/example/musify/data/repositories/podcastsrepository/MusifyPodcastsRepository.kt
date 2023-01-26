@@ -25,8 +25,7 @@ class MusifyPodcastsRepository @Inject constructor(
 
     override suspend fun fetchPodcastEpisode(
         episodeId: String,
-        countryCode: String,
-        imageSize: MapperImageSize,
+        countryCode: String
     ): FetchedResource<PodcastEpisode, MusifyErrorType> = tokenRepository.runCatchingWithToken {
         spotifyService.getEpisodeWithId(
             token = it,
@@ -36,7 +35,9 @@ class MusifyPodcastsRepository @Inject constructor(
     }
 
     override suspend fun fetchPodcastShow(
-        showId: String, countryCode: String, imageSize: MapperImageSize
+        showId: String,
+        countryCode: String,
+        imageSize: MapperImageSize
     ): FetchedResource<PodcastShow, MusifyErrorType> = tokenRepository.runCatchingWithToken {
         spotifyService.getShowWithId(
             token = it,
