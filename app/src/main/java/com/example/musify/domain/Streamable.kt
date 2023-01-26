@@ -17,7 +17,19 @@ sealed interface Streamable {
  */
 data class StreamInfo(
     val streamUrl: String?,
-    val imageUrl: String,
     val title: String,
     val subtitle: String,
-)
+    val imageUrls: ImageUrls
+) {
+    /**
+     * A data class that contains image urls for an instance of [StreamInfo]
+     * class.
+     */
+    data class ImageUrls(val smallImage: String, val largeImage: String)
+}
+
+
+
+
+
+

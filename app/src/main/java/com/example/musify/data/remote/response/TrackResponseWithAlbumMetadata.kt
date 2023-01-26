@@ -21,15 +21,14 @@ data class TrackResponseWithAlbumMetadata(
 
 /**
  * A mapper function used to map an instance of [TrackResponseWithAlbumMetadata] to
- * an instance of [TrackSearchResult]. The [imageSize]
- * parameter describes the size of image to be used for the
- * [TrackSearchResult] instance.
+ * an instance of [TrackSearchResult].
  */
-fun TrackResponseWithAlbumMetadata.toTrackSearchResult(imageSize: MapperImageSize) =
+fun TrackResponseWithAlbumMetadata.toTrackSearchResult() =
     TrackSearchResult(
         id = id,
         name = name,
-        imageUrlString = albumMetadata.images.getImageResponseForImageSize(imageSize).url,
+        largeImageUrlString = albumMetadata.images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
+        smallImageUrlString = albumMetadata.images.getImageResponseForImageSize(MapperImageSize.MEDIUM).url,
         artistsString = albumMetadata.artists.joinToString(",") { it.name },
         trackUrlString = previewUrl
     )

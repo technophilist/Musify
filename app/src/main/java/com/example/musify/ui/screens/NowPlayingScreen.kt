@@ -43,7 +43,11 @@ fun NowPlayingScreen(
 ) {
     var isImageLoadingPlaceholderVisible by remember { mutableStateOf(true) }
     val dynamicThemeResource = remember {
-        DynamicThemeResource.FromImageUrl(streamable.streamInfo.imageUrl)
+        // the background theme could also be generated using a smaller sized
+        // image in order to improve efficiency, but, there is  a change in the
+        // tone of the color extracted from a smaller sized version of the same
+        // image.
+        DynamicThemeResource.FromImageUrl(streamable.streamInfo.imageUrls.largeImage)
     }
     val dynamicBackgroundType = remember { DynamicBackgroundType.Gradient() }
     DynamicallyThemedSurface(
@@ -66,7 +70,7 @@ fun NowPlayingScreen(
                 modifier = Modifier
                     .size(330.dp)
                     .align(Alignment.CenterHorizontally),
-                model = streamable.streamInfo.imageUrl,
+                model = streamable.streamInfo.imageUrls.largeImage,
                 contentDescription = null,
                 onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
                 isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,

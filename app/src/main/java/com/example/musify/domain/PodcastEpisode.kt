@@ -9,7 +9,8 @@ import com.example.musify.utils.generateMusifyDateAndDurationString
 data class PodcastEpisode(
     val id: String,
     val title: String,
-    val episodeImageUrl: String,
+    val largeEpisodeImageUrl: String,
+    val smallEpisodeImageUrl: String,
     val description: String,
     val htmlDescription: String,
     val previewUrl: String?,
@@ -19,7 +20,10 @@ data class PodcastEpisode(
 ) : Streamable {
     override val streamInfo = StreamInfo(
         streamUrl = previewUrl,
-        imageUrl = podcastShowInfo.imageUrl,
+        imageUrls = StreamInfo.ImageUrls(
+            smallImage = smallEpisodeImageUrl,
+            largeImage = largeEpisodeImageUrl
+        ),
         title = title,
         subtitle = podcastShowInfo.name
     )

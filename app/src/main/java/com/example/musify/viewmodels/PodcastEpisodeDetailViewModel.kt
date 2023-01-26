@@ -10,7 +10,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.musify.data.repositories.podcastsrepository.PodcastsRepository
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.equalsIgnoringImageSize
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
@@ -82,8 +81,7 @@ class PodcastEpisodeDetailViewModel @Inject constructor(
     private suspend fun fetchEpisode(): PodcastEpisode? {
         val fetchedResource = podcastsRepository.fetchPodcastEpisode(
             episodeId = savedStateHandle[MusifyNavigationDestinations.PodcastEpisodeDetailScreen.NAV_ARG_PODCAST_EPISODE_ID]!!,
-            countryCode = getCountryCode(),
-            imageSize = MapperImageSize.LARGE // image would be used for both the mini player and the full screen player
+            countryCode = getCountryCode()
         )
         return if (fetchedResource is FetchedResource.Success) fetchedResource.data else null
     }

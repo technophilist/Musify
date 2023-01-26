@@ -11,7 +11,6 @@ import java.io.IOException
 class PodcastEpisodesForPodcastShowPagingSource(
     showId: String,
     countryCode: String,
-    imageSize: MapperImageSize,
     tokenRepository: TokenRepository,
     spotifyService: SpotifyService
 ) : SpotifyPagingSource<PodcastEpisode>(
@@ -30,12 +29,7 @@ class PodcastEpisodesForPodcastShowPagingSource(
                 offset = offset
             )
                 .items
-                .map {
-                    it.toPodcastEpisode(
-                        imageSizeForPodcastShowImage = imageSize,
-                        showResponse = showResponse
-                    )
-                }
+                .map { it.toPodcastEpisode(showResponse) }
             SpotifyLoadResult.PageData(episodes)
         } catch (httpException: HttpException) {
             SpotifyLoadResult.Error(httpException)

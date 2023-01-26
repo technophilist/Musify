@@ -29,17 +29,12 @@ data class EpisodeResponse(
 
 /**
  * A mapper function used to map an instance of [EpisodeResponse] to
- * an instance of [PodcastEpisode]. The [imageSizeForPodcastShowImage] parameter determines the size of image
- * to be used for the [PodcastEpisode] instance.
+ * an instance of [PodcastEpisode].
  * Note: The [PodcastEpisode.DurationInfo.minutes] is guaranteed to have a minimum value of 1.
  * This means that any episode with a duration lower than 1 minute will be coerced to have
  * a value of 1 minute.
- * // TODO update docs about the new imageSizeParameters
  */
-fun EpisodeResponse.toPodcastEpisode(
-    imageSizeForPodcastShowImage: MapperImageSize,
-    imageSizeForEpisodeImage: MapperImageSize = imageSizeForPodcastShowImage
-): PodcastEpisode {
+fun EpisodeResponse.toPodcastEpisode(): PodcastEpisode {
     val formattedEpisodeReleaseDateAndDuration = getFormattedEpisodeReleaseDateAndDuration(
         releaseDateString = this.releaseDate,
         durationMillis = this.durationMillis
@@ -58,7 +53,8 @@ fun EpisodeResponse.toPodcastEpisode(
     return PodcastEpisode(
         id = this.id,
         title = this.title,
-        episodeImageUrl = episodeImages.getImageResponseForImageSize(imageSizeForEpisodeImage).url,
+        largeEpisodeImageUrl = episodeImages.getImageResponseForImageSize(MapperImageSize.LARGE).url,
+        smallEpisodeImageUrl = episodeImages.getImageResponseForImageSize(MapperImageSize.SMALL).url,
         description = this.description,
         htmlDescription = this.htmlDescription,
         previewUrl = previewUrl,
@@ -67,7 +63,7 @@ fun EpisodeResponse.toPodcastEpisode(
         podcastShowInfo = PodcastEpisode.PodcastShowInfo(
             id = this.show.id,
             name = this.show.name,
-            imageUrl = this.show.images.getImageResponseForImageSize(imageSizeForPodcastShowImage).url
+            imageUrl = this.show.images.getImageResponseForImageSize(MapperImageSize.LARGE).url
         )
     )
 }

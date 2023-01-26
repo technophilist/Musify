@@ -82,7 +82,7 @@ class PlaybackViewModel @Inject constructor(
             }
 
             val downloadAlbumArtResult = downloadDrawableFromUrlUseCase.invoke(
-                urlString = streamable.streamInfo.imageUrl,
+                urlString = streamable.streamInfo.imageUrls.largeImage,
                 context = getApplication()
             )
             if (downloadAlbumArtResult.isSuccess) {

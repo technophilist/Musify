@@ -36,8 +36,7 @@ class PodcastShowDetailViewModel @Inject constructor(
         savedStateHandle.get<String>(MusifyNavigationDestinations.PodcastShowDetailScreen.NAV_ARG_PODCAST_SHOW_ID)!!
     val episodesForShowStream = podcastsRepository.getPodcastEpisodesStreamForPodcastShow(
         showId = showId,
-        countryCode = getCountryCode(),
-        imageSize = MapperImageSize.MEDIUM
+        countryCode = getCountryCode()
     )
 
     var currentlyPlayingEpisode by mutableStateOf<PodcastEpisode?>(null)
