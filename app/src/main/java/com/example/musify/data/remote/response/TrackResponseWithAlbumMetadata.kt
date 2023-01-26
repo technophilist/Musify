@@ -21,10 +21,7 @@ data class TrackResponseWithAlbumMetadata(
 
 /**
  * A mapper function used to map an instance of [TrackResponseWithAlbumMetadata] to
- * an instance of [TrackSearchResult]. The [imageSize]
- * parameter describes the size of image to be used for the
- * [TrackSearchResult] instance.
- * // todo update docs
+ * an instance of [TrackSearchResult].
  */
 fun TrackResponseWithAlbumMetadata.toTrackSearchResult() =
     TrackSearchResult(
