@@ -10,6 +10,7 @@ data class PodcastEpisode(
     val id: String,
     val title: String,
     val episodeImageUrl: String,
+    val smallEpisodeImageUrl: String? = null,
     val description: String,
     val htmlDescription: String,
     val previewUrl: String?,
