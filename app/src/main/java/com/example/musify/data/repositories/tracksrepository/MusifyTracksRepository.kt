@@ -70,7 +70,6 @@ class MusifyTracksRepository @Inject constructor(
         PlaylistTracksPagingSource(
             playlistId = playlistId,
             countryCode = countryCode,
-            imageSize = imageSize,
             tokenRepository = tokenRepository,
             spotifyService = spotifyService
         )
