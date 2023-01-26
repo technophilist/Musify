@@ -32,49 +32,6 @@ data class EpisodesWithPreviewUrlResponse(val items: List<EpisodeMetadataRespons
 /**
  * A mapper function used to map an instance of [EpisodeMetadataResponseWithPreviewUrl]
  * to an instance of [PodcastEpisode].
- * TODO : each episode has a unique image. But [PodcastEpisode] doeesn't accomodate for
- * that.
- * */
-@Deprecated("Use other overload.")
-fun EpisodeMetadataResponseWithPreviewUrl.toPodcastEpisode(
-    imageSizeForPodcastShowImage: MapperImageSize,
-    imageSizeForEpisodeImage: MapperImageSize = imageSizeForPodcastShowImage,
-    showResponse: ShowResponse
-): PodcastEpisode {
-    val formattedDateAndDuration = getFormattedEpisodeReleaseDateAndDuration(
-        releaseDateString = releaseDate,
-        durationMillis = durationMillis
-    )
-    val releaseDateInfo = PodcastEpisode.ReleaseDateInfo(
-        month = formattedDateAndDuration.month,
-        day = formattedDateAndDuration.day,
-        year = formattedDateAndDuration.year
-    )
-    val durationInfo = PodcastEpisode.DurationInfo(
-        hours = formattedDateAndDuration.hours,
-        minutes = formattedDateAndDuration.minutes
-    )
-    val podcastInfo = PodcastEpisode.PodcastShowInfo(
-        id = showResponse.id,
-        name = showResponse.name,
-        imageUrl = showResponse.images.getImageResponseForImageSize(imageSizeForPodcastShowImage).url
-    )
-    return PodcastEpisode(
-        id = id,
-        title = title,
-        description = description,
-        episodeImageUrl = images.getImageResponseForImageSize(imageSizeForEpisodeImage).url,
-        htmlDescription = htmlDescription,
-        previewUrl = previewUrl,
-        releaseDateInfo = releaseDateInfo,
-        durationInfo = durationInfo,
-        podcastShowInfo = podcastInfo
-    )
-}
-
-/**
- * A mapper function used to map an instance of [EpisodeMetadataResponseWithPreviewUrl]
- * to an instance of [PodcastEpisode].
  * */
 fun EpisodeMetadataResponseWithPreviewUrl.toPodcastEpisode(showResponse: ShowResponse): PodcastEpisode {
     val formattedDateAndDuration = getFormattedEpisodeReleaseDateAndDuration(
