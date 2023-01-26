@@ -64,8 +64,7 @@ class MusifyTracksRepository @Inject constructor(
 
     override fun getPaginatedStreamForPlaylistTracks(
         playlistId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
+        countryCode: String
     ): Flow<PagingData<SearchResult.TrackSearchResult>> = Pager(pagingConfig) {
         PlaylistTracksPagingSource(
             playlistId = playlistId,

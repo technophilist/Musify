@@ -38,6 +38,5 @@ interface TracksRepository {
     fun getPaginatedStreamForPlaylistTracks(
         playlistId: String,
         countryCode: String,
-        imageSize: MapperImageSize
     ): Flow<PagingData<SearchResult.TrackSearchResult>>
 }
