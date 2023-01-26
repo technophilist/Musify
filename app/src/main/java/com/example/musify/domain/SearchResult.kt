@@ -50,13 +50,17 @@ sealed class SearchResult {
         val id: String,
         val name: String,
         val largeImageUrlString: String,
-        val smallImageUrlString: String? = null,
+        val smallImageUrlString: String,
         val artistsString: String,
         val trackUrlString: String?
     ) : SearchResult(), Streamable {
         override val streamInfo = StreamInfo(
             streamUrl = trackUrlString,
             imageUrl = largeImageUrlString,
+            imageUrls = StreamInfo.ImageUrls(
+                smallImage = smallImageUrlString,
+                largeImage = largeImageUrlString
+            ),
             title = name,
             subtitle = artistsString
         )
