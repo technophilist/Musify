@@ -9,7 +9,7 @@ import com.example.musify.utils.generateMusifyDateAndDurationString
 data class PodcastEpisode(
     val id: String,
     val title: String,
-    val episodeImageUrl: String,
+    val largeEpisodeImageUrl: String,
     val smallEpisodeImageUrl: String,
     val description: String,
     val htmlDescription: String,

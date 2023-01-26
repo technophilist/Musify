@@ -56,7 +56,7 @@ fun EpisodeMetadataResponseWithPreviewUrl.toPodcastEpisode(showResponse: ShowRes
         id = id,
         title = title,
         description = description,
-        episodeImageUrl = images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
+        largeEpisodeImageUrl = images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
         smallEpisodeImageUrl = images.getImageResponseForImageSize(MapperImageSize.SMALL).url,
         htmlDescription = htmlDescription,
         previewUrl = previewUrl,

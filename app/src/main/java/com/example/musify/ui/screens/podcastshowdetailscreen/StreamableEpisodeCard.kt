@@ -43,7 +43,7 @@ fun StreamableEpisodeCard(
         onPlayButtonClicked = onPlayButtonClicked,
         onPauseButtonClicked = onPauseButtonClicked,
         onClicked = onClicked,
-        thumbnailImageUrlString = episode.episodeImageUrl,
+        thumbnailImageUrlString = episode.largeEpisodeImageUrl,
         title = episode.title,
         description = episode.description,
         dateAndDurationString = episode.getFormattedDateAndDurationString(context),
