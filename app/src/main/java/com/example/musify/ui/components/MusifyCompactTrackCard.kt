@@ -75,7 +75,7 @@ fun MusifyCompactTrackCard(
             backgroundColor = backgroundColor,
             shape = shape,
             cardType = ListItemCardType.TRACK,
-            thumbnailImageUrlString = if (isAlbumArtVisible) track.largeImageUrlString else null,
+            thumbnailImageUrlString = if (isAlbumArtVisible) track.smallImageUrlString else null,
             title = track.name,
             subtitle = track.artistsString,
             onClick = { onClick(track) },
