@@ -10,7 +10,6 @@ import com.example.musify.data.remote.response.toTrackSearchResult
 import com.example.musify.data.repositories.tokenrepository.TokenRepository
 import com.example.musify.data.repositories.tokenrepository.runCatchingWithToken
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.Genre
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.SearchResult
@@ -22,10 +21,9 @@ class MusifyTracksRepository @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val spotifyService: SpotifyService,
     private val pagingConfig: PagingConfig
-) : TracksRepository {
-    override suspend fun fetchTopTenTracksForArtistWithId(
+):TracksRepository  {
+     override suspend fun fetchTopTenTracksForArtistWithId(
         artistId: String,
-        imageSize: MapperImageSize,
         countryCode: String
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> =
         tokenRepository.runCatchingWithToken {
@@ -38,9 +36,8 @@ class MusifyTracksRepository @Inject constructor(
             }
         }
 
-    override suspend fun fetchTracksForGenre(
+     override suspend fun fetchTracksForGenre(
         genre: Genre,
-        imageSize: MapperImageSize,
         countryCode: String
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> =
         tokenRepository.runCatchingWithToken {
@@ -53,16 +50,15 @@ class MusifyTracksRepository @Inject constructor(
             }
         }
 
-    override suspend fun fetchTracksForAlbumWithId(
+     override suspend fun fetchTracksForAlbumWithId(
         albumId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
+        countryCode: String
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> =
         tokenRepository.runCatchingWithToken {
             spotifyService.getAlbumWithId(albumId, countryCode, it).getTracks()
         }
 
-    override fun getPaginatedStreamForPlaylistTracks(
+     override fun getPaginatedStreamForPlaylistTracks(
         playlistId: String,
         countryCode: String
     ): Flow<PagingData<SearchResult.TrackSearchResult>> = Pager(pagingConfig) {
