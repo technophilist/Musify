@@ -20,7 +20,6 @@ data class PodcastEpisode(
 ) : Streamable {
     override val streamInfo = StreamInfo(
         streamUrl = previewUrl,
-        imageUrl = podcastShowInfo.imageUrl,
         imageUrls = StreamInfo.ImageUrls(
             smallImage = smallEpisodeImageUrl,
             largeImage = largeEpisodeImageUrl

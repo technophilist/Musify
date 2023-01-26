@@ -56,7 +56,6 @@ sealed class SearchResult {
     ) : SearchResult(), Streamable {
         override val streamInfo = StreamInfo(
             streamUrl = trackUrlString,
-            imageUrl = largeImageUrlString,
             imageUrls = StreamInfo.ImageUrls(
                 smallImage = smallImageUrlString,
                 largeImage = largeImageUrlString
