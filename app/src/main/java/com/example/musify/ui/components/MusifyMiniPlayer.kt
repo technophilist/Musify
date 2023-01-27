@@ -62,11 +62,7 @@ fun MusifyMiniPlayer(
 ) {
     var isThumbnailImageLoading by remember { mutableStateOf(false) }
     val dynamicThemeResource = remember {
-        // the background theme could also be generated using a smaller sized
-        // image in order to improve efficiency, but, there is  a change in the
-        // tone of the color extracted from a smaller sized version of the same
-        // image.
-        DynamicThemeResource.FromImageUrl(streamable.streamInfo.imageUrls.largeImage)
+        DynamicThemeResource.FromImageUrl(streamable.streamInfo.imageUrl)
     }
     DynamicallyThemedSurface(
         modifier = Modifier
@@ -88,7 +84,7 @@ fun MusifyMiniPlayer(
                     .padding(8.dp)
                     .clip(RoundedCornerShape(4.dp))
                     .aspectRatio(1f),
-                model = streamable.streamInfo.imageUrls.smallImage,
+                model = streamable.streamInfo.imageUrl,
                 contentDescription = null,
                 onImageLoadingFinished = { isThumbnailImageLoading = false },
                 isLoadingPlaceholderVisible = isThumbnailImageLoading,

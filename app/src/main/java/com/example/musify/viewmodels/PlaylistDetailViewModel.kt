@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.example.musify.data.repositories.tracksrepository.TracksRepository
+import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.usecases.getCurrentlyPlayingTrackUseCase.GetCurrentlyPlayingTrackUseCase
 import com.example.musify.usecases.getPlaybackLoadingStatusUseCase.GetPlaybackLoadingStatusUseCase
@@ -26,6 +27,7 @@ class PlaylistDetailViewModel @Inject constructor(
     val currentlyPlayingTrackStream = getCurrentlyPlayingTrackUseCase.currentlyPlayingTrackStream
     val tracks = tracksRepository.getPaginatedStreamForPlaylistTracks(
         playlistId = playlistId,
-        countryCode = getCountryCode()
+        countryCode = getCountryCode(),
+        imageSize = MapperImageSize.MEDIUM
     ).cachedIn(viewModelScope)
 }

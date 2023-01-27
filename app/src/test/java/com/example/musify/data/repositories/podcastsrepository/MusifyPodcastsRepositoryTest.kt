@@ -44,7 +44,8 @@ class MusifyPodcastsRepositoryTest {
         val validEpisodeId = "5pLYyCItRvIc2SEbuJ3eO8"
         val fetchedResource = podcastsRepository.fetchPodcastEpisode(
             episodeId = validEpisodeId,
-            countryCode = "IN"
+            countryCode = "IN",
+            imageSize = MapperImageSize.SMALL
         )
         assert(fetchedResource is FetchedResource.Success)
     }

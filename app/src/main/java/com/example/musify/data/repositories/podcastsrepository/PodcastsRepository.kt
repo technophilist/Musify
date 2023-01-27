@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.Flow
 interface PodcastsRepository {
     suspend fun fetchPodcastEpisode(
         episodeId: String,
-        countryCode: String
+        countryCode: String,
+        imageSize: MapperImageSize,
     ): FetchedResource<PodcastEpisode, MusifyErrorType>
 
     suspend fun fetchPodcastShow(
@@ -22,9 +23,10 @@ interface PodcastsRepository {
         countryCode: String,
         imageSize: MapperImageSize
     ): FetchedResource<PodcastShow, MusifyErrorType>
-
+    
     fun getPodcastEpisodesStreamForPodcastShow(
         showId: String,
-        countryCode: String
+        countryCode: String,
+        imageSize: MapperImageSize
     ): Flow<PagingData<PodcastEpisode>>
 }

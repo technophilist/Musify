@@ -34,7 +34,7 @@ data class SearchResultsResponse(
  * instances excluding [SearchResults.playlists].
  */
 fun SearchResultsResponse.toSearchResults(imageSize: MapperImageSize) = SearchResults(
-    tracks = tracks?.value?.map { it.toTrackSearchResult() } ?: emptyList(),
+    tracks = tracks?.value?.map { it.toTrackSearchResult(imageSize) } ?: emptyList(),
     albums = albums?.value?.map { it.toAlbumSearchResult(imageSize) } ?: emptyList(),
     artists = artists?.value?.map { it.toArtistSearchResult(imageSize) } ?: emptyList(),
     playlists = playlists?.value?.map { it.toPlaylistSearchResult() } ?: emptyList(),

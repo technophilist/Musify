@@ -55,9 +55,7 @@ class ArtistDetailViewModel @Inject constructor(
     val currentlyPlayingTrackStream = getCurrentlyPlayingTrackUseCase.currentlyPlayingTrackStream
 
     val albumsOfArtistFlow = albumsRepository.getPaginatedStreamForAlbumsOfArtist(
-        artistId = artistId,
-        countryCode = getCountryCode(),
-        imageSize = defaultMapperImageSize
+        artistId = artistId, countryCode = getCountryCode(), imageSize = defaultMapperImageSize
     ).cachedIn(viewModelScope)
 
     init {
@@ -78,6 +76,7 @@ class ArtistDetailViewModel @Inject constructor(
         _uiState.value = ArtistDetailScreenUiState.Loading
         val fetchResult = tracksRepository.fetchTopTenTracksForArtistWithId(
             artistId = artistId,
+            imageSize = defaultMapperImageSize,
             countryCode = getCountryCode()
         )
         when (fetchResult) {

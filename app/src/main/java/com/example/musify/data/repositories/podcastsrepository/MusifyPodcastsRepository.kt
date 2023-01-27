@@ -25,34 +25,31 @@ class MusifyPodcastsRepository @Inject constructor(
 
     override suspend fun fetchPodcastEpisode(
         episodeId: String,
-        countryCode: String
+        countryCode: String,
+        imageSize: MapperImageSize,
     ): FetchedResource<PodcastEpisode, MusifyErrorType> = tokenRepository.runCatchingWithToken {
         spotifyService.getEpisodeWithId(
-            token = it,
-            id = episodeId,
-            market = countryCode
-        ).toPodcastEpisode()
+            token = it, id = episodeId, market = countryCode
+        ).toPodcastEpisode(imageSize)
     }
 
     override suspend fun fetchPodcastShow(
-        showId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
+        showId: String, countryCode: String, imageSize: MapperImageSize
     ): FetchedResource<PodcastShow, MusifyErrorType> = tokenRepository.runCatchingWithToken {
         spotifyService.getShowWithId(
-            token = it,
-            id = showId,
-            market = countryCode
+            token = it, id = showId, market = countryCode
         ).toPodcastShow(imageSize)
     }
 
     override fun getPodcastEpisodesStreamForPodcastShow(
         showId: String,
-        countryCode: String
+        countryCode: String,
+        imageSize: MapperImageSize
     ): Flow<PagingData<PodcastEpisode>> = Pager(pagingConfig) {
         PodcastEpisodesForPodcastShowPagingSource(
             showId = showId,
             countryCode = countryCode,
+            imageSize = imageSize,
             tokenRepository = tokenRepository,
             spotifyService = spotifyService
         )

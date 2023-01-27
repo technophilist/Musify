@@ -32,8 +32,14 @@ data class EpisodesWithPreviewUrlResponse(val items: List<EpisodeMetadataRespons
 /**
  * A mapper function used to map an instance of [EpisodeMetadataResponseWithPreviewUrl]
  * to an instance of [PodcastEpisode].
+ * TODO : each episode has a unique image. But [PodcastEpisode] doeesn't accomodate for
+ * that.
  * */
-fun EpisodeMetadataResponseWithPreviewUrl.toPodcastEpisode(showResponse: ShowResponse): PodcastEpisode {
+fun EpisodeMetadataResponseWithPreviewUrl.toPodcastEpisode(
+    imageSizeForPodcastShowImage: MapperImageSize,
+    imageSizeForEpisodeImage:MapperImageSize = imageSizeForPodcastShowImage,
+    showResponse: ShowResponse
+): PodcastEpisode {
     val formattedDateAndDuration = getFormattedEpisodeReleaseDateAndDuration(
         releaseDateString = releaseDate,
         durationMillis = durationMillis
@@ -50,14 +56,13 @@ fun EpisodeMetadataResponseWithPreviewUrl.toPodcastEpisode(showResponse: ShowRes
     val podcastInfo = PodcastEpisode.PodcastShowInfo(
         id = showResponse.id,
         name = showResponse.name,
-        imageUrl = showResponse.images.getImageResponseForImageSize(MapperImageSize.LARGE).url
+        imageUrl = showResponse.images.getImageResponseForImageSize(imageSizeForPodcastShowImage).url
     )
     return PodcastEpisode(
         id = id,
         title = title,
         description = description,
-        largeEpisodeImageUrl = images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
-        smallEpisodeImageUrl = images.getImageResponseForImageSize(MapperImageSize.SMALL).url,
+        episodeImageUrl = images.getImageResponseForImageSize(imageSizeForEpisodeImage).url,
         htmlDescription = htmlDescription,
         previewUrl = previewUrl,
         releaseDateInfo = releaseDateInfo,

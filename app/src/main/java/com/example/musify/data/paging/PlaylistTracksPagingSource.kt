@@ -3,6 +3,7 @@ package com.example.musify.data.paging
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.response.toTrackSearchResult
 import com.example.musify.data.repositories.tokenrepository.TokenRepository
+import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
 import retrofit2.HttpException
 import java.io.IOException
@@ -10,6 +11,7 @@ import java.io.IOException
 class PlaylistTracksPagingSource(
     playlistId: String,
     countryCode: String,
+    imageSize: MapperImageSize,
     tokenRepository: TokenRepository,
     spotifyService: SpotifyService
 ) : SpotifyPagingSource<SearchResult.TrackSearchResult>(
@@ -21,7 +23,7 @@ class PlaylistTracksPagingSource(
                 token = tokenRepository.getValidBearerToken(),
                 limit = limit,
                 offset = offset
-            ).items.map { it.track.toTrackSearchResult() }
+            ).items.map { it.track.toTrackSearchResult(imageSize) }
             SpotifyLoadResult.PageData(data)
         } catch (httpException: HttpException) {
             SpotifyLoadResult.Error(httpException)
