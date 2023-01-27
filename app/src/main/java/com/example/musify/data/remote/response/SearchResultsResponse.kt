@@ -39,6 +39,6 @@ fun SearchResultsResponse.toSearchResults(imageSize: MapperImageSize) = SearchRe
     artists = artists?.value?.map { it.toArtistSearchResult() } ?: emptyList(),
     playlists = playlists?.value?.map { it.toPlaylistSearchResult() } ?: emptyList(),
     shows = shows?.value?.map { it.toPodcastSearchResult() } ?: emptyList(),
-    episodes = episodes?.value?.map { it.toEpisodeSearchResult(imageSize) } ?: emptyList()
+    episodes = episodes?.value?.map { it.toEpisodeSearchResult() } ?: emptyList()
 )
 
