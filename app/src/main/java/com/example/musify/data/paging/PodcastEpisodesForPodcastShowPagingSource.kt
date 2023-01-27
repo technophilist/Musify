@@ -31,10 +31,7 @@ class PodcastEpisodesForPodcastShowPagingSource(
             )
                 .items
                 .map {
-                    it.toPodcastEpisode(
-                        imageSizeForPodcastShowImage = imageSize,
-                        showResponse = showResponse
-                    )
+                    it.toPodcastEpisode(showResponse)
                 }
             SpotifyLoadResult.PageData(episodes)
         } catch (httpException: HttpException) {
