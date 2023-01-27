@@ -23,11 +23,9 @@ data class ArtistResponse(
 
 /**
  * A mapper function used to map an instance of [ArtistResponse] to
- * an instance of [ArtistSearchResult]. The [imageSize]
- * parameter describes the size of image to be used for the
- * [ArtistSearchResult] instance.
+ * an instance of [ArtistSearchResult].
  */
-fun ArtistResponse.toArtistSearchResult(imageSize: MapperImageSize) = ArtistSearchResult(
+fun ArtistResponse.toArtistSearchResult() = ArtistSearchResult(
     id = id,
     name = name,
     imageUrlString = if (images.isEmpty()) null

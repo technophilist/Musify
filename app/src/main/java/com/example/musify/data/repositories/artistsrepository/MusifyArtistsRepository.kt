@@ -20,6 +20,6 @@ class MusifyArtistsRepository @Inject constructor(
         imageSize: MapperImageSize
     ): FetchedResource<SearchResult.ArtistSearchResult, MusifyErrorType> =
         tokenRepository.runCatchingWithToken {
-            spotifyService.getArtistInfoWithId(artistId, it).toArtistSearchResult(imageSize)
+            spotifyService.getArtistInfoWithId(artistId, it).toArtistSearchResult()
         }
 }
