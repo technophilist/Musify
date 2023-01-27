@@ -7,7 +7,6 @@ import com.example.musify.data.remote.response.toPlaylistSearchResultList
 import com.example.musify.data.repositories.tokenrepository.TokenRepository
 import com.example.musify.data.repositories.tokenrepository.runCatchingWithToken
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.FeaturedPlaylists
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.PlaylistsForCategory
@@ -22,8 +21,7 @@ class MusifyHomeFeedRepository @Inject constructor(
     private val tokenRepository: TokenRepository
 ) : HomeFeedRepository {
     override suspend fun fetchNewlyReleasedAlbums(
-        countryCode: String,
-        mapperImageSize: MapperImageSize
+        countryCode: String
     ): FetchedResource<List<SearchResult.AlbumSearchResult>, MusifyErrorType> =
         tokenRepository.runCatchingWithToken { token ->
             spotifyService

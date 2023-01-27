@@ -1,7 +1,6 @@
 package com.example.musify.data.repositories.homefeedrepository
 
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.FeaturedPlaylists
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.PlaylistsForCategory
@@ -25,7 +24,6 @@ interface HomeFeedRepository {
     ): FetchedResource<List<PlaylistsForCategory>, MusifyErrorType>
 
     suspend fun fetchNewlyReleasedAlbums(
-        countryCode: String,
-        mapperImageSize: MapperImageSize
+        countryCode: String
     ): FetchedResource<List<SearchResult.AlbumSearchResult>, MusifyErrorType>
 }
