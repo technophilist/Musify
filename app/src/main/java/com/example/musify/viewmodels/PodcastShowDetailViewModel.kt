@@ -9,7 +9,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.musify.data.repositories.podcastsrepository.PodcastsRepository
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.PodcastShow
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
@@ -36,8 +35,7 @@ class PodcastShowDetailViewModel @Inject constructor(
         savedStateHandle.get<String>(MusifyNavigationDestinations.PodcastShowDetailScreen.NAV_ARG_PODCAST_SHOW_ID)!!
     val episodesForShowStream = podcastsRepository.getPodcastEpisodesStreamForPodcastShow(
         showId = showId,
-        countryCode = getCountryCode(),
-        imageSize = MapperImageSize.MEDIUM
+        countryCode = getCountryCode()
     )
 
     var currentlyPlayingEpisode by mutableStateOf<PodcastEpisode?>(null)
@@ -87,8 +85,7 @@ class PodcastShowDetailViewModel @Inject constructor(
             uiState = UiState.LOADING
             val result = podcastsRepository.fetchPodcastShow(
                 showId = showId,
-                countryCode = getCountryCode(),
-                imageSize = MapperImageSize.LARGE
+                countryCode = getCountryCode()
             )
             if (result is FetchedResource.Success) {
                 uiState = UiState.IDLE

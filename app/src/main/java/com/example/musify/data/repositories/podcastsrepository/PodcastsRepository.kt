@@ -2,7 +2,6 @@ package com.example.musify.data.repositories.podcastsrepository
 
 import androidx.paging.PagingData
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.PodcastShow
@@ -14,19 +13,16 @@ import kotlinx.coroutines.flow.Flow
 interface PodcastsRepository {
     suspend fun fetchPodcastEpisode(
         episodeId: String,
-        countryCode: String,
-        imageSize: MapperImageSize,
+        countryCode: String
     ): FetchedResource<PodcastEpisode, MusifyErrorType>
 
     suspend fun fetchPodcastShow(
         showId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
+        countryCode: String
     ): FetchedResource<PodcastShow, MusifyErrorType>
     
     fun getPodcastEpisodesStreamForPodcastShow(
         showId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
+        countryCode: String
     ): Flow<PagingData<PodcastEpisode>>
 }

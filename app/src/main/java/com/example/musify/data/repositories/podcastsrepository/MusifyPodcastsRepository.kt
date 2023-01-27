@@ -10,7 +10,6 @@ import com.example.musify.data.remote.response.toPodcastShow
 import com.example.musify.data.repositories.tokenrepository.TokenRepository
 import com.example.musify.data.repositories.tokenrepository.runCatchingWithToken
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.PodcastShow
@@ -25,8 +24,7 @@ class MusifyPodcastsRepository @Inject constructor(
 
     override suspend fun fetchPodcastEpisode(
         episodeId: String,
-        countryCode: String,
-        imageSize: MapperImageSize,
+        countryCode: String
     ): FetchedResource<PodcastEpisode, MusifyErrorType> = tokenRepository.runCatchingWithToken {
         spotifyService.getEpisodeWithId(
             token = it, id = episodeId, market = countryCode
@@ -34,7 +32,8 @@ class MusifyPodcastsRepository @Inject constructor(
     }
 
     override suspend fun fetchPodcastShow(
-        showId: String, countryCode: String, imageSize: MapperImageSize
+        showId: String,
+        countryCode: String
     ): FetchedResource<PodcastShow, MusifyErrorType> = tokenRepository.runCatchingWithToken {
         spotifyService.getShowWithId(
             token = it, id = showId, market = countryCode
@@ -43,8 +42,7 @@ class MusifyPodcastsRepository @Inject constructor(
 
     override fun getPodcastEpisodesStreamForPodcastShow(
         showId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
+        countryCode: String
     ): Flow<PagingData<PodcastEpisode>> = Pager(pagingConfig) {
         PodcastEpisodesForPodcastShowPagingSource(
             showId = showId,
