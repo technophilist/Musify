@@ -28,7 +28,7 @@ class MusifyHomeFeedRepository @Inject constructor(
         tokenRepository.runCatchingWithToken { token ->
             spotifyService
                 .getNewReleases(token = token, market = countryCode)
-                .toAlbumSearchResultList(mapperImageSize)
+                .toAlbumSearchResultList()
         }
 
 

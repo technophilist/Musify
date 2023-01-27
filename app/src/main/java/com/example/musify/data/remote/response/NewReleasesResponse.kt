@@ -1,6 +1,5 @@
 package com.example.musify.data.remote.response
 
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
 
 /**
@@ -17,5 +16,5 @@ data class NewReleasesResponse(val albums: Albums) {
  * A mapper method used to map an instance of [NewReleasesResponse] to
  * a list of [SearchResult.AlbumSearchResult].
  */
-fun NewReleasesResponse.toAlbumSearchResultList(size: MapperImageSize): List<SearchResult.AlbumSearchResult> =
+fun NewReleasesResponse.toAlbumSearchResultList(): List<SearchResult.AlbumSearchResult> =
     this.albums.items.map { it.toAlbumSearchResult() }
