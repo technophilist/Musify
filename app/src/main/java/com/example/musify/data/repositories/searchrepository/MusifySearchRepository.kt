@@ -26,7 +26,7 @@ class MusifySearchRepository @Inject constructor(
         imageSize: MapperImageSize,
         countryCode: String
     ): FetchedResource<SearchResults, MusifyErrorType> = tokenRepository.runCatchingWithToken {
-        spotifyService.search(searchQuery, countryCode, it).toSearchResults(imageSize)
+        spotifyService.search(searchQuery, countryCode, it).toSearchResults()
     }
 
     override fun getPaginatedSearchStreamForAlbums(
@@ -37,7 +37,6 @@ class MusifySearchRepository @Inject constructor(
         SpotifyAlbumSearchPagingSource(
             searchQuery = searchQuery,
             countryCode = countryCode,
-            imageSize = imageSize,
             tokenRepository = tokenRepository,
             spotifyService = spotifyService
         )
@@ -51,7 +50,6 @@ class MusifySearchRepository @Inject constructor(
         SpotifyArtistSearchPagingSource(
             searchQuery = searchQuery,
             countryCode = countryCode,
-            imageSize = imageSize,
             tokenRepository = tokenRepository,
             spotifyService = spotifyService
         )
@@ -65,7 +63,6 @@ class MusifySearchRepository @Inject constructor(
         SpotifyTrackSearchPagingSource(
             searchQuery = searchQuery,
             countryCode = countryCode,
-            imageSize = imageSize,
             tokenRepository = tokenRepository,
             spotifyService = spotifyService
         )
@@ -79,7 +76,6 @@ class MusifySearchRepository @Inject constructor(
         SpotifyPlaylistSearchPagingSource(
             searchQuery = searchQuery,
             countryCode = countryCode,
-            imageSize = imageSize,
             tokenRepository = tokenRepository,
             spotifyService = spotifyService
         )
@@ -93,7 +89,6 @@ class MusifySearchRepository @Inject constructor(
         SpotifyPodcastSearchPagingSource(
             searchQuery = searchQuery,
             countryCode = countryCode,
-            imageSize = imageSize,
             tokenRepository = tokenRepository,
             spotifyService = spotifyService
         )
@@ -107,7 +102,6 @@ class MusifySearchRepository @Inject constructor(
         SpotifyEpisodeSearchPagingSource(
             searchQuery = searchQuery,
             countryCode = countryCode,
-            imageSize = imageSize,
             tokenRepository = tokenRepository,
             spotifyService = spotifyService
         )

@@ -4,14 +4,12 @@ import com.example.musify.data.remote.musicservice.SearchQueryType
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.response.toSearchResults
 import com.example.musify.data.repositories.tokenrepository.TokenRepository
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
 
 @Suppress("FunctionName")
 fun SpotifyTrackSearchPagingSource(
     searchQuery: String,
     countryCode: String,
-    imageSize: MapperImageSize,
     tokenRepository: TokenRepository,
     spotifyService: SpotifyService
 ): SpotifySearchPagingSource<SearchResult.TrackSearchResult> = SpotifySearchPagingSource(
@@ -20,14 +18,13 @@ fun SpotifyTrackSearchPagingSource(
     searchQueryType = SearchQueryType.TRACK,
     tokenRepository = tokenRepository,
     spotifyService = spotifyService,
-    resultsBlock = { it.toSearchResults(imageSize).tracks }
+    resultsBlock = { it.toSearchResults().tracks }
 )
 
 @Suppress("FunctionName")
 fun SpotifyAlbumSearchPagingSource(
     searchQuery: String,
     countryCode: String,
-    imageSize: MapperImageSize,
     tokenRepository: TokenRepository,
     spotifyService: SpotifyService
 ): SpotifySearchPagingSource<SearchResult.AlbumSearchResult> = SpotifySearchPagingSource(
@@ -36,14 +33,13 @@ fun SpotifyAlbumSearchPagingSource(
     searchQueryType = SearchQueryType.ALBUM,
     tokenRepository = tokenRepository,
     spotifyService = spotifyService,
-    resultsBlock = { it.toSearchResults(imageSize).albums }
+    resultsBlock = { it.toSearchResults().albums }
 )
 
 @Suppress("FunctionName")
 fun SpotifyArtistSearchPagingSource(
     searchQuery: String,
     countryCode: String,
-    imageSize: MapperImageSize,
     tokenRepository: TokenRepository,
     spotifyService: SpotifyService
 ): SpotifySearchPagingSource<SearchResult.ArtistSearchResult> = SpotifySearchPagingSource(
@@ -52,14 +48,13 @@ fun SpotifyArtistSearchPagingSource(
     searchQueryType = SearchQueryType.ARTIST,
     tokenRepository = tokenRepository,
     spotifyService = spotifyService,
-    resultsBlock = { it.toSearchResults(imageSize).artists }
+    resultsBlock = { it.toSearchResults().artists }
 )
 
 @Suppress("FunctionName")
 fun SpotifyPlaylistSearchPagingSource(
     searchQuery: String,
     countryCode: String,
-    imageSize: MapperImageSize,
     tokenRepository: TokenRepository,
     spotifyService: SpotifyService
 ): SpotifySearchPagingSource<SearchResult.PlaylistSearchResult> = SpotifySearchPagingSource(
@@ -68,14 +63,13 @@ fun SpotifyPlaylistSearchPagingSource(
     searchQueryType = SearchQueryType.PLAYLIST,
     tokenRepository = tokenRepository,
     spotifyService = spotifyService,
-    resultsBlock = { it.toSearchResults(imageSize).playlists }
+    resultsBlock = { it.toSearchResults().playlists }
 )
 
 @Suppress("FunctionName")
 fun SpotifyPodcastSearchPagingSource(
     searchQuery: String,
     countryCode: String,
-    imageSize: MapperImageSize,
     tokenRepository: TokenRepository,
     spotifyService: SpotifyService
 ): SpotifySearchPagingSource<SearchResult.PodcastSearchResult> = SpotifySearchPagingSource(
@@ -84,14 +78,13 @@ fun SpotifyPodcastSearchPagingSource(
     searchQueryType = SearchQueryType.SHOW,
     tokenRepository = tokenRepository,
     spotifyService = spotifyService,
-    resultsBlock = { it.toSearchResults(imageSize).shows }
+    resultsBlock = { it.toSearchResults().shows }
 )
 
 @Suppress("FunctionName")
 fun SpotifyEpisodeSearchPagingSource(
     searchQuery: String,
     countryCode: String,
-    imageSize: MapperImageSize,
     tokenRepository: TokenRepository,
     spotifyService: SpotifyService
 ): SpotifySearchPagingSource<SearchResult.EpisodeSearchResult> = SpotifySearchPagingSource(
@@ -100,5 +93,5 @@ fun SpotifyEpisodeSearchPagingSource(
     searchQueryType = SearchQueryType.EPISODE,
     tokenRepository = tokenRepository,
     spotifyService = spotifyService,
-    resultsBlock = { it.toSearchResults(imageSize).episodes }
+    resultsBlock = { it.toSearchResults().episodes }
 )
