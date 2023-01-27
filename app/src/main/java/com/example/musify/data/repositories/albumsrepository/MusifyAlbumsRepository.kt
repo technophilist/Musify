@@ -41,7 +41,7 @@ class MusifyAlbumsRepository @Inject constructor(
         countryCode: String
     ): FetchedResource<SearchResult.AlbumSearchResult, MusifyErrorType> =
         tokenRepository.runCatchingWithToken {
-            spotifyService.getAlbumWithId(albumId, countryCode, it).toAlbumSearchResult(imageSize)
+            spotifyService.getAlbumWithId(albumId, countryCode, it).toAlbumSearchResult()
         }
 
     override fun getPaginatedStreamForAlbumsOfArtist(
