@@ -73,7 +73,7 @@ fun AlbumResponse.toAlbumSearchResult(imageSize: MapperImageSize) = SearchResult
  * A utility function used to get a list of [SearchResult.TrackSearchResult]s
  * associated with a [AlbumResponse].
  */
-fun AlbumResponse.getTracks(imageSize: MapperImageSize): List<SearchResult.TrackSearchResult> =
+fun AlbumResponse.getTracks(): List<SearchResult.TrackSearchResult> =
     tracks.value.map { trackResponse ->
         trackResponse.toTrackSearchResult(
             albumArtImageUrlString = images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
