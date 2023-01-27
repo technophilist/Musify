@@ -24,7 +24,7 @@ data class AlbumsMetadataResponse(
  * instance.
  */
 fun AlbumsMetadataResponse.toAlbumSearchResultList(imageSize: MapperImageSize) = items.map {
-    it.toAlbumSearchResult(imageSize)
+    it.toAlbumSearchResult()
 }
 
 

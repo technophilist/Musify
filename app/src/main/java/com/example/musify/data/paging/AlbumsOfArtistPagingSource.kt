@@ -11,7 +11,7 @@ import java.io.IOException
 class AlbumsOfArtistPagingSource(
     private val artistId: String,
     private val market: String,
-    private val mapperImageSize: MapperImageSize,
+    private val mapperImageSize: MapperImageSize, // todo, remove redundant param
     private val tokenRepository: TokenRepository,
     private val spotifyService: SpotifyService,
 ) : SpotifyPagingSource<SearchResult.AlbumSearchResult>(
@@ -24,7 +24,7 @@ class AlbumsOfArtistPagingSource(
                 limit = limit,
                 offset = offset,
             )
-            val data = albumsMetadataResponse.items.map { it.toAlbumSearchResult(mapperImageSize) }
+            val data = albumsMetadataResponse.items.map { it.toAlbumSearchResult() }
             SpotifyLoadResult.PageData(data)
         } catch (httpException: HttpException) {
             SpotifyLoadResult.Error(httpException)

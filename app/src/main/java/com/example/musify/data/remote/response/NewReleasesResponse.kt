@@ -18,4 +18,4 @@ data class NewReleasesResponse(val albums: Albums) {
  * a list of [SearchResult.AlbumSearchResult].
  */
 fun NewReleasesResponse.toAlbumSearchResultList(size: MapperImageSize): List<SearchResult.AlbumSearchResult> =
-    this.albums.items.map { it.toAlbumSearchResult(size) }
+    this.albums.items.map { it.toAlbumSearchResult() }
