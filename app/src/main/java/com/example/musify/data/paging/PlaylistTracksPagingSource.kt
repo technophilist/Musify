@@ -23,7 +23,7 @@ class PlaylistTracksPagingSource(
                 token = tokenRepository.getValidBearerToken(),
                 limit = limit,
                 offset = offset
-            ).items.map { it.track.toTrackSearchResult(imageSize) }
+            ).items.map { it.track.toTrackSearchResult() }
             SpotifyLoadResult.PageData(data)
         } catch (httpException: HttpException) {
             SpotifyLoadResult.Error(httpException)

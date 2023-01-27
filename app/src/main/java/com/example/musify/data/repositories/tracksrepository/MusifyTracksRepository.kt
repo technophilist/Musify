@@ -25,7 +25,7 @@ class MusifyTracksRepository @Inject constructor(
 ) : TracksRepository {
     override suspend fun fetchTopTenTracksForArtistWithId(
         artistId: String,
-        imageSize: MapperImageSize,
+        imageSize: MapperImageSize, // todo remove param
         countryCode: String
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> =
         tokenRepository.runCatchingWithToken {
@@ -34,7 +34,7 @@ class MusifyTracksRepository @Inject constructor(
                 market = countryCode,
                 token = it,
             ).value.map { trackDTOWithAlbumMetadata ->
-                trackDTOWithAlbumMetadata.toTrackSearchResult(imageSize)
+                trackDTOWithAlbumMetadata.toTrackSearchResult()
             }
         }
 
@@ -49,7 +49,7 @@ class MusifyTracksRepository @Inject constructor(
                 market = countryCode,
                 token = it
             ).value.map { trackDTOWithAlbumMetadata ->
-                trackDTOWithAlbumMetadata.toTrackSearchResult(imageSize)
+                trackDTOWithAlbumMetadata.toTrackSearchResult()
             }
         }
 
