@@ -38,7 +38,7 @@ class MusifyPodcastsRepository @Inject constructor(
     ): FetchedResource<PodcastShow, MusifyErrorType> = tokenRepository.runCatchingWithToken {
         spotifyService.getShowWithId(
             token = it, id = showId, market = countryCode
-        ).toPodcastShow(imageSize)
+        ).toPodcastShow()
     }
 
     override fun getPodcastEpisodesStreamForPodcastShow(
