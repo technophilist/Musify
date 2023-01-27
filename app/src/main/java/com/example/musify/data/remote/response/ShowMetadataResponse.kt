@@ -16,11 +16,9 @@ data class ShowMetadataResponse(
 
 /**
  * A mapper function used to map an instance of [ShowMetadataResponse] to
- * an instance of [SearchResult.PodcastSearchResult]. The [imageSize]
- * parameter determines the size of image to be used for the
- * [SearchResult.PodcastSearchResult] instance.
+ * an instance of [SearchResult.PodcastSearchResult].
  */
-fun ShowMetadataResponse.toPodcastSearchResult(imageSize: MapperImageSize) =
+fun ShowMetadataResponse.toPodcastSearchResult() =
     SearchResult.PodcastSearchResult(
         id = id,
         name = name,
