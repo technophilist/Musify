@@ -67,8 +67,7 @@ class AlbumDetailViewModel @Inject constructor(
             _uiState.value = AlbumDetailUiState.Loading
             val result = tracksRepository.fetchTracksForAlbumWithId(
                 albumId = albumId,
-                countryCode = getCountryCode(),
-                imageSize = defaultMapperImageSize
+                countryCode = getCountryCode()
             )
             if (result is FetchedResource.Success) {
                 _tracks.value = result.data

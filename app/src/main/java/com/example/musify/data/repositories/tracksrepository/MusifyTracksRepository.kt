@@ -25,7 +25,6 @@ class MusifyTracksRepository @Inject constructor(
 ) : TracksRepository {
     override suspend fun fetchTopTenTracksForArtistWithId(
         artistId: String,
-        imageSize: MapperImageSize, // todo remove param
         countryCode: String
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> =
         tokenRepository.runCatchingWithToken {
@@ -40,7 +39,6 @@ class MusifyTracksRepository @Inject constructor(
 
     override suspend fun fetchTracksForGenre(
         genre: Genre,
-        imageSize: MapperImageSize,
         countryCode: String
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> =
         tokenRepository.runCatchingWithToken {
@@ -55,17 +53,15 @@ class MusifyTracksRepository @Inject constructor(
 
     override suspend fun fetchTracksForAlbumWithId(
         albumId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
+        countryCode: String
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> =
         tokenRepository.runCatchingWithToken {
-            spotifyService.getAlbumWithId(albumId, countryCode, it).getTracks(imageSize)
+            spotifyService.getAlbumWithId(albumId, countryCode, it).getTracks(MapperImageSize.LARGE)
         }
 
     override fun getPaginatedStreamForPlaylistTracks(
         playlistId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
+        countryCode: String
     ): Flow<PagingData<SearchResult.TrackSearchResult>> = Pager(pagingConfig) {
         PlaylistTracksPagingSource(
             playlistId = playlistId,
