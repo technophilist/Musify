@@ -32,6 +32,6 @@ fun ArtistResponse.toArtistSearchResult(imageSize: MapperImageSize) = ArtistSear
     name = name,
     imageUrlString = if (images.isEmpty()) null
     else if (images.size != 3) images.first().url
-    else images.getImageResponseForImageSize(imageSize).url
+    else images.getImageResponseForImageSize(MapperImageSize.LARGE).url
 )
 

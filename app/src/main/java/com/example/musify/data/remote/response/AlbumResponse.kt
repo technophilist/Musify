@@ -66,7 +66,7 @@ fun AlbumResponse.toAlbumSearchResult(imageSize: MapperImageSize) = SearchResult
     name = name,
     artistsString = artists.joinToString(",") { it.name },
     yearOfReleaseString = releaseDate,
-    albumArtUrlString = images.getImageResponseForImageSize(imageSize).url
+    albumArtUrlString = images.getImageResponseForImageSize(MapperImageSize.LARGE).url
 )
 
 /**
@@ -76,7 +76,7 @@ fun AlbumResponse.toAlbumSearchResult(imageSize: MapperImageSize) = SearchResult
 fun AlbumResponse.getTracks(imageSize: MapperImageSize): List<SearchResult.TrackSearchResult> =
     tracks.value.map { trackResponse ->
         trackResponse.toTrackSearchResult(
-            albumArtImageUrlString = images.getImageResponseForImageSize(imageSize).url,
+            albumArtImageUrlString = images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
             albumArtistsString = artists.joinToString(",") { it.name }
         )
     }

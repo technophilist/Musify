@@ -23,7 +23,7 @@ data class ShowResponse(
 fun ShowResponse.toPodcastShow(mapperImageSize: MapperImageSize) = PodcastShow(
     id = id,
     name = name,
-    imageUrlString = images.getImageResponseForImageSize(mapperImageSize).url,
+    imageUrlString = images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
     nameOfPublisher = publisher,
     htmlDescription = htmlDescription
 )

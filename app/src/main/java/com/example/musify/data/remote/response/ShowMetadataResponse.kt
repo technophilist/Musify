@@ -25,5 +25,5 @@ fun ShowMetadataResponse.toPodcastSearchResult(imageSize: MapperImageSize) =
         id = id,
         name = name,
         nameOfPublisher = publisher,
-        imageUrlString = images.getImageResponseForImageSize(imageSize).url
+        imageUrlString = images.getImageResponseForImageSize(MapperImageSize.LARGE).url
     )

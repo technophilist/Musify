@@ -56,13 +56,13 @@ fun EpisodeMetadataResponseWithPreviewUrl.toPodcastEpisode(
     val podcastInfo = PodcastEpisode.PodcastShowInfo(
         id = showResponse.id,
         name = showResponse.name,
-        imageUrl = showResponse.images.getImageResponseForImageSize(imageSizeForPodcastShowImage).url
+        imageUrl = showResponse.images.getImageResponseForImageSize(MapperImageSize.LARGE).url
     )
     return PodcastEpisode(
         id = id,
         title = title,
         description = description,
-        episodeImageUrl = images.getImageResponseForImageSize(imageSizeForEpisodeImage).url,
+        episodeImageUrl = images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
         htmlDescription = htmlDescription,
         previewUrl = previewUrl,
         releaseDateInfo = releaseDateInfo,

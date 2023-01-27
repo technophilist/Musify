@@ -32,7 +32,7 @@ fun EpisodeMetadataResponse.toEpisodeSearchResult(imageSize: MapperImageSize): S
     val contentInfo = SearchResult.EpisodeSearchResult.EpisodeContentInfo(
         title = this.title,
         description = this.description,
-        imageUrlString = images.getImageResponseForImageSize(imageSize).url
+        imageUrlString = images.getImageResponseForImageSize(MapperImageSize.LARGE).url
     )
     val formattedEpisodeReleaseDateAndDuration = getFormattedEpisodeReleaseDateAndDuration(
         releaseDateString = this.releaseDate,
