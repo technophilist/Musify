@@ -12,7 +12,7 @@ that is heavily inspired by the design of the official Spotify app with some cus
 4. [Source code and architecture](#source-code-and-architecture)
 
 ## Screenshots
-<img src = "screenshots/home_screen.png" width = "225" height = "500"/> &nbsp; <img src = "screenshots/search_screen.png" width = "225" height = "500"/> &nbsp; <img src = "screenshots/premium_screen.png" width = "225" height = "500"/> 
+<img src = "screenshots/home_screen.png" width = "225" height = "500"/> &nbsp; <img src = "screenshots/search_screen.png" width = "225" height = "500"/> &nbsp; <img src = "screenshots/full_screen_player.png" width = "225" height = "500"/> 
 ## Podcasts
 <img src = "screenshots/podcasts_search_screen.png" width = "225" height = "500"/> &nbsp; <img src = "screenshots/show_detail_screen.png" width = "225" height = "500" /> &nbsp; <img src = "screenshots/episode_detail_screen.png" width = "225" height = "500" />
 ## Tech Stack
