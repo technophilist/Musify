@@ -32,7 +32,7 @@ class MusifyAlbumsRepository @Inject constructor(
                 artistId,
                 countryCode,
                 it
-            ).toAlbumSearchResultList(imageSize)
+            ).toAlbumSearchResultList()
         }
 
     override suspend fun fetchAlbumWithId(

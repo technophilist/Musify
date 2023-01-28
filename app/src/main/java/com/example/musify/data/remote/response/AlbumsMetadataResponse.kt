@@ -1,6 +1,5 @@
 package com.example.musify.data.remote.response
 
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -19,11 +18,9 @@ data class AlbumsMetadataResponse(
 
 /**
  * A mapper function used to map an instance of [AlbumsMetadataResponse] to
- * a list of [SearchResult.AlbumSearchResult]. The [imageSize] parameter
- * describes the size of image to be used for each [SearchResult.AlbumSearchResult]
- * instance.
+ * a list of [SearchResult.AlbumSearchResult].
  */
-fun AlbumsMetadataResponse.toAlbumSearchResultList(imageSize: MapperImageSize) = items.map {
+fun AlbumsMetadataResponse.toAlbumSearchResultList() = items.map {
     it.toAlbumSearchResult()
 }
 
