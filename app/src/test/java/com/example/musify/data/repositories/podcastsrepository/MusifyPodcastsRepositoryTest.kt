@@ -5,7 +5,6 @@ import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
 import com.example.musify.data.repositories.tokenrepository.SpotifyTokenRepository
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.PagingConfigModule
 import com.example.musify.utils.defaultMusifyJacksonConverterFactory
 import kotlinx.coroutines.runBlocking
@@ -44,8 +43,7 @@ class MusifyPodcastsRepositoryTest {
         val validEpisodeId = "5pLYyCItRvIc2SEbuJ3eO8"
         val fetchedResource = podcastsRepository.fetchPodcastEpisode(
             episodeId = validEpisodeId,
-            countryCode = "IN",
-            imageSize = MapperImageSize.SMALL
+            countryCode = "IN"
         )
         assert(fetchedResource is FetchedResource.Success)
     }
@@ -55,8 +53,7 @@ class MusifyPodcastsRepositoryTest {
         val validShowId = "6o81QuW22s5m2nfcXWjucc"
         val fetchedResource = podcastsRepository.fetchPodcastShow(
             showId = validShowId,
-            countryCode = "IN",
-            imageSize = MapperImageSize.LARGE
+            countryCode = "IN"
         )
         assert(fetchedResource is FetchedResource.Success)
     }
