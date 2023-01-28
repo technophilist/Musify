@@ -21,8 +21,8 @@ class MusifyTracksRepository @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val spotifyService: SpotifyService,
     private val pagingConfig: PagingConfig
-):TracksRepository  {
-     override suspend fun fetchTopTenTracksForArtistWithId(
+) : TracksRepository {
+    override suspend fun fetchTopTenTracksForArtistWithId(
         artistId: String,
         countryCode: String
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> =
@@ -36,7 +36,7 @@ class MusifyTracksRepository @Inject constructor(
             }
         }
 
-     override suspend fun fetchTracksForGenre(
+    override suspend fun fetchTracksForGenre(
         genre: Genre,
         countryCode: String
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> =
@@ -50,7 +50,7 @@ class MusifyTracksRepository @Inject constructor(
             }
         }
 
-     override suspend fun fetchTracksForAlbumWithId(
+    override suspend fun fetchTracksForAlbumWithId(
         albumId: String,
         countryCode: String
     ): FetchedResource<List<SearchResult.TrackSearchResult>, MusifyErrorType> =
@@ -58,7 +58,7 @@ class MusifyTracksRepository @Inject constructor(
             spotifyService.getAlbumWithId(albumId, countryCode, it).getTracks()
         }
 
-     override fun getPaginatedStreamForPlaylistTracks(
+    override fun getPaginatedStreamForPlaylistTracks(
         playlistId: String,
         countryCode: String
     ): Flow<PagingData<SearchResult.TrackSearchResult>> = Pager(pagingConfig) {

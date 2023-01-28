@@ -57,16 +57,14 @@ data class AlbumResponse(
 
 /**
  * A mapper function used to map an instance of [AlbumResponse] to
- * an instance of [SearchResult.AlbumSearchResult]. The [imageSize]
- * parameter describes the size of image to be used for the
- * [SearchResult.AlbumSearchResult] instance.
+ * an instance of [SearchResult.AlbumSearchResult].
  */
-fun AlbumResponse.toAlbumSearchResult(imageSize: MapperImageSize) = SearchResult.AlbumSearchResult(
+fun AlbumResponse.toAlbumSearchResult() = SearchResult.AlbumSearchResult(
     id = id,
     name = name,
     artistsString = artists.joinToString(",") { it.name },
     yearOfReleaseString = releaseDate,
-    albumArtUrlString = images.getImageResponseForImageSize(imageSize).url
+    albumArtUrlString = images.getImageResponseForImageSize(MapperImageSize.LARGE).url
 )
 
 /**
@@ -76,8 +74,7 @@ fun AlbumResponse.toAlbumSearchResult(imageSize: MapperImageSize) = SearchResult
 fun AlbumResponse.getTracks(): List<SearchResult.TrackSearchResult> =
     tracks.value.map { trackResponse ->
         trackResponse.toTrackSearchResult(
-            largeAlbumArtImageUrlString = images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
-            smallAlbumArtImageUrlString = images.getImageResponseForImageSize(MapperImageSize.SMALL).url,
+            albumArtImageUrlString = images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
             albumArtistsString = artists.joinToString(",") { it.name }
         )
     }
@@ -87,14 +84,12 @@ fun AlbumResponse.getTracks(): List<SearchResult.TrackSearchResult> =
  * to an instance of [SearchResult.TrackSearchResult].
  */
 fun AlbumResponse.TrackResponseWithoutAlbumMetadataResponse.toTrackSearchResult(
-    largeAlbumArtImageUrlString: String,
-    smallAlbumArtImageUrlString: String,
+    albumArtImageUrlString: String,
     albumArtistsString: String
 ) = SearchResult.TrackSearchResult(
     id = id,
     name = name,
-    largeImageUrlString = largeAlbumArtImageUrlString,
-    smallImageUrlString = smallAlbumArtImageUrlString,
+    imageUrlString = albumArtImageUrlString,
     artistsString = albumArtistsString,
     trackUrlString = previewUrl
 )

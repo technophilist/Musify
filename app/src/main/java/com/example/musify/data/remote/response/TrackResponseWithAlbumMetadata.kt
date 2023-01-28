@@ -27,8 +27,7 @@ fun TrackResponseWithAlbumMetadata.toTrackSearchResult() =
     TrackSearchResult(
         id = id,
         name = name,
-        largeImageUrlString = albumMetadata.images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
-        smallImageUrlString = albumMetadata.images.getImageResponseForImageSize(MapperImageSize.MEDIUM).url,
+        imageUrlString = albumMetadata.images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
         artistsString = albumMetadata.artists.joinToString(",") { it.name },
         trackUrlString = previewUrl
     )

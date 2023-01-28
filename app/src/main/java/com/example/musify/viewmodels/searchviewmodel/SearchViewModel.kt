@@ -9,7 +9,6 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.musify.data.repositories.genresrepository.GenresRepository
 import com.example.musify.data.repositories.searchrepository.SearchRepository
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.IODispatcher
 import com.example.musify.domain.SearchResult
 import com.example.musify.usecases.getCurrentlyPlayingTrackUseCase.GetCurrentlyPlayingTrackUseCase
@@ -96,54 +95,45 @@ class SearchViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    private fun collectAndAssignSearchResults(
-        searchQuery: String,
-        imageSize: MapperImageSize
-    ) {
+    private fun collectAndAssignSearchResults(searchQuery: String) {
         searchRepository.getPaginatedSearchStreamForAlbums(
             searchQuery = searchQuery,
-            countryCode = getCountryCode(),
-            imageSize = imageSize
+            countryCode = getCountryCode()
         ).cachedIn(viewModelScope)
             .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.ALBUMS) {
                 _albumListForSearchQuery.value = it
             }
         searchRepository.getPaginatedSearchStreamForArtists(
             searchQuery = searchQuery,
-            countryCode = getCountryCode(),
-            imageSize = imageSize
+            countryCode = getCountryCode()
         ).cachedIn(viewModelScope)
             .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.ARTISTS) {
                 _artistListForSearchQuery.value = it
             }
         searchRepository.getPaginatedSearchStreamForTracks(
             searchQuery = searchQuery,
-            countryCode = getCountryCode(),
-            imageSize = imageSize
+            countryCode = getCountryCode()
         ).cachedIn(viewModelScope)
             .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.TRACKS) {
                 _trackListForSearchQuery.value = it
             }
         searchRepository.getPaginatedSearchStreamForPlaylists(
             searchQuery = searchQuery,
-            countryCode = getCountryCode(),
-            imageSize = imageSize
+            countryCode = getCountryCode()
         ).cachedIn(viewModelScope)
             .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.PLAYLISTS) {
                 _playlistListForSearchQuery.value = it
             }
         searchRepository.getPaginatedSearchStreamForPodcasts(
             searchQuery = searchQuery,
-            countryCode = getCountryCode(),
-            imageSize = imageSize
+            countryCode = getCountryCode()
         ).cachedIn(viewModelScope)
             .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.PODCASTS) {
                 _podcastListForSearchQuery.value = it
             }
         searchRepository.getPaginatedSearchStreamForEpisodes(
             searchQuery = searchQuery,
-            countryCode = getCountryCode(),
-            imageSize = imageSize
+            countryCode = getCountryCode()
         ).cachedIn(viewModelScope)
             .collectInViewModelScopeUpdatingUiState(currentlySelectedFilter.value == SearchFilter.PODCASTS) {
                 _episodeListForSearchQuery.value = it
@@ -213,7 +203,7 @@ class SearchViewModel @Inject constructor(
             // search text is currently being typed; preventing
             // un-necessary calls to the api
             delay(500)
-            collectAndAssignSearchResults(searchQuery, MapperImageSize.MEDIUM)
+            collectAndAssignSearchResults(searchQuery)
         }
     }
 

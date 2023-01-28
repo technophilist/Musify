@@ -10,7 +10,6 @@ import androidx.paging.cachedIn
 import com.example.musify.data.repositories.albumsrepository.AlbumsRepository
 import com.example.musify.data.repositories.tracksrepository.TracksRepository
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.navigation.MusifyNavigationDestinations
 import com.example.musify.usecases.getCurrentlyPlayingTrackUseCase.GetCurrentlyPlayingTrackUseCase
@@ -48,7 +47,6 @@ class ArtistDetailViewModel @Inject constructor(
     private val _uiState = mutableStateOf<ArtistDetailScreenUiState>(ArtistDetailScreenUiState.Idle)
     val uiState = _uiState as State<ArtistDetailScreenUiState>
 
-    private val defaultMapperImageSize = MapperImageSize.MEDIUM
     private val artistId =
         savedStateHandle.get<String>(MusifyNavigationDestinations.ArtistDetailScreen.NAV_ARG_ARTIST_ID)!!
 
@@ -56,8 +54,7 @@ class ArtistDetailViewModel @Inject constructor(
 
     val albumsOfArtistFlow = albumsRepository.getPaginatedStreamForAlbumsOfArtist(
         artistId = artistId,
-        countryCode = getCountryCode(),
-        imageSize = defaultMapperImageSize
+        countryCode = getCountryCode()
     ).cachedIn(viewModelScope)
 
     init {

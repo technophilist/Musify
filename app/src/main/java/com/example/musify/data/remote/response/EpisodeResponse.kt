@@ -53,8 +53,7 @@ fun EpisodeResponse.toPodcastEpisode(): PodcastEpisode {
     return PodcastEpisode(
         id = this.id,
         title = this.title,
-        largeEpisodeImageUrl = episodeImages.getImageResponseForImageSize(MapperImageSize.LARGE).url,
-        smallEpisodeImageUrl = episodeImages.getImageResponseForImageSize(MapperImageSize.SMALL).url,
+        episodeImageUrl = episodeImages.getImageResponseForImageSize(MapperImageSize.LARGE).url,
         description = this.description,
         htmlDescription = this.htmlDescription,
         previewUrl = previewUrl,

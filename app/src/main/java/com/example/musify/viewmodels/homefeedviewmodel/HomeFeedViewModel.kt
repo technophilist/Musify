@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.musify.data.repositories.homefeedrepository.HomeFeedRepository
 import com.example.musify.data.repositories.homefeedrepository.ISO6391LanguageCode
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.MusifyApplication
 import com.example.musify.domain.*
 import com.example.musify.viewmodels.getCountryCode
@@ -43,7 +42,7 @@ class HomeFeedViewModel @Inject constructor(
                 getApplication<MusifyApplication>().resources.configuration.locale.language.let(::ISO6391LanguageCode) // TODO test
             val countryCode = getCountryCode()
             val newAlbums = async {
-                homeFeedRepository.fetchNewlyReleasedAlbums(countryCode, MapperImageSize.LARGE)
+                homeFeedRepository.fetchNewlyReleasedAlbums(countryCode)
             }
             val featuredPlaylists = async {
                 homeFeedRepository.fetchFeaturedPlaylistsForCurrentTimeStamp(

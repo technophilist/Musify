@@ -35,10 +35,10 @@ import com.example.musify.domain.SearchResult
  * @param isAlbumArtVisible indicates whether the album art is visible
  * or not.
  * @param onImageLoading the callback to execute when the image associated
- * with [SearchResult.TrackSearchResult.largeImageUrlString] is loading.
+ * with [SearchResult.TrackSearchResult.imageUrlString] is loading.
  * image is loading.
  * @param onImageLoadingFinished the lambda to execute when the image
- * associated with [SearchResult.TrackSearchResult.largeImageUrlString] is
+ * associated with [SearchResult.TrackSearchResult.imageUrlString] is
  * is done loading. A nullable parameter of type [Throwable] is provided
  * to the lambda, that indicates whether the image loading process was
  * @param titleTextStyle The style configuration for the title of the
@@ -75,7 +75,7 @@ fun MusifyCompactTrackCard(
             backgroundColor = backgroundColor,
             shape = shape,
             cardType = ListItemCardType.TRACK,
-            thumbnailImageUrlString = if (isAlbumArtVisible) track.smallImageUrlString else null,
+            thumbnailImageUrlString = if (isAlbumArtVisible) track.imageUrlString else null,
             title = track.name,
             subtitle = track.artistsString,
             onClick = { onClick(track) },

@@ -1,6 +1,5 @@
 package com.example.musify.data.remote.response
 
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResults
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -33,12 +32,12 @@ data class SearchResultsResponse(
  * the size of image to be used for the for associated [SearchResults]
  * instances excluding [SearchResults.playlists].
  */
-fun SearchResultsResponse.toSearchResults(imageSize: MapperImageSize) = SearchResults(
+fun SearchResultsResponse.toSearchResults() = SearchResults(
     tracks = tracks?.value?.map { it.toTrackSearchResult() } ?: emptyList(),
-    albums = albums?.value?.map { it.toAlbumSearchResult(imageSize) } ?: emptyList(),
-    artists = artists?.value?.map { it.toArtistSearchResult(imageSize) } ?: emptyList(),
+    albums = albums?.value?.map { it.toAlbumSearchResult() } ?: emptyList(),
+    artists = artists?.value?.map { it.toArtistSearchResult() } ?: emptyList(),
     playlists = playlists?.value?.map { it.toPlaylistSearchResult() } ?: emptyList(),
-    shows = shows?.value?.map { it.toPodcastSearchResult(imageSize) } ?: emptyList(),
-    episodes = episodes?.value?.map { it.toEpisodeSearchResult(imageSize) } ?: emptyList()
+    shows = shows?.value?.map { it.toPodcastSearchResult() } ?: emptyList(),
+    episodes = episodes?.value?.map { it.toEpisodeSearchResult() } ?: emptyList()
 )
 

@@ -3,7 +3,6 @@ package com.example.musify.data.paging
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.response.toPodcastEpisode
 import com.example.musify.data.repositories.tokenrepository.TokenRepository
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.PodcastEpisode
 import retrofit2.HttpException
 import java.io.IOException
@@ -29,7 +28,9 @@ class PodcastEpisodesForPodcastShowPagingSource(
                 offset = offset
             )
                 .items
-                .map { it.toPodcastEpisode(showResponse) }
+                .map {
+                    it.toPodcastEpisode(showResponse)
+                }
             SpotifyLoadResult.PageData(episodes)
         } catch (httpException: HttpException) {
             SpotifyLoadResult.Error(httpException)

@@ -20,10 +20,10 @@ data class ShowResponse(
  * A mapper function used to map an instance of [ShowResponse] to an instance
  * of [PodcastShow].
  */
-fun ShowResponse.toPodcastShow(mapperImageSize: MapperImageSize) = PodcastShow(
+fun ShowResponse.toPodcastShow() = PodcastShow(
     id = id,
     name = name,
-    imageUrlString = images.getImageResponseForImageSize(mapperImageSize).url,
+    imageUrlString = images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
     nameOfPublisher = publisher,
     htmlDescription = htmlDescription
 )

@@ -3,7 +3,6 @@ package com.example.musify.data.paging
 import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.response.toAlbumSearchResult
 import com.example.musify.data.repositories.tokenrepository.TokenRepository
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
 import retrofit2.HttpException
 import java.io.IOException
@@ -11,9 +10,8 @@ import java.io.IOException
 class AlbumsOfArtistPagingSource(
     private val artistId: String,
     private val market: String,
-    private val mapperImageSize: MapperImageSize,
     private val tokenRepository: TokenRepository,
-    private val spotifyService: SpotifyService,
+    private val spotifyService: SpotifyService
 ) : SpotifyPagingSource<SearchResult.AlbumSearchResult>(
     loadBlock = { limit, offset ->
         try {
@@ -24,7 +22,7 @@ class AlbumsOfArtistPagingSource(
                 limit = limit,
                 offset = offset,
             )
-            val data = albumsMetadataResponse.items.map { it.toAlbumSearchResult(mapperImageSize) }
+            val data = albumsMetadataResponse.items.map { it.toAlbumSearchResult() }
             SpotifyLoadResult.PageData(data)
         } catch (httpException: HttpException) {
             SpotifyLoadResult.Error(httpException)

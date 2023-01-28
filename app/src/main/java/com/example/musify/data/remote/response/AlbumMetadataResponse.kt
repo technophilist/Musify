@@ -34,14 +34,12 @@ data class AlbumMetadataResponse(
 
 /**
  * A mapper function used to map an instance of [AlbumMetadataResponse] to
- * an instance of [AlbumSearchResult]. The [imageSize]
- * parameter describes the size of image to be used for the
- * [AlbumSearchResult] instance.
+ * an instance of [AlbumSearchResult].
  */
-fun AlbumMetadataResponse.toAlbumSearchResult(imageSize: MapperImageSize) = AlbumSearchResult(
+fun AlbumMetadataResponse.toAlbumSearchResult() = AlbumSearchResult(
     id = id,
     name = name,
     artistsString = artists.joinToString(", ") { it.name },
-    albumArtUrlString = images.getImageResponseForImageSize(imageSize).url,
+    albumArtUrlString = images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
     yearOfReleaseString = releaseDate // TODO
 )

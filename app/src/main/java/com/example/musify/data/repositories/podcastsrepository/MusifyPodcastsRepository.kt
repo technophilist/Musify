@@ -10,7 +10,6 @@ import com.example.musify.data.remote.response.toPodcastShow
 import com.example.musify.data.repositories.tokenrepository.TokenRepository
 import com.example.musify.data.repositories.tokenrepository.runCatchingWithToken
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.PodcastShow
@@ -28,22 +27,17 @@ class MusifyPodcastsRepository @Inject constructor(
         countryCode: String
     ): FetchedResource<PodcastEpisode, MusifyErrorType> = tokenRepository.runCatchingWithToken {
         spotifyService.getEpisodeWithId(
-            token = it,
-            id = episodeId,
-            market = countryCode
+            token = it, id = episodeId, market = countryCode
         ).toPodcastEpisode()
     }
 
     override suspend fun fetchPodcastShow(
         showId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
+        countryCode: String
     ): FetchedResource<PodcastShow, MusifyErrorType> = tokenRepository.runCatchingWithToken {
         spotifyService.getShowWithId(
-            token = it,
-            id = showId,
-            market = countryCode
-        ).toPodcastShow(imageSize)
+            token = it, id = showId, market = countryCode
+        ).toPodcastShow()
     }
 
     override fun getPodcastEpisodesStreamForPodcastShow(
