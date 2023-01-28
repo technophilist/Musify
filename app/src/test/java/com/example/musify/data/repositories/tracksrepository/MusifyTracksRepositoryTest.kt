@@ -5,7 +5,6 @@ import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
 import com.example.musify.data.repositories.tokenrepository.SpotifyTokenRepository
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.PagingConfigModule
 import com.example.musify.domain.Genre
 import com.example.musify.utils.defaultMusifyJacksonConverterFactory
@@ -48,11 +47,7 @@ class MusifyTracksRepositoryTest {
         val countryCode = "IN"
         // when fetching the top ten tracks of the artist
         val result = runBlocking {
-            musifyTracksRepository.fetchTopTenTracksForArtistWithId(
-                validArtistId,
-                MapperImageSize.SMALL,
-                countryCode
-            )
+            musifyTracksRepository.fetchTopTenTracksForArtistWithId(validArtistId, countryCode)
         }
         // the return type must be of type FetchedResource.Success
         assert(result is FetchedResource.Success)
@@ -68,11 +63,7 @@ class MusifyTracksRepositoryTest {
             genreType = Genre.GenreType.AMBIENT
         )
         val result = runBlocking {
-            musifyTracksRepository.fetchTracksForGenre(
-                validGenre,
-                MapperImageSize.SMALL,
-                "IN"
-            )
+            musifyTracksRepository.fetchTracksForGenre(validGenre, "IN")
         }
         assert(result is FetchedResource.Success)
         assert((result as FetchedResource.Success).data.isNotEmpty())
@@ -84,8 +75,7 @@ class MusifyTracksRepositoryTest {
         val result = runBlocking {
             musifyTracksRepository.fetchTracksForAlbumWithId(
                 albumId = validGenreId,
-                countryCode = "IN",
-                imageSize = MapperImageSize.SMALL
+                countryCode = "IN"
             )
         }
         assert(result is FetchedResource.Success)
