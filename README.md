@@ -12,9 +12,9 @@ that is heavily inspired by the design of the official Spotify app with some cus
 4. [Source code and architecture](#source-code-and-architecture)
 
 ## Screenshots
-<img src = "screenshots/home_screen.png" width = "270" height = "570"/> &nbsp; <img src = "screenshots/search_screen.png" width = "270" height = "570"/> &nbsp; <img src = "screenshots/full_screen_player.png" width = "270" height = "570"/> 
+<img src = "screenshots/home_screen.png" width = "216" height = "456"/> &nbsp; <img src = "screenshots/search_screen.png" width = "216" height = "456"/> &nbsp; <img src = "screenshots/full_screen_player.png" width = "216" height = "456"/> 
 ## Podcasts
-<img src = "screenshots/podcasts_search_screen.png" width = "270" height = "570"/> &nbsp; <img src = "screenshots/show_detail_screen.png" width = "270" height = "570" /> &nbsp; <img src = "screenshots/episode_detail_screen.png" width = "270" height = "570" />
+<img src = "screenshots/podcasts_search_screen.png" width = "216" height = "456"/> &nbsp; <img src = "screenshots/show_detail_screen.png" width = "216" height = "456" /> &nbsp; <img src = "screenshots/episode_detail_screen.png" width = "216" height = "456" />
 ## Tech Stack
 - Entirely written in [Kotlin](https://kotlinlang.org/).
 - [Hilt](https://www.google.com/url?client=internal-element-cse&cx=000521750095050289010:zpcpi1ea4s8&q=https://developer.android.com/training/dependency-injection/hilt-android&sa=U&ved=2ahUKEwiW5omeu6z4AhWRR2wGHVUsCo0QFnoECAMQAQ&usg=AOvVaw3dCbP79C6od3KVCnJub3v0) for dependency injection.
