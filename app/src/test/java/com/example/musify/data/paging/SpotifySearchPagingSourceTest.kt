@@ -6,7 +6,6 @@ import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.response.SearchResultsResponse
 import com.example.musify.data.remote.response.toSearchResults
 import com.example.musify.data.repositories.tokenrepository.TokenRepositoryStub
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.SearchResult
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -43,7 +42,7 @@ class SpotifySearchPagingSourceTest {
             tokenRepository = TokenRepositoryStub(),
             searchQueryType = SearchQueryType.TRACK,
             spotifyService = spotifyServiceStub,
-            resultsBlock = { it.toSearchResults(MapperImageSize.SMALL).tracks }
+            resultsBlock = { it.toSearchResults().tracks }
         )
     }
 
@@ -56,7 +55,7 @@ class SpotifySearchPagingSourceTest {
         )
         val expectedLoadResult = PagingSource.LoadResult.Page(
             data = getSearchResultsResponseForFakePageNumber(FakeSearchResultsPageNumbers.PAGE_1)
-                .toSearchResults(MapperImageSize.SMALL).tracks,
+                .toSearchResults().tracks,
             prevKey = null,
             nextKey = 1
         )
@@ -76,7 +75,7 @@ class SpotifySearchPagingSourceTest {
             )
             val expectedLoadResult = PagingSource.LoadResult.Page(
                 data = getSearchResultsResponseForFakePageNumber(fakeSearchPageNumber)
-                    .toSearchResults(MapperImageSize.SMALL).tracks,
+                    .toSearchResults().tracks,
                 prevKey = if (index == 0) null else index - 1,
                 nextKey = index + 1
             )
@@ -95,7 +94,7 @@ class SpotifySearchPagingSourceTest {
         )
         val expectedLoadResult = PagingSource.LoadResult.Page(
             data = SearchResultsResponse(null, null, null, null, null,null)
-                .toSearchResults(MapperImageSize.SMALL).tracks,
+                .toSearchResults().tracks,
             prevKey = 2,
             nextKey = null
         )
