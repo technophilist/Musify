@@ -10,7 +10,6 @@ import com.example.musify.data.remote.response.toAlbumSearchResultList
 import com.example.musify.data.repositories.tokenrepository.TokenRepository
 import com.example.musify.data.repositories.tokenrepository.runCatchingWithToken
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.SearchResult
 import kotlinx.coroutines.flow.Flow
@@ -24,8 +23,7 @@ class MusifyAlbumsRepository @Inject constructor(
 
     override suspend fun fetchAlbumsOfArtistWithId(
         artistId: String,
-        imageSize: MapperImageSize,
-        countryCode: String, //ISO 3166-1 alpha-2 country code
+        countryCode: String //ISO 3166-1 alpha-2 country code
     ): FetchedResource<List<SearchResult.AlbumSearchResult>, MusifyErrorType> =
         tokenRepository.runCatchingWithToken {
             spotifyService.getAlbumsOfArtistWithId(
@@ -37,7 +35,6 @@ class MusifyAlbumsRepository @Inject constructor(
 
     override suspend fun fetchAlbumWithId(
         albumId: String,
-        imageSize: MapperImageSize,
         countryCode: String
     ): FetchedResource<SearchResult.AlbumSearchResult, MusifyErrorType> =
         tokenRepository.runCatchingWithToken {
@@ -46,13 +43,11 @@ class MusifyAlbumsRepository @Inject constructor(
 
     override fun getPaginatedStreamForAlbumsOfArtist(
         artistId: String,
-        countryCode: String,
-        imageSize: MapperImageSize
+        countryCode: String
     ): Flow<PagingData<SearchResult.AlbumSearchResult>> = Pager(pagingConfig) {
         AlbumsOfArtistPagingSource(
             artistId = artistId,
             market = countryCode,
-            mapperImageSize = imageSize,
             tokenRepository = tokenRepository,
             spotifyService = spotifyService
         )
