@@ -11,9 +11,8 @@ import java.io.IOException
 class AlbumsOfArtistPagingSource(
     private val artistId: String,
     private val market: String,
-    private val mapperImageSize: MapperImageSize, // todo, remove redundant param
     private val tokenRepository: TokenRepository,
-    private val spotifyService: SpotifyService,
+    private val spotifyService: SpotifyService
 ) : SpotifyPagingSource<SearchResult.AlbumSearchResult>(
     loadBlock = { limit, offset ->
         try {
