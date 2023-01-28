@@ -1,6 +1,5 @@
 package com.example.musify.data.remote.response
 
-import com.example.musify.data.utils.MapperImageSize
 import org.junit.Test
 
 class EpisodeMetadataMappingTest {
@@ -8,7 +7,7 @@ class EpisodeMetadataMappingTest {
 
     @Test
     fun episodeMetadata_to_EpisodeSearchResult_mapping_test() {
-        val mappedObject = fakeEpisodeMetadataResponse.toEpisodeSearchResult(MapperImageSize.SMALL)
+        val mappedObject = fakeEpisodeMetadataResponse.toEpisodeSearchResult()
 
         with(mappedObject.episodeReleaseDateInfo) {
             assert(day == 2)
@@ -29,7 +28,7 @@ class EpisodeMetadataMappingTest {
         // given an episode with a duration of 30 seconds (less than 1 minute)
         val response = fakeEpisodeMetadataResponse.copy(durationMillis = 30_000)
         // when mapping it to an instance of EpisodeSearchResult
-        val mappedObject = response.toEpisodeSearchResult(MapperImageSize.SMALL)
+        val mappedObject = response.toEpisodeSearchResult()
         // the seconds must be set to 1
         assert(mappedObject.episodeDurationInfo.minutes == 1)
     }
