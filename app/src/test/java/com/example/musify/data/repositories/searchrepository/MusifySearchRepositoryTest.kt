@@ -5,7 +5,6 @@ import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
 import com.example.musify.data.repositories.tokenrepository.SpotifyTokenRepository
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.PagingConfigModule
 import com.example.musify.utils.defaultMusifyJacksonConverterFactory
 import kotlinx.coroutines.runBlocking
@@ -44,7 +43,7 @@ class MusifySearchRepositoryTest {
         val query = "Dull Knives"
         // when fetching search results for the query
         val result = runBlocking {
-            musifySearchRepository.fetchSearchResultsForQuery(query, MapperImageSize.SMALL, "IN")
+            musifySearchRepository.fetchSearchResultsForQuery(query, "IN")
         }
         // the return type must be of type FetchedResource.Success
         assert(result is FetchedResource.Success)
