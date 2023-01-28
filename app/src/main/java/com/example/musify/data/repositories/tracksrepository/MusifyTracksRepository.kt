@@ -10,7 +10,6 @@ import com.example.musify.data.remote.response.toTrackSearchResult
 import com.example.musify.data.repositories.tokenrepository.TokenRepository
 import com.example.musify.data.repositories.tokenrepository.runCatchingWithToken
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.Genre
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.domain.SearchResult
