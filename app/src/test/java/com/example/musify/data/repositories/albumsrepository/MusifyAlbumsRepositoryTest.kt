@@ -5,7 +5,6 @@ import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
 import com.example.musify.data.repositories.tokenrepository.SpotifyTokenRepository
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.di.PagingConfigModule
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.utils.defaultMusifyJacksonConverterFactory
@@ -48,11 +47,7 @@ class MusifyAlbumsRepositoryTest {
         val countryCode = "IN"
         // when fetching the albums
         val result = runBlocking {
-            musifyAlbumsRepository.fetchAlbumsOfArtistWithId(
-                validArtistId,
-                MapperImageSize.SMALL,
-                countryCode
-            )
+            musifyAlbumsRepository.fetchAlbumsOfArtistWithId(validArtistId, countryCode)
         }
         // the return type must be of type FetchedResource.Success
         assert(result is FetchedResource.Success)
@@ -68,11 +63,7 @@ class MusifyAlbumsRepositoryTest {
         val countryCode = "0"
         // when fetching the albums
         val result = runBlocking {
-            musifyAlbumsRepository.fetchAlbumsOfArtistWithId(
-                validArtistId,
-                MapperImageSize.SMALL,
-                countryCode
-            )
+            musifyAlbumsRepository.fetchAlbumsOfArtistWithId(validArtistId, countryCode)
         }
         // the return type must be of type FetchedResource.Failure
         assert(result is FetchedResource.Failure)
@@ -86,7 +77,7 @@ class MusifyAlbumsRepositoryTest {
         val albumId = "4aawyAB9vmqN3uQ7FjRGTy"
         // when fetching the album
         val result = runBlocking {
-            musifyAlbumsRepository.fetchAlbumWithId(albumId, MapperImageSize.SMALL, "IN")
+            musifyAlbumsRepository.fetchAlbumWithId(albumId,"IN")
         }
         // the return type must be of type FetchedResource.Success
         assert(result is FetchedResource.Success)
