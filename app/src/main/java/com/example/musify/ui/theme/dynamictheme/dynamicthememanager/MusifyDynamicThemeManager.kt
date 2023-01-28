@@ -23,7 +23,7 @@ class MusifyDynamicThemeManager(
                 .dominantSwatch
                 ?.hsl
                 ?.apply {
-                    // increase the brightness of the dominant color by 50%
+                    // set the brightness of the dominant color to 50%
                     this[2] = 0.5f
                 }
                 ?.let(ColorUtils::HSLToColor)
