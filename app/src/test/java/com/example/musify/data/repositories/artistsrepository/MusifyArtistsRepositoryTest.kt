@@ -5,7 +5,6 @@ import com.example.musify.data.remote.musicservice.SpotifyService
 import com.example.musify.data.remote.token.tokenmanager.TokenManager
 import com.example.musify.data.repositories.tokenrepository.SpotifyTokenRepository
 import com.example.musify.data.utils.FetchedResource
-import com.example.musify.data.utils.MapperImageSize
 import com.example.musify.domain.MusifyErrorType
 import com.example.musify.utils.defaultMusifyJacksonConverterFactory
 import kotlinx.coroutines.runBlocking
@@ -44,7 +43,7 @@ class MusifyArtistsRepositoryTest {
         val validArtistId = "4zCH9qm4R2DADamUHMCa6O" // Anirudh Ravichander
         // when fetching the artist summary using the id
         val resource =
-            artistsRepository.fetchArtistSummaryForId(validArtistId, MapperImageSize.SMALL)
+            artistsRepository.fetchArtistSummaryForId(validArtistId)
         // the return type must be of type FetchedResource.Success
         assert(resource is FetchedResource.Success)
     }
@@ -55,7 +54,7 @@ class MusifyArtistsRepositoryTest {
         val invalid = "-"
         // when fetching the artist summary using the id
         val resource =
-            artistsRepository.fetchArtistSummaryForId(invalid, MapperImageSize.SMALL)
+            artistsRepository.fetchArtistSummaryForId(invalid)
         // the return type must be of type FetchedResource.Failure
         assert(resource is FetchedResource.Failure)
         // the error type must be MusifyHttpErrorType.INVALID_REQUEST
