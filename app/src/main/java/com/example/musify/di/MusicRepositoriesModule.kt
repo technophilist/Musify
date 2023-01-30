@@ -2,8 +2,6 @@ package com.example.musify.di
 
 import com.example.musify.data.repositories.albumsrepository.AlbumsRepository
 import com.example.musify.data.repositories.albumsrepository.MusifyAlbumsRepository
-import com.example.musify.data.repositories.artistsrepository.ArtistsRepository
-import com.example.musify.data.repositories.artistsrepository.MusifyArtistsRepository
 import com.example.musify.data.repositories.genresrepository.GenresRepository
 import com.example.musify.data.repositories.genresrepository.MusifyGenresRepository
 import com.example.musify.data.repositories.homefeedrepository.HomeFeedRepository
@@ -27,9 +25,6 @@ abstract class MusicRepositoriesModule {
 
     @Binds
     abstract fun bindAlbumsRepository(impl: MusifyAlbumsRepository): AlbumsRepository
-
-    @Binds
-    abstract fun bindArtistsRepository(impl: MusifyArtistsRepository): ArtistsRepository
 
     @Binds
     abstract fun bindGeneresRepository(impl: MusifyGenresRepository): GenresRepository
