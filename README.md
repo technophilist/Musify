@@ -53,9 +53,10 @@ that is heavily inspired by the design of the official Spotify app with some cus
   - The clear button of the search bar in the search screen will only appear if there is text within it. It also uses a subtle animation while entering/exiting.
 - If the user is inside a nested navigation destination associated with a bottom navigation destination, and taps on the bottom navigation icon, the backstack would be popped.
    </dd>
+  <dt> HTML styled text🖌</dt>
+  <dd> The app leverages compose-view interop to display html styled text. It's mainly used in the descriptions of the podcast show/episode detail screens. This means, these textfields can display text in different styles, such as italics and bold. Moreover, since the text is html styled, it can even display text in other forms such as lists. The URLs in the descriptions are even clickable, allowing the user to navigate to a linked website. </dd>
    <dt> Additional features 🎄 </dt>
    <dd> As of writing this, the IOS version of the official Spotify app uses a dynamic background color in the search screen. The Android version of the app doesn't have that feature. The Musify app mimics that feature by using a dynamic background color for the search screen. </dd>
-  
 </dl>
 
 ## Source code and architecture
