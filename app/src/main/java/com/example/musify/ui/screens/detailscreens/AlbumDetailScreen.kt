@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
@@ -39,40 +40,33 @@ fun AlbumDetailScreen(
     val isAppBarVisible by remember {
         derivedStateOf { lazyListState.firstVisibleItemIndex > 0 }
     }
-    val dynamicThemeResource = remember {
-        DynamicThemeResource.FromImageUrl(albumArtUrlString)
-    }
+    val dynamicThemeResource = remember { DynamicThemeResource.FromImageUrl(albumArtUrlString) }
+    val dynamicBackgroundType = remember { DynamicBackgroundType.Gradient() }
+
     val coroutineScope = rememberCoroutineScope()
-    val dynamicThemeResourceType = remember { DynamicBackgroundType.Gradient() }
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
-            modifier = Modifier
-                .statusBarsPadding()
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(
                 bottom = MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight
             ),
             state = lazyListState
         ) {
-            item {
-                DynamicallyThemedSurface(
-                    dynamicThemeResource = dynamicThemeResource,
-                    dynamicBackgroundType = dynamicThemeResourceType
-                ) {
-                    ImageHeaderWithMetadata(
-                        title = albumName,
-                        headerImageSource = HeaderImageSource.ImageFromUrlString(albumArtUrlString),
-                        subtitle = artistsString,
-                        onBackButtonClicked = onBackButtonClicked,
-                        isLoadingPlaceholderVisible = isLoadingPlaceholderForAlbumArtVisible,
-                        onImageLoading = { isLoadingPlaceholderForAlbumArtVisible = true },
-                        onImageLoaded = { isLoadingPlaceholderForAlbumArtVisible = false },
-                        additionalMetadataContent = { AlbumArtHeaderMetadata(yearOfRelease) }
-                    )
-                    Spacer(modifier = Modifier.size(16.dp))
-                }
-            }
+            headerWithImageItem(
+                dynamicThemeResource = dynamicThemeResource,
+                dynamicBackgroundType = dynamicBackgroundType,
+                albumName = albumName,
+                albumArtUrlString = albumArtUrlString,
+                artistsString = artistsString,
+                yearOfRelease = yearOfRelease,
+                isLoadingPlaceholderForAlbumArtVisible = isLoadingPlaceholderForAlbumArtVisible,
+                onImageLoading = { isLoadingPlaceholderForAlbumArtVisible = true },
+                onImageLoaded = { isLoadingPlaceholderForAlbumArtVisible = false },
+                onBackButtonClicked = onBackButtonClicked
+            )
+
             if (isErrorMessageVisible) {
                 item {
                     Column(
@@ -154,4 +148,38 @@ private fun AlbumArtHeaderMetadata(yearOfRelease: String) {
                     .copy(alpha = ContentAlpha.medium)
             )
     )
+}
+
+private fun LazyListScope.headerWithImageItem(
+    dynamicThemeResource: DynamicThemeResource,
+    dynamicBackgroundType: DynamicBackgroundType,
+    albumName: String,
+    albumArtUrlString: String,
+    artistsString: String,
+    yearOfRelease: String,
+    isLoadingPlaceholderForAlbumArtVisible: Boolean,
+    onImageLoading: () -> Unit,
+    onImageLoaded: (Throwable?) -> Unit,
+    onBackButtonClicked: () -> Unit
+) {
+    item {
+        DynamicallyThemedSurface(
+            dynamicThemeResource = dynamicThemeResource,
+            dynamicBackgroundType = dynamicBackgroundType
+        ) {
+            Column(modifier = Modifier.statusBarsPadding()) {
+                ImageHeaderWithMetadata(
+                    title = albumName,
+                    headerImageSource = HeaderImageSource.ImageFromUrlString(albumArtUrlString),
+                    subtitle = artistsString,
+                    onBackButtonClicked = onBackButtonClicked,
+                    isLoadingPlaceholderVisible = isLoadingPlaceholderForAlbumArtVisible,
+                    onImageLoading = onImageLoading,
+                    onImageLoaded = onImageLoaded,
+                    additionalMetadataContent = { AlbumArtHeaderMetadata(yearOfRelease) }
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+            }
+        }
+    }
 }
