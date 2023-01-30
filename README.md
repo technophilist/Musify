@@ -59,8 +59,9 @@ that is heavily inspired by the design of the official Spotify app with some cus
    <dd> As of writing this, the IOS version of the official Spotify app uses a dynamic background color in the search screen. The Android version of the app doesn't have that feature. The Musify app mimics that feature by using a dynamic background color for the search screen. </dd>
 </dl>
 
-## Source code and architecture
+## Source code, Architecture, & Testing
 - All concrete implementations are prefixed by the term "Musify".
 - Uses multi-repository pattern.
 - MVVM archtecture.
 - Commit messages follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
+- Consists of extensive unit tests with a predominant focus on testing the data layer.
