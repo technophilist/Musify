@@ -48,25 +48,24 @@ fun PlaylistDetailScreen(
         else DynamicThemeResource.FromImageUrl(playlistImageUrlString)
 
     }
-    val dynamicBackgroundType = remember {
-        DynamicBackgroundType.Gradient(fraction = 0.5f)
-    }
+    val dynamicBackgroundType = remember { DynamicBackgroundType.Gradient() }
     val coroutineScope = rememberCoroutineScope()
-    DynamicallyThemedSurface(
-        dynamicThemeResource = dynamicThemeResource,
-        dynamicBackgroundType = dynamicBackgroundType
-    ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            LazyColumn(
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .fillMaxSize(),
-                contentPadding = PaddingValues(
-                    bottom = MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight
-                ),
-                state = lazyListState
-            ) {
-                item {
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .statusBarsPadding()
+                .fillMaxSize(),
+            contentPadding = PaddingValues(
+                bottom = MusifyBottomNavigationConstants.navigationHeight + MusifyMiniPlayerConstants.miniPlayerHeight
+            ),
+            state = lazyListState
+        ) {
+            item {
+                DynamicallyThemedSurface(
+                    dynamicThemeResource = dynamicThemeResource,
+                    dynamicBackgroundType = dynamicBackgroundType
+                ) {
                     ImageHeaderWithMetadata(
                         title = playlistName,
                         headerImageSource = if (playlistImageUrlString == null)
@@ -83,73 +82,73 @@ fun PlaylistDetailScreen(
                     )
                     Spacer(modifier = Modifier.size(16.dp))
                 }
-                if (isErrorMessageVisible) {
-                    item {
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "Oops! Something doesn't look right",
-                                style = MaterialTheme.typography.h6,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                            Text(
-                                text = "Please check the internet connection",
-                                style = MaterialTheme.typography.subtitle2
-                            )
-                        }
-                    }
-                } else {
-                    items(tracks) {
-                        it?.let {
-                            MusifyCompactTrackCard(
-                                track = it,
-                                onClick = onTrackClicked,
-                                isLoadingPlaceholderVisible = false,
-                                isCurrentlyPlaying = it == currentlyPlayingTrack,
-                                isAlbumArtVisible = true,
-                                subtitleTextStyle = LocalTextStyle.current.copy(
-                                    fontWeight = FontWeight.Thin,
-                                    color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.disabled),
-                                ),
-                                contentPadding = PaddingValues(16.dp)
-                            )
-                        }
+            }
+            if (isErrorMessageVisible) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Oops! Something doesn't look right",
+                            style = MaterialTheme.typography.h6,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = "Please check the internet connection",
+                            style = MaterialTheme.typography.subtitle2
+                        )
                     }
                 }
-                item {
-                    Spacer(
-                        modifier = Modifier
-                            .windowInsetsBottomHeight(WindowInsets.navigationBars)
-                            .padding(bottom = 16.dp)
-                    )
+            } else {
+                items(tracks) {
+                    it?.let {
+                        MusifyCompactTrackCard(
+                            track = it,
+                            onClick = onTrackClicked,
+                            isLoadingPlaceholderVisible = false,
+                            isCurrentlyPlaying = it == currentlyPlayingTrack,
+                            isAlbumArtVisible = true,
+                            subtitleTextStyle = LocalTextStyle.current.copy(
+                                fontWeight = FontWeight.Thin,
+                                color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.disabled),
+                            ),
+                            contentPadding = PaddingValues(16.dp)
+                        )
+                    }
                 }
             }
-            DefaultMusifyLoadingAnimation(
-                modifier = Modifier.align(Alignment.Center),
-                isVisible = isLoading
-            )
-            AnimatedVisibility(
-                visible = isAppBarVisible,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                DetailScreenTopAppBar(
+            item {
+                Spacer(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.TopCenter)
-                        .statusBarsPadding(),
-                    title = playlistName,
-                    onBackButtonClicked = onBackButtonClicked,
-                    dynamicThemeResource = dynamicThemeResource,
-                    onClick = {
-                        coroutineScope.launch { lazyListState.animateScrollToItem(0) }
-                    }
+                        .windowInsetsBottomHeight(WindowInsets.navigationBars)
+                        .padding(bottom = 16.dp)
                 )
             }
+        }
+        DefaultMusifyLoadingAnimation(
+            modifier = Modifier.align(Alignment.Center),
+            isVisible = isLoading
+        )
+        AnimatedVisibility(
+            visible = isAppBarVisible,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            DetailScreenTopAppBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter)
+                    .statusBarsPadding(),
+                title = playlistName,
+                onBackButtonClicked = onBackButtonClicked,
+                dynamicThemeResource = dynamicThemeResource,
+                onClick = {
+                    coroutineScope.launch { lazyListState.animateScrollToItem(0) }
+                }
+            )
         }
     }
 }
