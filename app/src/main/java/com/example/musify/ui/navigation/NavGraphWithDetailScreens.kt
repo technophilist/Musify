@@ -20,9 +20,10 @@ import com.example.musify.domain.SearchResult
 import com.example.musify.domain.Streamable
 import com.example.musify.ui.components.DefaultMusifyErrorMessage
 import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
-import com.example.musify.ui.screens.AlbumDetailScreen
-import com.example.musify.ui.screens.ArtistDetailScreen
-import com.example.musify.ui.screens.PlaylistDetailScreen
+import com.example.musify.ui.screens.detailscreens.AlbumDetailScreen
+import com.example.musify.ui.screens.detailscreens.ArtistDetailScreen
+import com.example.musify.ui.screens.detailscreens.PlaylistDetailScreen
+import com.example.musify.ui.screens.detailscreens.PodcastEpisodeDetailScreen
 import com.example.musify.ui.screens.podcastshowdetailscreen.PodcastShowDetailScreen
 import com.example.musify.viewmodels.*
 import com.example.musify.viewmodels.artistviewmodel.ArtistDetailScreenUiState
@@ -347,7 +348,7 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
                 }
             }
         } else {
-            com.example.musify.ui.screens.PodcastEpisodeDetailScreen(
+            PodcastEpisodeDetailScreen(
                 podcastEpisode = viewModel.podcastEpisode!!,
                 isEpisodeCurrentlyPlaying = isEpisodeCurrentlyPlaying,
                 isPlaybackLoading = uiState == PodcastEpisodeDetailViewModel.UiSate.PLAYBACK_LOADING,
