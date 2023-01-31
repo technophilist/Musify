@@ -8,10 +8,11 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 
 /**
  * A kotlin module with strict null checks enabled for collections.
- * TODO: consider using strict null checks only during the debug version and not for the release.
  */
 private val jacksonModule = kotlinModule {
-    configure(KotlinFeature.StrictNullChecks, true) // warning: this feature has a significant performance impact.
+    // warning: this feature has a significant performance impact.
+    // Consider using it only in debug mode.
+    configure(KotlinFeature.StrictNullChecks, true)
 }
 
 /**
