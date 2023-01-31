@@ -39,7 +39,7 @@ class HomeFeedViewModel @Inject constructor(
             _uiState.value = HomeFeedUiState.LOADING
             val carousels = mutableListOf<HomeFeedCarousel>()
             val languageCode =
-                getApplication<MusifyApplication>().resources.configuration.locale.language.let(::ISO6391LanguageCode) // TODO test
+                getApplication<MusifyApplication>().resources.configuration.locale.language.let(::ISO6391LanguageCode)
             val countryCode = getCountryCode()
             val newAlbums = async {
                 homeFeedRepository.fetchNewlyReleasedAlbums(countryCode)
