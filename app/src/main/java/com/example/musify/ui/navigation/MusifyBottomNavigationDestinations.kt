@@ -15,7 +15,6 @@ sealed class MusifyBottomNavigationDestinations(
         filledIconVariantResourceId = R.drawable.ic_filled_home_24
     )
 
-    // TODO add filled icon variant for search destination
     object Search : MusifyBottomNavigationDestinations(
         route = "com.example.musify.ui.navigation.bottom.search",
         label = "Search",
