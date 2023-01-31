@@ -224,7 +224,7 @@ private fun NavGraphBuilder.playlistDetailScreen(
             playlistImageUrlString = imageUrlString,
             nameOfPlaylistOwner = ownerName,
             totalNumberOfTracks = totalNumberOfTracks,
-            imageResToUseWhenImageUrlStringIsNull = R.drawable.ic_outline_account_circle_24, // TODO
+            imageResToUseWhenImageUrlStringIsNull = R.drawable.ic_outline_account_circle_24,
             tracks = tracks,
             currentlyPlayingTrack = currentlyPlayingTrack,
             onBackButtonClicked = onBackButtonClicked,
