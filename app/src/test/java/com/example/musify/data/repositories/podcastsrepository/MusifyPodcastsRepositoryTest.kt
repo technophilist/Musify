@@ -37,7 +37,6 @@ class MusifyPodcastsRepositoryTest {
         )
     }
 
-    // TODO Tests don't run because HtmlCompat.fromHtml isn't mocked.
     @Test
     fun fetchPodcastEpisodeTest_validEpisodeId_successfullyFetchesPodcastEpisode() = runBlocking {
         val validEpisodeId = "5pLYyCItRvIc2SEbuJ3eO8"
