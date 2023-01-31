@@ -16,6 +16,19 @@ import androidx.compose.ui.unit.dp
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.getFormattedDateAndDurationString
 
+/**
+ * A compact card that is used to display the information of a specific
+ * [SearchResult.EpisodeSearchResult], arranged in a row-wise manner.
+ * This composable, as the name implies, is meant to be mainly used in lists.
+ * It is also important to note that **this composable also has a fixed height.**
+ *
+ * @param episodeSearchResult the instance of [SearchResult.EpisodeSearchResult]
+ * that will be used by the composable.
+ * @param onClick the lambda to execute when this card is clicked.
+ * @param modifier the modifier to be applied to this composable. The composable
+ * has a fixed height which cannot be changed.
+ * @param backgroundColor the background [Color] to be applied to this composable.
+ */
 @ExperimentalMaterialApi
 @Composable
 fun EpisodeListCard(
@@ -31,7 +44,7 @@ fun EpisodeListCard(
     var isLoadingPlaceholderVisible by remember { mutableStateOf(true) }
     Card(
         modifier = Modifier
-            .height(114.dp) // TODO mention that this composable has a fixed height in the docs
+            .height(114.dp)
             .then(modifier),
         elevation = 0.dp,
         backgroundColor = backgroundColor,
