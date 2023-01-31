@@ -86,7 +86,9 @@ class PlaybackViewModel @Inject constructor(
                 context = getApplication()
             )
             if (downloadAlbumArtResult.isSuccess) {
-                val bitmap = downloadAlbumArtResult.getOrNull()!!.toBitmap() // TODO check
+                // getOrNull() can't be null because this line is executed
+                // if, and only if the image was downloaded successfully.
+                val bitmap = downloadAlbumArtResult.getOrNull()!!.toBitmap()
                 musicPlayer.playStreamable(
                     streamable = streamable,
                     associatedAlbumArt = bitmap
