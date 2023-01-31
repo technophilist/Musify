@@ -41,5 +41,5 @@ fun AlbumMetadataResponse.toAlbumSearchResult() = AlbumSearchResult(
     name = name,
     artistsString = artists.joinToString(", ") { it.name },
     albumArtUrlString = images.getImageResponseForImageSize(MapperImageSize.LARGE).url,
-    yearOfReleaseString = releaseDate // TODO
+    yearOfReleaseString = releaseDate.substring(0..3) // yyyy-mm-dd
 )
