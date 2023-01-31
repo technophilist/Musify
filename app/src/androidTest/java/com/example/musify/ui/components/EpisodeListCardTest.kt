@@ -52,7 +52,7 @@ class EpisodeListCardTest {
         composeTestRule.setContent {
             EpisodeListCard(
                 episodeSearchResult = episodeSearchResult,
-                onClick = { /*TODO*/ }
+                onClick = {}
             )
         }
         composeTestRule.onNodeWithText(text = "Jan 1, 2022 • 2 hrs 1 min").assertExists()
@@ -70,7 +70,7 @@ class EpisodeListCardTest {
         composeTestRule.setContent {
             EpisodeListCard(
                 episodeSearchResult = episodeSearchResult,
-                onClick = { /*TODO*/ }
+                onClick = {}
             )
         }
         composeTestRule.onNodeWithText(text = "1 min", substring = true).assertExists()
@@ -88,7 +88,7 @@ class EpisodeListCardTest {
         composeTestRule.setContent {
             EpisodeListCard(
                 episodeSearchResult = episodeSearchResult,
-                onClick = { /*TODO*/ }
+                onClick = {}
             )
         }
         composeTestRule.onNodeWithText(text = "2 mins", substring = true).assertExists()
@@ -106,7 +106,7 @@ class EpisodeListCardTest {
         composeTestRule.setContent {
             EpisodeListCard(
                 episodeSearchResult = episodeSearchResult,
-                onClick = { /*TODO*/ }
+                onClick = {}
             )
         }
         composeTestRule.onNodeWithText(text = "1 hr", substring = true).assertExists()
@@ -124,7 +124,7 @@ class EpisodeListCardTest {
         composeTestRule.setContent {
             EpisodeListCard(
                 episodeSearchResult = episodeSearchResult,
-                onClick = { /*TODO*/ }
+                onClick = {}
             )
         }
         composeTestRule.onNodeWithText(text = "2 hrs", substring = true).assertExists()
@@ -142,7 +142,7 @@ class EpisodeListCardTest {
         composeTestRule.setContent {
             EpisodeListCard(
                 episodeSearchResult = episodeSearchResult,
-                onClick = { /*TODO*/ }
+                onClick = {}
             )
         }
         composeTestRule.onNodeWithText(text = "0 hrs 2 mins", substring = true).assertDoesNotExist()
