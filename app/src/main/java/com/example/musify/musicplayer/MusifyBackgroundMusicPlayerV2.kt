@@ -92,9 +92,6 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
         currentPlaybackPositionInMillisFlow = player.getCurrentPlaybackProgressFlow()
     )
 
-
-    // TODO add an additional parameter that allows the client to specify
-    //  what happens when the method is called with the same streamable.
     override fun playStreamable(
         streamable: Streamable,
         associatedAlbumArt: Bitmap
