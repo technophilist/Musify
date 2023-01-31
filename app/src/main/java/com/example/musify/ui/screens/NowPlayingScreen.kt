@@ -59,7 +59,7 @@ fun NowPlayingScreen(
             Header(
                 modifier = Modifier.fillMaxWidth(),
                 onCloseButtonClicked = onCloseButtonClicked,
-                onTrailingButtonClick = {/*TODO*/ }
+                onTrailingButtonClick = {}
             )
             Spacer(modifier = Modifier.size(64.dp))
             AsyncImageWithPlaceholder(
@@ -108,11 +108,13 @@ fun NowPlayingScreen(
                 onRepeatButtonClicked = onRepeatButtonClicked,
                 onShuffleButtonClicked = onShuffleButtonClicked
             )
-            Footer(modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding(),
-                onAvailableDevicesButtonClicked = { /*TODO*/ },
-                onShareButtonClicked = { /*TODO*/ })
+            Footer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding(),
+                onAvailableDevicesButtonClicked = {},
+                onShareButtonClicked = {}
+            )
         }
     }
 }

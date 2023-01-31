@@ -111,7 +111,7 @@ fun MusifyMiniPlayer(
                     maxLines = 1
                 )
             }
-            IconButton(onClick = { /* TODO */ }) {
+            IconButton(onClick = {}) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_available_devices),
                     contentDescription = null

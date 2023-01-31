@@ -171,19 +171,19 @@ private fun HeaderRow(modifier: Modifier = Modifier, timeBasedGreeting: String) 
         )
 
         Row {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {}) {
                 Icon(
                     imageVector = Icons.Outlined.Notifications,
                     contentDescription = null
                 )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {}) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_listening_history),
                     contentDescription = null
                 )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {}) {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
                     contentDescription = null

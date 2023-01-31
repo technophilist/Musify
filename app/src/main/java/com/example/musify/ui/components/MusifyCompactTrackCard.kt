@@ -79,7 +79,7 @@ fun MusifyCompactTrackCard(
             title = track.name,
             subtitle = track.artistsString,
             onClick = { onClick(track) },
-            onTrailingButtonIconClick = { /* TODO*/ },
+            onTrailingButtonIconClick = {},
             isLoadingPlaceHolderVisible = isLoadingPlaceholderVisible,
             onThumbnailLoading = { onImageLoading?.invoke(track) },
             onThumbnailImageLoadingFinished = { throwable ->

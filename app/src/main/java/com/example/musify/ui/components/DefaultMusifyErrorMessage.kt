@@ -47,7 +47,7 @@ fun DefaultMusifyErrorMessage(
         )
         Spacer(modifier = Modifier.size(8.dp))
         OutlinedButton(
-            onClick = { /*TODO*/ },
+            onClick = {},
             shape = RoundedCornerShape(50),
             content = { Text(text = "Retry") }
         )

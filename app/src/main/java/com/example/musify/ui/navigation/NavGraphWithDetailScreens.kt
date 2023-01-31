@@ -147,7 +147,7 @@ private fun NavGraphBuilder.artistDetailScreen(
             releases = releases,
             currentlyPlayingTrack = currentlyPlayingTrack,
             onBackButtonClicked = onBackButtonClicked,
-            onPlayButtonClicked = { /*TODO*/ },
+            onPlayButtonClicked = {},
             onTrackClicked = onPlayTrack,
             onAlbumClicked = onAlbumClicked,
             isLoading = uiState is ArtistDetailScreenUiState.Loading,
@@ -356,9 +356,9 @@ private fun NavGraphBuilder.podcastEpisodeDetailScreen(
                     onPlayButtonClicked(viewModel.podcastEpisode!!)
                 },
                 onPauseButtonClicked = { onPauseButtonClicked() },
-                onShareButtonClicked = { /*TODO*/ },
-                onAddButtonClicked = { /*TODO*/ },
-                onDownloadButtonClicked = { /*TODO*/ },
+                onShareButtonClicked = {},
+                onAddButtonClicked = {},
+                onDownloadButtonClicked = {},
                 onBackButtonClicked = onBackButtonClicked,
                 navigateToPodcastDetailScreen = {
                     viewModel.podcastEpisode?.let { navigateToPodcastShowDetailScreen(it) }

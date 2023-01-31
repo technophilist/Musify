@@ -73,11 +73,11 @@ fun ExpandableMiniPlayerWithSnackbar(
                     playbackDurationRange = PlaybackViewModel.PLAYBACK_PROGRESS_RANGE,
                     playbackProgressFlow = playbackProgressFlow,
                     onCloseButtonClicked = { isNowPlayingScreenVisible = false },
-                    onShuffleButtonClicked = { /*TODO*/ },
-                    onSkipPreviousButtonClicked = { /*TODO*/ },
+                    onShuffleButtonClicked = {},
+                    onSkipPreviousButtonClicked = {},
                     onPlayButtonClicked = { onPlayButtonClicked(streamable) },
                     onPauseButtonClicked = onPauseButtonClicked,
-                    onSkipNextButtonClicked = { /*TODO*/ },
+                    onSkipNextButtonClicked = {},
                     onRepeatButtonClicked = {}
                 )
                 SnackbarHost(
