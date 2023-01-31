@@ -166,7 +166,7 @@ interface SpotifyService {
     suspend fun getPlaylistsForCategory(
         @Header("Authorization") token: BearerToken,
         @Path("category_id") categoryId: String,
-        @Query("country") market: String, // TODO change query name to "market"
+        @Query("country") market: String,
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0
     ): PlaylistsForSpecificCategoryResponse
