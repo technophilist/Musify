@@ -1,4 +1,4 @@
-package com.example.musify.ui.theme.dynamictheme.dynamicthememanager
+package com.example.musify.ui.dynamicTheme.manager
 
 import android.content.Context
 import androidx.compose.ui.graphics.Color

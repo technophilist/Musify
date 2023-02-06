@@ -30,9 +30,8 @@ import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.getFormattedDateAndDurationString
 import com.example.musify.ui.components.*
-import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
-import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
-import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.DynamicBackgroundResource
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.dynamicBackground
 import kotlinx.coroutines.launch
 import com.google.android.material.R as materialR
 
@@ -61,8 +60,8 @@ fun PodcastEpisodeDetailScreen(
             lazyListState.firstVisibleItemScrollOffset > 200
         }
     }
-    val dynamicThemeResource = remember(podcastEpisode) {
-        DynamicThemeResource.FromImageUrl(podcastEpisode.podcastShowInfo.imageUrl)
+    val dynamicBackgroundResource = remember(podcastEpisode) {
+        DynamicBackgroundResource.FromImageUrl(podcastEpisode.podcastShowInfo.imageUrl)
     }
     val coroutineScope = rememberCoroutineScope()
     val descriptionSpannedText = remember { HtmlCompat.fromHtml(podcastEpisode.htmlDescription, 0) }
@@ -111,7 +110,7 @@ fun PodcastEpisodeDetailScreen(
                 onClick = {
                     coroutineScope.launch { lazyListState.animateScrollToItem(0) }
                 },
-                dynamicThemeResource = dynamicThemeResource
+                dynamicBackgroundResource = dynamicBackgroundResource
             )
         }
         DefaultMusifyLoadingAnimation(
@@ -182,67 +181,64 @@ private fun PodcastEpisodeHeader(
     podcastName: String,
     dateAndDurationString: String
 ) {
-    val dynamicThemeResource = remember { DynamicThemeResource.FromImageUrl(episodeImageUrl) }
-    val dynamicBackgroundType = remember { DynamicBackgroundType.Gradient() }
+    val dynamicBackgroundResource = remember { DynamicBackgroundResource.FromImageUrl(episodeImageUrl) }
     var isImageLoadingPlaceholderVisible by remember { mutableStateOf(true) }
-    DynamicallyThemedSurface(
-        dynamicThemeResource = dynamicThemeResource, dynamicBackgroundType = dynamicBackgroundType
+
+    Column(
+        modifier = Modifier
+            .dynamicBackground(dynamicBackgroundResource)
+            .fillMaxWidth()
+            .statusBarsPadding()
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .statusBarsPadding()
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+        IconButton(
+            // add offset to accommodate for the touch target sizing
+            // applied to the icon button
+            modifier = Modifier.offset(x = (-16).dp), onClick = onBackButtonClicked
         ) {
-            IconButton(
-                // add offset to accommodate for the touch target sizing
-                // applied to the icon button
-                modifier = Modifier.offset(x = (-16).dp), onClick = onBackButtonClicked
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_baseline_chevron_left_24),
-                    contentDescription = null,
-                    tint = Color.White
-                )
-            }
-            AsyncImageWithPlaceholder(
-                modifier = Modifier
-                    .size(60.dp)
-                    .clip(RoundedCornerShape(4.dp)),
-                model = episodeImageUrl,
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_baseline_chevron_left_24),
                 contentDescription = null,
-                onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
-                isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
-                onImageLoading = {
-                    if (!isImageLoadingPlaceholderVisible) isImageLoadingPlaceholderVisible = true
-                },
-                contentScale = ContentScale.Crop
+                tint = Color.White
             )
-            Spacer(modifier = Modifier.height(32.dp))
+        }
+        AsyncImageWithPlaceholder(
+            modifier = Modifier
+                .size(60.dp)
+                .clip(RoundedCornerShape(4.dp)),
+            model = episodeImageUrl,
+            contentDescription = null,
+            onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
+            isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
+            onImageLoading = {
+                if (!isImageLoadingPlaceholderVisible) isImageLoadingPlaceholderVisible = true
+            },
+            contentScale = ContentScale.Crop
+        )
+        Spacer(modifier = Modifier.height(32.dp))
+        Text(
+            text = episodeTitle,
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis,
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold
+        )
+        // using a column to prevent the text being spaced by 16dp (set by the parent column)
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
-                text = episodeTitle,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis,
-                fontSize = 32.sp,
+                modifier = Modifier.clickable { onPodcastShowTitleClicked() },
+                text = podcastName,
+                style = MaterialTheme.typography.caption,
+                color = Color.White,
                 fontWeight = FontWeight.Bold
             )
-            // using a column to prevent the text being spaced by 16dp (set by the parent column)
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    modifier = Modifier.clickable { onPodcastShowTitleClicked() },
-                    text = podcastName,
-                    style = MaterialTheme.typography.caption,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = dateAndDurationString,
-                    style = MaterialTheme.typography.caption,
-                    color = Color.White.copy(alpha = ContentAlpha.medium)
-                )
-                Spacer(modifier = Modifier.size(8.dp))
-            }
+            Text(
+                text = dateAndDurationString,
+                style = MaterialTheme.typography.caption,
+                color = Color.White.copy(alpha = ContentAlpha.medium)
+            )
+            Spacer(modifier = Modifier.size(8.dp))
         }
     }
 }

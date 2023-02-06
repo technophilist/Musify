@@ -37,9 +37,8 @@ import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
 import com.example.musify.ui.components.DetailScreenTopAppBar
 import com.example.musify.ui.components.HtmlTextView
-import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
-import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
-import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.DynamicBackgroundResource
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.dynamicBackground
 
 @ExperimentalMaterialApi
 @Composable
@@ -66,6 +65,9 @@ fun PodcastShowDetailScreen(
     }
     val spannedHtmlDescription = remember {
         HtmlCompat.fromHtml(podcastShow.htmlDescription, 0)
+    }
+    val dynamicBackgroundResource = remember{
+        DynamicBackgroundResource.FromImageUrl(podcastShow.imageUrlString)
     }
     Box {
         LazyColumn(
@@ -125,7 +127,7 @@ fun PodcastShowDetailScreen(
                     .fillMaxWidth(),
                 title = podcastShow.name,
                 onBackButtonClicked = onBackButtonClicked,
-                dynamicThemeResource = DynamicThemeResource.FromImageUrl(podcastShow.imageUrlString)
+                dynamicBackgroundResource = dynamicBackgroundResource
             )
         }
         DefaultMusifyLoadingAnimation(
@@ -142,45 +144,42 @@ private fun Header(
     title: String,
     nameOfPublisher: String
 ) {
-    val dynamicThemeResource = remember { DynamicThemeResource.FromImageUrl(imageUrlString) }
-    val dynamicBackgroundType = remember { DynamicBackgroundType.Gradient() }
+    val dynamicBackgroundResource =
+        remember { DynamicBackgroundResource.FromImageUrl(imageUrlString) }
     val columnVerticalArrangementSpacing = 16.dp
-    DynamicallyThemedSurface(
-        dynamicThemeResource = dynamicThemeResource,
-        dynamicBackgroundType = dynamicBackgroundType
+
+    Column(
+        modifier = Modifier
+            .dynamicBackground(dynamicBackgroundResource)
+            .fillMaxWidth()
+            .systemBarsPadding(),
+        verticalArrangement = Arrangement.spacedBy(columnVerticalArrangementSpacing)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .systemBarsPadding(),
-            verticalArrangement = Arrangement.spacedBy(columnVerticalArrangementSpacing)
-        ) {
-            IconButton(onClick = onBackButtonClicked) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_chevron_left_24),
-                    contentDescription = null
-                )
-            }
-            PodcastHeaderImageWithMetadata(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    // The back button above has a slightly bigger size because
-                    // of the default touch target sizing applied by compose. This
-                    // together with the vertical arrangement specified by the
-                    // parent column, cause this composable have a lot of padding on
-                    // top of it. Therefore, apply an offset to reduce the spacing
-                    // above the composable.
-                    .offset(y = -columnVerticalArrangementSpacing),
-                imageUrl = imageUrlString,
-                title = title,
-                nameOfPublisher = nameOfPublisher
-            )
-            HeaderActionsRow(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .alpha(ContentAlpha.medium)
+        IconButton(onClick = onBackButtonClicked) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_chevron_left_24),
+                contentDescription = null
             )
         }
+        PodcastHeaderImageWithMetadata(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                // The back button above has a slightly bigger size because
+                // of the default touch target sizing applied by compose. This
+                // together with the vertical arrangement specified by the
+                // parent column, cause this composable have a lot of padding on
+                // top of it. Therefore, apply an offset to reduce the spacing
+                // above the composable.
+                .offset(y = -columnVerticalArrangementSpacing),
+            imageUrl = imageUrlString,
+            title = title,
+            nameOfPublisher = nameOfPublisher
+        )
+        HeaderActionsRow(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .alpha(ContentAlpha.medium)
+        )
     }
 }
 

@@ -33,7 +33,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.*
-import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.DynamicBackgroundResource
 import kotlinx.coroutines.launch
 
 // TODO display error messages - network error
@@ -63,9 +63,9 @@ fun ArtistDetailScreen(
     val isAppBarVisible by remember {
         derivedStateOf { lazyListState.firstVisibleItemIndex > 0 }
     }
-    val dynamicThemeResource = remember {
-        if (artistImageUrlString == null) DynamicThemeResource.Empty
-        else DynamicThemeResource.FromImageUrl(artistImageUrlString)
+    val dynamicBackgroundResource = remember {
+        if (artistImageUrlString == null) DynamicBackgroundResource.Empty
+        else DynamicBackgroundResource.FromImageUrl(artistImageUrlString)
     }
     val coroutineScope = rememberCoroutineScope()
     Box {
@@ -188,7 +188,7 @@ fun ArtistDetailScreen(
                     .statusBarsPadding(),
                 title = artistName,
                 onBackButtonClicked = onBackButtonClicked,
-                dynamicThemeResource = dynamicThemeResource,
+                dynamicBackgroundResource = dynamicBackgroundResource,
                 onClick = {
                     coroutineScope.launch { lazyListState.animateScrollToItem(0) }
                 }
