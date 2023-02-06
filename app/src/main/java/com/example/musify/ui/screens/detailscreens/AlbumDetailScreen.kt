@@ -16,9 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.*
-import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
-import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
-import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
+import com.example.musify.ui.dynamicbackgroundmodifier.DynamicBackgroundResource
+import com.example.musify.ui.dynamicbackgroundmodifier.dynamicBackground
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
@@ -40,11 +39,9 @@ fun AlbumDetailScreen(
     val isAppBarVisible by remember {
         derivedStateOf { lazyListState.firstVisibleItemIndex > 0 }
     }
-    val dynamicThemeResource = remember { DynamicThemeResource.FromImageUrl(albumArtUrlString) }
-    val dynamicBackgroundType = remember { DynamicBackgroundType.Gradient() }
-
+    val dynamicBackgroundResource =
+        remember { DynamicBackgroundResource.FromImageUrl(albumArtUrlString) }
     val coroutineScope = rememberCoroutineScope()
-
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
@@ -55,8 +52,7 @@ fun AlbumDetailScreen(
             state = lazyListState
         ) {
             headerWithImageItem(
-                dynamicThemeResource = dynamicThemeResource,
-                dynamicBackgroundType = dynamicBackgroundType,
+                dynamicBackgroundResource = dynamicBackgroundResource,
                 albumName = albumName,
                 albumArtUrlString = albumArtUrlString,
                 artistsString = artistsString,
@@ -126,7 +122,7 @@ fun AlbumDetailScreen(
                     .statusBarsPadding(),
                 title = albumName,
                 onBackButtonClicked = onBackButtonClicked,
-                dynamicThemeResource = dynamicThemeResource,
+                dynamicBackgroundResource = dynamicBackgroundResource,
                 onClick = {
                     coroutineScope.launch { lazyListState.animateScrollToItem(0) }
                 }
@@ -151,8 +147,7 @@ private fun AlbumArtHeaderMetadata(yearOfRelease: String) {
 }
 
 private fun LazyListScope.headerWithImageItem(
-    dynamicThemeResource: DynamicThemeResource,
-    dynamicBackgroundType: DynamicBackgroundType,
+    dynamicBackgroundResource: DynamicBackgroundResource,
     albumName: String,
     albumArtUrlString: String,
     artistsString: String,
@@ -163,23 +158,22 @@ private fun LazyListScope.headerWithImageItem(
     onBackButtonClicked: () -> Unit
 ) {
     item {
-        DynamicallyThemedSurface(
-            dynamicThemeResource = dynamicThemeResource,
-            dynamicBackgroundType = dynamicBackgroundType
+        Column(
+            modifier = Modifier
+                .dynamicBackground(dynamicBackgroundResource)
+                .statusBarsPadding()
         ) {
-            Column(modifier = Modifier.statusBarsPadding()) {
-                ImageHeaderWithMetadata(
-                    title = albumName,
-                    headerImageSource = HeaderImageSource.ImageFromUrlString(albumArtUrlString),
-                    subtitle = artistsString,
-                    onBackButtonClicked = onBackButtonClicked,
-                    isLoadingPlaceholderVisible = isLoadingPlaceholderForAlbumArtVisible,
-                    onImageLoading = onImageLoading,
-                    onImageLoaded = onImageLoaded,
-                    additionalMetadataContent = { AlbumArtHeaderMetadata(yearOfRelease) }
-                )
-                Spacer(modifier = Modifier.size(16.dp))
-            }
+            ImageHeaderWithMetadata(
+                title = albumName,
+                headerImageSource = HeaderImageSource.ImageFromUrlString(albumArtUrlString),
+                subtitle = artistsString,
+                onBackButtonClicked = onBackButtonClicked,
+                isLoadingPlaceholderVisible = isLoadingPlaceholderForAlbumArtVisible,
+                onImageLoading = onImageLoading,
+                onImageLoaded = onImageLoaded,
+                additionalMetadataContent = { AlbumArtHeaderMetadata(yearOfRelease) }
+            )
+            Spacer(modifier = Modifier.size(16.dp))
         }
     }
 }
