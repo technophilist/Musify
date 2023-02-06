@@ -1,4 +1,4 @@
-package com.example.musify.ui.theme.dynamictheme.dynamicthememanager
+package com.example.musify.ui.theme.dynamictheme
 
 import android.content.Context
 import android.graphics.Bitmap
