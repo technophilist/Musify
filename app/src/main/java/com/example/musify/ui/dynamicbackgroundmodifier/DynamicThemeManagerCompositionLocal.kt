@@ -1,4 +1,4 @@
-package com.example.musify.ui.theme.dynamictheme
+package com.example.musify.ui.dynamicbackgroundmodifier
 
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf

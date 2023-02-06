@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalContext
-import com.example.musify.ui.theme.dynamictheme.LocalDynamicThemeManager
 
 /**
  * A sealed class hierarchy that contains classes representing the
