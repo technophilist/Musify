@@ -15,9 +15,8 @@ import androidx.compose.ui.unit.dp
 import com.example.musify.R
 import com.example.musify.domain.Streamable
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
-import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
-import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
-import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
+import com.example.musify.ui.dynamicbackgroundmodifier.DynamicBackgroundResource
+import com.example.musify.ui.dynamicbackgroundmodifier.dynamicBackground
 import kotlinx.coroutines.flow.Flow
 
 // TODO make artist and album name scrollable if they overflow
@@ -42,80 +41,75 @@ fun NowPlayingScreen(
     onRepeatButtonClicked: () -> Unit
 ) {
     var isImageLoadingPlaceholderVisible by remember { mutableStateOf(true) }
-    val dynamicThemeResource = remember {
-        DynamicThemeResource.FromImageUrl(streamable.streamInfo.imageUrl)
+    val dynamicBackgroundResource = remember {
+        DynamicBackgroundResource.FromImageUrl(streamable.streamInfo.imageUrl)
     }
-    val dynamicBackgroundType = remember { DynamicBackgroundType.Gradient() }
-    DynamicallyThemedSurface(
-        dynamicThemeResource = dynamicThemeResource,
-        dynamicBackgroundType = dynamicBackgroundType
+    Column(
+        modifier = Modifier
+            .dynamicBackground(dynamicBackgroundResource)
+            .fillMaxSize()
+            .systemBarsPadding()
+            .padding(start = 16.dp, end = 16.dp)
     ) {
-        Column(
+        Header(
+            modifier = Modifier.fillMaxWidth(),
+            onCloseButtonClicked = onCloseButtonClicked,
+            onTrailingButtonClick = {}
+        )
+        Spacer(modifier = Modifier.size(64.dp))
+        AsyncImageWithPlaceholder(
             modifier = Modifier
-                .fillMaxSize()
-                .systemBarsPadding()
-                .padding(start = 16.dp, end = 16.dp)
-        ) {
-            Header(
-                modifier = Modifier.fillMaxWidth(),
-                onCloseButtonClicked = onCloseButtonClicked,
-                onTrailingButtonClick = {}
-            )
-            Spacer(modifier = Modifier.size(64.dp))
-            AsyncImageWithPlaceholder(
-                modifier = Modifier
-                    .size(330.dp)
-                    .align(Alignment.CenterHorizontally),
-                model = streamable.streamInfo.imageUrl,
-                contentDescription = null,
-                onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
-                isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
-                onImageLoading = { isImageLoadingPlaceholderVisible = true }
-            )
-            Spacer(modifier = Modifier.size(64.dp))
-            Text(
-                text = streamable.streamInfo.title,
-                fontWeight = FontWeight.Bold,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-                style = MaterialTheme.typography.h6
-            )
-            Text(
-                text = streamable.streamInfo.subtitle,
-                fontWeight = FontWeight.SemiBold,
-                style = MaterialTheme.typography.subtitle1.copy(
-                    color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)
-                ),
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
-            Spacer(modifier = Modifier.size(8.dp))
-            Box {
-                ProgressSliderWithTimeText(modifier = Modifier.fillMaxWidth(),
-                    currentTimeElapsedStringFlow = timeElapsedStringFlow,
-                    totalDurationOfTrack = totalDurationOfCurrentTrackProvider(),
-                    currentPlaybackProgressFlow = playbackProgressFlow,
-                    playbackDurationRange = playbackDurationRange,
-                    onSliderValueChange = {})
-            }
-            PlaybackControls(
-                modifier = Modifier.fillMaxWidth(),
-                isPlayIconVisible = isPlaybackPaused,
-                onSkipPreviousButtonClicked = onSkipPreviousButtonClicked,
-                onPlayButtonClicked = onPlayButtonClicked,
-                onPauseButtonClicked = onPauseButtonClicked,
-                onSkipNextButtonClicked = onSkipNextButtonClicked,
-                onRepeatButtonClicked = onRepeatButtonClicked,
-                onShuffleButtonClicked = onShuffleButtonClicked
-            )
-            Footer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .navigationBarsPadding(),
-                onAvailableDevicesButtonClicked = {},
-                onShareButtonClicked = {}
-            )
+                .size(330.dp)
+                .align(Alignment.CenterHorizontally),
+            model = streamable.streamInfo.imageUrl,
+            contentDescription = null,
+            onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
+            isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
+            onImageLoading = { isImageLoadingPlaceholderVisible = true }
+        )
+        Spacer(modifier = Modifier.size(64.dp))
+        Text(
+            text = streamable.streamInfo.title,
+            fontWeight = FontWeight.Bold,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+            style = MaterialTheme.typography.h6
+        )
+        Text(
+            text = streamable.streamInfo.subtitle,
+            fontWeight = FontWeight.SemiBold,
+            style = MaterialTheme.typography.subtitle1.copy(
+                color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)
+            ),
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1
+        )
+        Spacer(modifier = Modifier.size(8.dp))
+        Box {
+            ProgressSliderWithTimeText(modifier = Modifier.fillMaxWidth(),
+                currentTimeElapsedStringFlow = timeElapsedStringFlow,
+                totalDurationOfTrack = totalDurationOfCurrentTrackProvider(),
+                currentPlaybackProgressFlow = playbackProgressFlow,
+                playbackDurationRange = playbackDurationRange,
+                onSliderValueChange = {})
         }
+        PlaybackControls(
+            modifier = Modifier.fillMaxWidth(),
+            isPlayIconVisible = isPlaybackPaused,
+            onSkipPreviousButtonClicked = onSkipPreviousButtonClicked,
+            onPlayButtonClicked = onPlayButtonClicked,
+            onPauseButtonClicked = onPauseButtonClicked,
+            onSkipNextButtonClicked = onSkipNextButtonClicked,
+            onRepeatButtonClicked = onRepeatButtonClicked,
+            onShuffleButtonClicked = onShuffleButtonClicked
+        )
+        Footer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding(),
+            onAvailableDevicesButtonClicked = {},
+            onShareButtonClicked = {}
+        )
     }
 }
 
