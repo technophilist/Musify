@@ -66,7 +66,7 @@ fun Modifier.dynamicBackground(
             Color(0xFF121212),
         )
     }
-    LaunchedEffect(Unit) {
+    LaunchedEffect(dynamicBackgroundResource) {
         val newBackgroundColor = when (dynamicBackgroundResource) {
             DynamicBackgroundResource.Empty -> defaultBackgroundColor
             is DynamicBackgroundResource.FromImageUrl -> themeManager
