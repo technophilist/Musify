@@ -2,9 +2,11 @@ package com.example.musify.ui.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
@@ -17,13 +19,12 @@ import com.example.musify.domain.HomeFeedCarouselCardInfo
 import com.example.musify.domain.HomeFeedFilters
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.Streamable
+import com.example.musify.ui.dynamicbackgroundmodifier.DynamicBackgroundResource
+import com.example.musify.ui.dynamicbackgroundmodifier.dynamicBackground
 import com.example.musify.ui.screens.GetPremiumScreen
 import com.example.musify.ui.screens.homescreen.HomeScreen
 import com.example.musify.ui.screens.searchscreen.PagingItemsForSearchScreen
 import com.example.musify.ui.screens.searchscreen.SearchScreen
-import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
-import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
-import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
 import com.example.musify.viewmodels.homefeedviewmodel.HomeFeedViewModel
 import com.example.musify.viewmodels.searchviewmodel.SearchFilter
 import com.example.musify.viewmodels.searchviewmodel.SearchScreenUiState
@@ -37,7 +38,7 @@ import com.example.musify.viewmodels.searchviewmodel.SearchViewModel
 fun MusifyNavigation(
     navController: NavHostController,
     playStreamable: (Streamable) -> Unit,
-    onPausePlayback:()->Unit,
+    onPausePlayback: () -> Unit,
     isFullScreenNowPlayingOverlayScreenVisible: Boolean
 ) {
     NavHost(
@@ -143,24 +144,21 @@ private fun NavGraphBuilder.searchScreen(
         val genres = remember { viewModel.getAvailableGenres() }
         val filters = remember { SearchFilter.values().toList() }
         val currentlySelectedFilter by viewModel.currentlySelectedFilter
-        val dynamicThemeResource by remember {
+        val dynamicBackgroundResource by remember {
             derivedStateOf {
                 val imageUrl = when (currentlySelectedFilter) {
                     SearchFilter.ALBUMS -> albums.itemSnapshotList.firstOrNull()?.albumArtUrlString
                     SearchFilter.TRACKS -> tracks.itemSnapshotList.firstOrNull()?.imageUrlString
                     SearchFilter.ARTISTS -> artists.itemSnapshotList.firstOrNull()?.imageUrlString
                     SearchFilter.PLAYLISTS -> playlists.itemSnapshotList.firstOrNull()?.imageUrlString
-                    SearchFilter.PODCASTS  -> podcasts.itemSnapshotList.firstOrNull()?.imageUrlString
+                    SearchFilter.PODCASTS -> podcasts.itemSnapshotList.firstOrNull()?.imageUrlString
                 }
-                if (imageUrl == null) DynamicThemeResource.Empty
-                else DynamicThemeResource.FromImageUrl(imageUrl)
+                if (imageUrl == null) DynamicBackgroundResource.Empty
+                else DynamicBackgroundResource.FromImageUrl(imageUrl)
             }
         }
         val currentlyPlayingTrack by viewModel.currentlyPlayingTrackStream.collectAsState(initial = null)
-        DynamicallyThemedSurface(
-            dynamicThemeResource = dynamicThemeResource,
-            dynamicBackgroundType = DynamicBackgroundType.Gradient()
-        ) {
+        Box(modifier = Modifier.dynamicBackground(dynamicBackgroundResource)) {
             SearchScreen(
                 genreList = genres,
                 searchScreenFilters = filters,
