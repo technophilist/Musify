@@ -18,9 +18,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.*
-import com.example.musify.ui.theme.dynamictheme.DynamicBackgroundType
-import com.example.musify.ui.theme.dynamictheme.DynamicThemeResource
-import com.example.musify.ui.theme.dynamictheme.DynamicallyThemedSurface
+import com.example.musify.ui.dynamicbackgroundmodifier.DynamicBackgroundResource
+import com.example.musify.ui.dynamicbackgroundmodifier.dynamicBackground
 import kotlinx.coroutines.launch
 
 
@@ -44,12 +43,11 @@ fun PlaylistDetailScreen(
     val isAppBarVisible by remember {
         derivedStateOf { lazyListState.firstVisibleItemIndex > 0 }
     }
-    val dynamicThemeResource = remember {
-        if (playlistImageUrlString == null) DynamicThemeResource.Empty
-        else DynamicThemeResource.FromImageUrl(playlistImageUrlString)
+    val dynamicBackgroundResource = remember {
+        if (playlistImageUrlString == null) DynamicBackgroundResource.Empty
+        else DynamicBackgroundResource.FromImageUrl(playlistImageUrlString)
 
     }
-    val dynamicBackgroundType = remember { DynamicBackgroundType.Gradient() }
     val coroutineScope = rememberCoroutineScope()
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -61,8 +59,7 @@ fun PlaylistDetailScreen(
             state = lazyListState
         ) {
             headerWithImageItem(
-                dynamicThemeResource = dynamicThemeResource,
-                dynamicBackgroundType = dynamicBackgroundType,
+                dynamicBackgroundResource = dynamicBackgroundResource,
                 playlistName = playlistName,
                 playlistImageUrlString = playlistImageUrlString,
                 imageResToUseWhenImageUrlStringIsNull = imageResToUseWhenImageUrlStringIsNull,
@@ -134,7 +131,7 @@ fun PlaylistDetailScreen(
                     .statusBarsPadding(),
                 title = playlistName,
                 onBackButtonClicked = onBackButtonClicked,
-                dynamicThemeResource = dynamicThemeResource,
+                dynamicBackgroundResource = dynamicBackgroundResource,
                 onClick = {
                     coroutineScope.launch { lazyListState.animateScrollToItem(0) }
                 }
@@ -144,8 +141,7 @@ fun PlaylistDetailScreen(
 }
 
 private fun LazyListScope.headerWithImageItem(
-    dynamicThemeResource: DynamicThemeResource,
-    dynamicBackgroundType: DynamicBackgroundType,
+    dynamicBackgroundResource: DynamicBackgroundResource,
     playlistName: String,
     playlistImageUrlString: String?,
     @DrawableRes imageResToUseWhenImageUrlStringIsNull: Int,
@@ -157,27 +153,26 @@ private fun LazyListScope.headerWithImageItem(
     onBackButtonClicked: () -> Unit
 ) {
     item {
-        DynamicallyThemedSurface(
-            dynamicThemeResource = dynamicThemeResource,
-            dynamicBackgroundType = dynamicBackgroundType
+        Column(
+            modifier = Modifier
+                .dynamicBackground(dynamicBackgroundResource)
+                .statusBarsPadding()
         ) {
-            Column(modifier = Modifier.statusBarsPadding()) {
-                ImageHeaderWithMetadata(
-                    title = playlistName,
-                    headerImageSource = if (playlistImageUrlString == null)
-                        HeaderImageSource.ImageFromDrawableResource(
-                            resourceId = imageResToUseWhenImageUrlStringIsNull
-                        )
-                    else HeaderImageSource.ImageFromUrlString(playlistImageUrlString),
-                    subtitle = "by $nameOfPlaylistOwner • $totalNumberOfTracks tracks",
-                    onBackButtonClicked = onBackButtonClicked,
-                    isLoadingPlaceholderVisible = isLoadingPlaceholderForAlbumArtVisible,
-                    onImageLoading = onImageLoading,
-                    onImageLoaded = onImageLoaded,
-                    additionalMetadataContent = { }
-                )
-                Spacer(modifier = Modifier.size(16.dp))
-            }
+            ImageHeaderWithMetadata(
+                title = playlistName,
+                headerImageSource = if (playlistImageUrlString == null)
+                    HeaderImageSource.ImageFromDrawableResource(
+                        resourceId = imageResToUseWhenImageUrlStringIsNull
+                    )
+                else HeaderImageSource.ImageFromUrlString(playlistImageUrlString),
+                subtitle = "by $nameOfPlaylistOwner • $totalNumberOfTracks tracks",
+                onBackButtonClicked = onBackButtonClicked,
+                isLoadingPlaceholderVisible = isLoadingPlaceholderForAlbumArtVisible,
+                onImageLoading = onImageLoading,
+                onImageLoaded = onImageLoaded,
+                additionalMetadataContent = { }
+            )
+            Spacer(modifier = Modifier.size(16.dp))
         }
     }
 }
