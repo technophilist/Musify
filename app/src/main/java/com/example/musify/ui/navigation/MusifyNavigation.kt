@@ -19,8 +19,8 @@ import com.example.musify.domain.HomeFeedCarouselCardInfo
 import com.example.musify.domain.HomeFeedFilters
 import com.example.musify.domain.SearchResult
 import com.example.musify.domain.Streamable
-import com.example.musify.ui.dynamicbackgroundmodifier.DynamicBackgroundResource
-import com.example.musify.ui.dynamicbackgroundmodifier.dynamicBackground
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.DynamicBackgroundResource
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.dynamicBackground
 import com.example.musify.ui.screens.GetPremiumScreen
 import com.example.musify.ui.screens.homescreen.HomeScreen
 import com.example.musify.ui.screens.searchscreen.PagingItemsForSearchScreen

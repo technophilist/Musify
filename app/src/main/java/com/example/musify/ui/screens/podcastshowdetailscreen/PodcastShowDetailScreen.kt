@@ -37,8 +37,8 @@ import com.example.musify.ui.components.AsyncImageWithPlaceholder
 import com.example.musify.ui.components.DefaultMusifyLoadingAnimation
 import com.example.musify.ui.components.DetailScreenTopAppBar
 import com.example.musify.ui.components.HtmlTextView
-import com.example.musify.ui.dynamicbackgroundmodifier.DynamicBackgroundResource
-import com.example.musify.ui.dynamicbackgroundmodifier.dynamicBackground
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.DynamicBackgroundResource
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.dynamicBackground
 
 @ExperimentalMaterialApi
 @Composable

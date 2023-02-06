@@ -30,8 +30,8 @@ import com.example.musify.R
 import com.example.musify.domain.PodcastEpisode
 import com.example.musify.domain.getFormattedDateAndDurationString
 import com.example.musify.ui.components.*
-import com.example.musify.ui.dynamicbackgroundmodifier.DynamicBackgroundResource
-import com.example.musify.ui.dynamicbackgroundmodifier.dynamicBackground
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.DynamicBackgroundResource
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.dynamicBackground
 import kotlinx.coroutines.launch
 import com.google.android.material.R as materialR
 

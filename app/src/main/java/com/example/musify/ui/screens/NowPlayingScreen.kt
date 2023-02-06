@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import com.example.musify.R
 import com.example.musify.domain.Streamable
 import com.example.musify.ui.components.AsyncImageWithPlaceholder
-import com.example.musify.ui.dynamicbackgroundmodifier.DynamicBackgroundResource
-import com.example.musify.ui.dynamicbackgroundmodifier.dynamicBackground
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.DynamicBackgroundResource
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.dynamicBackground
 import kotlinx.coroutines.flow.Flow
 
 // TODO make artist and album name scrollable if they overflow

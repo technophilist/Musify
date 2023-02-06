@@ -17,9 +17,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.musify.R
-import com.example.musify.ui.dynamicbackgroundmodifier.DynamicBackgroundResource
-import com.example.musify.ui.dynamicbackgroundmodifier.DynamicBackgroundStyle
-import com.example.musify.ui.dynamicbackgroundmodifier.dynamicBackground
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.DynamicBackgroundResource
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.DynamicBackgroundStyle
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.dynamicBackground
 import com.example.musify.ui.theme.MusifyTheme
 
 /**

@@ -1,4 +1,4 @@
-package com.example.musify.ui.dynamicbackgroundmodifier
+package com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.material.MaterialTheme

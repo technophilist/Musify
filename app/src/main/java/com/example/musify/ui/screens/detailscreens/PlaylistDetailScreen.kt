@@ -18,8 +18,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import com.example.musify.domain.SearchResult
 import com.example.musify.ui.components.*
-import com.example.musify.ui.dynamicbackgroundmodifier.DynamicBackgroundResource
-import com.example.musify.ui.dynamicbackgroundmodifier.dynamicBackground
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.DynamicBackgroundResource
+import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.dynamicBackground
 import kotlinx.coroutines.launch
 
 
