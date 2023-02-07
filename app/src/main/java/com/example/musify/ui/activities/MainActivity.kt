@@ -105,7 +105,7 @@ private fun MusifyApp() {
                             ),
                         streamable = miniPlayerStreamable!!,
                         onPauseButtonClicked = playbackViewModel::pauseCurrentlyPlayingTrack,
-                        onPlayButtonClicked = { playbackViewModel.resumeIfPaused() },
+                        onPlayButtonClicked = playbackViewModel::resumeIfPausedOrPlay,
                         isPlaybackPaused = isPlaybackPaused,
                         timeElapsedStringFlow = playbackViewModel.flowOfProgressTextOfCurrentTrack.value,
                         playbackProgressFlow = playbackViewModel.flowOfProgressOfCurrentTrack.value,

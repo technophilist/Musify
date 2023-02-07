@@ -66,8 +66,9 @@ class PlaybackViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun resumeIfPaused() {
-        musicPlayer.tryResume()
+    fun resumeIfPausedOrPlay(streamable: Streamable){
+        if(musicPlayer.tryResume()) return
+        playStreamable(streamable)
     }
 
     fun playStreamable(streamable: Streamable) {
