@@ -39,6 +39,7 @@ import com.example.musify.ui.components.DetailScreenTopAppBar
 import com.example.musify.ui.components.HtmlTextView
 import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.DynamicBackgroundResource
 import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.dynamicBackground
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @Composable
@@ -66,9 +67,10 @@ fun PodcastShowDetailScreen(
     val spannedHtmlDescription = remember {
         HtmlCompat.fromHtml(podcastShow.htmlDescription, 0)
     }
-    val dynamicBackgroundResource = remember{
+    val dynamicBackgroundResource = remember {
         DynamicBackgroundResource.FromImageUrl(podcastShow.imageUrlString)
     }
+    val scope = rememberCoroutineScope()
     Box {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -127,7 +129,10 @@ fun PodcastShowDetailScreen(
                     .fillMaxWidth(),
                 title = podcastShow.name,
                 onBackButtonClicked = onBackButtonClicked,
-                dynamicBackgroundResource = dynamicBackgroundResource
+                dynamicBackgroundResource = dynamicBackgroundResource,
+                onClick = {
+                    scope.launch { lazyListState.animateScrollToItem(0) }
+                }
             )
         }
         DefaultMusifyLoadingAnimation(
