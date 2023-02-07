@@ -131,6 +131,8 @@ class MusifyBackgroundMusicPlayerV2 @Inject constructor(
     }
 
     override fun tryResume(): Boolean {
+        val hasPlaybackEnded = exoPlayer.currentPosition > exoPlayer.duration
+        if (hasPlaybackEnded) return false
         if (exoPlayer.isPlaying) return false
         return currentlyPlayingStreamable?.let {
             exoPlayer.playWhenReady = true
