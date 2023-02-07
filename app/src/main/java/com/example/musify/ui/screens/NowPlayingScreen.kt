@@ -44,72 +44,79 @@ fun NowPlayingScreen(
     val dynamicBackgroundResource = remember {
         DynamicBackgroundResource.FromImageUrl(streamable.streamInfo.imageUrl)
     }
-    Column(
-        modifier = Modifier
-            .dynamicBackground(dynamicBackgroundResource)
-            .fillMaxSize()
-            .systemBarsPadding()
-            .padding(start = 16.dp, end = 16.dp)
-    ) {
-        Header(
-            modifier = Modifier.fillMaxWidth(),
-            onCloseButtonClicked = onCloseButtonClicked,
-            onTrailingButtonClick = {}
-        )
-        Spacer(modifier = Modifier.size(64.dp))
-        AsyncImageWithPlaceholder(
+    // All built-in compose layouts don't use a surface to display the content.
+    // This means, if there is a list of clickable tracks displayed behind
+    // the layout, then it will be possible to click them even if they are
+    // not visible. To prevent such a behavior, surround the NowPlayingScreen
+    // content with a surface.
+    Surface {
+        Column(
             modifier = Modifier
-                .size(330.dp)
-                .align(Alignment.CenterHorizontally),
-            model = streamable.streamInfo.imageUrl,
-            contentDescription = null,
-            onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
-            isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
-            onImageLoading = { isImageLoadingPlaceholderVisible = true }
-        )
-        Spacer(modifier = Modifier.size(64.dp))
-        Text(
-            text = streamable.streamInfo.title,
-            fontWeight = FontWeight.Bold,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
-            style = MaterialTheme.typography.h6
-        )
-        Text(
-            text = streamable.streamInfo.subtitle,
-            fontWeight = FontWeight.SemiBold,
-            style = MaterialTheme.typography.subtitle1.copy(
-                color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)
-            ),
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1
-        )
-        Spacer(modifier = Modifier.size(8.dp))
-        Box {
-            ProgressSliderWithTimeText(modifier = Modifier.fillMaxWidth(),
-                currentTimeElapsedStringFlow = timeElapsedStringFlow,
-                totalDurationOfTrack = totalDurationOfCurrentTrackProvider(),
-                currentPlaybackProgressFlow = playbackProgressFlow,
-                playbackDurationRange = playbackDurationRange,
-                onSliderValueChange = {})
+                .dynamicBackground(dynamicBackgroundResource)
+                .fillMaxSize()
+                .systemBarsPadding()
+                .padding(start = 16.dp, end = 16.dp)
+        ) {
+            Header(
+                modifier = Modifier.fillMaxWidth(),
+                onCloseButtonClicked = onCloseButtonClicked,
+                onTrailingButtonClick = {}
+            )
+            Spacer(modifier = Modifier.size(64.dp))
+            AsyncImageWithPlaceholder(
+                modifier = Modifier
+                    .size(330.dp)
+                    .align(Alignment.CenterHorizontally),
+                model = streamable.streamInfo.imageUrl,
+                contentDescription = null,
+                onImageLoadingFinished = { isImageLoadingPlaceholderVisible = false },
+                isLoadingPlaceholderVisible = isImageLoadingPlaceholderVisible,
+                onImageLoading = { isImageLoadingPlaceholderVisible = true }
+            )
+            Spacer(modifier = Modifier.size(64.dp))
+            Text(
+                text = streamable.streamInfo.title,
+                fontWeight = FontWeight.Bold,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                style = MaterialTheme.typography.h6
+            )
+            Text(
+                text = streamable.streamInfo.subtitle,
+                fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.subtitle1.copy(
+                    color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)
+                ),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            Box {
+                ProgressSliderWithTimeText(modifier = Modifier.fillMaxWidth(),
+                    currentTimeElapsedStringFlow = timeElapsedStringFlow,
+                    totalDurationOfTrack = totalDurationOfCurrentTrackProvider(),
+                    currentPlaybackProgressFlow = playbackProgressFlow,
+                    playbackDurationRange = playbackDurationRange,
+                    onSliderValueChange = {})
+            }
+            PlaybackControls(
+                modifier = Modifier.fillMaxWidth(),
+                isPlayIconVisible = isPlaybackPaused,
+                onSkipPreviousButtonClicked = onSkipPreviousButtonClicked,
+                onPlayButtonClicked = onPlayButtonClicked,
+                onPauseButtonClicked = onPauseButtonClicked,
+                onSkipNextButtonClicked = onSkipNextButtonClicked,
+                onRepeatButtonClicked = onRepeatButtonClicked,
+                onShuffleButtonClicked = onShuffleButtonClicked
+            )
+            Footer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding(),
+                onAvailableDevicesButtonClicked = {},
+                onShareButtonClicked = {}
+            )
         }
-        PlaybackControls(
-            modifier = Modifier.fillMaxWidth(),
-            isPlayIconVisible = isPlaybackPaused,
-            onSkipPreviousButtonClicked = onSkipPreviousButtonClicked,
-            onPlayButtonClicked = onPlayButtonClicked,
-            onPauseButtonClicked = onPauseButtonClicked,
-            onSkipNextButtonClicked = onSkipNextButtonClicked,
-            onRepeatButtonClicked = onRepeatButtonClicked,
-            onShuffleButtonClicked = onShuffleButtonClicked
-        )
-        Footer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding(),
-            onAvailableDevicesButtonClicked = {},
-            onShareButtonClicked = {}
-        )
     }
 }
 
