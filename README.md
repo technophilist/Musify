@@ -9,7 +9,7 @@ that is heavily inspired by the design of the official Spotify app with some cus
 1. [Screenshots](#screenshots)
 2. [Tech Stack](#tech-stack)
 3. [Notable features](#notable-features)
-4. [Source code and architecture](#source-code-and-architecture)
+4. [Source code, Architecture, & Testing](#source-code-architecture--testing)
 
 ## Screenshots
 <img src = "screenshots/home_screen.png" width = "216" height = "456"/> &nbsp; <img src = "screenshots/search_screen.png" width = "216" height = "456"/> &nbsp; <img src = "screenshots/full_screen_player.png" width = "216" height = "456"/> 
