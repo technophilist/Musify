@@ -45,7 +45,6 @@ object MusifyMiniPlayerConstants {
  * @param onPauseButtonClicked the lambda to execute when the pause button
  * is clicked.
  */
-// TODO debug recompositions
 @Composable
 fun MusifyMiniPlayer(
     streamable: Streamable,
