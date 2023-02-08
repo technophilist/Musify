@@ -36,7 +36,6 @@ import com.example.musify.ui.components.*
 import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.DynamicBackgroundResource
 import kotlinx.coroutines.launch
 
-// TODO display error messages - network error
 @ExperimentalMaterialApi
 @Composable
 fun ArtistDetailScreen(
@@ -78,7 +77,7 @@ fun ArtistDetailScreen(
         ) {
             artistCoverArtHeaderItem(
                 artistName = artistName,
-                artistCoverArtUrlString = artistImageUrlString, // TODO
+                artistCoverArtUrlString = artistImageUrlString,
                 onBackButtonClicked = onBackButtonClicked,
                 onPLayButtonClick = onPlayButtonClicked,
                 isLoadingPlaceholderVisible = isCoverArtPlaceholderVisible,
