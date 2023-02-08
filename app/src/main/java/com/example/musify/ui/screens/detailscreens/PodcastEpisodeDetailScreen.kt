@@ -144,7 +144,7 @@ private fun PodcastEpisodeScreenContent(
             onAddButtonClicked = onAddButtonClicked,
             onDownloadButtonClicked = onDownloadButtonClicked,
         )
-        // Todo make text expandable once support for spanned
+        // make text expandable once support for spanned
         //  text is made available for compose.
         HtmlTextView(
             text = htmlDescription,
