@@ -19,11 +19,10 @@ import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.DynamicBackg
 import com.example.musify.ui.dynamicTheme.dynamicbackgroundmodifier.dynamicBackground
 import kotlinx.coroutines.flow.Flow
 
-// TODO make artist and album name scrollable if they overflow
-// TODO change layout based on [Streamable] type
 // collecting the flow within the composable scopes the collector to the composable.
 // This ensures that the collection of flow is stopped as soon this composable
-// is removed from composition.
+// is removed from composition. Therefore, this composables use parameters of type
+// Flow.
 @Composable
 fun NowPlayingScreen(
     streamable: Streamable,
