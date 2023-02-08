@@ -85,8 +85,8 @@ fun PodcastShowDetailScreen(
                 )
             }
             item {
-                // Todo make text expandable once support for spanned
-                //  text is made available for compose.
+                // make text expandable once support for spanned
+                // text is made available for compose.
                 HtmlTextView(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     text = spannedHtmlDescription,
