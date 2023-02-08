@@ -55,7 +55,7 @@ fun HomeFeedCard(
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
-            // TODO min lines not yet supported in compose
+            // Min lines not yet supported in compose
             // switch this out with Text composable once it
             // becomes available
             // https://issuetracker.google.com/issues/122476634
