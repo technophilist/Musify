@@ -285,8 +285,8 @@ class NavGraphWithDetailScreensNestedController(
     fun navigateToDetailScreen(podcastEpisode: PodcastEpisode) {
         val route = MusifyNavigationDestinations
             .PodcastShowDetailScreen
-            .buildRoute(podcastEpisode.podcastShowInfo.id);
-        navController.navigate(associatedNavGraphRoute + route)
+            .buildRoute(podcastEpisode.podcastShowInfo.id)
+        navController.navigate(associatedNavGraphRoute + route) { launchSingleTop = true }
     }
 
     fun navigateToDetailScreen(searchResult: SearchResult) {
