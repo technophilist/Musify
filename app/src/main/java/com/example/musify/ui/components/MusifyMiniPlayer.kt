@@ -40,22 +40,17 @@ object MusifyMiniPlayerConstants {
  * will be invoked. Also, the play and pause icons will also be displayed
  * based on this parameter.
  * @param modifier the modifier to be applied to this composable.
- * @param onLikedButtonClicked the lambda to execute when the like
- * button is clicked. It is provided with a boolean that indicates
- * whether the the track is currently liked or not.
  * @param onPlayButtonClicked the lambda to execute when the play button
  * is clicked.
  * @param onPauseButtonClicked the lambda to execute when the pause button
  * is clicked.
  */
-// TODO Make text scrollable if it overflows
 // TODO debug recompositions
 @Composable
 fun MusifyMiniPlayer(
     streamable: Streamable,
     isPlaybackPaused: Boolean,
     modifier: Modifier = Modifier,
-    onLikedButtonClicked: (Boolean) -> Unit, // todo remove param
     onPlayButtonClicked: () -> Unit,
     onPauseButtonClicked: () -> Unit
 ) {

@@ -100,7 +100,6 @@ fun ExpandableMiniPlayerWithSnackbar(
                         .clickable { isNowPlayingScreenVisible = true },
                     isPlaybackPaused = isPlaybackPaused,
                     streamable = streamable,
-                    onLikedButtonClicked = {},
                     onPlayButtonClicked = { onPlayButtonClicked(streamable) },
                     onPauseButtonClicked = onPauseButtonClicked
                 )
