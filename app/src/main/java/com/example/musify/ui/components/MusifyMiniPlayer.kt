@@ -60,13 +60,8 @@ fun MusifyMiniPlayer(
     }
     val dynamicBackgroundStyle = remember { DynamicBackgroundStyle.Filled() }
     Row(
-        modifier = Modifier
-            .fillMaxWidth() // todo remove, constant doesn't make sense for large screens
-            .then(modifier)
-            .heightIn(
-                MusifyMiniPlayerConstants.miniPlayerHeight,
-                MusifyMiniPlayerConstants.miniPlayerHeight
-            ) // the height of this composable is fixed
+        modifier = modifier
+            .height(MusifyMiniPlayerConstants.miniPlayerHeight) // the height of this composable is fixed
             .clip(RoundedCornerShape(8.dp))
             .dynamicBackground(dynamicBackgroundResource, dynamicBackgroundStyle),
         verticalAlignment = Alignment.CenterVertically
