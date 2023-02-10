@@ -6,10 +6,14 @@ completely built using Jetpack compose. It is also worth noting that it is not a
 that is heavily inspired by the design of the official Spotify app with some custom design tweaks. It uses many API’s such as Hilt,Retrofit, and Paging 3. I built this project purely for educational purposes. I neither intend to release, nor do I plan on monetizing any part of this project. 
 
 ## Table of contents
-1. [Screenshots](#screenshots)
-2. [Tech Stack](#tech-stack)
-3. [Notable features](#notable-features)
-4. [Source code, Architecture, & Testing](#source-code-architecture--testing)
+1. [Demo](#demo)
+2. [Screenshots](#screenshots)
+3. [Tech Stack](#tech-stack)
+4. [Notable features](#notable-features)
+5. [Source code, Architecture, & Testing](#source-code-architecture--testing)
+
+## Demo
+https://user-images.githubusercontent.com/54663474/218087723-0bf43793-3ff4-4e24-934e-37725e5cd248.mp4
 
 ## Screenshots
 <img src = "screenshots/home_screen.png" width = "216" height = "456"/> &nbsp; <img src = "screenshots/search_screen.png" width = "216" height = "456"/> &nbsp; <img src = "screenshots/full_screen_player.png" width = "216" height = "456"/> 
