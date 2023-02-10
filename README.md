@@ -66,3 +66,4 @@ that is heavily inspired by the design of the official Spotify app with some cus
 - MVVM archtecture.
 - Commit messages follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
 - Consists of extensive unit tests with a predominant focus on testing the data layer.
+- An illustration depicting the setup of the navigation graph can be found [here](https://github.com/t3chkid/Musify/tree/main/app/src/main/java/com/example/musify/ui/navigation).
