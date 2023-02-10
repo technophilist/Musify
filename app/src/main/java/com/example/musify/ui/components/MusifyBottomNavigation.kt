@@ -25,7 +25,7 @@ import com.example.musify.ui.navigation.MusifyBottomNavigationDestinations
  * composable.
  */
 object MusifyBottomNavigationConstants {
-    val navigationHeight = 80.dp
+    val navigationHeight = 60.dp
 }
 
 /**
