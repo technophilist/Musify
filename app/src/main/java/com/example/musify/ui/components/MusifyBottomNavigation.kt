@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -72,10 +72,6 @@ fun MusifyBottomNavigation(
     Surface(
         modifier = Modifier
             .background(gradientBrush)
-            .heightIn(
-                min = MusifyBottomNavigationConstants.navigationHeight,
-                max = MusifyBottomNavigationConstants.navigationHeight
-            )
             .then(modifier),
         color = Color.Transparent,
         elevation = 0.dp
@@ -83,6 +79,7 @@ fun MusifyBottomNavigation(
         Row(
             Modifier
                 .fillMaxWidth()
+                .height(MusifyBottomNavigationConstants.navigationHeight)
                 .selectableGroup(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
