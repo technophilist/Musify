@@ -11,6 +11,7 @@ that is heavily inspired by the design of the official Spotify app with some cus
 3. [Tech Stack](#tech-stack)
 4. [Notable features](#notable-features)
 5. [Source code, Architecture, & Testing](#source-code-architecture--testing)
+6. [Installation](#installation)
 
 ## Demo
 https://user-images.githubusercontent.com/54663474/218087723-0bf43793-3ff4-4e24-934e-37725e5cd248.mp4
@@ -71,3 +72,29 @@ https://user-images.githubusercontent.com/54663474/218087723-0bf43793-3ff4-4e24-
 - Commit messages follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
 - Consists of extensive unit tests with a predominant focus on testing the data layer.
 - An illustration depicting the setup of the navigation graph can be found [here](https://github.com/t3chkid/Musify/tree/main/app/src/main/java/com/example/musify/ui/navigation).
+
+## Installation
+1. Create a Spotify account and log into the [Spotify Developer Dashboard](https://developer.spotify.com). 
+2. Create an app from the dashboard and get the `Client ID` and `Client Secret`. 
+3. Add the two fields to the `local.properties` file of your project in the following manner.
+```properties
+SPOTIFY_CLIENT_ID = 2dfe051892f54e528b17b635f16d825d
+SPOTIFY_CLIENT_SECRET = 0df748c72dbd40cd99edc951649cefd7
+```
+4. Add the following code snippet inside the `defaultConfig` block of the `android` block in tyour **app's** build.gradle file.
+```kotlin
+android {
+    // ...
+    defaultConfig {
+        // ...
+        // load fields from local.properties file
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+        buildConfigField "String", "SPOTIFY_CLIENT_ID", "\"${properties.getProperty("SPOTIFY_CLIENT_ID")}\""
+        buildConfigField "String", "SPOTIFY_CLIENT_SECRET", "\"${properties.getProperty("SPOTIFY_CLIENT_SECRET")}\""
+    }
+    // ...
+ }
+```
+5. If you followed the instructions properly you must be able to build the app and run it.
+
