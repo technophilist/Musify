@@ -81,7 +81,7 @@ https://user-images.githubusercontent.com/54663474/218087723-0bf43793-3ff4-4e24-
 SPOTIFY_CLIENT_ID = 2dfe051892f54e528b17b635f16d825d
 SPOTIFY_CLIENT_SECRET = 0df748c72dbd40cd99edc951649cefd7
 ```
-4. Add the following code snippet inside the `defaultConfig` block of the `android` block in tyour **app's** build.gradle file.
+4. Add the following code snippet inside the `defaultConfig` block of the `android` block in your **app's** build.gradle file.
 ```kotlin
 android {
     // ...
