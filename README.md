@@ -30,7 +30,6 @@ https://user-images.githubusercontent.com/54663474/218087723-0bf43793-3ff4-4e24-
 - [Lottie compose](https://github.com/airbnb/lottie/blob/master/android-compose.md) for displaying animated resources such as a custom loading animation.
 - [Mokito-Kotlin](https://github.com/mockito/mockito-kotlin) for mocking dependencies in unit tests.
 - [Retrofit](https://square.github.io/retrofit/) for communicating with the Spotify API.
-- [Hilt](https://www.google.com/search?client=safari&rls=en&q=Hilt&ie=UTF-8&oe=UTF-8) for dependency injection.
 - [Exoplayer](https://exoplayer.dev) for background playback and music controls.
 - [Paging 3](https://developer.android.com/topic/libraries/architecture/paging/v3-overview) for pagination.
 - [Google's palette api](https://developer.android.com/develop/ui/views/graphics/palette-colors) for color extraction from image.
