@@ -11,7 +11,7 @@ that is heavily inspired by the design of the official Spotify app with some cus
 3. [Tech Stack](#tech-stack)
 4. [Notable features](#notable-features)
 5. [Source code, Architecture, & Testing](#source-code-architecture--testing)
-6. [Installation](#installation)
+6. [Building and running the app](#building-and-running-the-app)
 
 ## Demo
 https://user-images.githubusercontent.com/54663474/218087723-0bf43793-3ff4-4e24-934e-37725e5cd248.mp4
@@ -72,7 +72,7 @@ https://user-images.githubusercontent.com/54663474/218087723-0bf43793-3ff4-4e24-
 - Consists of extensive unit tests with a predominant focus on testing the data layer.
 - An illustration depicting the setup of the navigation graph can be found [here](https://github.com/t3chkid/Musify/tree/main/app/src/main/java/com/example/musify/ui/navigation).
 
-## Installation
+## Buliding and running the app
 1. Create a Spotify account and log into the [Spotify Developer Dashboard](https://developer.spotify.com). 
 2. Create an app from the dashboard and get the `Client ID` and `Client Secret`. 
 3. Add the two fields to the `local.properties` file of your project in the following manner.
