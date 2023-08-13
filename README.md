@@ -80,20 +80,5 @@ https://user-images.githubusercontent.com/54663474/218087723-0bf43793-3ff4-4e24-
 SPOTIFY_CLIENT_ID = PASTE-YOUR-CLIENT-ID-HERE
 SPOTIFY_CLIENT_SECRET = PASTE-YOUR-CLIENT-SECRET-HERE
 ```
-4. Add the following code snippet inside the `defaultConfig` block of the `android` block in your **app's** build.gradle file.
-```kotlin
-android {
-    // ...
-    defaultConfig {
-        // ...
-        // load fields from local.properties file
-        Properties properties = new Properties()
-        properties.load(project.rootProject.file("local.properties").newDataInputStream())
-        buildConfigField "String", "SPOTIFY_CLIENT_ID", "\"${properties.getProperty("SPOTIFY_CLIENT_ID")}\""
-        buildConfigField "String", "SPOTIFY_CLIENT_SECRET", "\"${properties.getProperty("SPOTIFY_CLIENT_SECRET")}\""
-    }
-    // ...
- }
-```
-5. If you followed the instructions properly you must be able to build the app and run it.
+4. Build the app and run it.
 
