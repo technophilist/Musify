@@ -77,8 +77,8 @@ https://user-images.githubusercontent.com/54663474/218087723-0bf43793-3ff4-4e24-
 2. Create an app from the dashboard and get the `Client ID` and `Client Secret`. 
 3. Add the two fields to the `local.properties` file of your project in the following manner.
 ```properties
-SPOTIFY_CLIENT_ID = 2dfe051892f54e528b17b635f16d825d
-SPOTIFY_CLIENT_SECRET = 0df748c72dbd40cd99edc951649cefd7
+SPOTIFY_CLIENT_ID = PASTE-YOUR-CLIENT-ID-HERE
+SPOTIFY_CLIENT_SECRET = PASTE-YOUR-CLIENT-SECRET-HERE
 ```
 4. Add the following code snippet inside the `defaultConfig` block of the `android` block in your **app's** build.gradle file.
 ```kotlin
