@@ -36,7 +36,7 @@ fun HomeScreen(
     onHomeFeedFilterClick: (HomeFeedFilters) -> Unit,
     carousels: List<HomeFeedCarousel>,
     onHomeFeedCarouselCardClick: (HomeFeedCarouselCardInfo) -> Unit,
-    onErrorRetryButtonClick:()->Unit,
+    onErrorRetryButtonClick: () -> Unit,
     isLoading: Boolean,
     isErrorMessageVisible: Boolean,
 ) {
@@ -109,8 +109,7 @@ fun HomeScreen(
                     )
                 }
             } else {
-                // not using keys because the items do not change
-                items(carousels) { carousel ->
+                items(items = carousels, key = { it.id }) { carousel ->
                     Text(
                         modifier = Modifier.padding(16.dp),
                         text = carousel.title,
@@ -146,8 +145,7 @@ private fun CarouselLazyRow(
         contentPadding = contentPadding,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // not using keys because the items do not change
-        items(carousel.associatedCards) { card ->
+        items(items = carousel.associatedCards, key = { it.id }) { card ->
             HomeFeedCard(
                 imageUrlString = card.imageUrlString,
                 caption = card.caption,
