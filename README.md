@@ -80,5 +80,9 @@ https://user-images.githubusercontent.com/54663474/218087723-0bf43793-3ff4-4e24-
 SPOTIFY_CLIENT_ID = PASTE-YOUR-CLIENT-ID-HERE
 SPOTIFY_CLIENT_SECRET = PASTE-YOUR-CLIENT-SECRET-HERE
 ```
-4. Build the app and run it.
+4. Build the app **in release mode** and run it.
+
+## Note
+You might experience performance issues if you do not build the app in release mode. Please make sure to **build the app in release mode**. 
+For more info on why this is important, especially in an app built completely with jetpack compose, read this [blog post](https://medium.com/androiddevelopers/why-should-you-always-test-compose-performance-in-release-4168dd0f2c71).
 
